@@ -5,9 +5,9 @@ namespace Edde\Config;
 
 use Dibi\DriverException;
 use Edde\Config\Repository\ConfigRepositoryTrait;
-use Edde\Container\Service\ContainerTrait;
-use Edde\Log\Service\LoggerTrait;
-use Edde\Storage\Service\StorageTrait;
+use Edde\Container\ContainerTrait;
+use Edde\Log\LoggerTrait;
+use Edde\Storage\StorageTrait;
 use Throwable;
 
 /**

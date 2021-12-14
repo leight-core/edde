@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Edde\Http;
 
 use Edde\Container\ContainerTrait;
-use Edde\Http\Service\HttpIndexTrait;
 use Slim\Interfaces\RouteCollectorProxyInterface;
 
 trait EndpointRegisterTrait {

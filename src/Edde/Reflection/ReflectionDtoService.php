@@ -13,7 +13,6 @@ use Edde\Reflection\Dto\Property\ClassProperty;
 use Edde\Reflection\Exception\InvalidValueException;
 use Edde\Reflection\Exception\MissingValueException;
 use Edde\Reflection\Exception\UnknownTypeException;
-use Edde\Reflection\Service\ReflectionServiceTrait;
 use Exception;
 use Psr\SimpleCache\InvalidArgumentException;
 use ReflectionException as NativeReflectionException;

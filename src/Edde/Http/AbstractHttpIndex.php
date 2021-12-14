@@ -5,7 +5,7 @@ namespace Edde\Http;
 
 use Edde\Cache\DatabaseCacheTrait;
 use Edde\Http\Exception\HttpException;
-use Edde\Profiler\Service\ProfilerServiceTrait;
+use Edde\Profiler\ProfilerServiceTrait;
 use Edde\Query\Dto\Query;
 use Edde\Query\Dto\QueryResult;
 use Edde\Reflection\Dto\Method\IRequestResponseMethod;

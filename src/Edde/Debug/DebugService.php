@@ -5,9 +5,9 @@ namespace Edde\Debug;
 
 use Edde\Debug\Exception\DebugException;
 use Edde\File\Dto\FileDto;
-use Edde\File\Service\FileServiceTrait;
+use Edde\File\FileServiceTrait;
 use Edde\Stream\TempStream;
-use Edde\Uuid\Service\UuidServiceTrait;
+use Edde\Uuid\UuidServiceTrait;
 use Marsh\User\CurrentUserTrait;
 use Throwable;
 use Tracy\Debugger;

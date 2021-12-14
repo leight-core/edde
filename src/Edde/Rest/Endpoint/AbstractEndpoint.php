@@ -93,8 +93,6 @@ abstract class AbstractEndpoint implements IEndpoint {
 		$this->logger->error($throwable);
 		try {
 			throw $throwable;
-		} catch (UnauthorizedException $e) {
-			return Response::withJson($response, 'Sorry, but you cannot use this application.', 401);
 		} catch (RestException|ClientException $e) {
 			return Response::withJson($response, $e->getMessage(), $e->getCode() > 0 ? $e->getCode() : 400);
 		} catch (DuplicateEntryException $e) {

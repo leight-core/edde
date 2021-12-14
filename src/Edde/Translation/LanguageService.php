@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Edde\Translation;
 
+use Edde\Dto\Common\SelectItemDto;
 use Edde\Dto\DtoServiceTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Translation\Repository\TranslationRepositoryTrait;
-use Marsh\Shared\Dto\LanguageDto;
 use Marsh\User\CurrentUserTrait;
 use Marsh\User\Exception\UserNotSelectedException;
 use Marsh\User\User;
@@ -45,16 +45,16 @@ class LanguageService {
 	}
 
 	/**
-	 * @return LanguageDto[]
+	 * @return SelectItemDto[]
 	 */
 	public function toList(): array {
 		return array_merge(array_map(function ($item) {
-			return $this->dtoService->fromArray(LanguageDto::class, [
+			return $this->dtoService->fromArray(SelectItemDto::class, [
 				'id'   => $item->locale,
 				'code' => $item->locale,
 			]);
 		}, $this->translationRepository->toLanguages()), [
-			$this->dtoService->fromArray(LanguageDto::class, [
+			$this->dtoService->fromArray(SelectItemDto::class, [
 				'id'   => 'translation',
 				'code' => 'translation',
 			]),

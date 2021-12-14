@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Edde\Mapper\Exception;
 
-use Marsh\MarshException;
+use Edde\EddeException;
 use Throwable;
 
-class MapperException extends MarshException {
+class MapperException extends EddeException {
 	/** @var array */
 	protected $extra;
 

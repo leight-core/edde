@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Progress\Exception;
 
-use Marsh\MarshException;
+use Edde\EddeException;
 
-class ProgressException extends MarshException {
+class ProgressException extends EddeException {
 }

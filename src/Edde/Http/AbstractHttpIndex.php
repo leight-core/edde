@@ -117,7 +117,6 @@ abstract class AbstractHttpIndex implements IHttpIndex {
 				'link'   => $class->annotations['link'] ?? '/' . str_replace([
 						'/endpoint/',
 						'-endpoint',
-						'marsh/',
 					], [
 						'/',
 						'',

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Php\Exception;
 
-use Marsh\MarshException;
+use Edde\EddeException;
 
-class PhpException extends MarshException {
+class PhpException extends EddeException {
 }

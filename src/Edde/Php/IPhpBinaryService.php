@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\Php\;
+namespace Edde\Php;
 
 interface IPhpBinaryService {
 	/**

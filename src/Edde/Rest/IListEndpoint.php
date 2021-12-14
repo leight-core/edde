@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\Rest\;
+namespace Edde\Rest;
 
 /**
  * Marks an Endpoint as returning list of small amount of data; could be used

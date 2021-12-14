@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\Mapper\;
+namespace Edde\Mapper;
 
 /**
  * Mapper do some action based on the input and

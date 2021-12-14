@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\Mapper\;
+namespace Edde\Mapper;
 
 use Edde\Mapper\Exception\ItemException;
 use Edde\Mapper\Exception\SkipException;

@@ -1,0 +1,21 @@
+version: '2'
+services:
+    php:
+        image: marekhanzal/php:7.2
+        container_name: edde
+        hostname: edde
+        restart: always
+        ports:
+            - "4088:80"
+            - "4022:22"
+        volumes:
+            - source:/var/www
+        networks:
+            - common
+
+volumes:
+    source:
+
+networks:
+    common:
+        external: true

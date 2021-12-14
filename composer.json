@@ -1,0 +1,63 @@
+{
+	"name": "leight-core/edde",
+	"license": "Apache-2.0",
+	"type": "library",
+	"description": "The Legacy of Edde Framework in much smaller and simpler library.",
+	"keywords": [
+		"php",
+		"framework"
+	],
+	"authors": [
+		{
+			"name": "Marek Hanzal",
+			"email": "marek.hanzal@x32.cz"
+		}
+	],
+	"config": {
+		"optimize-autoloader": true,
+		"bin-compat": "full",
+		"discard-changes": true
+	},
+	"autoload": {
+		"files": [
+			"./src/ClanCats/Hydrahon/Query/Sql/Select.php"
+		],
+		"exclude-from-classmap": [
+			"./vendor/clancats/hydrahon/src/Query/Sql/Select.php"
+		],
+		"classmap": [
+			"src/"
+		]
+	},
+	"minimum-stability": "dev",
+	"require": {
+		"php": ">=7.2",
+		"ext-json": "*",
+		"ext-pdo": "*",
+		"ext-zlib": "*",
+		"ext-zip": "*",
+		"psr/log": "^1.1",
+		"ramsey/uuid": "^4.1.1",
+		"tracy/tracy": "^v2.8",
+		"doctrine/annotations": "^1.12",
+		"robmorgan/phinx": "^0.12",
+		"dibi/dibi": "^4.1",
+		"phpoffice/phpspreadsheet": "^1.16",
+		"league/uri": "^6.4",
+		"symfony/process": "^5.2",
+		"diff/diff": "^3.2",
+		"symfony/yaml": "^5.2",
+		"gabrielelana/byte-units": "^0.5.0",
+		"league/flysystem": "^2.2.3",
+		"clancats/hydrahon": "^1.1",
+		"php-di/php-di": "^6.3",
+		"nette/utils": "^3.2",
+		"nyholm/psr7": "^1.3",
+		"nyholm/psr7-server": "^1.0.0",
+		"php-di/slim-bridge": "^3.0",
+		"roave/security-advisories": "dev-master"
+	},
+	"require-dev": {
+		"phpunit/phpunit": ">=8.5.21"
+	}
+}

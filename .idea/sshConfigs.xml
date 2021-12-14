@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" connectionConfig="{&quot;serverAliveInterval&quot;:300}" host="localhost" id="a45b13f5-c4a7-46e1-be1e-b32848c65edf" port="4022" customName="docker" nameFormat="CUSTOM" username="root" useOpenSSHConfig="true">
+        <option name="customName" value="docker" />
+      </sshConfig>
+    </configs>
+  </component>
+</project>

@@ -8,11 +8,11 @@ use DateTime;
 use Dibi\Row;
 use Edde\File\Dto\EnsureDto;
 use Edde\File\Dto\FileFilterDto;
-use Edde\Log\Service\LoggerTrait;
+use Edde\Log\LoggerTrait;
 use Edde\Query\Dto\Query;
 use Edde\Repository\AbstractRepository;
 use Edde\Repository\Exception\DuplicateEntryException;
-use Edde\Uuid\Service\UuidServiceTrait;
+use Edde\Uuid\UuidServiceTrait;
 use function hash;
 use function microtime;
 

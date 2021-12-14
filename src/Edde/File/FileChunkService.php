@@ -6,7 +6,6 @@ namespace Edde\File;
 use Edde\File\Dto\ChunkDto;
 use Edde\File\Dto\CommitDto;
 use Edde\File\Dto\FileDto;
-use Edde\File\Service\FileServiceTrait;
 use Edde\Stream\IStream;
 use Marsh\User\CurrentUserTrait;
 

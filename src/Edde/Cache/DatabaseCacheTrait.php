@@ -1,9 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\Cache\Service;
-
-use Edde\Cache\DatabaseCache;
+namespace Edde\Cache;
 
 /**
  * When one needs explicitly database cache.

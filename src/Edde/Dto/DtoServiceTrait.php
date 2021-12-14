@@ -1,9 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\Dto\Service;
-
-use Edde\Dto\IDtoService;
+namespace Edde\Dto;
 
 /**
  * A service used to map an array/object/whatever into a typed class.

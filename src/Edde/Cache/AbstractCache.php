@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Edde\Cache;
 
-use Edde\Log\Service\LoggerTrait;
-use Edde\Math\Service\RandomServiceTrait;
+use Edde\Log\LoggerTrait;
+use Edde\Math\RandomServiceTrait;
 use Psr\SimpleCache\CacheInterface;
 use function gzcompress;
 use function gzuncompress;

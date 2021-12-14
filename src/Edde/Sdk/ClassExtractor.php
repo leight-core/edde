@@ -13,7 +13,7 @@ use Edde\Reflection\Dto\Type\Utils\IGenericType;
 use Edde\Reflection\Exception\MissingReflectionClassException;
 use Edde\Reflection\Exception\UnknownTypeException;
 use Edde\Reflection\ReflectionServiceTrait;
-use Edde\Rest\Api\IEndpoint;
+use Edde\Rest\IEndpoint;
 use Edde\Rest\Reflection\Endpoint;
 use Generator;
 use ReflectionException;

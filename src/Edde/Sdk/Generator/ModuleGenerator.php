@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace Edde\Sdk\Generator;
 
 use Edde\Reflection\Exception\UnknownTypeException;
-use Edde\Rest\Api\IFetchEndpoint;
-use Edde\Rest\Api\IListEndpoint;
-use Edde\Rest\Api\IMutationEndpoint;
-use Edde\Rest\Api\IQueryEndpoint;
+use Edde\Rest\IFetchEndpoint;
+use Edde\Rest\IListEndpoint;
+use Edde\Rest\IMutationEndpoint;
+use Edde\Rest\IQueryEndpoint;
 use Edde\Rest\Reflection\Endpoint;
 use Edde\Sdk\ClassExtractorTrait;
 use Edde\Sdk\NameResolverTrait;

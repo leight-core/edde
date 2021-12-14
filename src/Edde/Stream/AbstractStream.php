@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Edde\Stream;
 
-use Edde\Stream\Api\IStream;
 use Edde\Stream\Exception\StreamException;
 use Nyholm\Psr7\Stream;
 use Psr\Http\Message\StreamInterface;

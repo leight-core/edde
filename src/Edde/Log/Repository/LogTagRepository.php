@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Edde\Log\Repository;
 
 use Edde\Repository\AbstractRepository;
-use Marsh\Tag\Repository\TagRepositoryTrait;
+use Edde\Tag\Repository\TagRepositoryTrait;
 
 class LogTagRepository extends AbstractRepository {
 	use TagRepositoryTrait;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Edde\Log\Dto;
 
 use Edde\Dto\AbstractDto;
-use Marsh\Tag\Dto\TagDto;
+use Edde\Tag\Dto\TagDto;
 use Marsh\User\Dto\UserDto;
 
 class LogDto extends AbstractDto {

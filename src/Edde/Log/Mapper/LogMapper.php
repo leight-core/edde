@@ -7,7 +7,7 @@ use DateTime;
 use Edde\Log\Dto\LogDto;
 use Edde\Log\Repository\LogTagRepositoryTrait;
 use Edde\Mapper\AbstractMapper;
-use Marsh\Tag\Mapper\TagMapperTrait;
+use Edde\Tag\Mapper\TagMapperTrait;
 use Marsh\User\Mapper\UserMapperTrait;
 use Marsh\User\UserRepositoryTrait;
 

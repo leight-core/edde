@@ -1,9 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Marsh\Exception;
-
-use Edde\Rest\Exception\RestException;
+namespace Edde\Rest\Exception;
 
 class ClientException extends RestException {
 }

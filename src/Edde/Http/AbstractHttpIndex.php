@@ -118,17 +118,17 @@ abstract class AbstractHttpIndex implements IHttpIndex {
 				'method' => $method,
 				'query'  => $query = ((array)($class->annotations['query'] ?? [])),
 				'roles'  => (array)($class->annotations['roles'] ?? []),
-				'link'   => ($class->annotations['link'] ?? '/') . $this->linkFilter->filter(str_replace([
-							'/endpoint/',
-							'-endpoint',
-						], [
-							'/',
-							'',
-						], implode('/', array_map(function (string $part) {
-							return StringUtils::recamel($part);
-						}, explode('\\', $class->fqdn)))) . implode('', array_map(function (string $param) {
-							return '/{' . $param . '}';
-						}, array_unique($query)))),
+				'link'   => $class->annotations['link'] ?? ('/' . $this->linkFilter->filter(str_replace([
+								'/endpoint/',
+								'-endpoint',
+							], [
+								'/',
+								'',
+							], implode('/', array_map(function (string $part) {
+								return StringUtils::recamel($part);
+							}, explode('\\', $class->fqdn)))) . implode('', array_map(function (string $param) {
+								return '/{' . $param . '}';
+							}, array_unique($query))))),
 			];
 
 			$endpoint = Endpoint::create($defaults);

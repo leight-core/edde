@@ -18,8 +18,8 @@ use Edde\Php\PhpBinaryServiceTrait;
 use Edde\Profiler\ProfilerServiceTrait;
 use Edde\Progress\IProgress;
 use Edde\Repository\Exception\RepositoryException;
-use Marsh\User\CurrentUserTrait;
-use Marsh\User\Exception\UserNotSelectedException;
+use Edde\User\CurrentUserTrait;
+use Edde\User\Exception\UserNotSelectedException;
 use Symfony\Component\Process\Process;
 use function get_class;
 use function realpath;
@@ -40,17 +40,22 @@ class CliJobExecutor extends AbstractJobExecutor {
 	use ProfilerServiceTrait;
 
 	/**
+	 * Configuration of the CLI script executable file (for example cli.php; ideally absolute path).
+	 */
+	const CONFIG_CLI_PHP = 'cli.php';
+
+	/**
 	 * @param IJobService $jobService
 	 * @param null        $params
 	 *
 	 * @return JobDto
 	 *
+	 * @throws Exception
 	 * @throws ItemException
 	 * @throws JobException
 	 * @throws RepositoryException
 	 * @throws SkipException
 	 * @throws UserNotSelectedException
-	 * @throws Exception
 	 */
 	public function execute(IJobService $jobService, $params = null): JobDto {
 		return $this->profilerService->profile(static::class, function () use ($jobService, $params) {
@@ -64,7 +69,7 @@ class CliJobExecutor extends AbstractJobExecutor {
 			$this->logger->info(sprintf('PHP executable [%s].', $php), ['tags' => ['job']]);
 			$process = new Process([
 				$php,
-				realpath(BLACKFOX_ROOT . '/cli.php'),
+				realpath($this->configService->system(self::CONFIG_CLI_PHP)),
 				'job',
 				'--trace=' . $this->traceService->trace(),
 				'--user=' . $this->currentUser->requiredId(),

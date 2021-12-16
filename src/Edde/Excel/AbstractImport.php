@@ -17,7 +17,6 @@ use Edde\Progress\IProgress;
 use Edde\Progress\NoProgress;
 use Edde\Translation\Mapper\TranslatingMapperTrait;
 use Edde\Translation\TranslationServiceTrait;
-use Marsh\User\Exception\UserNotSelectedException;
 use PhpOffice\PhpSpreadsheet\Exception;
 use Throwable;
 use function get_class;
@@ -69,10 +68,8 @@ abstract class AbstractImport extends AbstractImportService implements IExcelImp
 	 * @throws EmptySheetException
 	 * @throws Exception
 	 * @throws JobInterruptedException
-	 * @throws MemoryLimitException
 	 * @throws MissingHeaderException
 	 * @throws \Dibi\Exception
-	 * @throws UserNotSelectedException
 	 */
 	public function sheet(string $file, string $sheet = null, IProgress $progress = null) {
 		$progress = NoProgress::ensure($progress);

@@ -5,7 +5,6 @@ namespace Edde\Translation;
 
 use Dibi\Exception;
 use Edde\Translation\Repository\TranslationRepositoryTrait;
-use Marsh\User\Exception\UserNotSelectedException;
 
 class TranslationService {
 	use TranslationRepositoryTrait;
@@ -20,7 +19,6 @@ class TranslationService {
 	 * @return string
 	 *
 	 * @throws Exception
-	 * @throws UserNotSelectedException
 	 */
 	public function translation(string $label, string $default = null): string {
 		return $this->translate($label, $this->languageService->forCurrentUser(), $default);

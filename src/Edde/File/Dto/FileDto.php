@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Edde\File\Dto;
 
+use Edde\Bridge\User\UserDto;
 use Edde\Dto\AbstractDto;
-use Marsh\User\Dto\UserDto;
 
 class FileDto extends AbstractDto {
 	/** @var string */
@@ -21,10 +21,10 @@ class FileDto extends AbstractDto {
 	public $native;
 	/** @var string */
 	public $created;
-	/** @var string|void|null */
+	/** @var string|void */
 	public $updated;
-	/** @var double|null|void */
+	/** @var double|void */
 	public $ttl;
-	/** @var UserDto|null|void */
+	/** @var UserDto|void */
 	public $user;
 }

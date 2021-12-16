@@ -7,7 +7,7 @@ use Edde\File\Dto\ChunkDto;
 use Edde\File\Dto\CommitDto;
 use Edde\File\Dto\FileDto;
 use Edde\Stream\IStream;
-use Marsh\User\CurrentUserTrait;
+use Edde\User\CurrentUserTrait;
 
 class FileChunkService {
 	use FileServiceTrait;

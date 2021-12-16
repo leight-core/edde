@@ -9,7 +9,7 @@ use Edde\Log\LoggerTrait;
 use Edde\Log\TraceServiceTrait;
 use Edde\Mapper\Exception\ItemException;
 use Edde\Mapper\Exception\SkipException;
-use Marsh\User\CurrentUserTrait;
+use Edde\User\CurrentUserTrait;
 use Nette\Utils\JsonException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Edde\Log\Dto;
 
+use Edde\Bridge\User\UserDto;
 use Edde\Dto\AbstractDto;
 use Edde\Tag\Dto\TagDto;
-use Marsh\User\Dto\UserDto;
 
 class LogDto extends AbstractDto {
 	/**
@@ -21,7 +21,7 @@ class LogDto extends AbstractDto {
 	 */
 	public $log;
 	/**
-	 * @var string|null
+	 * @var string|void
 	 */
 	public $stack;
 	/**
@@ -29,11 +29,11 @@ class LogDto extends AbstractDto {
 	 */
 	public $stamp;
 	/**
-	 * @var string|null
+	 * @var string|void
 	 */
 	public $trace;
 	/**
-	 * @var string|null
+	 * @var string|void
 	 */
 	public $reference;
 	/**
@@ -41,7 +41,7 @@ class LogDto extends AbstractDto {
 	 */
 	public $microtime;
 	/**
-	 * @var UserDto|null
+	 * @var UserDto|void
 	 */
 	public $user;
 	/**

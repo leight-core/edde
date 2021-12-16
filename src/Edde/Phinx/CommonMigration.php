@@ -9,8 +9,8 @@ use Edde\Job\Repository\JobRepositoryTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Stream\FileStream;
 use Edde\Stream\IStream;
+use Edde\User\CurrentUserTrait;
 use Edde\Uuid\UuidServiceTrait;
-use Marsh\User\CurrentUserTrait;
 use Phinx\Migration\AbstractMigration;
 use Throwable;
 use function basename;
@@ -28,7 +28,7 @@ abstract class CommonMigration extends AbstractMigration {
 	use LoggerTrait;
 
 	public function init() {
-		(require __DIR__ . '/../../../../bootstrap.php')->getContainer()->injectOn($this);
+		(require __DIR__ . '/../../../../bootstrap.php')->injectOn($this);
 	}
 
 	protected function import(string $service, string $file) {

@@ -6,7 +6,7 @@ namespace Edde\Log;
 use Edde\Debug\DebugServiceTrait;
 use Edde\Log\Dto\Create\CreateDto;
 use Edde\Log\Repository\LogRepositoryTrait;
-use Marsh\User\CurrentUserTrait;
+use Edde\User\CurrentUserTrait;
 use Throwable;
 
 /**

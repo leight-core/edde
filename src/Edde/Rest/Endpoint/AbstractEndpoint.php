@@ -15,7 +15,6 @@ use Edde\Rest\Exception\RestException;
 use Edde\Rest\IEndpoint;
 use Edde\Rest\Reflection\Endpoint;
 use Edde\Slim\Response;
-use Marsh\User\Exception\UnauthorizedException;
 use Nette\Utils\JsonException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

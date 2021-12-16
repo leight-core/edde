@@ -6,12 +6,8 @@ namespace Edde\User;
 use Edde\Dto\AbstractDto;
 
 abstract class AbstractUser extends AbstractDto {
-	/** @var string|null */
+	/** @var string */
 	public $id;
 	/** @var string */
 	public $name;
-	/** @var string */
-	public $login;
-	/** @var string */
-	public $site;
 }

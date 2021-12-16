@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Edde\User;
 
-use Edde\Bridge\User\User;
 use Edde\Mapper\Exception\ItemException;
 use Edde\Mapper\Exception\SkipException;
 use Edde\User\Exception\UserNotSelectedException;
@@ -18,7 +17,7 @@ class CurrentUser {
 	use UserRepositoryTrait;
 	use CurrentUserMapperTrait;
 
-	/** @var User|null */
+	/** @var CurrentUser|null */
 	protected $user;
 
 	/**
@@ -26,12 +25,12 @@ class CurrentUser {
 	 *
 	 * @param mixed $userId mixed is intentional as it accepts "strange" ids from int, string as int and strings; it goes down to Repository which could handle it properly
 	 *
-	 * @return User|null
+	 * @return CurrentUser|null
 	 *
 	 * @throws ItemException
 	 * @throws SkipException
 	 */
-	public function select($userId): ?User {
+	public function select($userId): ?CurrentUser {
 		$this->user = null;
 		if ($userId) {
 			$this->user = $this->currentUserMapper->item($this->userRepository->findByLogin($userId));
@@ -39,7 +38,7 @@ class CurrentUser {
 		return $this->user;
 	}
 
-	public function selectBy(string $login): ?User {
+	public function selectBy(string $login): ?CurrentUser {
 		if ($user = $this->userRepository->findByLogin($login)) {
 			return $this->select($user->id);
 		}
@@ -73,15 +72,15 @@ class CurrentUser {
 		return !!$this->user;
 	}
 
-	public function requireUser(): User {
+	public function requireUser(): CurrentUser {
 		if (!$this->user) {
 			throw new UserNotSelectedException('Requested an user, but no user has been selected.');
 		}
 		return $this->user;
 	}
 
-	public function publicUser(array $extra = []): User {
-		return User::create(array_merge([
+	public function publicUser(array $extra = []): CurrentUser {
+		return CurrentUser::create(array_merge([
 			'id'    => null,
 			'name'  => 'public',
 			'login' => 'public',

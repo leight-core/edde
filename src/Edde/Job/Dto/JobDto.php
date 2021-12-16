@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Edde\Job\Dto;
 
+use Edde\Bridge\User\UserDto;
 use Edde\Dto\AbstractDto;
-use Marsh\User\Dto\UserDto;
 
 /**
  * @template TResult=void

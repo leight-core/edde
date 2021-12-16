@@ -3,13 +3,12 @@ declare(strict_types=1);
 
 namespace Edde\Translation;
 
+use Edde\Bridge\User\CurrentUser;
 use Edde\Dto\Common\SelectItemDto;
 use Edde\Dto\DtoServiceTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Translation\Repository\TranslationRepositoryTrait;
-use Marsh\User\CurrentUserTrait;
-use Marsh\User\Exception\UserNotSelectedException;
-use Marsh\User\User;
+use Edde\User\CurrentUserTrait;
 use function array_map;
 use function array_merge;
 
@@ -22,12 +21,12 @@ class LanguageService {
 	/**
 	 * Resolve a language for the given user. NULL as a result means translations are off.
 	 *
-	 * @param User        $user
+	 * @param CurrentUser $user
 	 * @param string|null $default
 	 *
 	 * @return string|null
 	 */
-	public function resolve(User $user, string $default = null): ?string {
+	public function resolve(CurrentUser $user, string $default = null): ?string {
 		return $user->settings ? $user->settings->language : $default;
 	}
 

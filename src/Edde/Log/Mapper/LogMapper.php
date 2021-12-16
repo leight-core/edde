@@ -8,8 +8,8 @@ use Edde\Log\Dto\LogDto;
 use Edde\Log\Repository\LogTagRepositoryTrait;
 use Edde\Mapper\AbstractMapper;
 use Edde\Tag\Mapper\TagMapperTrait;
+use Edde\User\Mapper\UserMapperTrait;
 use Edde\User\Repository\UserRepositoryTrait;
-use Marsh\User\Mapper\UserMapperTrait;
 
 /**
  * @Injectable(lazy=true)

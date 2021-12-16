@@ -6,7 +6,6 @@ namespace Edde\Translation\Mapper;
 use Dibi\Exception as DibiException;
 use Edde\Mapper\AbstractMapper;
 use Edde\Translation\TranslationServiceTrait;
-use Marsh\User\Exception\UserNotSelectedException;
 
 class TranslatingMapper extends AbstractMapper {
 	use TranslationServiceTrait;
@@ -18,7 +17,6 @@ class TranslatingMapper extends AbstractMapper {
 	 * @return array|false
 	 *
 	 * @throws DibiException
-	 * @throws UserNotSelectedException
 	 */
 	public function item($item, array $params = []) {
 		return array_combine(array_map(function (string $label) use ($params) {

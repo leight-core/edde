@@ -58,6 +58,11 @@ class SlimApp {
 		return $this;
 	}
 
+	public function injectOn($instance): SlimApp {
+		$this->app->getContainer()->injectOn($instance);
+		return $this;
+	}
+
 	public function dynamicBasePath(string $lookup = 'blackfox'): SlimApp {
 		/**
 		 * Guess base path to keep things working when moved between strange environments.

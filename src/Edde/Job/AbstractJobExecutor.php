@@ -13,7 +13,7 @@ use Edde\Job\Repository\JobRepositoryTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Progress\IProgress;
 use Edde\Translation\LanguageServiceTrait;
-use Marsh\User\CurrentUserTrait;
+use Edde\User\CurrentUserTrait;
 use Nette\Utils\Json;
 use Throwable;
 

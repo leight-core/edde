@@ -5,8 +5,10 @@ namespace Edde\File\Mapper;
 
 use Edde\File\Dto\FileDto;
 use Edde\Mapper\AbstractMapper;
+use Edde\Mapper\Exception\ItemException;
+use Edde\Mapper\Exception\SkipException;
+use Edde\User\Mapper\UserMapperTrait;
 use Edde\User\Repository\UserRepositoryTrait;
-use Marsh\User\Mapper\UserMapperTrait;
 
 class FileMapper extends AbstractMapper {
 	use UserRepositoryTrait;
@@ -17,6 +19,9 @@ class FileMapper extends AbstractMapper {
 	 * @param array $params
 	 *
 	 * @return FileDto
+	 *
+	 * @throws ItemException
+	 * @throws SkipException
 	 */
 	public function item($item, array $params = []) {
 		return $this->dtoService->fromArray(FileDto::class, [

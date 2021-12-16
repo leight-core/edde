@@ -25,6 +25,7 @@ use Edde\Profiler\ProfilerMiddleware;
 use Edde\Reflection\ReflectionDtoService;
 use Edde\Rest\EndpointInfo;
 use Edde\Rest\IEndpointInfo;
+use Edde\Session\SessionMiddleware;
 use Edde\Storage\StorageConfig;
 use Phinx\Config\ConfigInterface;
 use Phinx\Migration\Manager;
@@ -122,6 +123,7 @@ class SlimApp {
 		$containerBuilder->addDefinitions(...$definitions);
 		$app = Bridge::create($containerBuilder->build());
 
+		$app->add(SessionMiddleware::class);
 		$app->add(MemoryUsageMiddleware::class);
 		$app->add(ProfilerMiddleware::class);
 

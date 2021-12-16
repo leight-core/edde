@@ -27,6 +27,7 @@ use Edde\Rest\EndpointInfo;
 use Edde\Rest\IEndpointInfo;
 use Edde\Session\SessionMiddleware;
 use Edde\Storage\StorageConfig;
+use Nette\Utils\Strings;
 use Phinx\Config\ConfigInterface;
 use Phinx\Migration\Manager;
 use Psr\Container\ContainerInterface;
@@ -52,6 +53,15 @@ class SlimApp {
 	public function add($middleware): SlimApp {
 		$this->app->add($middleware);
 		return $this;
+	}
+
+	public function dynamicBasePath(string $lookup = 'blackfox') {
+		/**
+		 * Guess base path to keep things working when moved between strange environments.
+		 */
+		if ($match = Strings::match($_SERVER['REQUEST_URI'] ?? '', '~^(?<base>.*?/' . $lookup . ').*$~')['base']) {
+			$this->app->setBasePath($match);
+		}
 	}
 
 	public function setBasePath(string $basePath): SlimApp {

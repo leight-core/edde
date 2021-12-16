@@ -6,8 +6,8 @@ namespace Edde\Job\Mapper;
 use Edde\Job\Dto\JobDto;
 use Edde\Job\Repository\JobLogRepositoryTrait;
 use Edde\Mapper\AbstractMapper;
+use Edde\User\Repository\UserRepositoryTrait;
 use Marsh\User\Mapper\UserMapperTrait;
-use Marsh\User\UserRepositoryTrait;
 
 class JobMapper extends AbstractMapper {
 	use JobLogRepositoryTrait;

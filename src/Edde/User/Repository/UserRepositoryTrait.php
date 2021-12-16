@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\User;
+namespace Edde\User\Repository;
 
 trait UserRepositoryTrait {
 	/** @var IUserRepository */

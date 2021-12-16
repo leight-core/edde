@@ -5,8 +5,8 @@ namespace Edde\File\Mapper;
 
 use Edde\File\Dto\FileDto;
 use Edde\Mapper\AbstractMapper;
+use Edde\User\Repository\UserRepositoryTrait;
 use Marsh\User\Mapper\UserMapperTrait;
-use Marsh\User\UserRepositoryTrait;
 
 class FileMapper extends AbstractMapper {
 	use UserRepositoryTrait;

@@ -27,6 +27,7 @@ use Edde\Rest\EndpointInfo;
 use Edde\Rest\IEndpointInfo;
 use Edde\Session\SessionMiddleware;
 use Edde\Storage\StorageConfig;
+use Nette\Utils\Json;
 use Nette\Utils\Strings;
 use Phinx\Config\ConfigInterface;
 use Phinx\Migration\Manager;
@@ -144,7 +145,10 @@ class SlimApp {
 		$app->add(ProfilerMiddleware::class);
 
 		$app->addBodyParsingMiddleware()
-			->registerBodyParser('application/json', 'json_decode');
+			->registerBodyParser('application/json', [
+				Json::class,
+				'decode',
+			]);
 
 		return new self($app);
 	}

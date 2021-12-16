@@ -3,7 +3,16 @@ declare(strict_types=1);
 
 namespace Edde\User\Mapper;
 
+use Edde\Bridge\User\User;
 use Edde\Mapper\AbstractMapper;
 
 abstract class AbstractCurrentUserMapper extends AbstractMapper implements ICurrentUserMapper {
+	public function item($item, array $params = []) {
+		if (!$item) {
+			return null;
+		}
+		return $this->dtoService->fromArray(User::class, $this->toUser($item, $params));
+	}
+
+	abstract protected function toUser($item, array $params = []): array;
 }

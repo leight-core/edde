@@ -48,6 +48,8 @@ class SlimApp {
 
 	/** @var App */
 	protected $app;
+	/** @var SlimApp */
+	static public $instance;
 
 	public function __construct(App $app) {
 		$this->app = $app;
@@ -156,6 +158,6 @@ class SlimApp {
 				'decode',
 			]);
 
-		return new self($app);
+		return self::$instance = new self($app);
 	}
 }

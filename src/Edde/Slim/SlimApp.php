@@ -113,7 +113,7 @@ class SlimApp {
 			IPhpBinaryService::class => function (ContainerInterface $container) {
 				return $container->get(PhpBinaryService::class);
 			},
-			IEndpointInfo::class     => function (ContainerInterface $container) {
+			IEndpointInfo::class   => function (ContainerInterface $container) {
 				return $container->get(EndpointInfo::class);
 			},
 			CacheInterface::class  => function (ContainerInterface $container) {
@@ -136,6 +136,7 @@ class SlimApp {
 				$application->add($container->get(JobExecutorCommand::class));
 				return $application;
 			},
+			SlimApp::CONFIG_CLI    => [],
 			Manager::class         => function (ContainerInterface $container) {
 				$manager = new Manager($container->get(ConfigInterface::class), new ArrayInput([]), new StreamOutput(fopen('php://output', 'w')));
 				$manager->setContainer($container);

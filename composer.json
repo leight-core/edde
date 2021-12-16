@@ -38,6 +38,7 @@
 		"psr/log": "^1.1",
 		"ramsey/uuid": "^4.1.1",
 		"tracy/tracy": "^v2.8",
+		"symfony/http-foundation": "^v5.4.1",
 		"doctrine/annotations": "^1.12",
 		"robmorgan/phinx": "^0.12",
 		"dibi/dibi": "^4.1",

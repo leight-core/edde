@@ -37,6 +37,8 @@ use Slim\App;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use function fopen;
 
 class SlimApp {
@@ -87,6 +89,9 @@ class SlimApp {
 		$containerBuilder = new ContainerBuilder();
 		$containerBuilder->useAnnotations(true);
 		$containerBuilder->addDefinitions([
+			SessionInterface::class  => function (ContainerInterface $container) {
+				return $container->get(Session::class);
+			},
 			IHttpRouter::class       => function (ContainerInterface $container) {
 				return $container->get(ApiRouter::class);
 			},

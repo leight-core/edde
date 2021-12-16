@@ -15,6 +15,7 @@ use Edde\Http\HttpIndex;
 use Edde\Http\IHttpIndex;
 use Edde\Http\IHttpRouter;
 use Edde\Job\CliJobExecutor;
+use Edde\Job\Command\JobExecutorCommand;
 use Edde\Job\IJobExecutor;
 use Edde\Log\DatabaseLogger;
 use Edde\Php\IPhpBinaryService;
@@ -24,6 +25,7 @@ use Edde\Profiler\ProfilerMiddleware;
 use Edde\Reflection\ReflectionDtoService;
 use Edde\Rest\EndpointInfo;
 use Edde\Rest\IEndpointInfo;
+use Edde\Storage\StorageConfig;
 use Phinx\Config\ConfigInterface;
 use Phinx\Migration\Manager;
 use Psr\Container\ContainerInterface;
@@ -96,11 +98,15 @@ class SlimApp {
 			IFileService::class      => function (Container $container) {
 				return $container->make(FileService::class, ['root' => $container->get(FileService::CONFIG_ROOT)]);
 			},
+			StorageConfig::class     => function (ContainerInterface $container) {
+				return new StorageConfig($container->get(StorageConfig::CONFIG_STORAGE));
+			},
 			Application::class       => function (ContainerInterface $container) {
 				$application = new Application($container->get(self::CONFIG_APP_NAME));
 				foreach ($container->get(self::CONFIG_CLI) as $cli) {
 					$application->add($container->get($cli));
 				}
+				$application->add($container->get(JobExecutorCommand::class));
 				return $application;
 			},
 			Manager::class           => function (ContainerInterface $container) {

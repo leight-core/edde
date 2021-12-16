@@ -7,6 +7,7 @@ use Edde\File\FileServiceTrait;
 use Edde\Import\ImportMangerTrait;
 use Edde\Job\Repository\JobRepositoryTrait;
 use Edde\Log\LoggerTrait;
+use Edde\Slim\SlimApp;
 use Edde\Stream\FileStream;
 use Edde\Stream\IStream;
 use Edde\User\CurrentUserServiceTrait;
@@ -28,7 +29,7 @@ abstract class CommonMigration extends AbstractMigration {
 	use LoggerTrait;
 
 	public function init() {
-		(require __DIR__ . '/../../../../bootstrap.php')->injectOn($this);
+		SlimApp::$instance->injectOn($this);
 	}
 
 	protected function import(string $service, string $file) {

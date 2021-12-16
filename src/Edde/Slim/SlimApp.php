@@ -67,6 +67,10 @@ class SlimApp {
 		$this->app->run();
 	}
 
+	public function cli() {
+		return $this->app->getContainer()->get(Application::class)->run();
+	}
+
 	static public function create(...$definitions): SlimApp {
 		$containerBuilder = new ContainerBuilder();
 		$containerBuilder->useAnnotations(true);

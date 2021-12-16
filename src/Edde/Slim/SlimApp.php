@@ -116,19 +116,19 @@ class SlimApp {
 			IEndpointInfo::class     => function (ContainerInterface $container) {
 				return $container->get(EndpointInfo::class);
 			},
-			CacheInterface::class    => function (ContainerInterface $container) {
+			CacheInterface::class  => function (ContainerInterface $container) {
 				return $container->get(DatabaseCache::class);
 			},
-			LoggerInterface::class   => function (ContainerInterface $container) {
+			LoggerInterface::class => function (ContainerInterface $container) {
 				return $container->get(DatabaseLogger::class);
 			},
-			IFileService::class      => function (Container $container) {
+			IFileService::class    => function (Container $container) {
 				return $container->make(FileService::class, ['root' => $container->get(FileService::CONFIG_ROOT)]);
 			},
-			StorageConfig::class     => function (ContainerInterface $container) {
+			StorageConfig::class   => function (ContainerInterface $container) {
 				return new StorageConfig($container->get(StorageConfig::CONFIG_STORAGE));
 			},
-			Application::class       => function (ContainerInterface $container) {
+			Application::class     => function (ContainerInterface $container) {
 				$application = new Application($container->get(self::CONFIG_APP_NAME));
 				foreach ($container->get(self::CONFIG_CLI) as $cli) {
 					$application->add($container->get($cli));
@@ -136,7 +136,10 @@ class SlimApp {
 				$application->add($container->get(JobExecutorCommand::class));
 				return $application;
 			},
-			Manager::class           => function (ContainerInterface $container) {
+			SlimApp::CONFIG_CLI    => [
+				JobExecutorCommand::class,
+			],
+			Manager::class         => function (ContainerInterface $container) {
 				$manager = new Manager($container->get(ConfigInterface::class), new ArrayInput([]), new StreamOutput(fopen('php://output', 'w')));
 				$manager->setContainer($container);
 				return $manager;

@@ -47,6 +47,12 @@ class FileService implements IFileService {
 	use UuidServiceTrait;
 	use RandomServiceTrait;
 
+	/**
+	 * Name of configuration (or container entry) item to get the base path for the
+	 * filesystem.
+	 */
+	const CONFIG_ROOT = 'file-service.root';
+
 	/** @var Directory */
 	protected $directory;
 

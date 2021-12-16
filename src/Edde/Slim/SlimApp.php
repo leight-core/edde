@@ -30,11 +30,15 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\SimpleCache\CacheInterface;
 use Slim\App;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
 use function fopen;
 
 class SlimApp {
+	const CONFIG_APP_NAME = 'app.name';
+	const CONFIG_CLI = 'app.cli';
+
 	/** @var App */
 	protected $app;
 
@@ -91,6 +95,13 @@ class SlimApp {
 			},
 			IFileService::class      => function (Container $container) {
 				return $container->make(FileService::class, ['root' => $container->get(FileService::CONFIG_ROOT)]);
+			},
+			Application::class       => function (ContainerInterface $container) {
+				$application = new Application($container->get(self::CONFIG_APP_NAME));
+				foreach ($container->get(self::CONFIG_CLI) as $cli) {
+					$application->add($container->get($cli));
+				}
+				return $application;
 			},
 			Manager::class           => function (ContainerInterface $container) {
 				$manager = new Manager($container->get(ConfigInterface::class), new ArrayInput([]), new StreamOutput(fopen('php://output', 'w')));

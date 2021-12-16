@@ -6,7 +6,7 @@ namespace Edde\Log;
 use Edde\Debug\DebugServiceTrait;
 use Edde\Log\Dto\Create\CreateDto;
 use Edde\Log\Repository\LogRepositoryTrait;
-use Edde\User\CurrentUserTrait;
+use Edde\User\CurrentUserServiceTrait;
 use Throwable;
 
 /**
@@ -14,7 +14,7 @@ use Throwable;
  */
 class DatabaseLogger extends AbstractLogger {
 	use LogRepositoryTrait;
-	use CurrentUserTrait;
+	use CurrentUserServiceTrait;
 	use DebugServiceTrait;
 
 	public function log($level, $message, array $context = []) {
@@ -40,7 +40,7 @@ class DatabaseLogger extends AbstractLogger {
 				'type'        => $level,
 				'traceId'     => $traceId,
 				'referenceId' => $referenceId,
-				'userId'      => $this->currentUser->optionalId(),
+				'userId'      => $this->currentUserService->optionalId(),
 				'trace'       => $trace,
 				'context'     => empty($context) ? null : $context,
 				'tags'        => $tags,

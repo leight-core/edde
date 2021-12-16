@@ -8,12 +8,12 @@ use Edde\Dto\Common\SelectItemDto;
 use Edde\Dto\DtoServiceTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Translation\Repository\TranslationRepositoryTrait;
-use Edde\User\CurrentUserTrait;
+use Edde\User\CurrentUserServiceTrait;
 use function array_map;
 use function array_merge;
 
 class LanguageService {
-	use CurrentUserTrait;
+	use CurrentUserServiceTrait;
 	use LoggerTrait;
 	use DtoServiceTrait;
 	use TranslationRepositoryTrait;
@@ -38,7 +38,7 @@ class LanguageService {
 	 * @throws UserNotSelectedException
 	 */
 	public function forCurrentUser(string $default = null): ?string {
-		$language = $this->resolve($user = $this->currentUser->requireUser(), $default);
+		$language = $this->resolve($user = $this->currentUserService->requireUser(), $default);
 		$this->logger->info(sprintf('Resolved language [%s] for current user [%s]; default [%s].', $language, $user->emea, $default ?? 'null'));
 		return $language;
 	}

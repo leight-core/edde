@@ -7,7 +7,7 @@ use Edde\Debug\Exception\DebugException;
 use Edde\File\Dto\FileDto;
 use Edde\File\FileServiceTrait;
 use Edde\Stream\TempStream;
-use Edde\User\CurrentUserTrait;
+use Edde\User\CurrentUserServiceTrait;
 use Edde\Uuid\UuidServiceTrait;
 use Throwable;
 use Tracy\Debugger;
@@ -17,7 +17,7 @@ use function ob_start;
 
 class DebugService {
 	use FileServiceTrait;
-	use CurrentUserTrait;
+	use CurrentUserServiceTrait;
 	use UuidServiceTrait;
 
 	protected $lock = false;
@@ -58,7 +58,7 @@ class DebugService {
 				 * Store the file for a few days.
 				 */
 				60 * 60 * 24 * 7,
-				$this->currentUser->optionalId()
+				$this->currentUserService->optionalId()
 			);
 		} finally {
 			$this->lock = false;

@@ -9,7 +9,7 @@ use Edde\Log\LoggerTrait;
 use Edde\Log\TraceServiceTrait;
 use Edde\Mapper\Exception\ItemException;
 use Edde\Mapper\Exception\SkipException;
-use Edde\User\CurrentUserTrait;
+use Edde\User\CurrentUserServiceTrait;
 use Nette\Utils\JsonException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -22,7 +22,7 @@ class JobExecutorCommand extends Command {
 	use JobExecutorTrait;
 	use LoggerTrait;
 	use TraceServiceTrait;
-	use CurrentUserTrait;
+	use CurrentUserServiceTrait;
 
 	protected function configure() {
 		$this->setName('job');
@@ -46,7 +46,7 @@ class JobExecutorCommand extends Command {
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		try {
-			$this->currentUser->select($input->getOption('user'));
+			$this->currentUserService->select($input->getOption('user'));
 			$this->traceService->setReference($input->getOption('trace'));
 			$uuid = $input->getArgument('uuid');
 			$this->logger->debug(sprintf('Starting [%s]; job uuid [%s]', self::class, $uuid), ['tags' => ['job']]);

@@ -7,15 +7,15 @@ use Edde\File\Dto\ChunkDto;
 use Edde\File\Dto\CommitDto;
 use Edde\File\Dto\FileDto;
 use Edde\Stream\IStream;
-use Edde\User\CurrentUserTrait;
+use Edde\User\CurrentUserServiceTrait;
 
 class FileChunkService {
 	use FileServiceTrait;
-	use CurrentUserTrait;
+	use CurrentUserServiceTrait;
 
 	public function chunk(ChunkDto $chunkDto) {
 		return $chunkDto->stream->use(function (IStream $stream) use ($chunkDto) {
-			$this->fileService->chunk($stream, $chunkDto->hash, $this->currentUser->optionalId());
+			$this->fileService->chunk($stream, $chunkDto->hash, $this->currentUserService->optionalId());
 		});
 	}
 

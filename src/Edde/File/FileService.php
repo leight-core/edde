@@ -17,7 +17,7 @@ use Edde\Math\RandomServiceTrait;
 use Edde\Repository\Exception\RepositoryException;
 use Edde\Stream\FileStream;
 use Edde\Stream\IStream;
-use Edde\User\CurrentUserTrait;
+use Edde\User\CurrentUserServiceTrait;
 use Edde\Uuid\UuidServiceTrait;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\StorageAttributes;
@@ -40,7 +40,7 @@ use function unlink;
 class FileService implements IFileService {
 	use FileRepositoryTrait;
 	use LoggerTrait;
-	use CurrentUserTrait;
+	use CurrentUserServiceTrait;
 	use MimeServiceTrait;
 	use FileMapperTrait;
 	use DtoServiceTrait;
@@ -67,7 +67,7 @@ class FileService implements IFileService {
 		$this->gc();
 		return FileStream::openRead($_FILES[$file]['tmp_name'])
 			->use(function (IStream $stream) use ($path, $name, $ttl) {
-				return $this->store($stream, $path, $name, $ttl, $this->currentUser->optionalId());
+				return $this->store($stream, $path, $name, $ttl, $this->currentUserService->optionalId());
 			});
 	}
 

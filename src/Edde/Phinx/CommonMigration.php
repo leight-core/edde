@@ -9,7 +9,7 @@ use Edde\Job\Repository\JobRepositoryTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Stream\FileStream;
 use Edde\Stream\IStream;
-use Edde\User\CurrentUserTrait;
+use Edde\User\CurrentUserServiceTrait;
 use Edde\Uuid\UuidServiceTrait;
 use Phinx\Migration\AbstractMigration;
 use Throwable;
@@ -23,7 +23,7 @@ abstract class CommonMigration extends AbstractMigration {
 	use ImportMangerTrait;
 	use JobRepositoryTrait;
 	use FileServiceTrait;
-	use CurrentUserTrait;
+	use CurrentUserServiceTrait;
 	use UuidServiceTrait;
 	use LoggerTrait;
 
@@ -32,7 +32,7 @@ abstract class CommonMigration extends AbstractMigration {
 	}
 
 	protected function import(string $service, string $file) {
-		$this->currentUser->selectBy('upgrade');
+		$this->currentUserService->selectBy('upgrade');
 		$this->jobRepository->cleanup();
 		FileStream::openRead($file)
 			->use(function (IStream $stream) use ($service, $file) {

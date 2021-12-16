@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\User;
 
+use Edde\Bridge\User\CurrentUser;
 use Edde\Mapper\Exception\ItemException;
 use Edde\Mapper\Exception\SkipException;
 use Edde\User\Exception\UserNotSelectedException;
@@ -13,7 +14,7 @@ use function array_merge;
 /**
  * @Injectable(lazy=true)
  */
-class CurrentUser {
+class CurrentUserService {
 	use UserRepositoryTrait;
 	use CurrentUserMapperTrait;
 

@@ -13,7 +13,7 @@ use Edde\Job\Repository\JobRepositoryTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Progress\IProgress;
 use Edde\Translation\LanguageServiceTrait;
-use Edde\User\CurrentUserTrait;
+use Edde\User\CurrentUserServiceTrait;
 use Nette\Utils\Json;
 use Throwable;
 
@@ -21,14 +21,14 @@ abstract class AbstractJobExecutor implements IJobExecutor {
 	use JobRepositoryTrait;
 	use JobLogRepositoryTrait;
 	use ContainerTrait;
-	use CurrentUserTrait;
+	use CurrentUserServiceTrait;
 	use LoggerTrait;
 	use JobProgressFactoryTrait;
 	use JobMapperTrait;
 	use LanguageServiceTrait;
 
 	protected function createJob(IJobService $jobService, $params = null): JobDto {
-		return $this->jobMapper->item($this->jobRepository->create($jobService, $this->currentUser->optionalId(), $params));
+		return $this->jobMapper->item($this->jobRepository->create($jobService, $this->currentUserService->optionalId(), $params));
 	}
 
 	/**

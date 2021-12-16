@@ -18,7 +18,7 @@ use Edde\Php\PhpBinaryServiceTrait;
 use Edde\Profiler\ProfilerServiceTrait;
 use Edde\Progress\IProgress;
 use Edde\Repository\Exception\RepositoryException;
-use Edde\User\CurrentUserTrait;
+use Edde\User\CurrentUserServiceTrait;
 use Edde\User\Exception\UserNotSelectedException;
 use Symfony\Component\Process\Process;
 use function get_class;
@@ -30,7 +30,7 @@ use const BLACKFOX_ROOT;
 class CliJobExecutor extends AbstractJobExecutor {
 	use LoggerTrait;
 	use TraceServiceTrait;
-	use CurrentUserTrait;
+	use CurrentUserServiceTrait;
 	use PhpBinaryServiceTrait;
 	use ConfigServiceTrait;
 	use JobRepositoryTrait;
@@ -72,7 +72,7 @@ class CliJobExecutor extends AbstractJobExecutor {
 				realpath($this->configService->system(self::CONFIG_CLI_PHP)),
 				'job',
 				'--trace=' . $this->traceService->trace(),
-				'--user=' . $this->currentUser->requiredId(),
+				'--user=' . $this->currentUserService->requiredId(),
 				$job->id,
 			], null, null, null, null);
 			$process->setOptions(['create_new_console' => true]);

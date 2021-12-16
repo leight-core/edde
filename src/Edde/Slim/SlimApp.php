@@ -55,13 +55,14 @@ class SlimApp {
 		return $this;
 	}
 
-	public function dynamicBasePath(string $lookup = 'blackfox') {
+	public function dynamicBasePath(string $lookup = 'blackfox'): SlimApp {
 		/**
 		 * Guess base path to keep things working when moved between strange environments.
 		 */
 		if ($match = Strings::match($_SERVER['REQUEST_URI'] ?? '', '~^(?<base>.*?/' . $lookup . ').*$~')['base']) {
 			$this->app->setBasePath($match);
 		}
+		return $this;
 	}
 
 	public function setBasePath(string $basePath): SlimApp {

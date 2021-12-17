@@ -14,6 +14,7 @@ use Edde\File\Mapper\FileMapperTrait;
 use Edde\File\Repository\FileRepositoryTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Math\RandomServiceTrait;
+use Edde\Repository\Exception\DuplicateEntryException;
 use Edde\Repository\Exception\RepositoryException;
 use Edde\Stream\FileStream;
 use Edde\Stream\IStream;
@@ -99,7 +100,12 @@ class FileService implements IFileService {
 		];
 		$name && $source['name'] = $name;
 
-		return $this->fileMapper->item($this->fileRepository->change($source));
+		try {
+			return $this->fileMapper->item($this->fileRepository->change($source));
+		} catch (DuplicateEntryException $exception) {
+			$name && $this->fileRepository->deleteWhere()->where('path', $path)->where('name', $name)->execute();
+			return $this->fileMapper->item($this->fileRepository->change($source));
+		}
 	}
 
 	public function sizeOf(string $file): int {

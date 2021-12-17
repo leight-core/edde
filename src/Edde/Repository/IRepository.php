@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Repository;
 
+use ClanCats\Hydrahon\Query\Sql\Delete;
 use ClanCats\Hydrahon\Query\Sql\Select;
 use Dibi\Result;
 use Edde\Mapper\IMapper;
@@ -37,6 +38,8 @@ interface IRepository {
 	public function toQuery(Query $query): Select;
 
 	public function delete(string $id);
+
+	public function deleteWhere(): Delete;
 
 	/**
 	 * @param Query   $query

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Edde\Repository;
 
 use ClanCats\Hydrahon\Query\Expression;
+use ClanCats\Hydrahon\Query\Sql\Delete;
 use ClanCats\Hydrahon\Query\Sql\Exception as CattyException;
 use ClanCats\Hydrahon\Query\Sql\Select;
 use ClanCats\Hydrahon\Query\Sql\SelectBase;
@@ -241,6 +242,10 @@ abstract class AbstractRepository implements IRepository {
 		$data = $this->find($id);
 		$this->storage->delete($this->table, $id);
 		return $data;
+	}
+
+	public function deleteWhere(): Delete {
+		return $this->table()->delete();
 	}
 
 	public function truncate(): void {

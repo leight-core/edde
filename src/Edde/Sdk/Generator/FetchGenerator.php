@@ -35,6 +35,7 @@ class FetchGenerator {
 		$response = $this->typeGenerator->resolve($endpoint->response);
 		$required = count($endpoint->query) > 0 ? ":" : "?:";
 		$param = reset($endpoint->query);
+		/** @lang text */
 		return <<<EXPORT
 export const {$name}Context = createContext(null as unknown as IEntityContext<{$response}>);
 
@@ -46,7 +47,7 @@ export interface I{$name}Provider extends IEntityProviderProps<{$response}> {
 }
 
 export const {$name}Provider: FC<I{$name}Provider> = ({defaultEntity, children}) => {
-	return <EntityProvider defaultEntity="{defaultEntity}">
+	return <EntityProvider defaultEntity={defaultEntity}>
 		<EntityContext.Consumer>
 			{entityContext => <{$name}Context.Provider value={entityContext}>
 				{children}

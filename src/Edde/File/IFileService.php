@@ -30,10 +30,11 @@ interface IFileService {
 	 * @param string      $chunk
 	 * @param string      $path
 	 * @param string|null $name
+	 * @param bool        $replace
 	 *
 	 * @return FileDto
 	 */
-	public function commit(string $chunk, string $path, string $name = null): FileDto;
+	public function commit(string $chunk, string $path, string $name = null, bool $replace = false): FileDto;
 
 	/**
 	 * Prepare writable file and it's record in database.

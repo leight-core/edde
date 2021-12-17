@@ -21,4 +21,9 @@ class CommitDto extends AbstractDto {
 	 * @description optional filename; when null/undefined, random uuid will be used
 	 */
 	public $name;
+	/**
+	 * @var bool|void
+	 * @description Should the file be overridden if exists?
+	 */
+	public $replace;
 }

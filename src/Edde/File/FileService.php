@@ -87,7 +87,7 @@ class FileService implements IFileService {
 		]));
 	}
 
-	public function commit(string $chunk, string $path, string $name = null): FileDto {
+	public function commit(string $chunk, string $path, string $name = null, bool $replace = false): FileDto {
 		$this->gc();
 		$file = $this->fileRepository->findByPath('/chunk', $chunk);
 

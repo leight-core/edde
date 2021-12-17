@@ -20,6 +20,6 @@ class FileChunkService {
 	}
 
 	public function commit(CommitDto $commitDto): FileDto {
-		return $this->fileService->commit($commitDto->uuid, $commitDto->path, $commitDto->name);
+		return $this->fileService->commit($commitDto->uuid, $commitDto->path, $commitDto->name, $commitDto->replace);
 	}
 }

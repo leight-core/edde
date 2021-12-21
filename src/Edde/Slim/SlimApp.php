@@ -14,6 +14,8 @@ use Edde\File\IFileService;
 use Edde\Http\HttpIndex;
 use Edde\Http\IHttpIndex;
 use Edde\Http\IHttpRouter;
+use Edde\Import\IImportManager;
+use Edde\Import\ImportManager;
 use Edde\Job\CliJobExecutor;
 use Edde\Job\Command\JobExecutorCommand;
 use Edde\Job\IJobExecutor;
@@ -115,22 +117,25 @@ class SlimApp {
 			IPhpBinaryService::class => function (ContainerInterface $container) {
 				return $container->get(PhpBinaryService::class);
 			},
-			IEndpointInfo::class   => function (ContainerInterface $container) {
+			IEndpointInfo::class     => function (ContainerInterface $container) {
 				return $container->get(EndpointInfo::class);
 			},
-			CacheInterface::class  => function (ContainerInterface $container) {
+			CacheInterface::class    => function (ContainerInterface $container) {
 				return $container->get(DatabaseCache::class);
 			},
-			LoggerInterface::class => function (ContainerInterface $container) {
+			LoggerInterface::class   => function (ContainerInterface $container) {
 				return $container->get(DatabaseLogger::class);
 			},
-			IFileService::class    => function (Container $container) {
+			IFileService::class      => function (Container $container) {
 				return $container->make(FileService::class, ['root' => $container->get(FileService::CONFIG_ROOT)]);
 			},
-			StorageConfig::class   => function (ContainerInterface $container) {
+			StorageConfig::class     => function (ContainerInterface $container) {
 				return new StorageConfig($container->get(StorageConfig::CONFIG_STORAGE));
 			},
-			Application::class     => function (ContainerInterface $container) {
+			IImportManager::class    => function (ContainerInterface $container) {
+				return $container->get(ImportManager::class);
+			},
+			Application::class       => function (ContainerInterface $container) {
 				$application = new Application($container->get(self::CONFIG_APP_NAME));
 				foreach ($container->get(self::CONFIG_CLI) as $cli) {
 					$application->add($container->get($cli));
@@ -138,8 +143,8 @@ class SlimApp {
 				$application->add($container->get(JobExecutorCommand::class));
 				return $application;
 			},
-			SlimApp::CONFIG_CLI    => [],
-			Manager::class         => function (ContainerInterface $container) {
+			SlimApp::CONFIG_CLI      => [],
+			Manager::class           => function (ContainerInterface $container) {
 				$manager = new Manager($container->get(ConfigInterface::class), new ArrayInput([]), new StreamOutput(fopen('php://output', 'w')));
 				$manager->setContainer($container);
 				return $manager;

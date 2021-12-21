@@ -15,7 +15,6 @@ use Edde\Php\Exception\MemoryLimitException;
 use Edde\Progress\Dto\ItemDto;
 use Edde\Progress\IProgress;
 use Edde\Progress\NoProgress;
-use Edde\Translation\Mapper\TranslatingMapperTrait;
 use Edde\Translation\TranslationServiceTrait;
 use PhpOffice\PhpSpreadsheet\Exception;
 use Throwable;
@@ -27,7 +26,6 @@ abstract class AbstractImport extends AbstractImportService implements IExcelImp
 	use ExcelServiceTrait;
 	use ContainerTrait;
 	use TranslationServiceTrait;
-	use TranslatingMapperTrait;
 	use DtoServiceTrait;
 
 	public function import(string $file, $params = null, IProgress $progress = null) {

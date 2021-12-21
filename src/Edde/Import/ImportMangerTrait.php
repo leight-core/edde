@@ -4,15 +4,15 @@ declare(strict_types=1);
 namespace Edde\Import;
 
 trait ImportMangerTrait {
-	/** @var ImportManager */
+	/** @var IImportManager */
 	protected $importManager;
 
 	/**
 	 * @Inject
 	 *
-	 * @param ImportManager $importManager
+	 * @param IImportManager $importManager
 	 */
-	public function setImportManager(ImportManager $importManager): void {
+	public function setImportManager(IImportManager $importManager): void {
 		$this->importManager = $importManager;
 	}
 }

@@ -33,10 +33,10 @@ class ExcelService {
 	/**
 	 * Iterate through the given file on the given worksheet.
 	 *
-	 * @param string      $file      file to load, yaaay!
-	 * @param int         $worksheet worksheet index to be iterated
-	 * @param int         $first     first line (0 - without header, 1 - with a header) - basically skips first number of rows, indexed from 0
-	 * @param string|null $sheet     sheet to load (one can save some perf. by explicitly saying sheet name)
+	 * @param string     $file      file to load, yaaay!
+	 * @param int        $worksheet worksheet index to be iterated
+	 * @param int        $first     first line (0 - without header, 1 - with a header) - basically skips first number of rows, indexed from 0
+	 * @param mixed|null $sheet     sheet to load (one can save some perf. by explicitly saying sheet name)
 	 *
 	 * @return Generator|array[]
 	 *
@@ -44,7 +44,7 @@ class ExcelService {
 	 * @throws Exception
 	 * @throws MissingHeaderException
 	 */
-	public function read(string $file, int $worksheet = 0, int $first = 1, string $sheet = null): Generator {
+	public function read(string $file, int $worksheet = 0, int $first = 1, $sheet = null): Generator {
 		$spreadsheet = $this->load($file, $sheet ? [$sheet] : null);
 		if (($worksheet = $spreadsheet->getSheet($worksheet))->getHighestRow() === 1) {
 			throw new EmptySheetException(sprintf('Sheet [%s] of Excel file is empty.', $sheet));

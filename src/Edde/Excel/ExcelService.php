@@ -7,6 +7,7 @@ use Edde\Dto\DtoServiceTrait;
 use Edde\Excel\Dto\HandleDto;
 use Edde\Excel\Dto\MetaDto;
 use Edde\Excel\Dto\ReadDto;
+use Edde\Excel\Dto\ServiceDto;
 use Edde\Excel\Dto\TabDto;
 use Edde\Excel\Exception\EmptySheetException;
 use Edde\Excel\Exception\MissingHeaderException;
@@ -17,6 +18,8 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\Exception;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Row;
+use Throwable;
+use function array_combine;
 use function array_map;
 use function array_merge;
 use function array_unique;
@@ -53,6 +56,13 @@ class ExcelService implements IExcelService {
 		}
 	}
 
+	public function safeRead(ReadDto $readDto): Generator {
+		try {
+			yield from $this->read($readDto);
+		} catch (Throwable $exception) {
+		}
+	}
+
 	public function handle(HandleDto $handleDto): void {
 		$meta = $this->meta($handleDto->file);
 	}
@@ -74,15 +84,11 @@ class ExcelService implements IExcelService {
 	 * @param string $file
 	 *
 	 * @return MetaDto
-	 *
-	 * @throws EmptySheetException
-	 * @throws MissingHeaderException
-	 * @throws \PhpOffice\PhpSpreadsheet\Exception
 	 */
 	protected function meta(string $file): MetaDto {
 		$tabs = [];
 		$services = [];
-		foreach ($this->read($this->dtoService->fromArray(ReadDto::class, [
+		foreach ($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
 			'file'   => $file,
 			'sheets' => 'tabs',
 		])) as $tab) {
@@ -91,18 +97,34 @@ class ExcelService implements IExcelService {
 				'services' => $services = array_merge($services, array_map('trim', explode(',', $tab['services']))),
 			]);
 		}
+		$services = array_unique($services);
 		$translations = [];
-		foreach ($this->read($this->dtoService->fromArray(ReadDto::class, [
+		foreach ($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
 			'file'   => $file,
 			'sheets' => 'translations',
 		])) as $translation) {
 			$translations[$translation['from']] = $translation['to'];
 		}
+
 		return $this->dtoService->fromArray(MetaDto::class, [
 			'file'         => $file,
 			'tabs'         => $tabs,
 			'translations' => $translations,
-			'services'     => array_unique($services),
+			'services'     => array_combine($services, array_map(function (string $service) use ($file, $translations) {
+				$items = [];
+				if ($key = $translations[$service . '.translations'] ?? null) {
+					foreach ($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
+						'file'   => $file,
+						'sheets' => $key,
+					])) as $translation) {
+						$items[$translation['from']] = $translation['to'];
+					}
+				}
+				return $this->dtoService->fromArray(ServiceDto::class, [
+					'name'         => $service,
+					'translations' => $items,
+				]);
+			}, $services)),
 		]);
 	}
 }

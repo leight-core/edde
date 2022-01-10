@@ -23,6 +23,15 @@ interface IExcelService {
 	public function read(ReadDto $readDto): Generator;
 
 	/**
+	 * This method does not throw any exception; wrapper around "read"
+	 *
+	 * @param ReadDto $readDto
+	 *
+	 * @return Generator
+	 */
+	public function safeRead(ReadDto $readDto): Generator;
+
+	/**
 	 * Quite magical method which reads a metadata from Excel file and process all it's tabs.
 	 *
 	 * @param HandleDto $handleDto

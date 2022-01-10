@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Excel;
 
+use Edde\Container\ContainerTrait;
 use Edde\Dto\DtoServiceTrait;
 use Edde\Excel\Dto\HandleDto;
 use Edde\Excel\Dto\MetaDto;
@@ -30,6 +31,7 @@ use function json_encode;
 class ExcelService implements IExcelService {
 	use LoggerTrait;
 	use DtoServiceTrait;
+	use ContainerTrait;
 
 	/**
 	 * @inheritdoc
@@ -65,6 +67,11 @@ class ExcelService implements IExcelService {
 
 	public function handle(HandleDto $handleDto): void {
 		$meta = $this->meta($handleDto->file);
+		foreach ($meta->tabs as $tab) {
+			foreach ($tab->services as $service) {
+//				$handler = $this->container->get($service);
+			}
+		}
 	}
 
 	/**

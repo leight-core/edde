@@ -4,15 +4,15 @@ declare(strict_types=1);
 namespace Edde\Excel;
 
 trait ExcelServiceTrait {
-	/** @var ExcelService */
+	/** @var IExcelService */
 	protected $excelService;
 
 	/**
 	 * @Inject
 	 *
-	 * @param ExcelService $excelService
+	 * @param IExcelService $excelService
 	 */
-	public function setExcelService(ExcelService $excelService): void {
+	public function setExcelService(IExcelService $excelService): void {
 		$this->excelService = $excelService;
 	}
 }

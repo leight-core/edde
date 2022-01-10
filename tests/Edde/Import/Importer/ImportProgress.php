@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\Import;
+namespace Edde\Import\Importer;
 
 use Edde\Progress\AbstractProgress;
 use Edde\Progress\Dto\ItemDto;

@@ -8,7 +8,7 @@ use Edde\Progress\Dto\ItemDto;
 use Edde\Progress\IProgress;
 
 abstract class AbstractSheetImport extends AbstractImport {
-	public function import(string $file, $params = null, IProgress $progress = null) {
+	public function import(string $file, $importDto = null, IProgress $progress = null) {
 		parent::import($file, ['sheets' => $this->getSheets()], $progress);
 	}
 

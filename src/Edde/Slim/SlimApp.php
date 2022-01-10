@@ -9,6 +9,8 @@ use DI\ContainerBuilder;
 use Edde\Api\ApiRouter;
 use Edde\Cache\DatabaseCache;
 use Edde\Dto\IDtoService;
+use Edde\Excel\ExcelService;
+use Edde\Excel\IExcelService;
 use Edde\File\FileService;
 use Edde\File\IFileService;
 use Edde\Http\HttpIndex;
@@ -119,6 +121,9 @@ class SlimApp {
 			},
 			IEndpointInfo::class     => function (ContainerInterface $container) {
 				return $container->get(EndpointInfo::class);
+			},
+			IExcelService::class     => function (ContainerInterface $container) {
+				return $container->get(ExcelService::class);
 			},
 			CacheInterface::class    => function (ContainerInterface $container) {
 				return $container->get(DatabaseCache::class);

@@ -22,7 +22,7 @@ class MetaDto extends AbstractDto {
 	 */
 	public $translations;
 	/**
-	 * @var string[]
+	 * @var ServiceDto[]
 	 * @description services required by the requested file
 	 */
 	public $services;

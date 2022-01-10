@@ -22,7 +22,7 @@ class ReadDto extends AbstractDto {
 	 */
 	public $worksheet = 0;
 	/**
-	 * @var int
+	 * @var int|void
 	 * @description number of rows to skip
 	 */
 	public $skip = 1;

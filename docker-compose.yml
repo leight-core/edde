@@ -11,11 +11,22 @@ services:
         volumes:
             - source:/var/www
         networks:
-            - common
+            - edde
+
+    mysql:
+        image: mysql:5.5
+        container_name: edde-mysql
+        hostname: edde-mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 1234
+        networks:
+            - edde
+        ports:
+            - "4306:3306"
 
 volumes:
     source:
 
 networks:
-    common:
-        external: true
+    edde:

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\Import;
+namespace Edde\Import\Importer;
 
 trait SomeImporterTrait {
 	/** @var SomeImporter */

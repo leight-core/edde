@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Import;
 
+use Edde\Import\Importer\ImportProgress;
 use Edde\Phpunit\AbstractTestCase;
 use Generator;
 

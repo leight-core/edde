@@ -28,11 +28,11 @@ abstract class AbstractImport extends AbstractImportService implements IExcelImp
 	use TranslationServiceTrait;
 	use DtoServiceTrait;
 
-	public function import(string $file, $params = null, IProgress $progress = null) {
+	public function import(string $file, $importDto = null, IProgress $progress = null) {
 		$progress = NoProgress::ensure($progress);
 		$progress->check();
 		$count = 0;
-		foreach ($sheets = ($params['sheets'] ?? [null => $this]) as $sheet => $service) {
+		foreach ($sheets = ($importDto['sheets'] ?? [null => $this]) as $sheet => $service) {
 			try {
 				$count += iterator_count($this->excelService->read($file, 0, 1, $this->translateSheet($sheet)));
 				/**

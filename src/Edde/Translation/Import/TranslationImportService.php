@@ -17,8 +17,8 @@ class TranslationImportService extends AbstractImport {
 	use TranslationRepositoryTrait;
 	use DtoServiceTrait;
 
-	public function import(string $file, $params = null, IProgress $progress = null) {
-		parent::import($file, $params, $progress);
+	public function import(string $file, $importDto = null, IProgress $progress = null) {
+		parent::import($file, $importDto, $progress);
 		$this->databaseCache->delete(TranslationsDto::class);
 	}
 

@@ -3,7 +3,11 @@ declare(strict_types=1);
 
 namespace Edde\Excel;
 
+use Edde\Dto\DtoServiceTrait;
+use Edde\Excel\Dto\HandleDto;
+use Edde\Excel\Dto\MetaDto;
 use Edde\Excel\Dto\ReadDto;
+use Edde\Excel\Dto\TabDto;
 use Edde\Excel\Exception\EmptySheetException;
 use Edde\Excel\Exception\MissingHeaderException;
 use Edde\Log\LoggerTrait;
@@ -13,10 +17,16 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\Exception;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Row;
+use function array_map;
+use function array_merge;
+use function array_unique;
+use function explode;
+use function iterator_to_array;
 use function json_encode;
 
 class ExcelService implements IExcelService {
 	use LoggerTrait;
+	use DtoServiceTrait;
 
 	/**
 	 * @inheritdoc
@@ -24,7 +34,7 @@ class ExcelService implements IExcelService {
 	public function read(ReadDto $readDto): Generator {
 		$spreadsheet = $this->load($readDto);
 		if (($worksheet = $spreadsheet->getSheet($readDto->worksheet))->getHighestRow() === 1) {
-			throw new EmptySheetException(sprintf('Sheet [%d] of [%s] of Excel file [%s] is empty.', $readDto->worksheet, json_encode($readDto->sheets), $readDto->file));
+			throw new EmptySheetException(sprintf('Sheet [%d] of [%s] of Excel file [%s] is empty.', $readDto->worksheet, json_encode($readDto->sheets ?? 'default'), $readDto->file));
 		}
 		/** @var $header Row */
 		if (!($header = (iterator_to_array($worksheet->getRowIterator(1, 1))[1] ?? null))) {
@@ -43,6 +53,10 @@ class ExcelService implements IExcelService {
 		}
 	}
 
+	public function handle(HandleDto $handleDto): void {
+		$meta = $this->meta($handleDto->file);
+	}
+
 	/**
 	 * @param ReadDto $readDto
 	 *
@@ -54,5 +68,41 @@ class ExcelService implements IExcelService {
 		$reader = IOFactory::createReaderForFile($readDto->file);
 		$reader->setLoadSheetsOnly($readDto->sheets);
 		return $reader->load($readDto->file);
+	}
+
+	/**
+	 * @param string $file
+	 *
+	 * @return MetaDto
+	 *
+	 * @throws EmptySheetException
+	 * @throws MissingHeaderException
+	 * @throws \PhpOffice\PhpSpreadsheet\Exception
+	 */
+	protected function meta(string $file): MetaDto {
+		$tabs = [];
+		$services = [];
+		foreach ($this->read($this->dtoService->fromArray(ReadDto::class, [
+			'file'   => $file,
+			'sheets' => 'tabs',
+		])) as $tab) {
+			$tabs[] = $this->dtoService->fromArray(TabDto::class, [
+				'name'     => $tab['tab'],
+				'services' => $services = array_merge($services, array_map('trim', explode(',', $tab['services']))),
+			]);
+		}
+		$translations = [];
+		foreach ($this->read($this->dtoService->fromArray(ReadDto::class, [
+			'file'   => $file,
+			'sheets' => 'translations',
+		])) as $translation) {
+			$translations[$translation['from']] = $translation['to'];
+		}
+		return $this->dtoService->fromArray(MetaDto::class, [
+			'file'         => $file,
+			'tabs'         => $tabs,
+			'translations' => $translations,
+			'services'     => array_unique($services),
+		]);
 	}
 }

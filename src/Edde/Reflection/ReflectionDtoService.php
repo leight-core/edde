@@ -73,6 +73,7 @@ class ReflectionDtoService extends AbstractDtoService {
 	 * @throws Exception
 	 */
 	protected function resolveValue(ClassDto $classDto, AbstractProperty $property, $value, bool $inArray = false) {
+		$value = $value ?? $property->value;
 		if ($value === null && $property->isRequired && !$property->isOptional) {
 			throw new MissingValueException(sprintf('Source for object [%s] is missing required value for property [%s].', $classDto->fqdn, $property->name));
 		}

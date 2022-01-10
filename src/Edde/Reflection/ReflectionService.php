@@ -63,6 +63,7 @@ class ReflectionService {
 	 *
 	 * @return ClassDto
 	 *
+	 * @throws MissingReflectionClassException
 	 * @throws ReflectionException
 	 * @throws UnknownTypeException
 	 */
@@ -109,6 +110,7 @@ class ReflectionService {
 	 *
 	 * @return AbstractProperty[]
 	 *
+	 * @throws MissingReflectionClassException
 	 * @throws ReflectionException
 	 * @throws UnknownTypeException
 	 */
@@ -238,6 +240,7 @@ class ReflectionService {
 	 *
 	 * @return AbstractType
 	 *
+	 * @throws MissingReflectionClassException
 	 * @throws ReflectionException
 	 * @throws UnknownTypeException
 	 */
@@ -329,6 +332,7 @@ class ReflectionService {
 	 *
 	 * @return AbstractParameter[]
 	 *
+	 * @throws MissingReflectionClassException
 	 * @throws ReflectionException
 	 * @throws UnknownTypeException
 	 */
@@ -349,9 +353,11 @@ class ReflectionService {
 	 */
 	public function toProperty(ReflectionProperty $property): AbstractType {
 		$class = $property->getDeclaringClass();
+		$defaults = $class->getDefaultProperties();
 		$dto = [
 			'name'       => $property->getName(),
 			'isInternal' => $this->toAnnotation($property, 'internal') !== null,
+			'value'      => $defaults[$property->getName()] ?? null,
 		];
 		$dto = array_merge($dto, $this->parse($this->toAnnotation($property, 'var'), $class));
 		switch ($dto['__type']) {
@@ -379,6 +385,7 @@ class ReflectionService {
 	 *
 	 * @return MethodDto
 	 *
+	 * @throws MissingReflectionClassException
 	 * @throws ReflectionException
 	 * @throws UnknownTypeException
 	 */
@@ -428,6 +435,7 @@ class ReflectionService {
 	 *
 	 * @return MethodDto[]
 	 *
+	 * @throws MissingReflectionClassException
 	 * @throws ReflectionException
 	 * @throws UnknownTypeException
 	 */

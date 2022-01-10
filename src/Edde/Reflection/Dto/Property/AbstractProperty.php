@@ -11,4 +11,9 @@ abstract class AbstractProperty extends AbstractType {
 	 * @description property name
 	 */
 	public $name;
+	/**
+	 * @var mixed|null
+	 * @description default value of a property (or null)
+	 */
+	public $value;
 }

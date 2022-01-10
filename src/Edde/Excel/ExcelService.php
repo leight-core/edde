@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Edde\Excel;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Edde\Container\ContainerTrait;
 use Edde\Dto\DtoServiceTrait;
 use Edde\Excel\Dto\HandleDto;
@@ -11,8 +13,10 @@ use Edde\Excel\Dto\ReadDto;
 use Edde\Excel\Dto\ServiceDto;
 use Edde\Excel\Dto\TabDto;
 use Edde\Excel\Exception\EmptySheetException;
+use Edde\Excel\Exception\ExcelException;
 use Edde\Excel\Exception\MissingHeaderException;
 use Edde\Log\LoggerTrait;
+use Edde\Reader\IReader;
 use Generator;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -25,6 +29,7 @@ use function array_map;
 use function array_merge;
 use function array_unique;
 use function explode;
+use function get_class;
 use function iterator_to_array;
 use function json_encode;
 
@@ -65,11 +70,31 @@ class ExcelService implements IExcelService {
 		}
 	}
 
+	/**
+	 * @param HandleDto $handleDto
+	 *
+	 * @throws DependencyException
+	 * @throws EmptySheetException
+	 * @throws ExcelException
+	 * @throws MissingHeaderException
+	 * @throws NotFoundException
+	 * @throws \PhpOffice\PhpSpreadsheet\Exception
+	 */
 	public function handle(HandleDto $handleDto): void {
 		$meta = $this->meta($handleDto->file);
 		foreach ($meta->tabs as $tab) {
 			foreach ($tab->services as $service) {
-//				$handler = $this->container->get($service);
+				/** @var $reader IReader */
+				if (!(($reader = $this->container->get($service)) instanceof IReader)) {
+					throw new ExcelException(sprintf('Tab reading service [%s] must be instance of [%s]', get_class($reader), IReader::class));
+				}
+				/**
+				 * @todo add support for translating header from Excel by the services translator; a param into ReadDto?
+				 */
+				$reader->read($this->read($this->dtoService->fromArray(ReadDto::class, [
+					'file'   => $handleDto->file,
+					'sheets' => $tab->name,
+				])));
 			}
 		}
 	}

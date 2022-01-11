@@ -53,8 +53,8 @@ class ExcelService implements IExcelService {
 		if (!($header = (iterator_to_array($worksheet->getRowIterator(1, 1))[1] ?? null))) {
 			throw new MissingHeaderException(sprintf('Excel file [%s] does not have a header (is the file OK?).', $readDto->file));
 		}
-		$header = array_map(function (Cell $cell) {
-			return $cell->getValue();
+		$header = array_map(function (Cell $cell) use ($readDto) {
+			return $readDto->translations[$cell->getValue()] ?? $cell->getValue();
 		}, iterator_to_array($header->getCellIterator()));
 
 		foreach ($worksheet->getRowIterator($readDto->skip + 1) as $index => $row) {
@@ -89,11 +89,23 @@ class ExcelService implements IExcelService {
 			foreach ($tab->services as $service) {
 				/** @var $reader IReader */
 				$reader = $this->container->get($service);
-				$reader->read($this->read($this->dtoService->fromArray(ReadDto::class, [
+				$source = $this->read($this->dtoService->fromArray(ReadDto::class, [
 					'file'         => $handleDto->file,
 					'sheets'       => $tab->name,
 					'translations' => $meta->services[$service]->translations ?? [],
-				])));
+				]));
+				$dto = $meta->services[$service]->dto ?? null;
+				$reader->read(
+				/**
+				 * This is a little hack: self executing function used as a generator which provides a DTO to the
+				 * handler function of Reader. The whole thing works as a stream, thus it should not take a lot of memory on run.
+				 */
+					(function () use ($source, $dto) {
+						foreach ($source as $item) {
+							yield $dto ? $this->dtoService->fromArray($dto, $item) : $item;
+						}
+					})()
+				);
 			}
 		}
 	}

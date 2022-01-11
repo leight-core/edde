@@ -11,6 +11,5 @@ class SomeImporter extends AbstractReader {
 	 * @param SomeImportDto $item
 	 */
 	public function handle($item) {
-
 	}
 }

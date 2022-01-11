@@ -4,30 +4,29 @@ declare(strict_types=1);
 namespace Edde\Translation\Import;
 
 use Edde\Cache\DatabaseCacheTrait;
-use Edde\Dto\DtoServiceTrait;
-use Edde\Excel\AbstractImport;
-use Edde\Progress\IProgress;
+use Edde\Reader\AbstractReader;
+use Edde\Translation\Dto\Create\TranslationDto;
 use Edde\Translation\Dto\Ensure\EnsureDto;
 use Edde\Translation\Dto\TranslationsDto;
 use Edde\Translation\Repository\TranslationRepositoryTrait;
 
-class TranslationImportService extends AbstractImport {
+class TranslationImportService extends AbstractReader {
 	use DatabaseCacheTrait;
 	use TranslationRepositoryTrait;
-	use DtoServiceTrait;
 
-	public function import(string $file, $importDto = null, IProgress $progress = null) {
-		parent::import($file, $importDto, $progress);
-		$this->databaseCache->delete(TranslationsDto::class);
+	/**
+	 * @param TranslationDto $item
+	 *
+	 * @return TranslationDto
+	 */
+	public function handle($item) {
+		return $this->translationRepository->ensure($this->dtoService->fromArray(EnsureDto::class, [
+			'translation' => $item,
+		]));
 	}
 
-	public function process($itemDto, IProgress $progress) {
-		return $this->translationRepository->ensure($this->dtoService->fromArray(EnsureDto::class, [
-			'translation' => $this->check($itemDto, [
-				'language',
-				'label',
-				'translation',
-			]),
-		]));
+	protected function onFinish() {
+		parent::onFinish();
+		$this->databaseCache->delete(TranslationsDto::class);
 	}
 }

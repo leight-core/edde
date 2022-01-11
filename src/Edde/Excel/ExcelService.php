@@ -97,7 +97,7 @@ class ExcelService implements IExcelService {
 				$reader->read($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
 					'file'         => $handleDto->file,
 					'sheets'       => $tab->name,
-					'translations' => $meta->services[$service]->translations ?? [],
+					'translations' => array_merge($meta->translations, $meta->services[$service]->translations ?? []),
 				])), $progress);
 			}
 		}

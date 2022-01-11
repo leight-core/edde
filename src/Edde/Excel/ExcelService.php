@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Excel;
 
+use Edde\Cache\DatabaseCacheTrait;
 use Edde\Container\ContainerTrait;
 use Edde\Dto\DtoServiceTrait;
 use Edde\Excel\Dto\HandleDto;
@@ -37,12 +38,15 @@ use function is_string;
 use function iterator_count;
 use function iterator_to_array;
 use function json_encode;
+use function sha1_file;
+use function sprintf;
 
 class ExcelService implements IExcelService {
 	use LoggerTrait;
 	use DtoServiceTrait;
 	use ContainerTrait;
 	use ReflectionServiceTrait;
+	use DatabaseCacheTrait;
 
 	/**
 	 * @inheritdoc
@@ -103,75 +107,77 @@ class ExcelService implements IExcelService {
 	 * @inheritdoc
 	 */
 	public function meta(string $file): MetaDto {
-		/** @var $tabs TabDto[] */
-		$tabs = [];
-		$services = [];
-		$total = 0;
-		foreach ($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
-			'file'   => $file,
-			'sheets' => 'tabs',
-		])) as $tab) {
-			$count = iterator_count($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
+		return $this->databaseCache->get($hash = sha1_file($file), function () use ($hash, $file) {
+			/** @var $tabs TabDto[] */
+			$tabs = [];
+			$services = [];
+			$total = 0;
+			foreach ($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
 				'file'   => $file,
-				'sheets' => $tab['tab'],
-			])));
-
-			$services = array_merge($services, $handlers = array_map('trim', explode(',', $tab['services'])));
-			$tabs[] = $this->dtoService->fromArray(TabDto::class, [
-				'name'     => $tab['tab'],
-				'services' => $handlers,
-				'count'    => $count,
-			]);
-		}
-		foreach ($tabs as $tab) {
-			foreach ($tab->services as $_) {
-				$total += iterator_count($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
+				'sheets' => 'tabs',
+			])) as $tab) {
+				$count = iterator_count($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
 					'file'   => $file,
-					'sheets' => $tab->name,
+					'sheets' => $tab['tab'],
 				])));
-			}
-		}
 
-		$services = array_unique($services);
-		$translations = [];
-		foreach ($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
-			'file'   => $file,
-			'sheets' => 'translations',
-		])) as $translation) {
-			$translations[$translation['from']] = $translation['to'];
-		}
-
-		return $this->dtoService->fromArray(MetaDto::class, [
-			'file'         => $file,
-			'total'        => $total,
-			'tabs'         => $tabs,
-			'translations' => $translations,
-			'services'     => array_combine($services, array_map(function (string $service) use ($file, $translations) {
-				$items = [];
-				if ($key = $translations[$service . '.translations'] ?? null) {
-					foreach ($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
-						'file'   => $file,
-						'sheets' => $key,
-					])) as $translation) {
-						$items[$translation['from']] = $translation['to'];
-					}
-				}
-				$reflection = $this->reflectionService->toClass($service);
-				if (!$reflection->is(IReader::class)) {
-					throw new ExcelException(sprintf('Service [%s] does not implement interface [%s].', $service, IReader::class));
-				}
-				$dto = null;
-				if (($handler = ($reflection->methods['handle'] ?? null)) && $handler instanceof IRequestMethod && ($request = $handler->request()) instanceof ClassParameter) {
-					/** @var $request ClassParameter */
-					$dto = $request->class();
-				}
-				return $this->dtoService->fromArray(ServiceDto::class, [
-					'name'         => $service,
-					'dto'          => $dto,
-					'translations' => $items,
+				$services = array_merge($services, $handlers = array_map('trim', explode(',', $tab['services'])));
+				$tabs[] = $this->dtoService->fromArray(TabDto::class, [
+					'name'     => $tab['tab'],
+					'services' => $handlers,
+					'count'    => $count,
 				]);
-			}, $services)),
-		]);
+			}
+			foreach ($tabs as $tab) {
+				foreach ($tab->services as $_) {
+					$total += iterator_count($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
+						'file'   => $file,
+						'sheets' => $tab->name,
+					])));
+				}
+			}
+
+			$services = array_unique($services);
+			$translations = [];
+			foreach ($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
+				'file'   => $file,
+				'sheets' => 'translations',
+			])) as $translation) {
+				$translations[$translation['from']] = $translation['to'];
+			}
+			$this->databaseCache->set($hash, $dto = $this->dtoService->fromArray(MetaDto::class, [
+				'file'         => $file,
+				'total'        => $total,
+				'tabs'         => $tabs,
+				'translations' => $translations,
+				'services'     => array_combine($services, array_map(function (string $service) use ($file, $translations) {
+					$items = [];
+					if ($key = $translations[$service . '.translations'] ?? null) {
+						foreach ($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
+							'file'   => $file,
+							'sheets' => $key,
+						])) as $translation) {
+							$items[$translation['from']] = $translation['to'];
+						}
+					}
+					$reflection = $this->reflectionService->toClass($service);
+					if (!$reflection->is(IReader::class)) {
+						throw new ExcelException(sprintf('Service [%s] does not implement interface [%s].', $service, IReader::class));
+					}
+					$dto = null;
+					if (($handler = ($reflection->methods['handle'] ?? null)) && $handler instanceof IRequestMethod && ($request = $handler->request()) instanceof ClassParameter) {
+						/** @var $request ClassParameter */
+						$dto = $request->class();
+					}
+					return $this->dtoService->fromArray(ServiceDto::class, [
+						'name'         => $service,
+						'dto'          => $dto,
+						'translations' => $items,
+					]);
+				}, $services)),
+			]));
+			return $dto;
+		});
 	}
 
 	/**

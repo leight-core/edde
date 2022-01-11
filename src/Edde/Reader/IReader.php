@@ -16,7 +16,7 @@ interface IReader {
 	 *
 	 * @return Generator
 	 */
-	public function handle(Generator $generator): Generator;
+	public function stream(Generator $generator): Generator;
 
 	/**
 	 * Execute the reader, but do not care about the results.
@@ -24,4 +24,13 @@ interface IReader {
 	 * @param Generator $generator
 	 */
 	public function read(Generator $generator): void;
+
+	/**
+	 * Handle one item of the stream; whatever could happen inside this method.
+	 *
+	 * @param mixed $item
+	 *
+	 * @return mixed
+	 */
+	public function handle($item);
 }

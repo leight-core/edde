@@ -26,4 +26,9 @@ class ReadDto extends AbstractDto {
 	 * @description number of rows to skip
 	 */
 	public $skip = 1;
+	/**
+	 * @var string[]
+	 * @description custom translations for this reading
+	 */
+	public $translations = [];
 }

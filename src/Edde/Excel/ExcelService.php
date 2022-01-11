@@ -17,6 +17,9 @@ use Edde\Excel\Exception\ExcelException;
 use Edde\Excel\Exception\MissingHeaderException;
 use Edde\Log\LoggerTrait;
 use Edde\Reader\IReader;
+use Edde\Reflection\Dto\Method\IRequestMethod;
+use Edde\Reflection\Dto\Parameter\ClassParameter;
+use Edde\Reflection\ReflectionServiceTrait;
 use Generator;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -29,7 +32,6 @@ use function array_map;
 use function array_merge;
 use function array_unique;
 use function explode;
-use function get_class;
 use function iterator_to_array;
 use function json_encode;
 
@@ -37,6 +39,7 @@ class ExcelService implements IExcelService {
 	use LoggerTrait;
 	use DtoServiceTrait;
 	use ContainerTrait;
+	use ReflectionServiceTrait;
 
 	/**
 	 * @inheritdoc
@@ -85,15 +88,11 @@ class ExcelService implements IExcelService {
 		foreach ($meta->tabs as $tab) {
 			foreach ($tab->services as $service) {
 				/** @var $reader IReader */
-				if (!(($reader = $this->container->get($service)) instanceof IReader)) {
-					throw new ExcelException(sprintf('Tab reading service [%s] must be instance of [%s]', get_class($reader), IReader::class));
-				}
-				/**
-				 * @todo add support for translating header from Excel by the services translator; a param into ReadDto?
-				 */
+				$reader = $this->container->get($service);
 				$reader->read($this->read($this->dtoService->fromArray(ReadDto::class, [
-					'file'   => $handleDto->file,
-					'sheets' => $tab->name,
+					'file'         => $handleDto->file,
+					'sheets'       => $tab->name,
+					'translations' => $meta->services[$service]->translations ?? [],
 				])));
 			}
 		}
@@ -152,8 +151,17 @@ class ExcelService implements IExcelService {
 						$items[$translation['from']] = $translation['to'];
 					}
 				}
+				$reflection = $this->reflectionService->toClass($service);
+				if (!$reflection->is(IReader::class)) {
+					throw new ExcelException(sprintf('Service [%s] does not implement interface [%s].', $service, IReader::class));
+				}
+				$dto = null;
+				if (($handler = ($reflection->methods['handle'] ?? null)) && $handler instanceof IRequestMethod && ($request = $handler->request()) instanceof ClassParameter) {
+					$dto = $request->class();
+				}
 				return $this->dtoService->fromArray(ServiceDto::class, [
 					'name'         => $service,
+					'dto'          => $dto,
 					'translations' => $items,
 				]);
 			}, $services)),

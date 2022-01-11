@@ -34,7 +34,9 @@ class ExcelServiceTest extends AbstractTestCase {
 		$this->excelService->handle($this->dtoService->fromArray(HandleDto::class, [
 			'file' => __DIR__ . '/../fixtures/complex-import.xlsx',
 		]), $progress);
-		$this->assertEquals(41, $progress->total);
+		$this->assertEquals(61, $progress->total);
+		$this->assertEquals(60, $progress->success);
+		$this->assertEquals(1, $progress->error);
 		$this->assertEquals(100, $progress->progress);
 	}
 }

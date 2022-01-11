@@ -12,6 +12,11 @@ class ServiceDto extends AbstractDto {
 	 */
 	public $name;
 	/**
+	 * @var string|null
+	 * @description optional dto class of the service's handle method
+	 */
+	public $dto;
+	/**
 	 * @var string[]
 	 * @description service-specific translations
 	 */

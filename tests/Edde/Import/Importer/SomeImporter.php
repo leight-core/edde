@@ -3,11 +3,14 @@ declare(strict_types=1);
 
 namespace Edde\Import\Importer;
 
-use Edde\Import\AbstractImporter;
-use Edde\Progress\IProgress;
+use Edde\Import\Importer\Dto\SomeImportDto;
+use Edde\Reader\AbstractReader;
 
-class SomeImporter extends AbstractImporter {
-	public function item($item, IProgress $progress) {
-		return 'foo';
+class SomeImporter extends AbstractReader {
+	/**
+	 * @param SomeImportDto $item
+	 */
+	public function handle($item) {
+
 	}
 }

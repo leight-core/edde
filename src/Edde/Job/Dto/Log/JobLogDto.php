@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Edde\Job\Dto\Log;
 
 use Edde\Dto\AbstractDto;
-use Edde\Progress\Dto\ItemDto;
 
 class JobLogDto extends AbstractDto {
 	/**
@@ -28,7 +27,7 @@ class JobLogDto extends AbstractDto {
 	 */
 	public $reference;
 	/**
-	 * @var ItemDto|null
+	 * @var mixed|null
 	 */
 	public $item;
 }

@@ -38,7 +38,7 @@ abstract class CommonMigration extends AbstractMigration {
 		$this->jobRepository->cleanup();
 		FileStream::openRead($file)
 			->use(function (IStream $stream) use ($file) {
-				$this->excelImportService->async(
+				$this->excelImportService->import(
 					$this->fileService->store($stream, '/import/' . IExcelImportService::class, $this->uuidService->uuid4() . '-' . basename($file), 3600 * 24 * 7)->id
 				);
 			});

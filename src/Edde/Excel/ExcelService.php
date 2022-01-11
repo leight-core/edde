@@ -31,10 +31,12 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Row;
 use ReflectionException;
 use Throwable;
 use function array_combine;
+use function array_filter;
 use function array_map;
 use function array_merge;
 use function array_unique;
 use function explode;
+use function is_string;
 use function iterator_to_array;
 use function json_encode;
 
@@ -65,7 +67,9 @@ class ExcelService implements IExcelService {
 			foreach ($row->getCellIterator() as $cell) {
 				$item[$header[$cell->getColumn()]] = $cell->getFormattedValue();
 			}
-			yield str_pad((string)$index, 8, '0', STR_PAD_LEFT) => $item;
+			yield str_pad((string)$index, 8, '0', STR_PAD_LEFT) => array_filter($item, static function ($item) {
+				return !(is_string($item) && empty($item));
+			});
 		}
 	}
 

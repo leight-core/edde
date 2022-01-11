@@ -19,6 +19,8 @@ use Edde\Log\LoggerTrait;
 use Edde\Reader\IReader;
 use Edde\Reflection\Dto\Method\IRequestMethod;
 use Edde\Reflection\Dto\Parameter\ClassParameter;
+use Edde\Reflection\Exception\MissingReflectionClassException;
+use Edde\Reflection\Exception\UnknownTypeException;
 use Edde\Reflection\ReflectionServiceTrait;
 use Generator;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
@@ -26,6 +28,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\Exception;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Row;
+use ReflectionException;
 use Throwable;
 use function array_combine;
 use function array_map;
@@ -80,7 +83,10 @@ class ExcelService implements IExcelService {
 	 * @throws EmptySheetException
 	 * @throws ExcelException
 	 * @throws MissingHeaderException
+	 * @throws MissingReflectionClassException
 	 * @throws NotFoundException
+	 * @throws ReflectionException
+	 * @throws UnknownTypeException
 	 * @throws \PhpOffice\PhpSpreadsheet\Exception
 	 */
 	public function handle(HandleDto $handleDto): void {
@@ -89,23 +95,11 @@ class ExcelService implements IExcelService {
 			foreach ($tab->services as $service) {
 				/** @var $reader IReader */
 				$reader = $this->container->get($service);
-				$source = $this->read($this->dtoService->fromArray(ReadDto::class, [
+				$reader->read($this->read($this->dtoService->fromArray(ReadDto::class, [
 					'file'         => $handleDto->file,
 					'sheets'       => $tab->name,
 					'translations' => $meta->services[$service]->translations ?? [],
-				]));
-				$dto = $meta->services[$service]->dto ?? null;
-				$reader->read(
-				/**
-				 * This is a little hack: self executing function used as a generator which provides a DTO to the
-				 * handler function of Reader. The whole thing works as a stream, thus it should not take a lot of memory on run.
-				 */
-					(function () use ($source, $dto) {
-						foreach ($source as $item) {
-							yield $dto ? $this->dtoService->fromArray($dto, $item) : $item;
-						}
-					})()
-				);
+				])));
 			}
 		}
 	}
@@ -127,6 +121,11 @@ class ExcelService implements IExcelService {
 	 * @param string $file
 	 *
 	 * @return MetaDto
+	 *
+	 * @throws ExcelException
+	 * @throws MissingReflectionClassException
+	 * @throws UnknownTypeException
+	 * @throws ReflectionException
 	 */
 	protected function meta(string $file): MetaDto {
 		$tabs = [];
@@ -169,6 +168,7 @@ class ExcelService implements IExcelService {
 				}
 				$dto = null;
 				if (($handler = ($reflection->methods['handle'] ?? null)) && $handler instanceof IRequestMethod && ($request = $handler->request()) instanceof ClassParameter) {
+					/** @var $request ClassParameter */
 					$dto = $request->class();
 				}
 				return $this->dtoService->fromArray(ServiceDto::class, [

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Edde\Reflection\Dto;
 
 use Edde\Dto\AbstractDto;
+use Edde\Reflection\Dto\Method\IRequestMethod;
 use Edde\Reflection\Dto\Method\MethodDto;
 use Edde\Reflection\Dto\Property\AbstractProperty;
 use ReflectionClass;
@@ -74,6 +75,14 @@ class ClassDto extends AbstractDto {
 	 */
 	public function reflection(): ReflectionClass {
 		return $this->reflection ?? $this->reflection = new ReflectionClass($this->fqdn);
+	}
+
+	public function getRequestMethod(string $name): ?IRequestMethod {
+		return ($method = $this->methods[$name] ?? null) instanceof IRequestMethod ? $method : null;
+	}
+
+	public function getRequestClassOf(string $name): ?string {
+		return ($method = $this->getRequestMethod($name)) ? (($request = $method->requestClass()) ? $request->class() : null) : null;
 	}
 
 	public function __toString() {

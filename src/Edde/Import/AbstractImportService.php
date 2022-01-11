@@ -9,7 +9,6 @@ use Edde\Job\AbstractJobService;
 use Edde\Job\IJob;
 use Edde\Mapper\Exception\ItemException;
 use Edde\Mapper\Exception\SkipException;
-use Edde\Progress\Dto\ItemDto;
 use function array_diff_key;
 use function array_filter;
 use function array_flip;
@@ -38,15 +37,15 @@ abstract class AbstractImportService extends AbstractJobService implements IImpo
 	}
 
 	/**
-	 * @param ItemDto $itemDto
-	 * @param array   $required
+	 * @param mixed $itemDto
+	 * @param array $required
 	 *
 	 * @return mixed|null
 	 *
 	 * @throws ItemException
 	 * @throws SkipException
 	 */
-	public function check(ItemDto $itemDto, array $required) {
+	public function check($itemDto, array $required) {
 		$empty = array_filter($itemDto->item);
 		if (empty($empty)) {
 			throw new SkipException('Source has an empty data (falsey).', [

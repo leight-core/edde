@@ -4,12 +4,17 @@ declare(strict_types=1);
 namespace Edde\Excel;
 
 use Edde\Excel\Dto\HandleDto;
+use Edde\Excel\Dto\MetaDto;
 use Edde\Excel\Dto\ReadDto;
 use Edde\Excel\Exception\EmptySheetException;
+use Edde\Excel\Exception\ExcelException;
 use Edde\Excel\Exception\MissingHeaderException;
 use Edde\Progress\IProgress;
+use Edde\Reflection\Exception\MissingReflectionClassException;
+use Edde\Reflection\Exception\UnknownTypeException;
 use Generator;
 use PhpOffice\PhpSpreadsheet\Exception;
+use ReflectionException;
 
 interface IExcelService {
 	/**
@@ -39,4 +44,18 @@ interface IExcelService {
 	 * @param IProgress|null $progress adds an ability to track a progress and eventually kill the running method if needed
 	 */
 	public function handle(HandleDto $handleDto, IProgress $progress = null): void;
+
+	/**
+	 * Computes a metadata for the given excel file. This method is quite heavy and likes to throw some exceptions.
+	 *
+	 * @param string $file
+	 *
+	 * @return MetaDto
+	 *
+	 * @throws ExcelException
+	 * @throws MissingReflectionClassException
+	 * @throws UnknownTypeException
+	 * @throws ReflectionException
+	 */
+	public function meta(string $file): MetaDto;
 }

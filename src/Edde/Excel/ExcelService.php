@@ -19,8 +19,6 @@ use Edde\Progress\NoProgress;
 use Edde\Reader\IReader;
 use Edde\Reflection\Dto\Method\IRequestMethod;
 use Edde\Reflection\Dto\Parameter\ClassParameter;
-use Edde\Reflection\Exception\MissingReflectionClassException;
-use Edde\Reflection\Exception\UnknownTypeException;
 use Edde\Reflection\ReflectionServiceTrait;
 use Generator;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
@@ -28,7 +26,6 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\Exception;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Row;
-use ReflectionException;
 use Throwable;
 use function array_combine;
 use function array_filter;
@@ -103,29 +100,9 @@ class ExcelService implements IExcelService {
 	}
 
 	/**
-	 * @param ReadDto $readDto
-	 *
-	 * @return Spreadsheet
-	 *
-	 * @throws Exception
+	 * @inheritdoc
 	 */
-	protected function load(ReadDto $readDto): Spreadsheet {
-		$reader = IOFactory::createReaderForFile($readDto->file);
-		$reader->setLoadSheetsOnly($readDto->sheets);
-		return $reader->load($readDto->file);
-	}
-
-	/**
-	 * @param string $file
-	 *
-	 * @return MetaDto
-	 *
-	 * @throws ExcelException
-	 * @throws MissingReflectionClassException
-	 * @throws UnknownTypeException
-	 * @throws ReflectionException
-	 */
-	protected function meta(string $file): MetaDto {
+	public function meta(string $file): MetaDto {
 		/** @var $tabs TabDto[] */
 		$tabs = [];
 		$services = [];
@@ -195,5 +172,18 @@ class ExcelService implements IExcelService {
 				]);
 			}, $services)),
 		]);
+	}
+
+	/**
+	 * @param ReadDto $readDto
+	 *
+	 * @return Spreadsheet
+	 *
+	 * @throws Exception
+	 */
+	protected function load(ReadDto $readDto): Spreadsheet {
+		$reader = IOFactory::createReaderForFile($readDto->file);
+		$reader->setLoadSheetsOnly($readDto->sheets);
+		return $reader->load($readDto->file);
 	}
 }

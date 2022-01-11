@@ -31,8 +31,17 @@ class ExcelServiceTest extends AbstractTestCase {
 
 	public function testHandleComplex() {
 		$progress = $this->container->injectOn(new ImportProgress());
+		$meta = $this->excelService->meta($file = __DIR__ . '/../fixtures/complex-import.xlsx');
+
+		$this->assertCount(4, $meta->tabs);
+		$this->assertCount(5, $meta->services);
+		$this->assertEquals(20, $meta->tabs[0]->count);
+		$this->assertEquals(6, $meta->tabs[1]->count);
+		$this->assertEquals(15, $meta->tabs[2]->count);
+		$this->assertEquals(0, $meta->tabs[3]->count);
+
 		$this->excelService->handle($this->dtoService->fromArray(HandleDto::class, [
-			'file' => __DIR__ . '/../fixtures/complex-import.xlsx',
+			'file' => $file,
 		]), $progress);
 		$this->assertEquals(61, $progress->total);
 		$this->assertEquals(60, $progress->success);

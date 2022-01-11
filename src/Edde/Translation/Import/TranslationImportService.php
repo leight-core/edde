@@ -4,13 +4,13 @@ declare(strict_types=1);
 namespace Edde\Translation\Import;
 
 use Edde\Cache\DatabaseCacheTrait;
-use Edde\Reader\AbstractReader;
+use Edde\Import\AbstractImporter;
 use Edde\Translation\Dto\Create\TranslationDto;
 use Edde\Translation\Dto\Ensure\EnsureDto;
 use Edde\Translation\Dto\TranslationsDto;
 use Edde\Translation\Repository\TranslationRepositoryTrait;
 
-class TranslationImportService extends AbstractReader {
+class TranslationImportService extends AbstractImporter {
 	use DatabaseCacheTrait;
 	use TranslationRepositoryTrait;
 

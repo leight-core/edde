@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Edde\Phinx;
 
+use Edde\Excel\ExcelImportServiceTrait;
+use Edde\Excel\IExcelImportService;
 use Edde\File\FileServiceTrait;
-use Edde\Import\ImportMangerTrait;
 use Edde\Job\Repository\JobRepositoryTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Slim\SlimApp;
@@ -21,25 +22,24 @@ use function basename;
  * UUID prepared tables, foreign keys and so on.
  */
 abstract class CommonMigration extends AbstractMigration {
-	use ImportMangerTrait;
 	use JobRepositoryTrait;
 	use FileServiceTrait;
 	use CurrentUserServiceTrait;
 	use UuidServiceTrait;
+	use ExcelImportServiceTrait;
 	use LoggerTrait;
 
 	public function init() {
 		SlimApp::$instance->injectOn($this);
 	}
 
-	protected function import(string $service, string $file) {
+	protected function importExcel(string $file) {
 		$this->currentUserService->selectBy('upgrade');
 		$this->jobRepository->cleanup();
 		FileStream::openRead($file)
-			->use(function (IStream $stream) use ($service, $file) {
-				$this->importManager->import(
-					$service,
-					$this->fileService->store($stream, '/import/' . $service, $this->uuidService->uuid4() . '-' . basename($file), 3600 * 24 * 7)->id
+			->use(function (IStream $stream) use ($file) {
+				$this->excelImportService->async(
+					$this->fileService->store($stream, '/import/' . IExcelImportService::class, $this->uuidService->uuid4() . '-' . basename($file), 3600 * 24 * 7)->id
 				);
 			});
 	}

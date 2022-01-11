@@ -9,12 +9,8 @@ use Edde\Job\Repository\JobLogRepositoryTrait;
 use Edde\Job\Repository\JobRepositoryTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Mapper\Exception\ItemException;
-use Edde\Php\Exception\MemoryLimitException;
 use Edde\Progress\AbstractProgress;
-use Edde\Progress\Dto\ItemDto;
 use Edde\Progress\IProgress;
-use Edde\Repository\Exception\DuplicateEntryException;
-use Edde\Repository\Exception\RepositoryException;
 use Throwable;
 
 class JobProgress extends AbstractProgress {
@@ -43,14 +39,9 @@ class JobProgress extends AbstractProgress {
 	}
 
 	/**
-	 * @param ItemDto $itemDto
-	 *
-	 * @throws MemoryLimitException
-	 * @throws RepositoryException
-	 * @throws Throwable
-	 * @throws DuplicateEntryException
+	 * @inheritdoc
 	 */
-	public function onProgress(ItemDto $itemDto): void {
+	public function onProgress(): void {
 		$this->check();
 		$this->jobRepository->change([
 			'id'       => $this->jobId,
@@ -77,15 +68,10 @@ class JobProgress extends AbstractProgress {
 	}
 
 	/**
-	 * @param Throwable $throwable
-	 * @param mixed     $itemDto
-	 *
-	 * @throws MemoryLimitException
-	 * @throws RepositoryException
-	 * @throws Throwable
-	 * @throws DuplicateEntryException
+	 * @inheritdoc
 	 */
-	public function onError(Throwable $throwable, ItemDto $itemDto): void {
+	public function onError(Throwable $throwable): void {
+		parent::onError($throwable);
 		$this->check();
 		$this->jobRepository->change([
 			'id'       => $this->jobId,
@@ -96,12 +82,12 @@ class JobProgress extends AbstractProgress {
 			throw $throwable;
 		} catch (ItemException $itemException) {
 			$type = $itemException->getType();
-			$itemDto->error = $itemException->getExtra();
+			$this->context['exception'] = $itemException->getExtra();
 		} catch (Throwable $throwable) {
 			$type = null;
 		}
 		$this->logger->error($throwable);
-		$this->jobLogRepository->log($this->jobId, IProgress::LOG_ERROR, $throwable->getMessage() . "\n" . $throwable->getTraceAsString(), $itemDto, $type);
+		$this->jobLogRepository->log($this->jobId, IProgress::LOG_ERROR, $throwable->getMessage() . "\n" . $throwable->getTraceAsString(), $this->context, $type);
 	}
 
 	public function onFailure(Throwable $throwable): void {
@@ -122,12 +108,12 @@ class JobProgress extends AbstractProgress {
 		}
 	}
 
-	public function log(int $level, string $message, ItemDto $itemDto = null, string $type = null, string $reference = null) {
+	public function log(int $level, string $message, string $type = null, string $reference = null) {
 		$this->jobLogRepository->log(
 			$this->jobId,
 			$level,
 			$message,
-			$itemDto,
+			$this->context,
 			$type,
 			$reference
 		);

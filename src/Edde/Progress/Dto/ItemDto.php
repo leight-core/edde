@@ -11,12 +11,12 @@ class ItemDto extends AbstractDto {
 	 */
 	public $index;
 	/**
-	 * @var mixed|null
+	 * @var mixed
 	 * @description source row of the excel file (without mapper applied)
 	 */
 	public $source;
 	/**
-	 * @var mixed|null
+	 * @var mixed
 	 * @description mapped source row
 	 */
 	public $item;

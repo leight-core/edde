@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Edde\Progress;
 
-use Edde\Progress\Dto\ItemDto;
 use Throwable;
 
 /**
@@ -23,13 +22,19 @@ interface IProgress {
 	public function onStart(int $total = 1): void;
 
 	/**
+	 * Should be called to set the current context of processed item; it's eventually used to provide a context
+	 * of what happens during life cycle of a processed item.
+	 *
+	 * @param mixed $context
+	 */
+	public function onCurrent($context = null): void;
+
+	/**
 	 * Called when the given item has been processed.
 	 *
 	 * This method could be called in total of count used in onCount method.
-	 *
-	 * @param ItemDto $itemDto
 	 */
-	public function onProgress(ItemDto $itemDto): void;
+	public function onProgress(): void;
 
 	/**
 	 * When a job is done and returned to JobManager this method is called.
@@ -40,9 +45,8 @@ interface IProgress {
 	 * Called when an item cannot be processed (but job is still running).
 	 *
 	 * @param Throwable $throwable
-	 * @param mixed     $itemDto
 	 */
-	public function onError(Throwable $throwable, ItemDto $itemDto): void;
+	public function onError(Throwable $throwable): void;
 
 	/**
 	 * Hook called when some nasty error happens (thus whole job fails without recovery).
@@ -60,13 +64,12 @@ interface IProgress {
 	 * Log something during job (it's not necessarily mapping between one log row to one job item; reference
 	 * is grouping element).
 	 *
-	 * @param int          $level     log level, should be used levels of IProgress
-	 * @param string       $message   what to log
-	 * @param ItemDto|null $item      optional item used in the job (for example import item row, ...)
-	 * @param string|null  $type      optional error type to define type of an error (thus "typing" item array)
-	 * @param string|null  $reference reference to processed item (could be index to data source, an ID, whatever)
+	 * @param int         $level     log level, should be used levels of IProgress
+	 * @param string      $message   what to log
+	 * @param string|null $type      optional error type to define type of an error (thus "typing" item array)
+	 * @param string|null $reference reference to processed item (could be index to data source, an ID, whatever)
 	 *
 	 * @return mixed
 	 */
-	public function log(int $level, string $message, ItemDto $itemDto = null, string $type = null, string $reference = null);
+	public function log(int $level, string $message, string $type = null, string $reference = null);
 }

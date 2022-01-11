@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Edde\Job;
 
-use ClanCats\Hydrahon\Query\Sql\Exception;
 use Edde\Config\ConfigServiceTrait;
 use Edde\Job\Dto\JobDto;
 use Edde\Job\Exception\JobException;
@@ -12,14 +11,10 @@ use Edde\Job\Repository\JobLogRepositoryTrait;
 use Edde\Job\Repository\JobRepositoryTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Log\TraceServiceTrait;
-use Edde\Mapper\Exception\ItemException;
-use Edde\Mapper\Exception\SkipException;
 use Edde\Php\PhpBinaryServiceTrait;
 use Edde\Profiler\ProfilerServiceTrait;
 use Edde\Progress\IProgress;
-use Edde\Repository\Exception\RepositoryException;
 use Edde\User\CurrentUserServiceTrait;
-use Edde\User\Exception\UserNotSelectedException;
 use Symfony\Component\Process\Process;
 use function get_class;
 use function realpath;
@@ -45,17 +40,7 @@ class CliJobExecutor extends AbstractJobExecutor {
 	const CONFIG_CLI_PHP = 'cli.php';
 
 	/**
-	 * @param IJobService $jobService
-	 * @param null        $params
-	 *
-	 * @return JobDto
-	 *
-	 * @throws Exception
-	 * @throws ItemException
-	 * @throws JobException
-	 * @throws RepositoryException
-	 * @throws SkipException
-	 * @throws UserNotSelectedException
+	 * @inheritdoc
 	 */
 	public function execute(IJobService $jobService, $params = null): JobDto {
 		return $this->profilerService->profile(static::class, function () use ($jobService, $params) {

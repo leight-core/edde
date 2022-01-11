@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Reader;
 
+use Edde\Progress\IProgress;
 use Generator;
 
 interface IReader {
@@ -16,19 +17,20 @@ interface IReader {
 	 *
 	 * @return Generator
 	 */
-	public function stream(Generator $generator): Generator;
+	public function stream(Generator $generator, IProgress $progress = null): Generator;
 
 	/**
 	 * Execute the reader, but do not care about the results.
 	 *
-	 * @param Generator $generator
+	 * @param Generator      $generator
+	 * @param IProgress|null $progress
 	 */
-	public function read(Generator $generator): void;
+	public function read(Generator $generator, IProgress $progress = null): void;
 
 	/**
 	 * Handle one item of the stream; whatever could happen inside this method.
 	 *
-	 * @param mixed $item
+	 * @param mixed $item an item being handled
 	 *
 	 * @return mixed
 	 */

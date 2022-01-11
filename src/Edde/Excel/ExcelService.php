@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Edde\Excel;
 
-use DI\DependencyException;
-use DI\NotFoundException;
 use Edde\Container\ContainerTrait;
 use Edde\Dto\DtoServiceTrait;
 use Edde\Excel\Dto\HandleDto;
@@ -16,6 +14,8 @@ use Edde\Excel\Exception\EmptySheetException;
 use Edde\Excel\Exception\ExcelException;
 use Edde\Excel\Exception\MissingHeaderException;
 use Edde\Log\LoggerTrait;
+use Edde\Progress\IProgress;
+use Edde\Progress\NoProgress;
 use Edde\Reader\IReader;
 use Edde\Reflection\Dto\Method\IRequestMethod;
 use Edde\Reflection\Dto\Parameter\ClassParameter;
@@ -82,29 +82,22 @@ class ExcelService implements IExcelService {
 	}
 
 	/**
-	 * @param HandleDto $handleDto
-	 *
-	 * @throws DependencyException
-	 * @throws EmptySheetException
-	 * @throws ExcelException
-	 * @throws MissingHeaderException
-	 * @throws MissingReflectionClassException
-	 * @throws NotFoundException
-	 * @throws ReflectionException
-	 * @throws UnknownTypeException
-	 * @throws \PhpOffice\PhpSpreadsheet\Exception
+	 * @inheritdoc
 	 */
-	public function handle(HandleDto $handleDto): void {
+	public function handle(HandleDto $handleDto, IProgress $progress = null): void {
+		$progress = NoProgress::ensure($progress);
 		$meta = $this->meta($handleDto->file);
+		$progress->check();
+		$progress->onStart($meta->total);
 		foreach ($meta->tabs as $tab) {
 			foreach ($tab->services as $service) {
 				/** @var $reader IReader */
 				$reader = $this->container->get($service);
-				$reader->read($this->read($this->dtoService->fromArray(ReadDto::class, [
+				$reader->read($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
 					'file'         => $handleDto->file,
 					'sheets'       => $tab->name,
 					'translations' => $meta->services[$service]->translations ?? [],
-				])));
+				])), $progress);
 			}
 		}
 	}

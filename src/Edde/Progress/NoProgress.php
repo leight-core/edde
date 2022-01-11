@@ -3,32 +3,14 @@ declare(strict_types=1);
 
 namespace Edde\Progress;
 
-use Edde\Progress\Dto\ItemDto;
-use Throwable;
+use Edde\Slim\SlimApp;
 
-class NoProgress implements IProgress {
-	public function onStart(int $total = 1): void {
-	}
-
-	public function onProgress(ItemDto $itemDto): void {
-	}
-
-	public function onDone($result): void {
-	}
-
-	public function onError(Throwable $throwable, ItemDto $itemDto): void {
-	}
-
-	public function onFailure(Throwable $throwable): void {
-	}
-
+class NoProgress extends AbstractProgress {
 	static public function ensure(?IProgress $progress) {
-		return $progress ?: new self();
-	}
-
-	public function check(): void {
-	}
-
-	public function log(int $level, string $message, ItemDto $itemDto = null, string $type = null, string $reference = null) {
+		/**
+		 * Here is one ugly hack, so if you see it, look somewhere else, for example try to find
+		 * some unicorn or rainbow... or both. Good luck.
+		 */
+		return $progress ?: SlimApp::$instance->injectOn(new self());
 	}
 }

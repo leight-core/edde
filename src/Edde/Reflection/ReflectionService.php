@@ -196,7 +196,11 @@ class ReflectionService {
 		}
 
 		if (class_exists($type) || class_exists($typeWithUse = $this->toUse($class, $type))) {
-			$class = new ReflectionClass($typeWithUse ?? $type);
+			try {
+				$class = new ReflectionClass($typeWithUse);
+			} catch (ReflectionException $exception) {
+				$class = new ReflectionClass($type);
+			}
 			return array_merge($dto, [
 				'__type'    => 'class',
 				'class'     => $class->getName(),
@@ -206,7 +210,11 @@ class ReflectionService {
 			], $extra);
 		}
 		if (interface_exists($type) || interface_exists($typeWithUse)) {
-			$class = new ReflectionClass($typeWithUse ?? $type);
+			try {
+				$class = new ReflectionClass($typeWithUse);
+			} catch (ReflectionException $exception) {
+				$class = new ReflectionClass($type);
+			}
 			return array_merge($dto, [
 				'__type'    => 'interface',
 				'class'     => $class->getName(),

@@ -18,14 +18,41 @@ abstract class AbstractProgress implements IProgress {
 	use MemoryServiceTrait;
 
 	/** @var int */
-	protected $total = 0;
+	public $total = 0;
 	/** @var int */
-	protected $success = 0;
+	public $success = 0;
 	/** @var int */
-	protected $error = 0;
+	public $error = 0;
+	public $progress = 0;
+	public $context;
+	public $result;
 
-	protected function progress(): float {
-		return (100 * ($this->success + $this->error)) / max($this->total, 1);
+	public function onStart(int $total = 1): void {
+		$this->total = $total;
+	}
+
+	public function onCurrent($context = null): void {
+		$this->context = $context;
+	}
+
+	public function onProgress(): void {
+		$this->success++;
+		$this->progress = $this->progress();
+	}
+
+	public function onDone($result): void {
+		$this->result = $result;
+		$this->progress = $this->progress();
+	}
+
+	public function onError(Throwable $throwable): void {
+		$this->error++;
+		$this->progress = $this->progress();
+		$this->logger->error($throwable, ['context' => $this->context]);
+	}
+
+	public function onFailure(Throwable $throwable): void {
+		$this->logger->error($throwable, ['context' => $this->context]);
 	}
 
 	/**
@@ -42,7 +69,19 @@ abstract class AbstractProgress implements IProgress {
 			 * Do nothing else as job check should not kill the job (progress) itself in the cost of
 			 * potentially malfunctioning memory check.
 			 */
-			$this->logger->error($exception);
+			$this->logger->error($exception, ['context' => $this->context]);
 		}
+	}
+
+	public function log(int $level, string $message, string $type = null, string $reference = null) {
+		$this->logger->log($level, $message, [
+			'context'   => $this->context,
+			'type'      => $type,
+			'reference' => $reference,
+		]);
+	}
+
+	protected function progress(): float {
+		return (100 * ($this->success + $this->error)) / max($this->total, 1);
 	}
 }

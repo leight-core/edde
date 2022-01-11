@@ -7,6 +7,7 @@ use Edde\Excel\Dto\HandleDto;
 use Edde\Excel\Dto\ReadDto;
 use Edde\Excel\Exception\EmptySheetException;
 use Edde\Excel\Exception\MissingHeaderException;
+use Edde\Progress\IProgress;
 use Generator;
 use PhpOffice\PhpSpreadsheet\Exception;
 
@@ -34,7 +35,8 @@ interface IExcelService {
 	/**
 	 * Quite magical method which reads a metadata from Excel file and process all it's tabs.
 	 *
-	 * @param HandleDto $handleDto
+	 * @param HandleDto      $handleDto
+	 * @param IProgress|null $progress adds an ability to track a progress and eventually kill the running method if needed
 	 */
-	public function handle(HandleDto $handleDto): void;
+	public function handle(HandleDto $handleDto, IProgress $progress = null): void;
 }

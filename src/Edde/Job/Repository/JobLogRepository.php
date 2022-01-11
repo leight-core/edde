@@ -5,7 +5,6 @@ namespace Edde\Job\Repository;
 
 use ClanCats\Hydrahon\Query\Sql\Select;
 use Edde\Job\Dto\Log\JobLogFilterDto;
-use Edde\Progress\Dto\ItemDto;
 use Edde\Query\Dto\Query;
 use Edde\Repository\AbstractRepository;
 
@@ -14,12 +13,12 @@ class JobLogRepository extends AbstractRepository {
 		parent::__construct(['stamp' => true]);
 	}
 
-	public function log(string $jobId, int $level, string $message, ItemDto $itemDto = null, string $type = null, string $reference = null) {
+	public function log(string $jobId, int $level, string $message, $context = null, string $type = null, string $reference = null) {
 		return $this->insert([
 			'job_id'    => $jobId,
 			'level'     => $level,
 			'message'   => $message,
-			'item'      => json_encode($itemDto),
+			'item'      => json_encode($context),
 			'stamp'     => microtime(true),
 			'reference' => $reference ?? $itemDto->index ?? null,
 			'type'      => $type ?? "common",

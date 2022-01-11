@@ -138,9 +138,10 @@ class ExcelService implements IExcelService {
 				'sheets' => $tab['tab'],
 			])));
 
+			$services = array_merge($services, $handlers = array_map('trim', explode(',', $tab['services'])));
 			$tabs[] = $this->dtoService->fromArray(TabDto::class, [
 				'name'     => $tab['tab'],
-				'services' => $services = array_merge($services, array_map('trim', explode(',', $tab['services']))),
+				'services' => $handlers,
 				'count'    => $count,
 			]);
 		}

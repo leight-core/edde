@@ -37,6 +37,7 @@ use function array_merge;
 use function array_unique;
 use function explode;
 use function is_string;
+use function iterator_count;
 use function iterator_to_array;
 use function json_encode;
 
@@ -134,13 +135,20 @@ class ExcelService implements IExcelService {
 	protected function meta(string $file): MetaDto {
 		$tabs = [];
 		$services = [];
+		$total = 0;
 		foreach ($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
 			'file'   => $file,
 			'sheets' => 'tabs',
 		])) as $tab) {
+			$total += $count = iterator_count($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
+				'file'   => $file,
+				'sheets' => $tab['tab'],
+			])));
+
 			$tabs[] = $this->dtoService->fromArray(TabDto::class, [
 				'name'     => $tab['tab'],
 				'services' => $services = array_merge($services, array_map('trim', explode(',', $tab['services']))),
+				'count'    => $count,
 			]);
 		}
 		$services = array_unique($services);
@@ -154,6 +162,7 @@ class ExcelService implements IExcelService {
 
 		return $this->dtoService->fromArray(MetaDto::class, [
 			'file'         => $file,
+			'total'        => $total,
 			'tabs'         => $tabs,
 			'translations' => $translations,
 			'services'     => array_combine($services, array_map(function (string $service) use ($file, $translations) {

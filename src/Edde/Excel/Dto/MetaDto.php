@@ -12,6 +12,11 @@ class MetaDto extends AbstractDto {
 	 */
 	public $file;
 	/**
+	 * @var int
+	 * @description grand total of all items available
+	 */
+	public $total = 0;
+	/**
 	 * @var TabDto[]
 	 * @description tab definition for process
 	 */

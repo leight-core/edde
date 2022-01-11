@@ -16,4 +16,9 @@ class TabDto extends AbstractDto {
 	 * @description an array of services used to process the given tab
 	 */
 	public $services;
+	/**
+	 * @var int
+	 * @description number of items on the given tab
+	 */
+	public $count = 0;
 }

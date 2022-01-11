@@ -126,6 +126,7 @@ class ExcelService implements IExcelService {
 	 * @throws ReflectionException
 	 */
 	protected function meta(string $file): MetaDto {
+		/** @var $tabs TabDto[] */
 		$tabs = [];
 		$services = [];
 		$total = 0;
@@ -133,7 +134,7 @@ class ExcelService implements IExcelService {
 			'file'   => $file,
 			'sheets' => 'tabs',
 		])) as $tab) {
-			$total += $count = iterator_count($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
+			$count = iterator_count($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
 				'file'   => $file,
 				'sheets' => $tab['tab'],
 			])));
@@ -145,6 +146,15 @@ class ExcelService implements IExcelService {
 				'count'    => $count,
 			]);
 		}
+		foreach ($tabs as $tab) {
+			foreach ($tab->services as $_) {
+				$total += iterator_count($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
+					'file'   => $file,
+					'sheets' => $tab->name,
+				])));
+			}
+		}
+
 		$services = array_unique($services);
 		$translations = [];
 		foreach ($this->safeRead($this->dtoService->fromArray(ReadDto::class, [

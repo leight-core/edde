@@ -100,6 +100,9 @@ class DatabaseCache extends AbstractCache {
 		/**
 		 * Cache cleanup with probability.
 		 */
-		$this->randomService->isHit(1 / 250) && $this->cacheRepository->cleanup();
+		if ($this->randomService->isHit(1 / 250)) {
+			$this->cache = [];
+			$this->cacheRepository->cleanup();
+		}
 	}
 }

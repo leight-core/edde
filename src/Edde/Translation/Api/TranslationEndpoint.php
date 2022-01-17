@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace PuffSmith\Api\Shared\Endpoint;
+namespace Edde\Translation\Api;
 
 use Edde\Cache\DatabaseCacheTrait;
 use Edde\Dto\DtoServiceTrait;

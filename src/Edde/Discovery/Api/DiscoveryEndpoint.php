@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Discovery\Api;
+namespace Edde\Discovery\Api;
 
 use Edde\Cache\DatabaseCacheTrait;
 use Edde\Discovery\Dto\DiscoveryIndexDto;

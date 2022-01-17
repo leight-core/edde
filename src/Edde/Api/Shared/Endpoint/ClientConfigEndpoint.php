@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\Config\Api;
+namespace Edde\Api\Shared\Endpoint;
 
 use Edde\Config\ClientConfigServiceTrait;
 use Edde\Config\Dto\ClientConfigDto;

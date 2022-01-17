@@ -56,8 +56,6 @@ class SessionResolver implements ISessionResolver {
 			/**
 			 * Try resolve an user from the $_SESSION directly as Symfony does some dark magick which prevents direct access
 			 * to native $_SESSION.
-			 *
-			 * This user is the one logged from MarshConnect.
 			 */
 			try {
 				$this->currentUserService->select($session->get('user'));

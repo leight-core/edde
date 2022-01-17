@@ -30,7 +30,9 @@ use Edde\Profiler\ProfilerMiddleware;
 use Edde\Reflection\ReflectionDtoService;
 use Edde\Rest\EndpointInfo;
 use Edde\Rest\IEndpointInfo;
+use Edde\Session\ISessionResolver;
 use Edde\Session\SessionMiddleware;
+use Edde\Session\SessionResolver;
 use Edde\Storage\StorageConfig;
 use Edde\User\Mapper\IUserMapper;
 use Edde\User\Repository\IUserRepository;
@@ -105,28 +107,31 @@ class SlimApp {
 		$containerBuilder = new ContainerBuilder();
 		$containerBuilder->useAnnotations(true);
 		$containerBuilder->addDefinitions([
-			SessionInterface::class    => function (ContainerInterface $container) {
+			SessionInterface::class  => function (ContainerInterface $container) {
 				return $container->get(Session::class);
 			},
-			IHttpRouter::class         => function (ContainerInterface $container) {
+			ISessionResolver::class  => function (ContainerInterface $container) {
+				return $container->get(SessionResolver::class);
+			},
+			IHttpRouter::class       => function (ContainerInterface $container) {
 				return $container->get(ApiRouter::class);
 			},
-			IJobExecutor::class        => function (ContainerInterface $container) {
+			IJobExecutor::class      => function (ContainerInterface $container) {
 				return $container->get(CliJobExecutor::class);
 			},
-			IDtoService::class         => function (ContainerInterface $container) {
+			IDtoService::class       => function (ContainerInterface $container) {
 				return $container->get(ReflectionDtoService::class);
 			},
-			IHttpIndex::class          => function (ContainerInterface $container) {
+			IHttpIndex::class        => function (ContainerInterface $container) {
 				return $container->get(HttpIndex::class);
 			},
-			IPhpBinaryService::class   => function (ContainerInterface $container) {
+			IPhpBinaryService::class => function (ContainerInterface $container) {
 				return $container->get(PhpBinaryService::class);
 			},
-			IEndpointInfo::class       => function (ContainerInterface $container) {
+			IEndpointInfo::class     => function (ContainerInterface $container) {
 				return $container->get(EndpointInfo::class);
 			},
-			IExcelService::class       => function (ContainerInterface $container) {
+			IExcelService::class     => function (ContainerInterface $container) {
 				return $container->get(ExcelService::class);
 			},
 			IExcelImportService::class => function (ContainerInterface $container) {

@@ -7,4 +7,6 @@ use Edde\Repository\IRepository;
 
 interface IUserRepository extends IRepository {
 	public function findByLogin($login);
+
+	public function updateSettings($userId, $settings);
 }

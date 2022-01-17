@@ -10,4 +10,8 @@ class UserRepository extends AbstractRepository implements IUserRepository {
 	public function findByLogin($login) {
 		return null;
 	}
+
+	public function updateSettings($userId, $settings) {
+		return null;
+	}
 }

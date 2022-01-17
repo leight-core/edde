@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace PuffSmith\Api\Shared\Endpoint;
+namespace Edde\Api\Shared\Endpoint;
 
 use Edde\Api\Shared\Dto\DateTimeDto;
 use Edde\Config\ConfigServiceTrait;

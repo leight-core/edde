@@ -60,10 +60,6 @@ class SessionResolver implements ISessionResolver {
 			 * This user is the one logged from MarshConnect.
 			 */
 			try {
-				/**
-				 * At the first glance, use "default" user; if not available, use the one provided from
-				 * MarshConnect session.
-				 */
 				$this->currentUserService->select($session->get('user'));
 			} catch (Throwable $throwable) {
 				/**

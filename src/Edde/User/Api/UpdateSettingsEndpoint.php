@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Marsh\Api\Shared\User\Endpoint;
+namespace Edde\User\Api;
 
 use Edde\Dto\DtoServiceTrait;
 use Edde\Rest\Endpoint\AbstractMutationEndpoint;

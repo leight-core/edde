@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\User\Api;
+namespace Edde\Api\Shared\User\Endpoint;
 
 use Edde\Mapper\Exception\ItemException;
 use Edde\Mapper\Exception\SkipException;

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\Translation\Api;
+namespace Edde\Api\Shared\Endpoint;
 
 use Edde\Cache\DatabaseCacheTrait;
 use Edde\Dto\DtoServiceTrait;

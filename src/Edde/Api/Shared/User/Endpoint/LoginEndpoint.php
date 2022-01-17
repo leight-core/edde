@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\User\Api;
+namespace Edde\Api\Shared\User\Endpoint;
 
 use Edde\Config\ConfigServiceTrait;
 use Edde\Dto\Common\LoginRequest;

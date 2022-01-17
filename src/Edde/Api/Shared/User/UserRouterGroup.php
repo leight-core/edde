@@ -1,8 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\User\Api;
+namespace Edde\Api\Shared\User;
 
+use Edde\Api\Shared\User\Endpoint\LoginEndpoint;
+use Edde\Api\Shared\User\Endpoint\LogoutEndpoint;
+use Edde\Api\Shared\User\Endpoint\TicketEndpoint;
+use Edde\Api\Shared\User\Endpoint\UpdateSettingsEndpoint;
 use Edde\Http\AbstractRouterGroup;
 use Slim\Interfaces\RouteCollectorProxyInterface;
 

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace PuffSmith\Api\Shared\Endpoint;
+namespace Discovery\Api;
 
 use Edde\Cache\DatabaseCacheTrait;
 use Edde\Discovery\Dto\DiscoveryIndexDto;

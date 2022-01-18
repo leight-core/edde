@@ -28,7 +28,7 @@ class DatabaseCache extends AbstractCache {
 
 	public function set($key, $value, $ttl = null) {
 		try {
-			$this->cacheRepository->ensure($key, $this->blob($value), $ttl);
+			$this->cacheRepository->ensure($key, $value, $ttl);
 			return true;
 		} catch (Throwable $throwable) {
 			$this->logger->error($throwable);

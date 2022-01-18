@@ -12,7 +12,6 @@ use Edde\Link\LinkGeneratorTrait;
 use Edde\Rest\Endpoint\AbstractFetchEndpoint;
 use Edde\Rest\EndpointInfoTrait;
 use Edde\Rest\Reflection\Endpoint;
-use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * @description Endpoint used to get server discovery index.
@@ -26,12 +25,10 @@ class DiscoveryEndpoint extends AbstractFetchEndpoint {
 
 	/**
 	 * @return DiscoveryIndexDto
-	 *
-	 * @throws InvalidArgumentException
 	 */
 	public function get(): DiscoveryIndexDto {
-		return $this->cache->get(DiscoveryIndexDto::class, function (string $key) {
-			$this->cache->set($key, $value = $this->dtoService->fromArray(DiscoveryIndexDto::class, [
+		return $this->cache->get(DiscoveryIndexDto::class, function () {
+			return $this->cache->set(DiscoveryIndexDto::class, $this->dtoService->fromArray(DiscoveryIndexDto::class, [
 				'index' => array_map(function (Endpoint $endpoint) {
 					return $this->dtoService->fromArray(DiscoveryItemDto::class, [
 						'id'     => $this->endpointInfo->getId($endpoint->class->fqdn),
@@ -43,7 +40,6 @@ class DiscoveryEndpoint extends AbstractFetchEndpoint {
 					return $this->endpointInfo->getId($endpoint->class->fqdn);
 				}, $this->httpIndex->endpoints()), array_values($this->httpIndex->endpoints()))),
 			]));
-			return $value;
 		});
 	}
 }

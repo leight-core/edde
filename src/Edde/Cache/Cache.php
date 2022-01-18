@@ -14,16 +14,16 @@ class Cache extends AbstractCache {
 	public function get(string $key, $default = null) {
 		try {
 			$this->gc();
-			if (isset($this->local[$key = $this->key($key)])) {
-				return $this->local[$key];
+			if (isset($this->local[$keyHash = $this->key($key)])) {
+				return $this->local[$keyHash];
 			}
-			if (!($item = $this->cache->get($key))) {
-				return $this->resolveDefault($key, $default);
+			if (!($item = $this->cache->get($keyHash))) {
+				return $this->resolveDefault($keyHash, $default);
 			}
 			if (($hash = sha1($item[0])) !== $item[1]) {
 				throw new InvalidEntryException(sprintf('Cached item [%s] is invalid: computed hash [%s] does not match item hash [%s].', $key, $hash, $item->hash));
 			}
-			return $this->local[$key] = $this->unblob($item[0]);
+			return $this->local[$keyHash] = $this->unblob($item[0]);
 		} catch (Throwable $throwable) {
 			$this->logger->error($throwable);
 			return $this->resolveDefault($key, $default);

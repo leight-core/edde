@@ -75,10 +75,9 @@ abstract class AbstractHttpIndex implements IHttpIndex {
 		return $this->profilerService->profile(static::class, function () use ($onRebuild) {
 			return $this->cache->get('endpoints', function () use ($onRebuild) {
 				$onRebuild && $onRebuild();
-				$this->cache->set('endpoints', $endpoints = array_map(function (string $name) {
+				return $this->cache->set('endpoints', array_map(function (string $name) {
 					return $this->endpoint($name);
 				}, $this->index));
-				return $endpoints;
 			});
 		});
 	}
@@ -200,8 +199,7 @@ abstract class AbstractHttpIndex implements IHttpIndex {
 				$endpoint = MutationEndpoint::create(array_merge($defaults, []));
 			}
 
-			$this->cache->set('endpoints.' . $name, $endpoint);
-			return $endpoint;
+			return $this->cache->set('endpoints.' . $name, $endpoint);
 		});
 	}
 }

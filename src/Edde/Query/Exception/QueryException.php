@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Query\Exception;
 
-use Edde\LibException;
+use Edde\EddeException;
 
-class QueryException extends LibException {
+class QueryException extends EddeException {
 }

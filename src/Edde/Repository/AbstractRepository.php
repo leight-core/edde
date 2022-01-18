@@ -25,6 +25,7 @@ use Edde\Utils\StringUtils;
 use Edde\Uuid\UuidServiceTrait;
 use Nette\Utils\Arrays;
 use Throwable;
+use function array_filter;
 use function sprintf;
 use function strpos;
 
@@ -279,7 +280,7 @@ abstract class AbstractRepository implements IRepository {
 	 */
 	protected function syncWith(string $source, string $target, string $id, ?array $items) {
 		$this->table()->delete()->where([$source => $id])->execute();
-		foreach ($items ?? [] as $item) {
+		foreach (array_filter($items ?? []) as $item) {
 			$this->insert([
 				$source => $id,
 				$target => $item,

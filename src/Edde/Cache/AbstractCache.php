@@ -9,6 +9,7 @@ use function gzcompress;
 use function gzuncompress;
 use function is_callable;
 use function serialize;
+use function sha1;
 use function unserialize;
 
 /**
@@ -28,6 +29,10 @@ abstract class AbstractCache implements ICache {
 
 	protected function resolveDefault(string $key, $default) {
 		return (is_callable($default) ? $default($key) : $default);
+	}
+
+	protected function key(string $key): string {
+		return sha1($key);
 	}
 
 	protected function blob($value): string {

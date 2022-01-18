@@ -14,7 +14,7 @@ class Cache extends AbstractCache {
 	public function get(string $key, $default = null) {
 		try {
 			$this->gc();
-			if (isset($this->local[$key])) {
+			if (isset($this->local[$key = $this->key($key)])) {
 				return $this->local[$key];
 			}
 			if (!($item = $this->cache->get($key))) {
@@ -36,7 +36,7 @@ class Cache extends AbstractCache {
 			if (count($this->local) > 512) {
 				$this->local = array_slice($this->local, 0, 128, true);
 			}
-			$this->local[$key] = $value;
+			$this->local[$key = $this->key($key)] = $value;
 			$this->cache->set($key, [
 				$blob = $this->blob($value),
 				sha1($blob),
@@ -51,7 +51,7 @@ class Cache extends AbstractCache {
 	public function delete(string $key): void {
 		try {
 			$this->gc();
-			$this->cache->delete($key);
+			$this->cache->delete($this->key($key));
 		} catch (Throwable $throwable) {
 			$this->logger->error($throwable);
 		}
@@ -68,7 +68,7 @@ class Cache extends AbstractCache {
 
 	public function has(string $key): bool {
 		$this->gc();
-		return $this->cache->has($key);
+		return $this->cache->has($this->key($key));
 	}
 
 	/**

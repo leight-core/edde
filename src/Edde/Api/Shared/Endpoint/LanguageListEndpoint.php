@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Edde\Api\Shared\Endpoint;
 
+use Edde\Api\Shared\Dto\LanguageDto;
 use Edde\Dto\DtoServiceTrait;
 use Edde\Query\Dto\Query;
 use Edde\Query\Dto\QueryResult;
 use Edde\Rest\Endpoint\AbstractQueryEndpoint;
-use Edde\Translation\Api\Dto\LanguageDto;
 use Edde\Translation\LanguageServiceTrait;
 use Edde\Translation\Repository\TranslationRepositoryTrait;
 

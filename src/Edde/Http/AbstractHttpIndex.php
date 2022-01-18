@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Http;
 
-use Edde\Cache\DatabaseCacheTrait;
+use Edde\Cache\CacheTrait;
 use Edde\Http\Exception\HttpException;
 use Edde\Profiler\ProfilerServiceTrait;
 use Edde\Query\Dto\Query;
@@ -45,7 +45,7 @@ use function sprintf;
 use function str_replace;
 
 abstract class AbstractHttpIndex implements IHttpIndex {
-	use DatabaseCacheTrait;
+	use CacheTrait;
 	use ReflectionServiceTrait;
 	use ProfilerServiceTrait;
 	use LinkFilterTrait;
@@ -73,9 +73,9 @@ abstract class AbstractHttpIndex implements IHttpIndex {
 	 */
 	public function endpoints(callable $onRebuild = null): array {
 		return $this->profilerService->profile(static::class, function () use ($onRebuild) {
-			return $this->databaseCache->get('endpoints', function () use ($onRebuild) {
+			return $this->cache->get('endpoints', function () use ($onRebuild) {
 				$onRebuild && $onRebuild();
-				$this->databaseCache->set('endpoints', $endpoints = array_map(function (string $name) {
+				$this->cache->set('endpoints', $endpoints = array_map(function (string $name) {
 					return $this->endpoint($name);
 				}, $this->index));
 				return $endpoints;
@@ -95,7 +95,7 @@ abstract class AbstractHttpIndex implements IHttpIndex {
 	 * @throws MissingReflectionClassException
 	 */
 	public function endpoint(string $name): Endpoint {
-		return $this->databaseCache->get('endpoint.' . $name, function () use ($name) {
+		return $this->cache->get('endpoint.' . $name, function () use ($name) {
 			static $methods = [
 				'get',
 				'post',
@@ -200,7 +200,7 @@ abstract class AbstractHttpIndex implements IHttpIndex {
 				$endpoint = MutationEndpoint::create(array_merge($defaults, []));
 			}
 
-			$this->databaseCache->set('endpoints.' . $name, $endpoint);
+			$this->cache->set('endpoints.' . $name, $endpoint);
 			return $endpoint;
 		});
 	}

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Api\Shared\Endpoint;
 
-use Edde\Cache\DatabaseCacheTrait;
+use Edde\Cache\CacheTrait;
 use Edde\Discovery\Dto\DiscoveryIndexDto;
 use Edde\Discovery\Dto\DiscoveryItemDto;
 use Edde\Dto\DtoServiceTrait;
@@ -19,10 +19,10 @@ use Psr\SimpleCache\InvalidArgumentException;
  */
 class DiscoveryEndpoint extends AbstractFetchEndpoint {
 	use HttpIndexTrait;
-	use DatabaseCacheTrait;
 	use DtoServiceTrait;
 	use EndpointInfoTrait;
 	use LinkGeneratorTrait;
+	use CacheTrait;
 
 	/**
 	 * @return DiscoveryIndexDto
@@ -30,8 +30,8 @@ class DiscoveryEndpoint extends AbstractFetchEndpoint {
 	 * @throws InvalidArgumentException
 	 */
 	public function get(): DiscoveryIndexDto {
-		return $this->databaseCache->get(DiscoveryIndexDto::class, function (string $key) {
-			$this->databaseCache->set($key, $value = $this->dtoService->fromArray(DiscoveryIndexDto::class, [
+		return $this->cache->get(DiscoveryIndexDto::class, function (string $key) {
+			$this->cache->set($key, $value = $this->dtoService->fromArray(DiscoveryIndexDto::class, [
 				'index' => array_map(function (Endpoint $endpoint) {
 					return $this->dtoService->fromArray(DiscoveryItemDto::class, [
 						'id'     => $this->endpointInfo->getId($endpoint->class->fqdn),

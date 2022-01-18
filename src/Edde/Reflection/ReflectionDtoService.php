@@ -5,12 +5,13 @@ namespace Edde\Reflection;
 
 use DateTime;
 use DI\Annotation\Injectable;
-use Edde\Cache\DatabaseCacheTrait;
+use Edde\Cache\CacheTrait;
 use Edde\Dto\AbstractDtoService;
 use Edde\Reflection\Dto\ClassDto;
 use Edde\Reflection\Dto\Property\AbstractProperty;
 use Edde\Reflection\Dto\Property\ClassProperty;
 use Edde\Reflection\Exception\InvalidValueException;
+use Edde\Reflection\Exception\MissingReflectionClassException;
 use Edde\Reflection\Exception\MissingValueException;
 use Edde\Reflection\Exception\UnknownTypeException;
 use Exception;
@@ -24,7 +25,7 @@ use ReflectionException as NativeReflectionException;
  */
 class ReflectionDtoService extends AbstractDtoService {
 	use ReflectionServiceTrait;
-	use DatabaseCacheTrait;
+	use CacheTrait;
 
 	/**
 	 * @param string      $class
@@ -32,11 +33,12 @@ class ReflectionDtoService extends AbstractDtoService {
 	 *
 	 * @return mixed
 	 *
-	 * @throws UnknownTypeException
+	 * @throws MissingReflectionClassException
 	 * @throws InvalidArgumentException
 	 * @throws InvalidValueException
 	 * @throws MissingValueException
 	 * @throws NativeReflectionException
+	 * @throws UnknownTypeException
 	 */
 	public function fromObject(string $class, ?object $source) {
 		/**
@@ -47,8 +49,8 @@ class ReflectionDtoService extends AbstractDtoService {
 		 *
 		 * @var $classDto ClassDto
 		 */
-		$classDto = $this->databaseCache->get('reflection.' . $class, function (string $key) use ($class) {
-			$this->databaseCache->set($key, $value = $this->reflectionService->toClass($class));
+		$classDto = $this->cache->get('reflection.' . $class, function (string $key) use ($class) {
+			$this->cache->set($key, $value = $this->reflectionService->toClass($class));
 			return $value;
 		});
 		$instance = new $class;

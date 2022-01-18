@@ -5,20 +5,30 @@ namespace Edde\Cache;
 
 use Edde\Log\LoggerTrait;
 use Edde\Math\RandomServiceTrait;
-use Psr\SimpleCache\CacheInterface;
 use function gzcompress;
 use function gzuncompress;
+use function is_callable;
 use function serialize;
 use function unserialize;
 
-abstract class AbstractCache implements CacheInterface {
+/**
+ * Just helper class for extended cache; it uses PSR cache under the hood.
+ */
+abstract class AbstractCache implements ICache {
+	use \Edde\Cache\Psr\CacheTrait;
 	use LoggerTrait;
 	use RandomServiceTrait;
 
 	/**
-	 * @var array[]
+	 * Local cache; it should be limited to prevent memory leaks here.
+	 *
+	 * @var array
 	 */
-	protected $cache;
+	protected $local;
+
+	protected function resolveDefault(string $key, $default) {
+		return (is_callable($default) ? $default($key) : $default);
+	}
 
 	protected function blob($value): string {
 		return gzcompress(serialize($value), 9);

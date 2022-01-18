@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Api;
 
-use Edde\Cache\DatabaseCacheTrait;
+use Edde\Cache\CacheTrait;
 use Edde\Config\ConfigServiceTrait;
 use Edde\Http\AbstractHttpRouter;
 use Edde\Http\HttpIndexTrait;
@@ -23,9 +23,9 @@ use Throwable;
 class ApiRouter extends AbstractHttpRouter {
 	use LoggerTrait;
 	use HttpIndexTrait;
-	use DatabaseCacheTrait;
 	use ProfilerServiceTrait;
 	use ConfigServiceTrait;
+	use CacheTrait;
 
 	/**
 	 * Option to specify endpoints directly bound into the root; this should be avoided.
@@ -66,7 +66,7 @@ class ApiRouter extends AbstractHttpRouter {
 				}
 				($static = $this->configService->system(self::CONFIG_STATIC, false)) && $app->get('{path:.*}', $static);
 			} catch (Throwable $e) {
-				$this->databaseCache->clear();
+				$this->cache->clear();
 				throw $e;
 			}
 		});

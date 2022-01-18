@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Excel;
 
-use Edde\Cache\DatabaseCacheTrait;
+use Edde\Cache\CacheTrait;
 use Edde\Container\ContainerTrait;
 use Edde\Dto\DtoServiceTrait;
 use Edde\Excel\Dto\HandleDto;
@@ -46,7 +46,7 @@ class ExcelService implements IExcelService {
 	use DtoServiceTrait;
 	use ContainerTrait;
 	use ReflectionServiceTrait;
-	use DatabaseCacheTrait;
+	use CacheTrait;
 
 	/**
 	 * @inheritdoc
@@ -107,7 +107,7 @@ class ExcelService implements IExcelService {
 	 * @inheritdoc
 	 */
 	public function meta(string $file): MetaDto {
-		return $this->databaseCache->get($hash = sha1_file($file), function () use ($hash, $file) {
+		return $this->cache->get($hash = sha1_file($file), function () use ($hash, $file) {
 			/** @var $tabs TabDto[] */
 			$tabs = [];
 			$services = [];
@@ -145,7 +145,7 @@ class ExcelService implements IExcelService {
 			])) as $translation) {
 				$translations[$translation['from']] = $translation['to'];
 			}
-			$this->databaseCache->set($hash, $dto = $this->dtoService->fromArray(MetaDto::class, [
+			$this->cache->set($hash, $dto = $this->dtoService->fromArray(MetaDto::class, [
 				'file'         => $file,
 				'total'        => $total,
 				'tabs'         => $tabs,

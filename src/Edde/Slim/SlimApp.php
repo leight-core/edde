@@ -7,7 +7,9 @@ use DI\Bridge\Slim\Bridge;
 use DI\Container;
 use DI\ContainerBuilder;
 use Edde\Api\ApiRouter;
-use Edde\Cache\DatabaseCache;
+use Edde\Cache\Cache;
+use Edde\Cache\ICache;
+use Edde\Cache\Impl\DatabaseCache;
 use Edde\Dto\IDtoService;
 use Edde\EddeException;
 use Edde\Excel\ExcelImportService;
@@ -137,19 +139,16 @@ class SlimApp {
 			IExcelImportService::class => function (ContainerInterface $container) {
 				return $container->get(ExcelImportService::class);
 			},
-			CacheInterface::class      => function (ContainerInterface $container) {
-				return $container->get(DatabaseCache::class);
-			},
 			LoggerInterface::class     => function (ContainerInterface $container) {
 				return $container->get(DatabaseLogger::class);
 			},
-			IFileService::class        => function (Container $container) {
+			IFileService::class      => function (Container $container) {
 				return $container->make(FileService::class, ['root' => $container->get(FileService::CONFIG_ROOT)]);
 			},
-			StorageConfig::class       => function (ContainerInterface $container) {
+			StorageConfig::class     => function (ContainerInterface $container) {
 				return new StorageConfig($container->get(StorageConfig::CONFIG_STORAGE));
 			},
-			Application::class         => function (ContainerInterface $container) {
+			Application::class       => function (ContainerInterface $container) {
 				$application = new Application($container->get(self::CONFIG_APP_NAME));
 				foreach ($container->get(self::CONFIG_CLI) as $cli) {
 					$application->add($container->get($cli));
@@ -157,14 +156,20 @@ class SlimApp {
 				$application->add($container->get(JobExecutorCommand::class));
 				return $application;
 			},
-			IUserRepository::class     => function (ContainerInterface $container) {
+			IUserRepository::class   => function (ContainerInterface $container) {
 				throw new EddeException(sprintf('[%s] is not implemented or registered in the container; please provide implementation of [%s].', IUserRepository::class, IUserRepository::class));
 			},
-			IUserMapper::class         => function (ContainerInterface $container) {
+			IUserMapper::class       => function (ContainerInterface $container) {
 				throw new EddeException(sprintf('[%s] is not implemented or registered in the container; please provide implementation of [%s].', IUserMapper::class, IUserMapper::class));
 			},
-			SlimApp::CONFIG_CLI        => [],
-			Manager::class             => function (ContainerInterface $container) {
+			ICache::class            => function (ContainerInterface $container) {
+				return $container->get(Cache::class);
+			},
+			CacheInterface::class    => function (ContainerInterface $container) {
+				return $container->get(DatabaseCache::class);
+			},
+			SlimApp::CONFIG_CLI      => [],
+			Manager::class           => function (ContainerInterface $container) {
 				$manager = new Manager($container->get(ConfigInterface::class), new ArrayInput([]), new StreamOutput(fopen('php://output', 'w')));
 				$manager->setContainer($container);
 				return $manager;

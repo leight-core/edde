@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Rest\Endpoint;
 
-use Edde\Cache\DatabaseCacheTrait;
+use Edde\Cache\CacheTrait;
 use Edde\Dto\DtoServiceTrait;
 use Edde\Http\HttpIndexTrait;
 use Edde\Log\LoggerTrait;
@@ -29,7 +29,7 @@ abstract class AbstractEndpoint implements IEndpoint {
 	use DtoServiceTrait;
 	use HttpIndexTrait;
 	use ProfilerServiceTrait;
-	use DatabaseCacheTrait;
+	use CacheTrait;
 
 	/** @var ServerRequestInterface */
 	protected $request;
@@ -74,7 +74,7 @@ abstract class AbstractEndpoint implements IEndpoint {
 				 * due to cache problems; in general exception in this place is real exception (aka ugly error, bug), thus
 				 * slow down caused by this could be a pointer that something is wrong.
 				 */
-				$this->databaseCache->clear();
+				$this->cache->clear();
 				return $this->handleException($e, $response);
 			}
 		});

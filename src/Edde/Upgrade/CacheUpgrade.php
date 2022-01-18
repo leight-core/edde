@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\Cache\Upgrade;
+namespace Edde\Upgrade;
 
 use Edde\Phinx\CommonMigration;
 

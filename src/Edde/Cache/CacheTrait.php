@@ -3,18 +3,19 @@ declare(strict_types=1);
 
 namespace Edde\Cache;
 
-use Psr\SimpleCache\CacheInterface;
-
+/**
+ * This is wrapper around PSR cache interface with some extended functions.
+ */
 trait CacheTrait {
-	/** @var CacheInterface */
+	/** @var ICache */
 	protected $cache;
 
 	/**
 	 * @Inject
 	 *
-	 * @param CacheInterface $cache
+	 * @param ICache $cache
 	 */
-	public function setCache(CacheInterface $cache): void {
+	public function setCache(ICache $cache): void {
 		$this->cache = $cache;
 	}
 }

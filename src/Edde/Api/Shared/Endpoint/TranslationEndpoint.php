@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Api\Shared\Endpoint;
 
-use Edde\Cache\DatabaseCacheTrait;
+use Edde\Cache\CacheTrait;
 use Edde\Dto\DtoServiceTrait;
 use Edde\Rest\Endpoint\AbstractFetchEndpoint;
 use Edde\Translation\Dto\TranslationsDto;
@@ -17,8 +17,8 @@ use Psr\SimpleCache\InvalidArgumentException;
 class TranslationEndpoint extends AbstractFetchEndpoint {
 	use ToTranslationMapperTrait;
 	use TranslationRepositoryTrait;
-	use DatabaseCacheTrait;
 	use DtoServiceTrait;
+	use CacheTrait;
 
 	/**
 	 * @return TranslationsDto
@@ -26,8 +26,8 @@ class TranslationEndpoint extends AbstractFetchEndpoint {
 	 * @throws InvalidArgumentException
 	 */
 	public function get(): TranslationsDto {
-		return $this->databaseCache->get(TranslationsDto::class, function (string $key) {
-			$this->databaseCache->set($key, $value = $this->dtoService->fromArray(TranslationsDto::class, ['translations' => $this->toTranslationMapper->map($this->translationRepository->all())]));
+		return $this->cache->get(TranslationsDto::class, function (string $key) {
+			$this->cache->set($key, $value = $this->dtoService->fromArray(TranslationsDto::class, ['translations' => $this->toTranslationMapper->map($this->translationRepository->all())]));
 			return $value;
 		});
 	}

@@ -32,7 +32,7 @@ class TagRepository extends AbstractRepository {
 			return $this->insert([
 				'code'  => $code,
 				'label' => $code,
-				'group' => $code,
+				'group' => $group,
 				'sort'  => 0,
 			]);
 		} catch (DuplicateEntryException $exception) {

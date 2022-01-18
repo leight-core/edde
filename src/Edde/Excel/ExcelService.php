@@ -145,7 +145,7 @@ class ExcelService implements IExcelService {
 			])) as $translation) {
 				$translations[$translation['from']] = $translation['to'];
 			}
-			$this->cache->set($hash, $dto = $this->dtoService->fromArray(MetaDto::class, [
+			return $this->cache->set($hash, $this->dtoService->fromArray(MetaDto::class, [
 				'file'         => $file,
 				'total'        => $total,
 				'tabs'         => $tabs,
@@ -176,7 +176,6 @@ class ExcelService implements IExcelService {
 					]);
 				}, $services)),
 			]));
-			return $dto;
 		});
 	}
 

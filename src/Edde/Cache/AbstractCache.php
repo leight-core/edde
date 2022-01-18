@@ -24,7 +24,7 @@ abstract class AbstractCache implements ICache {
 	 *
 	 * @var array
 	 */
-	protected $local;
+	protected $local = [];
 
 	protected function resolveDefault(string $key, $default) {
 		return (is_callable($default) ? $default($key) : $default);

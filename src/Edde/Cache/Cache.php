@@ -18,7 +18,7 @@ class Cache extends AbstractCache {
 				return $this->local[$keyHash];
 			}
 			if (!($item = $this->cache->get($keyHash))) {
-				return $this->resolveDefault($keyHash, $default);
+				return $this->resolveDefault($key, $default);
 			}
 			if (($hash = sha1($item[0])) !== $item[1]) {
 				throw new InvalidEntryException(sprintf('Cached item [%s] is invalid: computed hash [%s] does not match item hash [%s].', $key, $hash, $item->hash));

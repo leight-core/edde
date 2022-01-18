@@ -112,6 +112,9 @@ class SlimApp {
 			SessionInterface::class  => function (ContainerInterface $container) {
 				return $container->get(Session::class);
 			},
+			Session::class           => function (ContainerInterface $container) {
+				return $container->get(ISessionResolver::class)->setup();
+			},
 			ISessionResolver::class  => function (ContainerInterface $container) {
 				return $container->get(SessionResolver::class);
 			},

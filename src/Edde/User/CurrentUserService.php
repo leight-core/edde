@@ -9,7 +9,6 @@ use Edde\Mapper\Exception\SkipException;
 use Edde\User\Exception\UserNotSelectedException;
 use Edde\User\Mapper\CurrentUserMapperTrait;
 use Edde\User\Repository\UserRepositoryTrait;
-use function array_merge;
 
 /**
  * @Injectable(lazy=true)
@@ -78,15 +77,5 @@ class CurrentUserService {
 			throw new UserNotSelectedException('Requested an user, but no user has been selected.');
 		}
 		return $this->user;
-	}
-
-	public function publicUser(array $extra = []): CurrentUser {
-		return CurrentUser::create(array_merge([
-			'id'    => null,
-			'name'  => 'public',
-			'login' => 'public',
-			'site'  => 'public',
-			'roles' => [],
-		], $extra));
 	}
 }

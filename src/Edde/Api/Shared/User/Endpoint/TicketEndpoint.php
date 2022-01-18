@@ -21,20 +21,17 @@ class TicketEndpoint extends AbstractFetchEndpoint {
 	use SessionMapperTrait;
 
 	/**
-	 * @return SessionDto
+	 * @return SessionDto|void
 	 *
 	 * @throws ItemException
 	 * @throws SkipException
 	 * @throws UserNotSelectedException
 	 */
-	public function get(): SessionDto {
+	public function get(): ?SessionDto {
 		if ($this->currentUserService->isSelected()) {
 			return $this->sessionMapper->item($this->currentUserService->requireUser());
 
 		}
-		/**
-		 * When an user does not have a session, treat him as public (common) user.
-		 */
-		return $this->sessionMapper->item($this->currentUserService->publicUser());
+		return null;
 	}
 }

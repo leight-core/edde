@@ -69,9 +69,12 @@ class ExcelService implements IExcelService {
 			foreach ($row->getCellIterator() as $cell) {
 				$item[$header[$cell->getColumn()]] = $cell->getFormattedValue();
 			}
-			yield str_pad((string)$index, 8, '0', STR_PAD_LEFT) => array_filter($item, static function ($item) {
+			if (empty($item = array_filter($item, static function ($item) {
 				return !(is_string($item) && empty($item));
-			});
+			}))) {
+				continue;
+			}
+			yield str_pad((string)$index, 8, '0', STR_PAD_LEFT) => $item;
 		}
 	}
 

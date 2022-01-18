@@ -7,6 +7,7 @@ use Edde\Cache\Exception\CacheException;
 use Edde\Cache\Psr\AbstractCache;
 use Edde\Cache\Repository\CacheRepositoryTrait;
 use Throwable;
+use function is_array;
 
 class DatabaseCache extends AbstractCache {
 	use CacheRepositoryTrait;
@@ -28,7 +29,7 @@ class DatabaseCache extends AbstractCache {
 
 	public function set($key, $value, $ttl = null) {
 		try {
-			$this->cacheRepository->ensure($key, $value, $ttl);
+			$this->cacheRepository->ensure($key, is_array($value) ? $value[0] : $value, $ttl);
 			return true;
 		} catch (Throwable $throwable) {
 			$this->logger->error($throwable);

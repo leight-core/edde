@@ -10,14 +10,12 @@ class TranslationUpgrade extends CommonMigration {
 		$this
 			->createUuidTable('z_translation')
 			->addStringColumn('locale', 32, ['comment' => 'Locale ID (cz-CZ, en-Gb, whatever...).'])
-			->addColumn('key', 'text', [
+			->addTextColumn('key', [
 				'comment' => 'Translation key.',
-				'length'  => 4096 * 10,
 			])
 			->addStringColumn('hash', 128, ['comment' => 'Hash of a translation key.'])
-			->addColumn('translation', 'text', [
+			->addTextColumn('translation', [
 				'comment' => 'The translation of the key.',
-				'length'  => 4096 * 10,
 			])
 			->addIndex([
 				'locale',

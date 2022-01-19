@@ -5,6 +5,7 @@ namespace Edde\Phinx;
 
 use Phinx\Db\Table;
 use Ramsey\Uuid\Uuid;
+use function array_merge;
 
 class PhinxTable extends Table {
 	/**
@@ -87,6 +88,13 @@ class PhinxTable extends Table {
 				'name'   => $this->getName() . '_' . $name . '_unique',
 			]));
 		}
+		return $this;
+	}
+
+	public function addTextColumn(string $name, array $options = [], int $length = 4096 * 32,): PhinxTable {
+		$this->addColumn('log', 'text', array_merge([
+			'length' => $length,
+		], $options));
 		return $this;
 	}
 

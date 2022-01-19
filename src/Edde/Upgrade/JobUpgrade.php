@@ -10,15 +10,13 @@ class JobUpgrade extends CommonMigration {
 		$this
 			->createUuidTable('z_job', ['comment' => 'Table containing jobs running or being executed.'])
 			->addStringColumn('service', 256, ['comment' => 'Service being called; must be accessible from DI container. Also it must implement IJobService interface.'])
-			->addColumn('params', 'text', [
+			->addTextColumn('params', [
 				'comment' => 'JSON encoded parameter DTO.',
 				'null'    => true,
-				'length'  => 4096 * 10,
 			])
-			->addColumn('result', 'text', [
+			->addTextColumn('result', [
 				'comment' => 'JSON encoded result DTO.',
 				'null'    => true,
-				'length'  => 4096 * 10,
 			])
 			->addColumn('total', 'integer', [
 				'default' => 0,
@@ -82,18 +80,16 @@ class JobUpgrade extends CommonMigration {
 				'limit'   => 2,
 				'comment' => 'Log level (the weight - for example 0 - notice, 4 - error).',
 			])
-			->addColumn('item', 'text', [
+			->addTextColumn('item', [
 				'comment' => 'JSON encoded source (processed item of a job).',
 				'null'    => true,
-				'length'  => 4096 * 10,
 			])
 			->addStringColumn('reference', 512, [
 				'comment' => 'Optional reference to the item of log (for example foreign key id).',
 				'null'    => true,
 			])
-			->addColumn('message', 'text', [
+			->addTextColumn('message', [
 				'comment' => 'Content of the message',
-				'length'  => 4096 * 10,
 			])
 			->addColumn('stamp', 'double', ['comment' => 'When this log item occurred (microtime).'])
 			->save();

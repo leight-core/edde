@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\Math;
+namespace Edde\Password;
 
 trait PasswordServiceTrait {
 	/** @var IPasswordService */

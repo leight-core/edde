@@ -165,13 +165,13 @@ class SlimApp {
 				$application->add($container->get(JobExecutorCommand::class));
 				return $application;
 			},
-			IUserRepository::class => function (ContainerInterface $container) {
+			IUserRepository::class => function () {
 				throw new EddeException(sprintf('[%s] is not implemented or registered in the container; please provide implementation of [%s].', IUserRepository::class, IUserRepository::class));
 			},
-			IUserMapper::class     => function (ContainerInterface $container) {
+			IUserMapper::class     => function () {
 				throw new EddeException(sprintf('[%s] is not implemented or registered in the container; please provide implementation of [%s].', IUserMapper::class, IUserMapper::class));
 			},
-			ISessionMapper::class  => function (ContainerInterface $container) {
+			ISessionMapper::class  => function () {
 				throw new EddeException(sprintf('[%s] is not implemented or registered in the container; please provide implementation of [%s].', ISessionMapper::class, ISessionMapper::class));
 			},
 			ICache::class          => function (ContainerInterface $container) {

@@ -9,6 +9,7 @@ use Edde\Dto\DtoServiceTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Translation\Repository\TranslationRepositoryTrait;
 use Edde\User\CurrentUserServiceTrait;
+use Edde\User\Exception\UserNotSelectedException;
 use function array_map;
 use function array_merge;
 

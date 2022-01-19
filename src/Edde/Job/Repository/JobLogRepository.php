@@ -7,10 +7,11 @@ use ClanCats\Hydrahon\Query\Sql\Select;
 use Edde\Job\Dto\Log\JobLogFilterDto;
 use Edde\Query\Dto\Query;
 use Edde\Repository\AbstractRepository;
+use Edde\Repository\IRepository;
 
 class JobLogRepository extends AbstractRepository {
 	public function __construct() {
-		parent::__construct(['stamp' => true]);
+		parent::__construct(['stamp' => IRepository::ORDER_ASC]);
 	}
 
 	public function log(string $jobId, int $level, string $message, $context = null, string $type = null, string $reference = null) {

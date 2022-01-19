@@ -6,10 +6,11 @@ namespace Edde\Tag\Repository;
 use Dibi\Exception;
 use Edde\Repository\AbstractRepository;
 use Edde\Repository\Exception\DuplicateEntryException;
+use Edde\Repository\IRepository;
 
 class TagRepository extends AbstractRepository {
 	public function __construct() {
-		parent::__construct(['code' => true], ['z_tag_code_group_unique']);
+		parent::__construct(['code' => IRepository::ORDER_ASC], ['z_tag_code_group_unique']);
 	}
 
 	/**

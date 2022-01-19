@@ -6,6 +6,7 @@ namespace Edde\Translation\Repository;
 use ClanCats\Hydrahon\Query\Sql\Exception;
 use Edde\Repository\AbstractRepository;
 use Edde\Repository\Exception\DuplicateEntryException;
+use Edde\Repository\IRepository;
 use Edde\Translation\Dto\Create\CreateDto;
 use Edde\Translation\Dto\Ensure\EnsureDto;
 use Throwable;
@@ -13,7 +14,7 @@ use function sha1;
 
 class TranslationRepository extends AbstractRepository {
 	public function __construct() {
-		parent::__construct(['key' => false], [
+		parent::__construct(['key' => IRepository::ORDER_ASC], [
 			'z_translation_hash_unique',
 		]);
 	}

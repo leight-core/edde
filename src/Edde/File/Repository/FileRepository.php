@@ -12,6 +12,7 @@ use Edde\Log\LoggerTrait;
 use Edde\Query\Dto\Query;
 use Edde\Repository\AbstractRepository;
 use Edde\Repository\Exception\DuplicateEntryException;
+use Edde\Repository\IRepository;
 use Edde\Uuid\UuidServiceTrait;
 use function hash;
 use function microtime;
@@ -22,9 +23,9 @@ class FileRepository extends AbstractRepository {
 
 	public function __construct() {
 		parent::__construct([
-			'created' => false,
-			'path'    => true,
-			'name'    => true,
+			'created' => IRepository::ORDER_DESC,
+			'path'    => IRepository::ORDER_ASC,
+			'name'    => IRepository::ORDER_ASC,
 		], [
 			'z_file_name_unique',
 			'z_file_native_unique',

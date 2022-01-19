@@ -11,11 +11,12 @@ use Edde\Query\Dto\Query;
 use Edde\Repository\AbstractRepository;
 use Edde\Repository\Exception\DuplicateEntryException;
 use Edde\Repository\Exception\RepositoryException;
+use Edde\Repository\IRepository;
 use Throwable;
 
 class ConfigRepository extends AbstractRepository {
 	public function __construct() {
-		parent::__construct(['key' => true], [
+		parent::__construct(['key' => IRepository::ORDER_ASC], [
 			'z_config_key_unique',
 		]);
 	}

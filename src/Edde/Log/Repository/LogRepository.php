@@ -11,6 +11,7 @@ use Edde\Log\Dto\Create\CreateDto;
 use Edde\Log\Dto\LogFilterDto;
 use Edde\Query\Dto\Query;
 use Edde\Repository\AbstractRepository;
+use Edde\Repository\IRepository;
 use Throwable;
 
 /**
@@ -20,7 +21,7 @@ class LogRepository extends AbstractRepository {
 	use LogTagRepositoryTrait;
 
 	public function __construct() {
-		parent::__construct(['microtime' => false]);
+		parent::__construct(['microtime' => IRepository::ORDER_DESC]);
 	}
 
 	/**

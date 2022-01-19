@@ -14,13 +14,14 @@ use Edde\Job\IJobService;
 use Edde\Job\JobStatus;
 use Edde\Query\Dto\Query;
 use Edde\Repository\AbstractRepository;
+use Edde\Repository\IRepository;
 use Throwable;
 
 class JobRepository extends AbstractRepository {
 	use JobLogRepositoryTrait;
 
 	public function __construct() {
-		parent::__construct(['created' => false]);
+		parent::__construct(['created' => IRepository::ORDER_DESC]);
 	}
 
 	public function toQuery(Query $query): Select {

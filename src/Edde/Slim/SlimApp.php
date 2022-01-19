@@ -25,6 +25,8 @@ use Edde\Job\CliJobExecutor;
 use Edde\Job\Command\JobExecutorCommand;
 use Edde\Job\IJobExecutor;
 use Edde\Log\DatabaseLogger;
+use Edde\Math\IPasswordService;
+use Edde\Math\PasswordService;
 use Edde\Php\IPhpBinaryService;
 use Edde\Php\MemoryUsageMiddleware;
 use Edde\Php\PhpBinaryService;
@@ -109,34 +111,34 @@ class SlimApp {
 		$containerBuilder = new ContainerBuilder();
 		$containerBuilder->useAnnotations(true);
 		$containerBuilder->addDefinitions([
-			SessionInterface::class  => function (ContainerInterface $container) {
+			SessionInterface::class    => function (ContainerInterface $container) {
 				return $container->get(Session::class);
 			},
-			Session::class           => function (ContainerInterface $container) {
+			Session::class             => function (ContainerInterface $container) {
 				return $container->get(ISessionResolver::class)->setup();
 			},
-			ISessionResolver::class  => function (ContainerInterface $container) {
+			ISessionResolver::class    => function (ContainerInterface $container) {
 				return $container->get(SessionResolver::class);
 			},
-			IHttpRouter::class       => function (ContainerInterface $container) {
+			IHttpRouter::class         => function (ContainerInterface $container) {
 				return $container->get(ApiRouter::class);
 			},
-			IJobExecutor::class      => function (ContainerInterface $container) {
+			IJobExecutor::class        => function (ContainerInterface $container) {
 				return $container->get(CliJobExecutor::class);
 			},
-			IDtoService::class       => function (ContainerInterface $container) {
+			IDtoService::class         => function (ContainerInterface $container) {
 				return $container->get(ReflectionDtoService::class);
 			},
-			IHttpIndex::class        => function (ContainerInterface $container) {
+			IHttpIndex::class          => function (ContainerInterface $container) {
 				return $container->get(HttpIndex::class);
 			},
-			IPhpBinaryService::class => function (ContainerInterface $container) {
+			IPhpBinaryService::class   => function (ContainerInterface $container) {
 				return $container->get(PhpBinaryService::class);
 			},
-			IEndpointInfo::class     => function (ContainerInterface $container) {
+			IEndpointInfo::class       => function (ContainerInterface $container) {
 				return $container->get(EndpointInfo::class);
 			},
-			IExcelService::class     => function (ContainerInterface $container) {
+			IExcelService::class       => function (ContainerInterface $container) {
 				return $container->get(ExcelService::class);
 			},
 			IExcelImportService::class => function (ContainerInterface $container) {
@@ -145,13 +147,16 @@ class SlimApp {
 			LoggerInterface::class     => function (ContainerInterface $container) {
 				return $container->get(DatabaseLogger::class);
 			},
-			IFileService::class      => function (Container $container) {
+			IPasswordService::class    => function (ContainerInterface $container) {
+				return $container->get(PasswordService::class);
+			},
+			IFileService::class        => function (Container $container) {
 				return $container->make(FileService::class, ['root' => $container->get(FileService::CONFIG_ROOT)]);
 			},
-			StorageConfig::class     => function (ContainerInterface $container) {
+			StorageConfig::class       => function (ContainerInterface $container) {
 				return new StorageConfig($container->get(StorageConfig::CONFIG_STORAGE));
 			},
-			Application::class       => function (ContainerInterface $container) {
+			Application::class         => function (ContainerInterface $container) {
 				$application = new Application($container->get(self::CONFIG_APP_NAME));
 				foreach ($container->get(self::CONFIG_CLI) as $cli) {
 					$application->add($container->get($cli));
@@ -159,20 +164,20 @@ class SlimApp {
 				$application->add($container->get(JobExecutorCommand::class));
 				return $application;
 			},
-			IUserRepository::class   => function (ContainerInterface $container) {
+			IUserRepository::class     => function (ContainerInterface $container) {
 				throw new EddeException(sprintf('[%s] is not implemented or registered in the container; please provide implementation of [%s].', IUserRepository::class, IUserRepository::class));
 			},
-			IUserMapper::class       => function (ContainerInterface $container) {
+			IUserMapper::class         => function (ContainerInterface $container) {
 				throw new EddeException(sprintf('[%s] is not implemented or registered in the container; please provide implementation of [%s].', IUserMapper::class, IUserMapper::class));
 			},
-			ICache::class            => function (ContainerInterface $container) {
+			ICache::class              => function (ContainerInterface $container) {
 				return $container->get(Cache::class);
 			},
-			CacheInterface::class    => function (ContainerInterface $container) {
+			CacheInterface::class      => function (ContainerInterface $container) {
 				return $container->get(DatabaseCache::class);
 			},
-			SlimApp::CONFIG_CLI      => [],
-			Manager::class           => function (ContainerInterface $container) {
+			SlimApp::CONFIG_CLI        => [],
+			Manager::class             => function (ContainerInterface $container) {
 				$manager = new Manager($container->get(ConfigInterface::class), new ArrayInput([]), new StreamOutput(fopen('php://output', 'w')));
 				$manager->setContainer($container);
 				return $manager;

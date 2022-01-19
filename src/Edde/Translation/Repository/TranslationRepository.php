@@ -9,11 +9,12 @@ use Edde\Repository\Exception\DuplicateEntryException;
 use Edde\Translation\Dto\Create\CreateDto;
 use Edde\Translation\Dto\Ensure\EnsureDto;
 use Throwable;
+use function sha1;
 
 class TranslationRepository extends AbstractRepository {
 	public function __construct() {
 		parent::__construct(['key' => false], [
-			'z_translation_key_unique',
+			'z_translation_hash_unique',
 		]);
 	}
 
@@ -26,7 +27,7 @@ class TranslationRepository extends AbstractRepository {
 	 * @throws Exception
 	 */
 	public function fetchByKey(string $locale, string $key) {
-		return $this->select()->where('locale', $locale)->where('key', $key)->execute()->fetch();
+		return $this->select()->where('locale', $locale)->where('hash', $this->key($key))->execute()->fetch();
 	}
 
 	/**
@@ -40,6 +41,7 @@ class TranslationRepository extends AbstractRepository {
 		return $this->insert([
 			'locale'      => $createDto->translation->language,
 			'key'         => $createDto->translation->label,
+			'hash'        => $this->key($createDto->translation->label),
 			'translation' => $createDto->translation->translation,
 		]);
 	}
@@ -49,6 +51,7 @@ class TranslationRepository extends AbstractRepository {
 			return $this->insert([
 				'locale'      => $ensureDto->translation->language,
 				'key'         => $ensureDto->translation->label,
+				'hash'        => $this->key($ensureDto->translation->label),
 				'translation' => $ensureDto->translation->translation,
 			]);
 		} catch (DuplicateEntryException $exception) {
@@ -65,5 +68,9 @@ class TranslationRepository extends AbstractRepository {
 
 	public function toLanguages(): array {
 		return iterator_to_array($this->languages());
+	}
+
+	protected function key(string $key): string {
+		return sha1($key);
 	}
 }

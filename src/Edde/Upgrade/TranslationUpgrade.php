@@ -7,13 +7,18 @@ use Edde\Phinx\CommonMigration;
 
 class TranslationUpgrade extends CommonMigration {
 	public function change(): void {
-		$this->drop('z_translation');
 		$this
 			->createUuidTable('z_translation')
 			->addStringColumn('locale', 32, ['comment' => 'Locale ID (cz-CZ, en-Gb, whatever...).'])
-			->addStringColumn('key', 4096 * 10, ['comment' => 'Translation key.'])
+			->addColumn('key', 'text', [
+				'comment' => 'Translation key.',
+				'length'  => 4096 * 10,
+			])
 			->addStringColumn('hash', 128, ['comment' => 'Hash of a translation key.'])
-			->addStringColumn('translation', 4096 * 10, ['comment' => 'The translation of the key.'])
+			->addColumn('translation', 'text', [
+				'comment' => 'The translation of the key.',
+				'length'  => 4096 * 10,
+			])
 			->addIndex([
 				'locale',
 				'hash',

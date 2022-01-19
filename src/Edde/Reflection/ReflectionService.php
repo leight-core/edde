@@ -40,8 +40,8 @@ use Edde\Reflection\Dto\Type\UnknownType;
 use Edde\Reflection\Exception\MissingReflectionClassException;
 use Edde\Reflection\Exception\UnknownTypeException;
 use Edde\Utils\StringUtils;
-use Kdyby\ParseUseStatements\UseStatements;
 use Minime\Annotations\Reader;
+use Nette\Utils\Reflection;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -159,7 +159,7 @@ class ReflectionService {
 		$dto = [
 			'isRequired' => !in_array('null', array_map('strtolower', $types), true),
 			'isOptional' => in_array('void', array_map('strtolower', $types), true),
-			'isArray'    => strpos($type = reset($types), '[]') !== false,
+			'isArray'    => str_contains($type = reset($types), '[]'),
 		];
 		$type = rtrim($type, '[]');
 		if (class_exists($type) && !$class) {
@@ -197,8 +197,8 @@ class ReflectionService {
 
 		if (class_exists($type) || class_exists($typeWithUse = $this->toUse($class, $type))) {
 			try {
-				$class = new ReflectionClass($typeWithUse);
-			} catch (ReflectionException $exception) {
+				$class = new ReflectionClass($typeWithUse ?? $type);
+			} catch (ReflectionException $_) {
 				$class = new ReflectionClass($type);
 			}
 			return array_merge($dto, [
@@ -209,10 +209,10 @@ class ReflectionService {
 				'module'    => $this->toModule($class->getNamespaceName()),
 			], $extra);
 		}
-		if (interface_exists($type) || interface_exists($typeWithUse)) {
+		if (interface_exists($type) || interface_exists($typeWithUse ?? $type)) {
 			try {
-				$class = new ReflectionClass($typeWithUse);
-			} catch (ReflectionException $exception) {
+				$class = new ReflectionClass($typeWithUse ?? $type);
+			} catch (ReflectionException $_) {
 				$class = new ReflectionClass($type);
 			}
 			return array_merge($dto, [
@@ -464,7 +464,7 @@ class ReflectionService {
 	}
 
 	public function toUse(ReflectionClass $class, string $type): string {
-		return @UseStatements::expandClassName($type, $class);
+		return Reflection::expandClassName($type, $class);
 	}
 
 	public function toModule(string $name): string {

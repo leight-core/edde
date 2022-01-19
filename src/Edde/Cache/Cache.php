@@ -60,7 +60,6 @@ class Cache extends AbstractCache {
 	public function clear(): void {
 		try {
 			$this->cache->clear();
-			$this->localRepository->table()->delete()->execute();
 		} catch (Throwable $throwable) {
 			$this->logger->error($throwable);
 		}

@@ -14,7 +14,7 @@ abstract class AbstractCurrentUser extends AbstractDto {
 	public $name;
 	/** @var string */
 	public $email;
-	/** @var string */
+	/** @var string|null */
 	public $site;
 	/** @var UserSettingsDto|void */
 	public $settings;

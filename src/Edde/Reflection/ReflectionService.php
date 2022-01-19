@@ -42,6 +42,7 @@ use Edde\Reflection\Exception\UnknownTypeException;
 use Edde\Utils\StringUtils;
 use Kdyby\ParseUseStatements\UseStatements;
 use Minime\Annotations\Reader;
+use Nette\Utils\Reflection;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -464,7 +465,7 @@ class ReflectionService {
 	}
 
 	public function toUse(ReflectionClass $class, string $type): string {
-		return @UseStatements::expandClassName($type, $class);
+		return Reflection::expandClassName($type, $class);
 	}
 
 	public function toModule(string $name): string {

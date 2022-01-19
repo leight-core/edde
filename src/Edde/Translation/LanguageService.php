@@ -39,7 +39,7 @@ class LanguageService {
 	 */
 	public function forCurrentUser(string $default = null): ?string {
 		$language = $this->resolve($user = $this->currentUserService->requireUser(), $default);
-		$this->logger->info(sprintf('Resolved language [%s] for current user [%s]; default [%s].', $language, $user->emea, $default ?? 'null'));
+		$this->logger->info(sprintf('Resolved language [%s] for current user [%s]; default [%s].', $language, $user->email, $default ?? 'null'));
 		return $language;
 	}
 

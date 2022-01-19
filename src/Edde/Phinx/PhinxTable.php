@@ -84,7 +84,7 @@ class PhinxTable extends Table {
 		if ($isUnique) {
 			$this->addIndex($name, array_merge([
 				'unique' => true,
-				'name'   => $index ?? $this->getName() . '_' . $name . '_unique',
+				'name'   => $this->getName() . '_' . $name . '_unique',
 			]));
 		}
 		return $this;

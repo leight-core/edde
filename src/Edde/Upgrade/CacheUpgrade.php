@@ -9,7 +9,10 @@ class CacheUpgrade extends CommonMigration {
 	public function change(): void {
 		$this
 			->createUuidTable('z_cache', ['comment' => 'Database cache support (the last resort).'])
-			->addStringColumn('key', 128, ['comment' => 'An unique cache key.'])
+			->addStringColumn('key', 128, [
+				'comment' => 'An unique cache key.',
+				'unique'  => true,
+			])
 			->addColumn('value', 'binary', [
 				'comment' => 'Cached value; could be null. Could be basically anything, value, json encoded, whatever an implementation needs. The column limit (length) should be checked!',
 				'length'  => 16384 * 32,
@@ -22,10 +25,6 @@ class CacheUpgrade extends CommonMigration {
 			->addColumn('ttl', 'datetime', [
 				'comment' => 'Optional timestamp after which cached item expires (so even a cache item exists in the table, cache miss may happen if ttl is over).',
 				'null'    => true,
-			])
-			->addIndex('key', [
-				'unique' => true,
-				'name'   => 'z_cache_key_unique',
 			])
 			->save();
 	}

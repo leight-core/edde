@@ -12,6 +12,7 @@ use Edde\Reflection\Dto\Type\Utils\IMixedType;
 use Edde\Reflection\Dto\Type\Utils\IScalarType;
 use Edde\Reflection\Dto\Type\Utils\ITemplateType;
 use Edde\Reflection\Dto\Type\Utils\IUnknownType;
+use Edde\Reflection\Exception\MissingReflectionClassException;
 use Edde\Reflection\Exception\UnknownTypeException;
 use Edde\Reflection\ReflectionServiceTrait;
 use Edde\Sdk\NameResolverTrait;
@@ -21,9 +22,6 @@ use function get_class;
 use function implode;
 use function sprintf;
 
-/**
- * @Injectable(lazy=true)
- */
 class TypeGenerator {
 	use ReflectionServiceTrait;
 	use NameResolverTrait;
@@ -55,6 +53,7 @@ class TypeGenerator {
 	 * @throws ReflectionException
 	 * @throws SdkException
 	 * @throws UnknownTypeException
+	 * @throws MissingReflectionClassException
 	 */
 	public function resolve(?AbstractType $type, string $default = 'void'): string {
 		$export = $default;

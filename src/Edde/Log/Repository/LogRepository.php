@@ -14,9 +14,6 @@ use Edde\Repository\AbstractRepository;
 use Edde\Repository\IRepository;
 use Throwable;
 
-/**
- * @Injectable(lazy=true)
- */
 class LogRepository extends AbstractRepository {
 	use LogTagRepositoryTrait;
 

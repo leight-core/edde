@@ -1,7 +1,7 @@
 version: '2'
 services:
     php:
-        image: marekhanzal/php:7.2
+        image: marekhanzal/php:8.0
         container_name: edde
         hostname: edde
         restart: always

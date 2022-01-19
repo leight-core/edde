@@ -10,9 +10,6 @@ use Edde\User\Exception\UserNotSelectedException;
 use Edde\User\Mapper\CurrentUserMapperTrait;
 use Edde\User\Repository\UserRepositoryTrait;
 
-/**
- * @Injectable(lazy=true)
- */
 class CurrentUserService {
 	use UserRepositoryTrait;
 	use CurrentUserMapperTrait;

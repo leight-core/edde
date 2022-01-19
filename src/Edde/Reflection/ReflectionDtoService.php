@@ -4,24 +4,19 @@ declare(strict_types=1);
 namespace Edde\Reflection;
 
 use DateTime;
-use DI\Annotation\Injectable;
 use Edde\Cache\CacheTrait;
 use Edde\Dto\AbstractDtoService;
 use Edde\Reflection\Dto\ClassDto;
 use Edde\Reflection\Dto\Property\AbstractProperty;
 use Edde\Reflection\Dto\Property\ClassProperty;
 use Edde\Reflection\Exception\InvalidValueException;
-use Edde\Reflection\Exception\MissingReflectionClassException;
 use Edde\Reflection\Exception\MissingValueException;
-use Edde\Reflection\Exception\UnknownTypeException;
 use Exception;
 use Psr\SimpleCache\InvalidArgumentException;
 use ReflectionException as NativeReflectionException;
 
 /**
  * This implementation uses in-house reflection to rebuild objects from an array.
- *
- * @Injectable(lazy=true)
  */
 class ReflectionDtoService extends AbstractDtoService {
 	use ReflectionServiceTrait;
@@ -33,14 +28,12 @@ class ReflectionDtoService extends AbstractDtoService {
 	 *
 	 * @return mixed
 	 *
-	 * @throws MissingReflectionClassException
 	 * @throws InvalidArgumentException
 	 * @throws InvalidValueException
 	 * @throws MissingValueException
 	 * @throws NativeReflectionException
-	 * @throws UnknownTypeException
 	 */
-	public function fromObject(string $class, ?object $source) {
+	public function fromObject(string $class, ?object $source): mixed {
 		/**
 		 * Be careful - this piece uses proprietary implementation used just in DatabaseCache - that's the reason CacheTrait is not
 		 * used here.

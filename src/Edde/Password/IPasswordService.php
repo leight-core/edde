@@ -30,8 +30,9 @@ interface IPasswordService {
 	 * Hashes a password.
 	 *
 	 * @param string $password
+	 * @param int    $cost
 	 *
 	 * @return bool
 	 */
-	public function hash(string $password): bool;
+	public function hash(string $password, int $cost = 12): bool;
 }

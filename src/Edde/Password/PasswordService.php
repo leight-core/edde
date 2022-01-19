@@ -10,7 +10,7 @@ class PasswordService extends AbstractPasswordService {
 		return password_verify($password, $hash);
 	}
 
-	public function hash(string $password): bool {
-		return password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+	public function hash(string $password, int $cost = 12): bool {
+		return password_hash($password, PASSWORD_BCRYPT, ['cost' => $cost]);
 	}
 }

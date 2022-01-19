@@ -162,7 +162,7 @@ abstract class AbstractRepository implements IRepository {
 	 */
 	public function insert(array $data, string $table = null) {
 		$table = $table ?? $this->table;
-		$increment = $data['id'] === -1;
+		$increment = ($data['id'] ?? null) === -1;
 		if (empty($data['id'])) {
 			$data['id'] = $this->generateId();
 		}

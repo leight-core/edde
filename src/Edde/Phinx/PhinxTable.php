@@ -91,8 +91,8 @@ class PhinxTable extends Table {
 		return $this;
 	}
 
-	public function addTextColumn(string $name, array $options = [], int $length = 4096 * 32,): PhinxTable {
-		$this->addColumn('log', 'text', array_merge([
+	public function addTextColumn(string $name, array $options = [], int $length = 4096 * 32): PhinxTable {
+		$this->addColumn($name, 'text', array_merge([
 			'length' => $length,
 		], $options));
 		return $this;

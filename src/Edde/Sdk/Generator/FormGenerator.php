@@ -33,10 +33,10 @@ class FormGenerator {
 		$generics = "I{$name}QueryParams, $request, $response";
 
 		return <<<EXPORT
-export interface I{$name}FormProps extends Partial<IFormProps<{$generics}>> {
+export interface I{$name}DefaultFormProps extends Partial<IFormProps<{$generics}>> {
 }
 
-export const {$name}Form: FC<I{$name}FormProps> = props => {
+export const {$name}DefaultForm: FC<I{$name}DefaultFormProps> = props => {
 	return <Form<{$generics}>
 		useMutation={use{$name}Mutation}
 		{...props}

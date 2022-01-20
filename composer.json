@@ -26,9 +26,7 @@
 			"./src/ClanCats/Hydrahon/Query/Sql/Select.php"
 		],
 		"exclude-from-classmap": [
-			"./src/Edde/Bridge/User/CurrentUser.php",
-			"./src/Edde/Bridge/User/UserDto.php",
-			"./src/Edde/Bridge/User/Repository/UserRepository.php",
+			"./src/Edde/Bridge/",
 			"./vendor/clancats/hydrahon/src/Query/Sql/Select.php"
 		],
 		"classmap": [

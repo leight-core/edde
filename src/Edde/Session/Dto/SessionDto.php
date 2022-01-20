@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Session\Dto;
 
+use Edde\Bridge\User\CurrentUser;
 use Edde\Dto\AbstractDto;
 
 class SessionDto extends AbstractDto {

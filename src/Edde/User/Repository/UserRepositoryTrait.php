@@ -3,16 +3,18 @@ declare(strict_types=1);
 
 namespace Edde\User\Repository;
 
+use Edde\Bridge\User\Repository\UserRepository;
+
 trait UserRepositoryTrait {
-	/** @var IUserRepository */
-	protected $userRepository;
+	/** @var UserRepository */
+	protected UserRepository $userRepository;
 
 	/**
 	 * @Inject
 	 *
-	 * @param IUserRepository $userRepository
+	 * @param UserRepository $userRepository
 	 */
-	public function setUserRepository(IUserRepository $userRepository): void {
+	public function setUserRepository(UserRepository $userRepository): void {
 		$this->userRepository = $userRepository;
 	}
 }

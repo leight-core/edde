@@ -7,7 +7,6 @@ use DI\Bridge\Slim\Bridge;
 use DI\Container;
 use DI\ContainerBuilder;
 use Edde\Api\ApiRouter;
-use Edde\Bridge\User\Repository\UserRepository;
 use Edde\Cache\Cache;
 use Edde\Cache\ICache;
 use Edde\Cache\Impl\DatabaseCache;
@@ -163,9 +162,6 @@ class SlimApp {
 				}
 				$application->add($container->get(JobExecutorCommand::class));
 				return $application;
-			},
-			UserRepository::class      => function () {
-				throw new EddeException(sprintf('[%s] is not implemented or registered in the container; please provide implementation of [%s].', UserRepository::class, UserRepository::class));
 			},
 			IUserMapper::class         => function () {
 				throw new EddeException(sprintf('[%s] is not implemented or registered in the container; please provide implementation of [%s].', IUserMapper::class, IUserMapper::class));

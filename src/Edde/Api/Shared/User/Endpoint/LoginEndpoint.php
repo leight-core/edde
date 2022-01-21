@@ -38,7 +38,7 @@ class LoginEndpoint extends AbstractMutationEndpoint {
 		if (!($user = $this->userRepository->findByLogin($loginRequest->login))) {
 			throw new ClientException('Unknown login', 400);
 		}
-		if (!$this->passwordService->isMatch($loginRequest->password, $user->pasword)) {
+		if (!$this->passwordService->isMatch($loginRequest->password, $user->password)) {
 			throw new ClientException('Unknown login', 400);
 		}
 		$this->session->set('user', $user->id);

@@ -17,13 +17,10 @@ class TranslationUpgrade extends CommonMigration {
 			->addTextColumn('translation', [
 				'comment' => 'The translation of the key.',
 			])
-			->addIndex([
+			->addUniqueIndex([
 				'locale',
 				'hash',
-			], [
-				'unique' => true,
-				'name'   => 'z_translation_hash_unique',
-			])
+			], 'hash')
 			->save();
 	}
 }

@@ -127,4 +127,11 @@ class PhinxTable extends Table {
 			->removeColumn($name);
 		return $this;
 	}
+
+	public function addUniqueIndex($columns, string $name): PhinxTable {
+		return $this->addIndex($columns, [
+			'name'   => $this->getName() . '_' . $name . '_unique',
+			'unique' => true,
+		]);
+	}
 }

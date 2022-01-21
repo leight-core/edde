@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Edde\Api\Shared\User\Endpoint;
 
-use Edde\Config\ConfigServiceTrait;
 use Edde\Dto\Common\LoginRequest;
 use Edde\Mapper\Exception\ItemException;
 use Edde\Mapper\Exception\SkipException;
+use Edde\Password\PasswordServiceTrait;
 use Edde\Rest\Endpoint\AbstractMutationEndpoint;
 use Edde\Rest\Exception\ClientException;
 use Edde\Session\Dto\SessionDto;
@@ -23,7 +23,7 @@ class LoginEndpoint extends AbstractMutationEndpoint {
 	use UserRepositoryTrait;
 	use CurrentUserMapperTrait;
 	use SessionMapperTrait;
-	use ConfigServiceTrait;
+	use PasswordServiceTrait;
 
 	/**
 	 * @param LoginRequest $loginRequest
@@ -38,7 +38,7 @@ class LoginEndpoint extends AbstractMutationEndpoint {
 		if (!($user = $this->userRepository->findByLogin($loginRequest->login))) {
 			throw new ClientException('Unknown login', 400);
 		}
-		if (!($key = $this->configService->get('app.key')) || $key !== $loginRequest->password) {
+		if (!$this->passwordService->isMatch($loginRequest->password, $user->pasword)) {
 			throw new ClientException('Unknown login', 400);
 		}
 		$this->session->set('user', $user->id);

@@ -9,15 +9,15 @@ use Edde\User\Dto\Settings\UserSettingsDto;
 
 abstract class AbstractCurrentUser extends AbstractDto {
 	/** @var string */
-	public $id;
+	public string $id;
 	/** @var string */
-	public $name;
+	public string $name;
 	/** @var string */
-	public $email;
-	/** @var string|null */
-	public $site;
+	public string $email;
+	/** @var string */
+	public string $site;
 	/** @var UserSettingsDto|void */
 	public $settings;
 	/** @var RoleDto[] */
-	public $roles = [];
+	public array $roles = [];
 }

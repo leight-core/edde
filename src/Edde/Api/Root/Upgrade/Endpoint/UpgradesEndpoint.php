@@ -34,7 +34,7 @@ class UpgradesEndpoint extends AbstractQueryEndpoint {
 		($query->orderBy->active ?? null) !== null && usort($upgrades, function (UpgradeDto $a, UpgradeDto $b) use ($query) {
 			return $query->orderBy->active ? $a->active : $b->active;
 		});
-		$query->filter->active !== null && $upgrades = array_filter($upgrades, function (UpgradeDto $upgrade) use ($query) {
+		isset($query->filter->active) && $upgrades = array_filter($upgrades, function (UpgradeDto $upgrade) use ($query) {
 			return $upgrade->active === $query->filter->active;
 		});
 		return $this->queryService->toResponse($upgrades);

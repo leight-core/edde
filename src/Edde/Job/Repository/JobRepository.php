@@ -29,15 +29,15 @@ class JobRepository extends AbstractRepository {
 
 		/** @var $filter JobFilterDto */
 		$filter = $query->filter;
-		$filter->userId && $select->where('user_id', $filter->userId);
-		$filter->services && $select->where('service', 'in', $filter->services);
-		$filter->id && $select->where('id', $filter->id);
-		$filter->status && $select->where('status', 'in', $filter->status);
-		$filter->commit !== null && $select->where('commit', $filter->commit);
-		$filter->params && $this->fulltext($select, [
+		isset($filter->userId) && $select->where('user_id', $filter->userId);
+		isset($filter->services) && $select->where('service', 'in', $filter->services);
+		isset($filter->id) && $select->where('id', $filter->id);
+		isset($filter->status) && $select->where('status', 'in', $filter->status);
+		isset($filter->commit) && $select->where('commit', $filter->commit);
+		isset($filter->params) && $this->fulltext($select, [
 			'params',
 		], $filter->params);
-		$filter->fulltext && $this->fulltext($select, [
+		isset($filter->fulltext) && $this->fulltext($select, [
 			'id',
 			'service',
 			'user_id',

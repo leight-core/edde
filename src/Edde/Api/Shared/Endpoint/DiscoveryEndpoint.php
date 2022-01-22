@@ -12,6 +12,10 @@ use Edde\Link\LinkGeneratorTrait;
 use Edde\Rest\Endpoint\AbstractFetchEndpoint;
 use Edde\Rest\EndpointInfoTrait;
 use Edde\Rest\Reflection\Endpoint;
+use function array_combine;
+use function array_map;
+use function array_values;
+use function ksort;
 
 /**
  * @description Endpoint used to get server discovery index.
@@ -28,17 +32,19 @@ class DiscoveryEndpoint extends AbstractFetchEndpoint {
 	 */
 	public function get(): DiscoveryIndexDto {
 		return $this->cache->get(DiscoveryIndexDto::class, function () {
+			$index = array_map(function (Endpoint $endpoint) {
+				return $this->dtoService->fromArray(DiscoveryItemDto::class, [
+					'id'     => $this->endpointInfo->getId($endpoint->class->fqdn),
+					'url'    => $this->linkGenerator->link($endpoint->link),
+					'link'   => $this->linkGenerator->link($endpoint->link),
+					'params' => $endpoint->query,
+				]);
+			}, array_combine(array_map(function (Endpoint $endpoint) {
+				return $this->endpointInfo->getId($endpoint->class->fqdn);
+			}, $this->httpIndex->endpoints()), array_values($this->httpIndex->endpoints())));
+			ksort($index);
 			return $this->cache->set(DiscoveryIndexDto::class, $this->dtoService->fromArray(DiscoveryIndexDto::class, [
-				'index' => array_map(function (Endpoint $endpoint) {
-					return $this->dtoService->fromArray(DiscoveryItemDto::class, [
-						'id'     => $this->endpointInfo->getId($endpoint->class->fqdn),
-						'url'    => $this->linkGenerator->link($endpoint->link),
-						'link'   => $this->linkGenerator->link($endpoint->link),
-						'params' => $endpoint->query,
-					]);
-				}, array_combine(array_map(function (Endpoint $endpoint) {
-					return $this->endpointInfo->getId($endpoint->class->fqdn);
-				}, $this->httpIndex->endpoints()), array_values($this->httpIndex->endpoints()))),
+				'index' => $index,
 			]));
 		});
 	}

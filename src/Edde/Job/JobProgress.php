@@ -75,7 +75,7 @@ class JobProgress extends AbstractProgress {
 		$this->check();
 		$this->jobRepository->change([
 			'id'       => $this->jobId,
-			'error'    => ++$this->error,
+			'error'    => $this->error,
 			'progress' => $this->progress(),
 		]);
 		try {

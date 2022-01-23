@@ -10,6 +10,6 @@ class TagImport extends AbstractImporter {
 	use TagRepositoryTrait;
 
 	public function handle($item) {
-		return $this->tagRepository->ensure($item['code'], $item['group'], $item['sort'] ?? 0);
+		return $this->tagRepository->ensure($item['code'], $item['group'], (int)($item['sort'] ?? 0));
 	}
 }

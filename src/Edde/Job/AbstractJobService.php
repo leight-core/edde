@@ -23,7 +23,7 @@ abstract class AbstractJobService implements IJobService {
 				/**
 				 * Sleep should do idle CPU cycles, thus eating no resources when waiting.
 				 */
-				sleep(5);
+				sleep(3);
 			}
 			$this->handle($job);
 		} finally {

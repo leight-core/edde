@@ -25,16 +25,16 @@ class UpgradesEndpoint extends AbstractQueryEndpoint {
 	 */
 	public function post(Query $query): QueryResult {
 		$upgrades = $this->upgradeMapper->map($this->upgradeManager->migrations());
-		($query->orderBy->name ?? null) !== null && usort($upgrades, function (UpgradeDto $a, UpgradeDto $b) use ($query) {
+		isset($query->orderBy->name) && usort($upgrades, function (UpgradeDto $a, UpgradeDto $b) use ($query) {
 			return $query->orderBy->name ? strcmp($a->name, $b->name) : strcmp($b->name, $a->name);
 		});
-		($query->orderBy->version ?? null) !== null && usort($upgrades, function (UpgradeDto $a, UpgradeDto $b) use ($query) {
+		isset($query->orderBy->version) && usort($upgrades, function (UpgradeDto $a, UpgradeDto $b) use ($query) {
 			return $query->orderBy->version ? strcmp($a->version, $b->version) : strcmp($b->version, $a->version);
 		});
-		($query->orderBy->active ?? null) !== null && usort($upgrades, function (UpgradeDto $a, UpgradeDto $b) use ($query) {
+		isset($query->orderBy->active) && usort($upgrades, function (UpgradeDto $a, UpgradeDto $b) use ($query) {
 			return $query->orderBy->active ? $a->active : $b->active;
 		});
-		$query->filter->active !== null && $upgrades = array_filter($upgrades, function (UpgradeDto $upgrade) use ($query) {
+		isset($query->filter->active) && $upgrades = array_filter($upgrades, function (UpgradeDto $upgrade) use ($query) {
 			return $upgrade->active === $query->filter->active;
 		});
 		return $this->queryService->toResponse($upgrades);

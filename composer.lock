@@ -1,20 +1,20 @@
 {
-    "_readme": [
-        "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
-        "This file is @generated automatically"
-    ],
-    "content-hash": "5a81f12472fd0735cba3de66a0b8c646",
-    "packages": [
-        {
-            "name": "brick/math",
-            "version": "0.9.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
-            },
-            "dist": {
+	"_readme": [
+		"This file locks the dependencies of your project to a known state",
+		"Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+		"This file is @generated automatically"
+	],
+	"content-hash": "6065e807db6b154022cc91b4a8b48298",
+	"packages": [
+		{
+			"name": "brick/math",
+			"version": "0.9.3",
+			"source": {
+				"type": "git",
+				"url": "https://github.com/brick/math.git",
+				"reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
+			},
+			"dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
                 "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",

@@ -48,7 +48,7 @@
 		"robmorgan/phinx": "^0.12",
 		"dibi/dibi": "^4.1",
 		"phpoffice/phpspreadsheet": "^1.16",
-		"nelexa/zip": "^3.3.3",
+		"nelexa/zip": "^3.3.3 || ^4.0.0",
 		"league/uri": "^6.4",
 		"symfony/process": "^5.2",
 		"diff/diff": "^3.2",

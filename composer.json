@@ -62,7 +62,6 @@
 		"nyholm/psr7-server": "^1.0.0",
 		"php-di/slim-bridge": "^3.0",
 		"minwork/array": "^v1.13.5",
-		"graze/array-merger": "^0.2",
 		"minime/annotations": "^3.1.0",
 		"nikic/php-parser": "v4.13.2",
 		"cache/void-adapter": "^1.1",

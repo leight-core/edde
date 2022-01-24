@@ -5,9 +5,6 @@ namespace Edde\Log;
 
 use Edde\Uuid\UuidServiceTrait;
 
-/**
- * @Injectable(lazy=true)
- */
 class TraceService {
 	use UuidServiceTrait;
 

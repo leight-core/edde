@@ -41,13 +41,10 @@ class FileUpgrade extends CommonMigration {
 			], [
 				'delete' => 'SET_NULL',
 			])
-			->addIndex([
+			->addUniqueIndex([
 				'path',
 				'name',
-			], [
-				'name'   => 'z_file_name_unique',
-				'unique' => true,
-			])
+			], 'name')
 			->save();
 	}
 }

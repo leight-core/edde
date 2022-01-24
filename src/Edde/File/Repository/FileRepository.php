@@ -38,16 +38,16 @@ class FileRepository extends AbstractRepository {
 
 		/** @var $filter FileFilterDto */
 		$filter = $query->filter;
-		$filter->fulltext && $this->fulltext($select, [
+		isset($filter->fulltext) && $this->fulltext($select, [
 			'id',
 			'path',
 			'name',
 			'mime',
 		], $filter->fulltext);
-		$filter->userIds && $select->where('user_id', 'in', $filter->userIds);
-		$filter->paths && $select->where('path', 'in', $filter->paths);
-		$filter->path && $this->fulltext($select, ['path'], $filter->path);
-		$filter->mimes && $select->where('mimes', 'in', $filter->mimes);
+		isset($filter->userIds) && $select->where('user_id', 'in', $filter->userIds);
+		isset($filter->paths) && $select->where('path', 'in', $filter->paths);
+		isset($filter->path) && $this->fulltext($select, ['path'], $filter->path);
+		isset($filter->mimes) && $select->where('mimes', 'in', $filter->mimes);
 
 		$this->toOrderBy($query->orderBy, $select);
 

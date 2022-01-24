@@ -31,11 +31,11 @@ class JobLogRepository extends AbstractRepository {
 
 		/** @var $filter JobLogFilterDto */
 		$filter = $query->filter;
-		$filter->jobId && $select->where('job_id', $filter->jobId);
-		$filter->id && $select->where('id', $filter->id);
-		$filter->type && $select->where('type', 'in', $filter->type);
-		$filter->notType && $select->whereNotIn('type', $filter->notType);
-		$filter->level && $select->where('level', 'in', $filter->level);
+		isset($filter->jobId) && $select->where('job_id', $filter->jobId);
+		isset($filter->id) && $select->where('id', $filter->id);
+		isset($filter->type) && $select->where('type', 'in', $filter->type);
+		isset($filter->notType) && $select->whereNotIn('type', $filter->notType);
+		isset($filter->level) && $select->where('level', 'in', $filter->level);
 
 		$this->toOrderBy($query->orderBy, $select);
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Edde\Sdk\Generator;
 
 use Edde\Reflection\Dto\Method\IRequestResponseMethod;
+use Edde\Reflection\Exception\MissingReflectionClassException;
 use Edde\Reflection\Exception\UnknownTypeException;
 use Edde\Rest\Reflection\MutationEndpoint;
 use Edde\Sdk\NameResolverTrait;
@@ -22,6 +23,7 @@ class FormGenerator {
 	 * @throws ReflectionException
 	 * @throws SdkException
 	 * @throws UnknownTypeException
+	 * @throws MissingReflectionClassException
 	 */
 	public function generate(MutationEndpoint $endpoint): ?string {
 		if (!($endpoint->method instanceof IRequestResponseMethod)) {

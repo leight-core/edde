@@ -11,9 +11,6 @@ use Edde\Tag\Mapper\TagMapperTrait;
 use Edde\User\Mapper\UserMapperTrait;
 use Edde\User\Repository\UserRepositoryTrait;
 
-/**
- * @Injectable(lazy=true)
- */
 class LogMapper extends AbstractMapper {
 	use UserRepositoryTrait;
 	use UserMapperTrait;

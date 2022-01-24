@@ -28,13 +28,13 @@ class TagRepository extends AbstractRepository {
 		return $this->native("SELECT * FROM %n WHERE %and ORDER BY sort", $this->table, ['group' => $group]);
 	}
 
-	public function ensure(string $code, string $group) {
+	public function ensure(string $code, string $group, int $sort = 0) {
 		try {
 			return $this->insert([
 				'code'  => $code,
 				'label' => $code,
 				'group' => $group,
-				'sort'  => 0,
+				'sort'  => $sort,
 			]);
 		} catch (DuplicateEntryException $exception) {
 			return $this->select()->where('code', $code)->where('group', $group)->execute()->fetch();

@@ -77,9 +77,9 @@ class Cache extends AbstractCache {
 		/**
 		 * Cache cleanup with probability.
 		 */
-		if ($force || $this->randomService->isHit(1 / 250)) {
-			$this->local = [];
-			$this->cache->clear();
-		}
+//		if ($force || $this->randomService->isHit(1 / 10000)) {
+//			$this->local = [];
+//			$this->cache->clear();
+//		}
 	}
 }

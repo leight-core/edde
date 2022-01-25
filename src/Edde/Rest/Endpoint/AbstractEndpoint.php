@@ -8,6 +8,7 @@ use Edde\Dto\DtoServiceTrait;
 use Edde\Http\HttpIndexTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Profiler\ProfilerServiceTrait;
+use Edde\Query\Dto\Query;
 use Edde\Reflection\Dto\Method\IRequestMethod;
 use Edde\Repository\Exception\DuplicateEntryException;
 use Edde\Rest\Exception\ClientException;
@@ -128,5 +129,11 @@ abstract class AbstractEndpoint implements IEndpoint {
 	 */
 	protected function ofBody(string $name, $default = null) {
 		return $this->body[$name] ?? $default;
+	}
+
+	protected function withUser(Query $query): Query {
+		return $query->withFilter([
+			'userId' => $this->currentUserService->requiredId(),
+		]);
 	}
 }

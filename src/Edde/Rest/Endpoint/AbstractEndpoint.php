@@ -15,6 +15,7 @@ use Edde\Rest\Exception\RestException;
 use Edde\Rest\IEndpoint;
 use Edde\Rest\Reflection\Endpoint;
 use Edde\Slim\Response;
+use Edde\User\CurrentUserServiceTrait;
 use Nette\Utils\JsonException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -30,6 +31,7 @@ abstract class AbstractEndpoint implements IEndpoint {
 	use HttpIndexTrait;
 	use ProfilerServiceTrait;
 	use CacheTrait;
+	use CurrentUserServiceTrait;
 
 	/** @var ServerRequestInterface */
 	protected $request;

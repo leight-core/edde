@@ -6,6 +6,7 @@ namespace Edde\Query\Dto;
 use Edde\Dto\AbstractDto;
 use Edde\Query\Exception\InvalidLimitException;
 use Edde\Query\Exception\InvalidQueryException;
+use stdClass;
 
 /**
  * @template TOrderBy=void
@@ -56,6 +57,14 @@ class Query extends AbstractDto {
 		$pages = floor($total / $this->size);
 		if ($this->page > $pages) {
 			throw new InvalidQueryException("Out of range: page [{$this->page}] cannot be higher than [{$pages}]");
+		}
+		return $this;
+	}
+
+	public function withFilter(array $filter): Query {
+		$this->filter = $this->filter ?? new stdClass();
+		foreach ($filter as $k => $v) {
+			$this->filter->$k = $v;
 		}
 		return $this;
 	}

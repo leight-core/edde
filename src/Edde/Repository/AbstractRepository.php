@@ -227,9 +227,7 @@ abstract class AbstractRepository implements IRepository {
 	 * @throws Throwable
 	 */
 	public function patch(array $data) {
-		return $this->change(array_filter($data, static function ($item) {
-			return $item !== null;
-		}));
+		return $this->change($data);
 	}
 
 	/**

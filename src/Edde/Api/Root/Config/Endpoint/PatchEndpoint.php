@@ -31,7 +31,7 @@ class PatchEndpoint extends AbstractPatchEndpoint {
 	 * @throws Throwable
 	 */
 	public function patch(PatchDto $patchDto): ConfigDto {
-		return $this->configMapper->item($this->configRepository->patch([
+		return $this->configMapper->item($this->configRepository->change([
 			'id'    => $patchDto->id,
 			'key'   => $patchDto->config->key,
 			'value' => $patchDto->config->value,

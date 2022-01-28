@@ -25,8 +25,11 @@ use Edde\Utils\StringUtils;
 use Edde\Uuid\UuidServiceTrait;
 use Nette\Utils\Arrays;
 use Throwable;
+use function array_combine;
 use function array_filter;
+use function array_keys;
 use function array_map;
+use function array_values;
 use function sprintf;
 use function str_replace;
 use function strpos;
@@ -47,9 +50,9 @@ abstract class AbstractRepository implements IRepository {
 
 	public function __construct(array $orderBy = null, array $unique = [], string $id = "id", string $table = null) {
 		$this->table = $table ?? 'z_' . StringUtils::recamel(Arrays::last(explode('\\', str_replace('Repository', '', static::class))), '_');
-		$this->orderBy = $orderBy ? array_map(function (string $orderBy) {
+		$this->orderBy = $orderBy ? array_combine(array_map(function (string $orderBy) {
 			return $this->table . '.' . $orderBy;
-		}, $orderBy) : null;
+		}, $orderBy), array_values($orderBy)) : null;
 		$this->unique = array_map([
 			$this,
 			'resolveColumn',

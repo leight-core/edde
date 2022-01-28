@@ -27,6 +27,7 @@ use Nette\Utils\Arrays;
 use Throwable;
 use function array_filter;
 use function sprintf;
+use function str_replace;
 use function strpos;
 
 abstract class AbstractRepository implements IRepository {
@@ -320,9 +321,17 @@ abstract class AbstractRepository implements IRepository {
 		return $select->where(function (SelectBase $select) use ($columns, $values) {
 			foreach ((array)$values as $value) {
 				foreach ($columns as $column) {
-					$select->where($column, 'like', '%' . $value . '%', 'or');
+					$select->where($this->resolveColumn($column), 'like', '%' . $value . '%', 'or');
 				}
 			}
 		});
+	}
+
+	protected function resolveColumn(string $name): string {
+		return str_replace(
+			['$'],
+			[$this->table],
+			$name
+		);
 	}
 }

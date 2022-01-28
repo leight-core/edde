@@ -52,7 +52,7 @@ abstract class AbstractRepository implements IRepository {
 		$this->orderBy = $orderBy;
 		$this->unique = array_map([
 			$this,
-			'resolveColumn',
+			'col',
 		], $unique);
 		$this->id = $id;
 	}
@@ -327,13 +327,13 @@ abstract class AbstractRepository implements IRepository {
 		return $select->where(function (SelectBase $select) use ($columns, $values) {
 			foreach ((array)$values as $value) {
 				foreach ($columns as $column) {
-					$select->where($this->resolveColumn($column), 'like', '%' . $value . '%', 'or');
+					$select->where($this->col($column), 'like', '%' . $value . '%', 'or');
 				}
 			}
 		});
 	}
 
-	protected function resolveColumn(string $name): string {
+	protected function col(string $name): string {
 		return str_replace(
 			['$'],
 			[$this->table],

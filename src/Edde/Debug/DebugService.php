@@ -6,6 +6,7 @@ namespace Edde\Debug;
 use Edde\Debug\Exception\DebugException;
 use Edde\File\Dto\FileDto;
 use Edde\File\FileServiceTrait;
+use Edde\Profiler\ProfilerServiceTrait;
 use Edde\Stream\TempStream;
 use Edde\User\CurrentUserServiceTrait;
 use Edde\Uuid\UuidServiceTrait;
@@ -19,6 +20,7 @@ class DebugService {
 	use FileServiceTrait;
 	use CurrentUserServiceTrait;
 	use UuidServiceTrait;
+	use ProfilerServiceTrait;
 
 	protected $lock = false;
 
@@ -31,9 +33,11 @@ class DebugService {
 	 * @return string
 	 */
 	public function render(Throwable $throwable): string {
-		ob_start();
-		Debugger::getBlueScreen()->render($throwable);
-		return ob_get_clean();
+		return $this->profilerService->profile(self::class, function () use ($throwable) {
+			ob_start();
+			Debugger::getBlueScreen()->render($throwable);
+			return ob_get_clean();
+		});
 	}
 
 	/**

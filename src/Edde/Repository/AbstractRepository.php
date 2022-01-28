@@ -340,4 +340,8 @@ abstract class AbstractRepository implements IRepository {
 			$name
 		);
 	}
+
+	protected function where(SelectBase $selectBase, string $column, $param1 = null, $param2 = null, string $type = 'and'): SelectBase {
+		return $selectBase->where($this->col($column), $param1, $param2, $type);
+	}
 }

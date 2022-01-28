@@ -49,7 +49,7 @@ abstract class AbstractRepository implements IRepository {
 		$this->table = $table ?? 'z_' . StringUtils::recamel(Arrays::last(explode('\\', str_replace('Repository', '', static::class))), '_');
 		$this->orderBy = array_map(function (string $orderBy) {
 			return $this->table . '.' . $orderBy;
-		}, $orderBy);
+		}, $orderBy ?? []);
 		$this->unique = array_map([
 			$this,
 			'resolveColumn',

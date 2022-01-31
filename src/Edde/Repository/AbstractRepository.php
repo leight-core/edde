@@ -29,6 +29,8 @@ use function array_combine;
 use function array_filter;
 use function array_keys;
 use function array_map;
+use function explode;
+use function is_string;
 use function sprintf;
 use function str_replace;
 use function strpos;
@@ -324,6 +326,13 @@ abstract class AbstractRepository implements IRepository {
 	}
 
 	protected function fulltext(Select $select, array $columns, $values): Select {
+		if (is_string($values)) {
+			foreach (explode(' ', $values) as $part) {
+				$this->fulltext($select, $columns, [trim($part)]);
+			}
+			return $select;
+		}
+
 		return $select->where(function (SelectBase $select) use ($columns, $values) {
 			foreach ((array)$values as $value) {
 				foreach ($columns as $column) {

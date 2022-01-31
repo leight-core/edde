@@ -67,7 +67,7 @@ class ExcelService implements IExcelService {
 		foreach ($worksheet->getRowIterator($readDto->skip + 1) as $index => $row) {
 			$item = [];
 			foreach ($row->getCellIterator() as $cell) {
-				$item[$header[$cell->getColumn()]] = $cell->getFormattedValue();
+				$item[$header[$cell->getColumn()]] = $readDto->translations[$cell->getFormattedValue()] ?? $cell->getFormattedValue();
 			}
 			if (empty($item = array_filter($item, static function ($item) {
 				return !(is_string($item) && empty($item));

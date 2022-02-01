@@ -306,9 +306,13 @@ abstract class AbstractRepository implements IRepository {
 	protected function toBy(?array $orderBy): ?array {
 		return $orderBy ? array_combine(array_map(function (string $order) {
 			return strpos($order, '.') === false ? $this->col("$." . $order) : $this->col($order);
-		}, array_keys($orderBy)), array_map(function (bool $order) {
+		}, $this->toByMap(array_keys($orderBy))), array_map(function (bool $order) {
 			return $order ? 'asc' : 'desc';
 		}, $orderBy)) : [];
+	}
+
+	protected function toByMap(array $orderBy): array {
+		return $orderBy;
 	}
 
 	protected function toOrderBy($orderBy, Select $select) {

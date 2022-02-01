@@ -82,7 +82,7 @@ class SlimApp {
 		/**
 		 * Guess base path to keep things working when moved between strange environments.
 		 */
-		if ($match = Strings::match($_SERVER['REQUEST_URI'] ?? '', '~^(?<base>.*?/' . $lookup . ').*$~')['base']) {
+		if ($match = (Strings::match($_SERVER['REQUEST_URI'] ?? '', '~^(?<base>.*?/' . $lookup . ').*$~')['base']) ?? null) {
 			$this->app->setBasePath($match);
 		}
 		return $this;

@@ -87,7 +87,7 @@ class JobProgress extends AbstractProgress {
 			$type = null;
 		}
 		$this->logger->error($throwable);
-		$this->jobLogRepository->log($this->jobId, IProgress::LOG_ERROR, $throwable->getMessage() . "\n" . $throwable->getTraceAsString(), $this->context, $type, $reference);
+		$this->jobLogRepository->log($this->jobId, IProgress::LOG_ERROR, $throwable->getMessage(), $this->context, $type, $reference);
 	}
 
 	public function onFailure(Throwable $throwable): void {
@@ -96,7 +96,7 @@ class JobProgress extends AbstractProgress {
 			'status' => JobStatus::JOB_FAILURE,
 		]);
 		$this->logger->error($throwable);
-		$this->log(self::LOG_ERROR, $throwable->getMessage() . "\n" . $throwable->getTraceAsString(), null, 'job.failure');
+		$this->log(self::LOG_ERROR, $throwable->getMessage(), null, 'job.failure');
 	}
 
 	public function check(): void {

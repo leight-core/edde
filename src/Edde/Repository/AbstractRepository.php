@@ -358,7 +358,7 @@ abstract class AbstractRepository implements IRepository {
 		return $selectBase->where($this->col($column), $param1, $param2, $type);
 	}
 
-	protected function join(Select $select, string $target, string $alias, string $column, string $bind = 'id'): Select {
-		return $select->join($target . ' as ' . $alias, $alias . '.' . $bind, '=', $this->col($column));
+	protected function join(Select $select, string $target, ?string $alias, string $column, string $bind = 'id'): Select {
+		return $select->join($target . ($alias ? ' as ' . $alias : ''), ($alias ? ($alias . '.') : '') . $bind, '=', $this->col($column));
 	}
 }

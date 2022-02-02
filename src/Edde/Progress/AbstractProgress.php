@@ -45,7 +45,7 @@ abstract class AbstractProgress implements IProgress {
 		$this->progress = $this->progress();
 	}
 
-	public function onError(Throwable $throwable): void {
+	public function onError(Throwable $throwable, string $reference = null): void {
 		$this->error++;
 		$this->progress = $this->progress();
 		$this->logger->error($throwable, ['context' => $this->context]);

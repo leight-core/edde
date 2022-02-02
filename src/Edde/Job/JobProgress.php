@@ -70,8 +70,8 @@ class JobProgress extends AbstractProgress {
 	/**
 	 * @inheritdoc
 	 */
-	public function onError(Throwable $throwable): void {
-		parent::onError($throwable);
+	public function onError(Throwable $throwable, string $reference = null): void {
+		parent::onError($throwable, $reference);
 		$this->check();
 		$this->jobRepository->change([
 			'id'       => $this->jobId,
@@ -87,7 +87,7 @@ class JobProgress extends AbstractProgress {
 			$type = null;
 		}
 		$this->logger->error($throwable);
-		$this->jobLogRepository->log($this->jobId, IProgress::LOG_ERROR, $throwable->getMessage() . "\n" . $throwable->getTraceAsString(), $this->context, $type);
+		$this->jobLogRepository->log($this->jobId, IProgress::LOG_ERROR, $throwable->getMessage() . "\n" . $throwable->getTraceAsString(), $this->context, $type, $reference);
 	}
 
 	public function onFailure(Throwable $throwable): void {

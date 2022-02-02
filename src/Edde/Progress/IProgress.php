@@ -44,9 +44,10 @@ interface IProgress {
 	/**
 	 * Called when an item cannot be processed (but job is still running).
 	 *
-	 * @param Throwable $throwable
+	 * @param Throwable   $throwable
+	 * @param string|null $reference
 	 */
-	public function onError(Throwable $throwable): void;
+	public function onError(Throwable $throwable, string $reference = null): void;
 
 	/**
 	 * Hook called when some nasty error happens (thus whole job fails without recovery).

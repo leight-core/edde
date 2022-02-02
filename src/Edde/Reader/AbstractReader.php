@@ -61,10 +61,10 @@ abstract class AbstractReader implements IReader {
 					 */
 					throw $exception;
 				} catch (MemoryLimitException $exception) {
-					$progress->onError($exception);
+					$progress->onError($exception, $index);
 					throw new JobInterruptedException($exception->getMessage(), 0, $exception);
 				} catch (Throwable $throwable) {
-					$progress->onError($throwable);
+					$progress->onError($throwable, $index);
 				}
 			}
 			$this->onSuccess();

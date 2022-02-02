@@ -48,7 +48,7 @@ class ReflectionDtoService extends AbstractDtoService {
 		});
 		$instance = new $class;
 		foreach ($classDto->properties as $name => $propertyDto) {
-			$instance->{$name} = $this->resolveValue($classDto, $propertyDto, @$source->{$name});
+			$instance->{$name} = $this->resolveValue($classDto, $propertyDto, @$source->{$class.'.'.$name} ?? @$source->{$name} ?? null);
 		}
 		return $instance;
 	}

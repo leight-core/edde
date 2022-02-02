@@ -56,7 +56,7 @@ class DebugService {
 		try {
 			return $this->fileService->store(
 				TempStream::create($this->render($throwable)),
-				'/logs',
+				'/logs/exception',
 				date('Y-m-d H:i:s') . '-' . $this->uuidService->uuid4() . '.html',
 				/**
 				 * Store the file for a few days.

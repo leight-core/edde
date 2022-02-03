@@ -68,19 +68,20 @@ export const Fetch{$name}: FC<IFetch{$name}Props> = ({query, ...props}) => <Quer
 	{...props}
 />;
 
-export interface I{$name}PageProps extends IPageProps {
+export interface I{$name}PageProps extends Omit<IPageProps, "breadcrumbProps" | "extra"> {
 	children?: ReactNode | ((data: {$response}) => ReactNode);
-	breadcrumbProps?: BreadcrumbProps | React.ReactElement<typeof Breadcrumb> | ((entityContext: IEntityContext<{$response}>) => BreadcrumbProps | React.ReactElement<typeof Breadcrumb>);
-	extra?: React.ReactElement | ((entityContext: IEntityContext<{$response}>) => React.ReactElement);
+	breadcrumbProps?: BreadcrumbProps | React.ReactElement<typeof Breadcrumb> | ((entityContext: IEntityContext<{$response}>) => BreadcrumbProps | ReactElement<typeof Breadcrumb>);
+	extra?: ReactElement | ((entityContext: IEntityContext<{$response}>) => ReactElement);
 }
 
-export const {$name}Page: FC<I{$name}PageProps> = ({children, ...props}) => {
+export const {$name}Page: FC<I{$name}PageProps> = ({children, breadcrumbProps, extra, ...props}) => {
 	const {{$param}} = useParams();
 	return <{$name}Provider>
 		<{$name}Context.Consumer>
 			{entityContext => <Page
 				breadcrumbProps={breadcrumbProps ? isCallable(breadcrumbProps) ? (breadcrumbProps as any)(entityContext) : breadcrumbProps : undefined}
 				extra={extra ? (isCallable(extra) ? (extra as any)(entityContext) : extra) : undefined}
+				{...props}
 			>
 				<Fetch{$name}
 					query={{{$param}}}

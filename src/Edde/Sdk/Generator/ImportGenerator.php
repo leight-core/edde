@@ -264,6 +264,7 @@ class ImportGenerator {
 			$dependencies[$module]["@leight-core/leight"][] = "isCallable";
 			$dependencies[$module]["react"][] = "createContext";
 			$dependencies[$module]["react"][] = "ReactNode";
+			$dependencies[$module]["react"][] = "ReactElement";
 			$dependencies[$module]["antd"][] = "BreadcrumbProps";
 			$dependencies[$module]["antd/lib/breadcrumb"] = 'Breadcrumb';
 		}

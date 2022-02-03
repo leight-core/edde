@@ -17,7 +17,7 @@ class ArrayUtils {
 		return array_sum($values) / (max(count($values), 1));
 	}
 
-	static public function median(array $array): array {
+	static public function median(array $array): float {
 		$mid = floor((($count = count($array)) - 1) / 2);
 		return $count % 2 ? $array[$mid] : (($array[$mid] + $array[$mid + 1]) / 2);
 	}

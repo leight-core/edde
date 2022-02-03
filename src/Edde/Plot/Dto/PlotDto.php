@@ -11,6 +11,10 @@ class PlotDto extends AbstractDto {
 	 */
 	public $isStack = false;
 	/**
+	 * @var bool
+	 */
+	public $isGroup = false;
+	/**
 	 * @var string
 	 */
 	public $x = 'column';

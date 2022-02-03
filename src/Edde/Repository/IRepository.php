@@ -35,6 +35,13 @@ interface IRepository {
 	 */
 	public function query(Query $query): iterable;
 
+	/**
+	 * @param Query $query
+	 *
+	 * @return Result
+	 */
+	public function execute(Query $query): iterable;
+
 	public function toQuery(Query $query): Select;
 
 	public function delete(string $id);

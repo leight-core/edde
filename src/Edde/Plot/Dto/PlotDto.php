@@ -23,6 +23,10 @@ class PlotDto extends AbstractDto {
 	 */
 	public $group = 'group';
 	/**
+	 * @var int
+	 */
+	public $count;
+	/**
 	 * @var DataDto[]
 	 */
 	public $data = [];

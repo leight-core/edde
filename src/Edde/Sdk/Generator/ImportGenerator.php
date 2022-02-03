@@ -89,6 +89,10 @@ class ImportGenerator {
 				"@leight-core/leight",
 				"IQueryResult",
 			];
+			yield $endpoint->class->module => [
+				"@leight-core/leight",
+				"IFilterContextProviderProps",
+			];
 		}
 	}
 

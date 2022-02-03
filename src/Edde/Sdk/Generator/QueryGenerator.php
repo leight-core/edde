@@ -98,6 +98,13 @@ export const {$name}SourceSelect: FC<I{$name}SourceSelectProps> = ({source, ...p
 		<QuerySourceSelect<$generic> {...props}/>
 	</{$name}Source>;
 };
+
+export interface I{$name}FilterContextProps extends Partial<IFilterContextProviderProps<$filter>> {
+}
+
+export const {$name}FilterContext: FC<I{$name}FilterContextProps> = props => {
+	return <FilterContextProvider<$filter> {...props}/>
+}
 EXPORT;
 	}
 }

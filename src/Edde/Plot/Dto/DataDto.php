@@ -6,10 +6,12 @@ namespace Edde\Plot\Dto;
 use Edde\Dto\AbstractDto;
 
 class DataDto extends AbstractDto {
-	/** @var mixed */
+	/** @var string */
 	public $column;
 	/** @var mixed */
 	public $value;
-	/** @var mixed|null|void */
+	/** @var string|null|void */
 	public $group;
+	/** @var int */
+	public $count;
 }

@@ -25,6 +25,8 @@ use Edde\Sdk\SdkException;
 use Generator;
 use Minwork\Helper\Arr;
 use ReflectionException;
+use function implode;
+use function is_string;
 
 class ImportGenerator {
 	use ClassExtractorTrait;
@@ -262,6 +264,8 @@ class ImportGenerator {
 			$dependencies[$module]["@leight-core/leight"][] = "isCallable";
 			$dependencies[$module]["react"][] = "createContext";
 			$dependencies[$module]["react"][] = "ReactNode";
+			$dependencies[$module]["antd"][] = "BreadcrumbProps";
+			$dependencies[$module]["antd/lib/breadcrumb"] = 'Breadcrumb';
 		}
 		foreach ($this->classExtractor->toExport($endpoints, IListEndpoint::class) as $endpoint) {
 			$module = $endpoint->class->module;
@@ -271,7 +275,10 @@ class ImportGenerator {
 		}
 
 		foreach ($dependencies as $path => $imports) {
-			yield $path => implode("\n", Arr::map($imports, function (string $package, array $imports) {
+			yield $path => implode("\n", Arr::map($imports, function (string $package, $imports) {
+				if (is_string($imports)) {
+					return "import " . $imports . " from \"$package\";";
+				}
 				$imports = array_map(function ($import) {
 					if ($import instanceof ClassDto) {
 						return $import->name;

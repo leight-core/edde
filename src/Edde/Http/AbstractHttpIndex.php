@@ -5,6 +5,7 @@ namespace Edde\Http;
 
 use Edde\Cache\CacheTrait;
 use Edde\Http\Exception\HttpException;
+use Edde\Plot\Dto\PlotDto;
 use Edde\Profiler\ProfilerServiceTrait;
 use Edde\Query\Dto\Query;
 use Edde\Query\Dto\QueryResult;
@@ -19,11 +20,13 @@ use Edde\Reflection\ReflectionServiceTrait;
 use Edde\Rest\IFetchEndpoint;
 use Edde\Rest\IListEndpoint;
 use Edde\Rest\IMutationEndpoint;
+use Edde\Rest\IPlotEndpoint;
 use Edde\Rest\IQueryEndpoint;
 use Edde\Rest\Reflection\Endpoint;
 use Edde\Rest\Reflection\FetchEndpoint;
 use Edde\Rest\Reflection\ListEndpoint;
 use Edde\Rest\Reflection\MutationEndpoint;
+use Edde\Rest\Reflection\PlotEndpoint;
 use Edde\Rest\Reflection\QueryEndpoint;
 use Edde\Utils\StringUtils;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -184,6 +187,18 @@ abstract class AbstractHttpIndex implements IHttpIndex {
 				}
 				$endpoint = FetchEndpoint::create(array_merge($defaults, [
 					'response' => $method->response(),
+				]));
+			} else if ($class->is(IPlotEndpoint::class)) {
+				if (!($endpoint->method instanceof IResponseMethod)) {
+					throw new HttpException(sprintf('Plot endpoint [%s] does not have response method [%s]!', $name, get_class($endpoint->method)));
+				}
+				$response = $method->response();
+				/** @var $class IClassType */
+				if (!(($class = $response->type()) instanceof IClassType) || $class->class() !== PlotDto::class) {
+					throw new HttpException(sprintf('Response of method [%s] of plot endpoint [%s] is not required [%s] response.', $method->name, $name, PlotDto::class));
+				}
+				$endpoint = PlotEndpoint::create(array_merge($defaults, [
+					'response' => $response,
 				]));
 			} else if ($class->is(IListEndpoint::class)) {
 				if (!($endpoint->method instanceof IResponseMethod)) {

@@ -192,9 +192,7 @@ abstract class AbstractHttpIndex implements IHttpIndex {
 				if (!($endpoint->method instanceof IResponseMethod)) {
 					throw new HttpException(sprintf('Plot endpoint [%s] does not have response method [%s]!', $name, get_class($endpoint->method)));
 				}
-				$response = $method->response();
-				/** @var $class IClassType */
-				if (!(($class = $response->type()) instanceof IClassType) || $class->class() !== PlotDto::class) {
+				if (!(($response = $method->response()) instanceof IClassType) || $response->class() !== PlotDto::class) {
 					throw new HttpException(sprintf('Response of method [%s] of plot endpoint [%s] is not required [%s] response.', $method->name, $name, PlotDto::class));
 				}
 				$endpoint = PlotEndpoint::create(array_merge($defaults, [

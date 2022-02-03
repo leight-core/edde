@@ -105,6 +105,9 @@ export interface I{$name}FilterContextProps extends Partial<IFilterContextProvid
 export const {$name}FilterContext: FC<I{$name}FilterContextProps> = props => {
 	return <FilterContextProvider<$filter> {...props}/>
 }
+
+export const use{$name}OptionalFilterContext = () => useOptionalFilterContext<$filter>()
+export const use{$name}FilterContext = () => useFilterContext<$filter>()
 EXPORT;
 	}
 }

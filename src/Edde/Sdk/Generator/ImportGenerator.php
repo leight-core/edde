@@ -97,7 +97,16 @@ class ImportGenerator {
 				"@leight-core/leight",
 				"IFilterContextProviderProps",
 			];
+			yield $endpoint->class->module => [
+				"@leight-core/leight",
+				"useFilterContext",
+			];
 		}
+		yield $endpoint->class->module => [
+			"@leight-core/leight",
+			"useOptionalFilterContext",
+		];
+	}
 	}
 
 	/**

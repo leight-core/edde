@@ -22,7 +22,7 @@ class Query extends AbstractDto {
 	 * @var int|null|void
 	 * @description limit number of items per page
 	 */
-	public $size = 1;
+	public $size = 10;
 	/**
 	 * @var TOrderBy|null|void
 	 */

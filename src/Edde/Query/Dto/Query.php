@@ -14,12 +14,12 @@ use stdClass;
  */
 class Query extends AbstractDto {
 	/**
-	 * @var int|null
+	 * @var int|null|void
 	 * @description currently requested page
 	 */
 	public $page = 0;
 	/**
-	 * @var int|null
+	 * @var int|null|void
 	 * @description limit number of items per page
 	 */
 	public $size = 1;

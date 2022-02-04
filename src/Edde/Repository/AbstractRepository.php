@@ -48,8 +48,15 @@ abstract class AbstractRepository implements IRepository {
 	protected $unique;
 	/** @var string */
 	protected $id;
+	/** @var string */
+	protected $orderByMap = [];
 
-	public function __construct(array $orderBy = null, array $unique = [], string $id = "id", string $table = null) {
+	public function __construct(
+		array  $orderBy = null,
+		array  $unique = [],
+		string $id = "id",
+		string $table = null
+	) {
 		$this->table = $table ?? 'z_' . StringUtils::recamel(Arrays::last(explode('\\', str_replace('Repository', '', static::class))), '_');
 		$this->orderBy = $orderBy;
 		$this->unique = array_map([
@@ -321,7 +328,9 @@ abstract class AbstractRepository implements IRepository {
 	}
 
 	protected function toByMap(array $orderBy): array {
-		return $orderBy;
+		return array_map(function (string $orderBy) {
+			return $this->orderByMap[$orderBy] ?? $orderBy;
+		}, $orderBy);
 	}
 
 	protected function toOrderBy($orderBy, Select $select) {

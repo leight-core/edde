@@ -90,7 +90,6 @@ abstract class AbstractRepository implements IRepository {
 	public function require(string $search, string $message): Row {
 		$row = $this->query(Query::create([
 			'size'   => 1,
-			'page'   => 0,
 			'filter' => (object)['fulltext' => $search],
 		]))->fetch();
 		if (!$row) {
@@ -110,7 +109,7 @@ abstract class AbstractRepository implements IRepository {
 	 */
 	protected function findById($id, string $table = null) {
 		$table = $table ?? $this->table;
-		if (!($fetch = $this->select()->where($this->id, $id)->execute()->fetch())) {
+		if (!($fetch = $this->select()->orderBy(null)->where($this->id, $id)->execute()->fetch())) {
 			throw new RepositoryException(sprintf('Cannot find [%s] by [%s]!', $table, $id), 500);
 		}
 		return $fetch;
@@ -129,7 +128,14 @@ abstract class AbstractRepository implements IRepository {
 	 *
 	 */
 	public function total(Query $query): int {
-		return $this->toQuery($query)->page(0, 1)->fields(null)->addFieldCount(new Expression('distinct ' . $this->table . '.' . $this->id))->execute()->fetchSingle();
+		return $this
+			->toQuery($query)
+			->page(0, 1)
+			->orderBy(null)
+			->fields(null)
+			->addFieldCount(new Expression('distinct ' . $this->table . '.' . $this->id))
+			->execute()
+			->fetchSingle();
 	}
 
 	/**

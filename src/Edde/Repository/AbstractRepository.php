@@ -54,7 +54,7 @@ abstract class AbstractRepository implements IRepository {
 	public function __construct(
 		array  $orderBy = null,
 		array  $unique = [],
-		string $id = "id",
+		string $id = "$.id",
 		string $table = null
 	) {
 		$this->table = $table ?? 'z_' . StringUtils::recamel(Arrays::last(explode('\\', str_replace('Repository', '', static::class))), '_');
@@ -109,7 +109,7 @@ abstract class AbstractRepository implements IRepository {
 	 */
 	protected function findById($id, string $table = null) {
 		$table = $table ?? $this->table;
-		if (!($fetch = $this->select()->orderBy(null)->where($this->id, $id)->execute()->fetch())) {
+		if (!($fetch = $this->select()->orderBy(null)->where($this->col($this->id), $id)->execute()->fetch())) {
 			throw new RepositoryException(sprintf('Cannot find [%s] by [%s]!', $table, $id), 500);
 		}
 		return $fetch;

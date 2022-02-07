@@ -133,7 +133,7 @@ abstract class AbstractRepository implements IRepository {
 			->page(0, 1)
 			->orderBy(null)
 			->fields(null)
-			->addFieldCount(new Expression('distinct ' . $this->table . '.' . $this->id))
+			->addFieldCount(new Expression('distinct ' . $this->col($this->id)))
 			->execute()
 			->fetchSingle();
 	}

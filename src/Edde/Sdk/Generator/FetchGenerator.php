@@ -71,7 +71,7 @@ export const Fetch{$name}: FC<IFetch{$name}Props> = ({query, ...props}) => <Quer
 export type I{$name}PageExtra = ReactElement | ((entityContext: IEntityContext<{$response}>) => ReactElement);
 export type I{$name}PageBreadcrumb = BreadcrumbProps | ReactElement<typeof Breadcrumb> | ((entityContext: IEntityContext<{$response}>) => BreadcrumbProps | ReactElement<typeof Breadcrumb>);
 
-export interface I{$name}PageProps extends Omit<IPageProps, "breadcrumbProps" | "extra"> {
+export interface I{$name}PageProps extends Omit<IPageProps, "breadcrumbProps" | "breadcrumbMobileProps" | "breadcrumbBrowserProps" | "extra" | "extraBrowser" | "extraMobile"> {
 	children?: ReactNode | ((data: {$response}) => ReactNode);
 	breadcrumbProps?: I{$name}PageBreadcrumb;
 	breadcrumbMobileProps?: I{$name}PageBreadcrumb;
@@ -83,13 +83,15 @@ export interface I{$name}PageProps extends Omit<IPageProps, "breadcrumbProps" | 
 
 export const {$name}Page: FC<I{$name}PageProps> = ({children, breadcrumbProps, breadcrumbMobileProps, breadcrumbBrowserProps, extraMobile, extraBrowser, extra, ...props}) => {
 	const {{$param}} = useParams();
-	extra = extra || (isBrowser ? extraBrowser : extraMobile);
-	breadcrumbProps = breadcrumbProps || (isBrowser ? breadcrumbBrowserProps : breadcrumbMobileProps);
 	return <{$name}Provider>
 		<{$name}Context.Consumer>
 			{entityContext => <Page
 				breadcrumbProps={breadcrumbProps ? isCallable(breadcrumbProps) ? (breadcrumbProps as any)(entityContext) : breadcrumbProps : undefined}
+				breadcrumbMobileProps={breadcrumbMobileProps ? isCallable(breadcrumbMobileProps) ? (breadcrumbMobileProps as any)(entityContext) : breadcrumbMobileProps : undefined}
+				breadcrumbBrowserProps={breadcrumbBrowserProps ? isCallable(breadcrumbBrowserProps) ? (breadcrumbBrowserProps as any)(entityContext) : breadcrumbBrowserProps : undefined}
 				extra={extra ? (isCallable(extra) ? (extra as any)(entityContext) : extra) : undefined}
+				extraBrowser={extraBrowser ? (isCallable(extra) ? (extraBrowser as any)(entityContext) : extraBrowser) : undefined}
+				extraMobile={extraMobile ? (isCallable(extra) ? (extraMobile as any)(entityContext) : extraMobile) : undefined}
 				{...props}
 			>
 				<Fetch{$name}

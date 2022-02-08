@@ -109,6 +109,11 @@ class ImportGenerator {
 				"@leight-core/leight",
 				"useOptionalFilterContext",
 			];
+			yield $endpoint->class->module => [
+				"react",
+				"ConsumerProps",
+			];
+
 		}
 	}
 
@@ -285,7 +290,6 @@ class ImportGenerator {
 			$dependencies[$module]["react"][] = "createContext";
 			$dependencies[$module]["react"][] = "ReactNode";
 			$dependencies[$module]["react"][] = "ReactElement";
-			$dependencies[$module]["react"][] = "ConsumerProps";
 			$dependencies[$module]["antd"][] = "BreadcrumbProps";
 			$dependencies[$module]["antd/lib/breadcrumb"] = 'Breadcrumb';
 		}

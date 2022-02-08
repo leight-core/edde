@@ -53,7 +53,7 @@ export const {$name}Source: FC<I{$name}SourceProps> = ({children, ...props}) => 
 	</SourceContextProvider>;
 }
 
-export interface I{$name}SourceConsumerProps extends ConsumerProps<$generic> {
+export interface I{$name}SourceConsumerProps extends ConsumerProps<ISourceContext<$generic>> {
 }
 
 export const {$name}SourceConsumer: FC<I{$name}SourceConsumerProps> = props => {

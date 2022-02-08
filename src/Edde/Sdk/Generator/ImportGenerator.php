@@ -63,6 +63,10 @@ class ImportGenerator {
 			];
 			yield $endpoint->class->module => [
 				"@leight-core/leight",
+				"SourceContext",
+			];
+			yield $endpoint->class->module => [
+				"@leight-core/leight",
 				"ITableProps",
 			];
 			yield $endpoint->class->module => [
@@ -283,6 +287,7 @@ class ImportGenerator {
 			$dependencies[$module]["react"][] = "ReactElement";
 			$dependencies[$module]["antd"][] = "BreadcrumbProps";
 			$dependencies[$module]["antd/lib/breadcrumb"] = 'Breadcrumb';
+			$dependencies[$module]["react-device-detect"] = 'isBrowser';
 		}
 		foreach ($this->classExtractor->toExport($endpoints, IListEndpoint::class) as $endpoint) {
 			$module = $endpoint->class->module;

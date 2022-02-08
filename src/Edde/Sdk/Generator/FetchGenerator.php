@@ -68,14 +68,19 @@ export const Fetch{$name}: FC<IFetch{$name}Props> = ({query, ...props}) => <Quer
 	{...props}
 />;
 
+export type I{$name}PageExtra = ReactElement | ((entityContext: IEntityContext<{$response}>) => ReactElement);
+
 export interface I{$name}PageProps extends Omit<IPageProps, "breadcrumbProps" | "extra"> {
 	children?: ReactNode | ((data: {$response}) => ReactNode);
 	breadcrumbProps?: BreadcrumbProps | React.ReactElement<typeof Breadcrumb> | ((entityContext: IEntityContext<{$response}>) => BreadcrumbProps | ReactElement<typeof Breadcrumb>);
-	extra?: ReactElement | ((entityContext: IEntityContext<{$response}>) => ReactElement);
+	extra?: I{$name}PageExtra;
+	extraMobile?: I{$name}PageExtra; 
+	extraBrowser?: I{$name}PageExtra; 
 }
 
-export const {$name}Page: FC<I{$name}PageProps> = ({children, breadcrumbProps, extra, ...props}) => {
+export const {$name}Page: FC<I{$name}PageProps> = ({children, breadcrumbProps, extraMobile, extraBrowser, extra, ...props}) => {
 	const {{$param}} = useParams();
+	extra = extra || entityContext => isBrowser ? extraBrowser : extraMobile;
 	return <{$name}Provider>
 		<{$name}Context.Consumer>
 			{entityContext => <Page

@@ -53,6 +53,13 @@ export const {$name}Source: FC<I{$name}SourceProps> = ({children, ...props}) => 
 	</SourceContextProvider>;
 }
 
+export interface I{$name}SourceConsumerProps extends ConsumerProps<$generic> {
+}
+
+export const {$name}SourceConsumer: FC<I{$name}SourceConsumerProps> = props => {
+	return <SourceContext.Consumer {...props}/>
+}
+
 export interface I{$name}BaseTableProps extends ITableProps<$generic> {
 }
 

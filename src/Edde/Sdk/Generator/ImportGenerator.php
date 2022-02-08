@@ -288,7 +288,7 @@ class ImportGenerator {
 			$dependencies[$module]["react"][] = "ConsumerProps";
 			$dependencies[$module]["antd"][] = "BreadcrumbProps";
 			$dependencies[$module]["antd/lib/breadcrumb"] = 'Breadcrumb';
-			$dependencies[$module]["react-device-detect"] = 'isBrowser';
+			$dependencies[$module]["react-device-detect"][] = 'isBrowser';
 		}
 		foreach ($this->classExtractor->toExport($endpoints, IListEndpoint::class) as $endpoint) {
 			$module = $endpoint->class->module;

@@ -83,8 +83,8 @@ export interface I{$name}PageProps extends Omit<IPageProps, "breadcrumbProps" | 
 
 export const {$name}Page: FC<I{$name}PageProps> = ({children, breadcrumbProps, breadcrumbMobileProps, breadcrumbBrowserProps, extraMobile, extraBrowser, extra, ...props}) => {
 	const {{$param}} = useParams();
-	extra = extra || entityContext => isBrowser ? extraBrowser : extraMobile;
-	breadcrumbProps = breadcrumbProps || entityContext => isBrowser ? breadcrumbBrowserProps : breadcrumbMobileProps;
+	extra = extra || (isBrowser ? extraBrowser : extraMobile);
+	breadcrumbProps = breadcrumbProps || (isBrowser ? breadcrumbBrowserProps : breadcrumbMobileProps);
 	return <{$name}Provider>
 		<{$name}Context.Consumer>
 			{entityContext => <Page

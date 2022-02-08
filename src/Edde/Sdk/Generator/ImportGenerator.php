@@ -285,6 +285,7 @@ class ImportGenerator {
 			$dependencies[$module]["react"][] = "createContext";
 			$dependencies[$module]["react"][] = "ReactNode";
 			$dependencies[$module]["react"][] = "ReactElement";
+			$dependencies[$module]["react"][] = "ConsumerProps";
 			$dependencies[$module]["antd"][] = "BreadcrumbProps";
 			$dependencies[$module]["antd/lib/breadcrumb"] = 'Breadcrumb';
 			$dependencies[$module]["react-device-detect"] = 'isBrowser';

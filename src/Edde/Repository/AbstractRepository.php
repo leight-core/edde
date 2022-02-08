@@ -354,6 +354,9 @@ abstract class AbstractRepository implements IRepository {
 	}
 
 	protected function fulltext(Select $select, array $columns, $values): Select {
+		if (empty($values)) {
+			return $select;
+		}
 		if (is_string($values)) {
 			foreach (explode(' ', $values) as $part) {
 				$this->fulltext($select, $columns, [trim($part)]);

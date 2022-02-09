@@ -38,6 +38,8 @@ use Edde\Session\ISessionMapper;
 use Edde\Session\ISessionResolver;
 use Edde\Session\SessionMiddleware;
 use Edde\Session\SessionResolver;
+use Edde\Source\ISourceService;
+use Edde\Source\SourceService;
 use Edde\Storage\StorageConfig;
 use Edde\User\Mapper\IUserMapper;
 use Nette\Utils\Json;
@@ -149,13 +151,16 @@ class SlimApp {
 			IPasswordService::class    => function (ContainerInterface $container) {
 				return $container->get(PasswordService::class);
 			},
-			IFileService::class   => function (Container $container) {
+			IFileService::class        => function (Container $container) {
 				return $container->make(FileService::class, ['root' => $container->get(FileService::CONFIG_ROOT)]);
 			},
-			StorageConfig::class  => function (ContainerInterface $container) {
+			ISourceService::class      => function (ContainerInterface $container) {
+				return $container->get(SourceService::class);
+			},
+			StorageConfig::class       => function (ContainerInterface $container) {
 				return new StorageConfig($container->get(StorageConfig::CONFIG_STORAGE));
 			},
-			Application::class    => function (ContainerInterface $container) {
+			Application::class         => function (ContainerInterface $container) {
 				$application = new Application($container->get(self::CONFIG_APP_NAME));
 				foreach ($container->get(self::CONFIG_CLI) as $cli) {
 					$application->add($container->get($cli));
@@ -163,20 +168,20 @@ class SlimApp {
 				$application->add($container->get(JobExecutorCommand::class));
 				return $application;
 			},
-			IUserMapper::class    => function () {
+			IUserMapper::class         => function () {
 				throw new EddeException(sprintf('[%s] is not implemented or registered in the container; please provide implementation of [%s].', IUserMapper::class, IUserMapper::class));
 			},
-			ISessionMapper::class => function () {
+			ISessionMapper::class      => function () {
 				throw new EddeException(sprintf('[%s] is not implemented or registered in the container; please provide implementation of [%s].', ISessionMapper::class, ISessionMapper::class));
 			},
-			ICache::class         => function (ContainerInterface $container) {
+			ICache::class              => function (ContainerInterface $container) {
 				return $container->get(Cache::class);
 			},
-			CacheInterface::class => function (ContainerInterface $container) {
+			CacheInterface::class      => function (ContainerInterface $container) {
 				return $container->get(DatabaseCache::class);
 			},
-			SlimApp::CONFIG_CLI   => [],
-			Manager::class        => function (ContainerInterface $container) {
+			SlimApp::CONFIG_CLI        => [],
+			Manager::class             => function (ContainerInterface $container) {
 				$manager = new Manager($container->get(ConfigInterface::class), new ArrayInput([]), new StreamOutput(fopen('php://output', 'w')));
 				$manager->setContainer($container);
 				return $manager;

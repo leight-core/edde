@@ -150,12 +150,10 @@ abstract class AbstractRepository implements IRepository {
 	}
 
 	/**
-	 * @param Query $query
-	 *
-	 * @return iterable|Result
+	 * @inheritdoc
 	 */
-	public function execute(Query $query): iterable {
-		return $this->toQuery($query)->execute();
+	public function execute(?Query $query = null): iterable {
+		return $query ? $this->toQuery($query)->execute() : $this->all();
 	}
 
 	/**

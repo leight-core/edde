@@ -36,11 +36,11 @@ interface IRepository {
 	public function query(Query $query): iterable;
 
 	/**
-	 * @param Query $query
+	 * @param Query|null $query
 	 *
 	 * @return Result
 	 */
-	public function execute(Query $query): iterable;
+	public function execute(?Query $query = null): iterable;
 
 	public function toQuery(Query $query): Select;
 

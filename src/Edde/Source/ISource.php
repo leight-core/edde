@@ -14,5 +14,14 @@ interface ISource {
 	 */
 	public function query(string $query): Generator;
 
+	/**
+	 * Request data in a single batch
+	 *
+	 * @param string[] $queries
+	 *
+	 * @return Generator
+	 */
+	public function group(array $queries): Generator;
+
 	public function parse(string $query): SourceQueryDto;
 }

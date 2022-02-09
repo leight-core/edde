@@ -41,6 +41,16 @@ abstract class AbstractSource implements ISource {
 		], $_query);
 	}
 
+	public function group(array $queries): Generator {
+		$sources = [];
+		foreach ($queries as $query) {
+			$_query = $this->parse($query);
+			if ($_query->source) {
+				$sources[$_query->source] = $query;
+			}
+		}
+	}
+
 	public function parse(string $query): SourceQueryDto {
 		$result = [
 			'type'  => 'literal',

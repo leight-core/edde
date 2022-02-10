@@ -50,15 +50,15 @@ class LogRepository extends AbstractRepository {
 
 		/** @var $filter LogFilterDto */
 		$filter = $query->filter;
-		$filter->types && $select->where('type', 'in', $filter->types);
-		$filter->userIds && $select->where('user_id', 'in', $filter->userIds);
-		$filter->reference && $select->where(function (SelectBase $selectBase) use ($filter) {
+		isset($filter->types) && $select->where('type', 'in', $filter->types);
+		isset($filter->userIds) && $select->where('user_id', 'in', $filter->userIds);
+		isset($filter->reference) && $select->where(function (SelectBase $selectBase) use ($filter) {
 			$selectBase->orWhere('trace', $filter->reference);
 			$selectBase->orWhere('reference', $filter->reference);
 		});
-		$filter->stamp && $filter->stamp->from && $select->where('stamp', '>=', $filter->stamp->from);
-		$filter->stamp && $filter->stamp->to && $select->where('stamp', '<=', $filter->stamp->to);
-		$filter->tagIds && $select
+		isset($filter->stamp) && $filter->stamp->from && $select->where('stamp', '>=', $filter->stamp->from);
+		isset($filter->stamp) && $filter->stamp->to && $select->where('stamp', '<=', $filter->stamp->to);
+		isset($filter->tagIds) && $select
 			->rightJoin('z_log_tag as lt', 'lt.log_id', '=', 'z_log.id')
 			->where('tag_id', 'in', $filter->tagIds);
 

@@ -5,12 +5,14 @@ namespace Edde\Job;
 
 use Edde\Job\Dto\JobDto;
 use Edde\Job\Repository\JobLockRepositoryTrait;
+use Edde\Log\LoggerTrait;
 use function microtime;
 use function sleep;
 
 abstract class AbstractJobService implements IJobService {
 	use JobLockRepositoryTrait;
 	use JobExecutorTrait;
+	use LoggerTrait;
 
 	public function job(IJob $job) {
 		/**

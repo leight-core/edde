@@ -49,13 +49,17 @@ class ImageJobService extends AbstractJobService {
 				$this->logger->warning(sprintf('Image [%s] with invalid mime type [%s].', $file->path, $file->mime));
 				continue;
 			}
-			$this->fileService->store(
+			$original = $this->fileService->store(
 				FileStream::openRead($file->native),
 				str_replace('/image.raw', '/original', $file->path),
 				$file->name,
 				null,
 				$file->user->id
 			);
+			/**
+			 * Prevent users for uploading some huuuge shits, so images will be kept in some sane dimensions.
+			 */
+			$this->imageService->resize($original->native, 1200, 1200);
 			$preview = $this->fileService->store(
 				FileStream::openRead($file->native),
 				str_replace('/image.raw', '', $file->path),
@@ -63,7 +67,10 @@ class ImageJobService extends AbstractJobService {
 				null,
 				$file->user->id
 			);
-			$this->imageService->resize($preview->native);
+			/**
+			 * Image preview will be quite small to keep the size small too.
+			 */
+			$this->imageService->resize($preview->native, 400);
 			/**
 			 * Mark raw file as stale (so it will be removed).
 			 */

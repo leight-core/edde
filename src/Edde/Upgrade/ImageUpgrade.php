@@ -8,7 +8,7 @@ use Edde\Phinx\CommonMigration;
 class ImageUpgrade extends CommonMigration {
 	public function change() {
 		$this
-			->table('z_image')
+			->createUuidTable('z_image', ['comment' => 'Images and galleries.'])
 			->addStringColumn('gallery', 128, [
 				'comment' => 'Group images into a gallery.',
 				'null'    => true,

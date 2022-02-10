@@ -21,6 +21,8 @@ use Edde\File\IFileService;
 use Edde\Http\HttpIndex;
 use Edde\Http\IHttpIndex;
 use Edde\Http\IHttpRouter;
+use Edde\Image\IImageService;
+use Edde\Image\ImageService;
 use Edde\Job\CliJobExecutor;
 use Edde\Job\Command\JobExecutorCommand;
 use Edde\Job\IJobExecutor;
@@ -123,6 +125,9 @@ class SlimApp {
 			},
 			IHttpRouter::class         => function (ContainerInterface $container) {
 				return $container->get(ApiRouter::class);
+			},
+			IImageService::class       => function (ContainerInterface $container) {
+				return $container->get(ImageService::class);
 			},
 			IJobExecutor::class        => function (ContainerInterface $container) {
 				return $container->get(CliJobExecutor::class);

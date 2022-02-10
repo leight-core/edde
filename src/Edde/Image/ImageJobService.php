@@ -46,10 +46,6 @@ class ImageJobService extends AbstractJobService {
 		foreach ($this->fileMapper->map($this->fileRepository->execute((new Query())->withFilter(['pathEndLike' => '/image.raw']))) as $file) {
 			if (!in_array($file->mime, $allowed)) {
 				$this->logger->warning(sprintf('Image [%s] with invalid mime type [%s].', $file->path, $file->mime));
-				$this->fileRepository->change([
-					'id'  => $file->id,
-					'ttl' => microtime(true) - 1,
-				]);
 				continue;
 			}
 			$this->fileService->store(
@@ -59,6 +55,10 @@ class ImageJobService extends AbstractJobService {
 				null,
 				$file->user->id
 			);
+			$this->fileRepository->change([
+				'id'  => $file->id,
+				'ttl' => microtime(true) - 1,
+			]);
 		}
 
 		$this->fileGcService->async();

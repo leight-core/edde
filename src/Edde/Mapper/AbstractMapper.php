@@ -28,6 +28,7 @@ abstract class AbstractMapper implements IMapper {
 	}
 
 	public function stream(iterable $source): Generator {
+//		$dto = $this->reflectionService->toClass(static::class)->getResponseClassOf('item') && $this->reflectionService->toClass($dto)->is(IDto::class);
 		foreach ($source as $item) {
 			try {
 				yield $this->item($item);

@@ -25,6 +25,7 @@ class ImageJobService extends AbstractJobService {
 	use FileRepositoryTrait;
 	use FileMapperTrait;
 	use FileServiceTrait;
+	use ImageServiceTrait;
 
 	/**
 	 * @param IJob $job
@@ -55,6 +56,17 @@ class ImageJobService extends AbstractJobService {
 				null,
 				$file->user->id
 			);
+			$preview = $this->fileService->store(
+				FileStream::openRead($file->native),
+				str_replace('/image.raw', '', $file->path),
+				$file->name,
+				null,
+				$file->user->id
+			);
+			$this->imageService->resize($preview->native);
+			/**
+			 * Mark raw file as stale (so it will be removed).
+			 */
 			$this->fileRepository->change([
 				'id'  => $file->id,
 				'ttl' => microtime(true) - 1,

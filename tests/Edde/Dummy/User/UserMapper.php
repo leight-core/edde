@@ -6,7 +6,7 @@ namespace Edde\Dummy\User;
 use Edde\User\Mapper\AbstractUserMapper;
 
 class UserMapper extends AbstractUserMapper {
-	protected function toUser($item, array $params = []): array {
+	protected function toUser($item): array {
 		return [];
 	}
 }

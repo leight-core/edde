@@ -11,8 +11,8 @@ abstract class AbstractCurrentUserMapper extends AbstractMapper implements ICurr
 		if (!$item) {
 			return null;
 		}
-		return $this->dtoService->fromArray(CurrentUser::class, $this->toUser($item, $params));
+		return $this->dtoService->fromArray(CurrentUser::class, $this->toUser($item));
 	}
 
-	abstract protected function toUser($item, array $params = []): array;
+	abstract protected function toUser($item): array;
 }

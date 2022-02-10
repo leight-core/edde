@@ -25,7 +25,7 @@ abstract class AbstractJobService implements IJobService {
 				 */
 				sleep(3);
 			}
-			$this->handle($job);
+			return $this->handle($job);
 		} finally {
 			$this->unlock($job);
 		}

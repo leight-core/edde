@@ -71,7 +71,7 @@ class ImageJobService extends AbstractJobService {
 			/**
 			 * Image preview will be quite small to keep the size small too.
 			 */
-			$this->imageService->resize($preview->native, 400, 400);
+			$this->imageService->resize($preview->native, 200, 200);
 			$this->fileService->refresh($preview->id);
 			/**
 			 * Mark raw file as stale (so it will be removed).

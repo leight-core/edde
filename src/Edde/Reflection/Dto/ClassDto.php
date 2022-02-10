@@ -78,7 +78,11 @@ class ClassDto extends AbstractDto {
 	}
 
 	public function getRequestMethod(string $name): ?IRequestMethod {
-		return ($method = $this->methods[$name] ?? null) instanceof IRequestMethod ? $method : null;
+		return ($method = $this->getMethod($name)) instanceof IRequestMethod ? $method : null;
+	}
+
+	public function getMethod(string $name): ?MethodDto {
+		return $this->methods[$name] ?? null;
 	}
 
 	public function getRequestClassOf(string $name): ?string {

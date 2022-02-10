@@ -6,7 +6,7 @@ namespace Edde\Translation\Mapper;
 use Edde\Mapper\AbstractMapper;
 
 class ToTranslationMapper extends AbstractMapper {
-	public function item($item, array $params = []) {
+	public function item($item) {
 		return [
 			'id'        => $item->id,
 			'language'  => $item->locale,

@@ -7,7 +7,7 @@ use Edde\Config\Dto\ConfigDto;
 use Edde\Mapper\AbstractMapper;
 
 class ConfigMapper extends AbstractMapper {
-	public function item($item, array $params = []) {
+	public function item($item) {
 		return ConfigDto::create([
 			'id'    => $item->id,
 			'key'   => $item->key,

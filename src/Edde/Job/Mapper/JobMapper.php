@@ -14,7 +14,7 @@ class JobMapper extends AbstractMapper {
 	use UserRepositoryTrait;
 	use UserMapperTrait;
 
-	public function item($item, array $params = []) {
+	public function item($item) {
 		if (!$item) {
 			return null;
 		}

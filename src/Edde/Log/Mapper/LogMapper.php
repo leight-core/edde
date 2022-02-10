@@ -17,7 +17,7 @@ class LogMapper extends AbstractMapper {
 	use TagMapperTrait;
 	use LogTagRepositoryTrait;
 
-	public function item($item, array $params = []) {
+	public function item($item) {
 		return $this->dtoService->fromArray(LogDto::class, [
 			'id'        => $item->id,
 			'type'      => $item->type,
@@ -27,7 +27,7 @@ class LogMapper extends AbstractMapper {
 			'trace'     => $item->trace,
 			'reference' => $item->reference,
 			'microtime' => DateTime::createFromFormat('U.u', (string)$item->microtime)->format('Y-m-d H:i:s.u'),
-			'user'      => $item->user_id ? $this->userMapper->item($this->userRepository->find($item->user_id), $params) : null,
+			'user'      => $item->user_id ? $this->userMapper->item($this->userRepository->find($item->user_id)) : null,
 			'context'   => json_decode($item->context),
 			'tags'      => $this->tagMapper->map($this->logTagRepository->findTagByLog($item->id)),
 		]);

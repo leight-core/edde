@@ -16,14 +16,13 @@ class FileMapper extends AbstractMapper {
 
 	/**
 	 * @param       $item
-	 * @param array $params
 	 *
 	 * @return FileDto
 	 *
 	 * @throws ItemException
 	 * @throws SkipException
 	 */
-	public function item($item, array $params = []) {
+	public function item($item) {
 		return $this->dtoService->fromArray(FileDto::class, [
 			'id'      => $item->id,
 			'path'    => $item->path,

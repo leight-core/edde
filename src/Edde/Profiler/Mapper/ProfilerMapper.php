@@ -7,7 +7,7 @@ use Edde\Mapper\AbstractMapper;
 use Edde\Profiler\Dto\ProfilerDto;
 
 class ProfilerMapper extends AbstractMapper {
-	public function item($item, array $params = []) {
+	public function item($item) {
 		return $this->dtoService->fromArray(ProfilerDto::class, [
 			'id'      => $item->id,
 			'name'    => $item->name,

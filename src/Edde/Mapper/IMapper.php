@@ -20,10 +20,9 @@ interface IMapper {
 	 * Map one-to-one item.
 	 *
 	 * @param       $item
-	 * @param array $params
 	 *
 	 * @throws SkipException when an item should be silently skipped
 	 * @throws ItemException when an item has some error
 	 */
-	public function item($item, array $params = []);
+	public function item($item);
 }

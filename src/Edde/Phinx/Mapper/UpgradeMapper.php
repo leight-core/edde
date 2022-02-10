@@ -13,11 +13,10 @@ class UpgradeMapper extends AbstractMapper {
 
 	/**
 	 * @param AbstractMigration $item
-	 * @param array             $params
 	 *
 	 * @return mixed
 	 */
-	public function item($item, array $params = []) {
+	public function item($item) {
 		return $this->dtoService->fromArray(UpgradeDto::class, [
 			'version' => $item->getVersion(),
 			'name'    => $item->getName(),

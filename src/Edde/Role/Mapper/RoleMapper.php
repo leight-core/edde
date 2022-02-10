@@ -7,7 +7,7 @@ use Edde\Mapper\AbstractMapper;
 use Edde\Role\Dto\RoleDto;
 
 class RoleMapper extends AbstractMapper {
-	public function item($item, array $params = []) {
+	public function item($item) {
 		return $this->dtoService->fromArray(RoleDto::class, [
 			'id'   => $item->id,
 			'name' => $item->name,

@@ -54,7 +54,7 @@ class LogRepository extends AbstractRepository {
 		});
 		isset($filter->stamp) && $filter->stamp->from && $select->where('stamp', '>=', $filter->stamp->from);
 		isset($filter->stamp) && $filter->stamp->to && $select->where('stamp', '<=', $filter->stamp->to);
-		!empty($filter->tagIds) && $select->where('tag_id', 'in', $filter->tagIds);
+//		!empty($filter->tags) && $select->where('tag_id', 'in', $filter->tags);
 
 		$this->toOrderBy($query->orderBy, $select);
 

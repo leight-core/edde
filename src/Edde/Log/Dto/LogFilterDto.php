@@ -18,7 +18,7 @@ class LogFilterDto extends AbstractFilterDto {
 	/**
 	 * @var string[]|void
 	 */
-	public $tagIds;
+	public $tags;
 	/**
 	 * @var RangeDto|void
 	 */

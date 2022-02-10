@@ -399,7 +399,8 @@ class ReflectionService {
 	 */
 	public function toMethod(ReflectionMethod $method): MethodDto {
 		$dto = [
-			'name' => $method->getName(),
+			'name'        => $method->getName(),
+			'annotations' => $this->toAnnotations($method),
 		];
 		$class = $method->getDeclaringClass();
 		$return = $this->toAnnotation($method, 'return');

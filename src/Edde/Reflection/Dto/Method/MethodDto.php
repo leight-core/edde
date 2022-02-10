@@ -8,4 +8,6 @@ use Edde\Dto\AbstractDto;
 class MethodDto extends AbstractDto {
 	/** @var string */
 	public $name;
+	/** @var array */
+	public $annotations = [];
 }

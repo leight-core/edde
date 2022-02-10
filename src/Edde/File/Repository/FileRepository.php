@@ -81,11 +81,12 @@ class FileRepository extends AbstractRepository {
 			]);
 		} catch (DuplicateEntryException $exception) {
 			return $this->change([
-				'id'   => $this->findByPath($ensureDto->path, $ensureDto->name)->id,
-				'path' => $ensureDto->path,
-				'name' => $ensureDto->name,
-				'mime' => $ensureDto->mime,
-				'ttl'  => $ensureDto->ttl ? microtime(true) + $ensureDto->ttl : null,
+				'id'      => $this->findByPath($ensureDto->path, $ensureDto->name)->id,
+				'path'    => $ensureDto->path,
+				'name'    => $ensureDto->name,
+				'mime'    => $ensureDto->mime,
+				'ttl'     => $ensureDto->ttl ? microtime(true) + $ensureDto->ttl : null,
+				'user_id' => $ensureDto->userId,
 				/**
 				 * native is missing intentionally; if there is native file with a content, this
 				 * could mess everything up; ensure should ensure that native file eventually exists

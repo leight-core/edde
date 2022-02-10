@@ -15,7 +15,7 @@ class FileChunkService {
 
 	public function chunk(ChunkDto $chunkDto) {
 		return $chunkDto->stream->use(function (IStream $stream) use ($chunkDto) {
-			$this->fileService->chunk($stream, $chunkDto->hash, $this->currentUserService->optionalId());
+			$this->fileService->chunk($stream, $chunkDto->hash, $this->currentUserService->requiredId());
 		});
 	}
 

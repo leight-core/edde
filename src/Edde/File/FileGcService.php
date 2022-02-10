@@ -10,6 +10,10 @@ class FileGcService extends AbstractJobService {
 	use FileServiceTrait;
 
 	protected function handle(IJob $job) {
-		return $this->fileService->gc(true);
+		$progress = $job->getProgress();
+		$progress->onStart();
+		$result = $this->fileService->gc(true);
+		$progress->onProgress();
+		return $result;
 	}
 }

@@ -65,7 +65,6 @@ class FileService implements IFileService {
 	 * @inheritdoc
 	 */
 	public function accept(string $file, string $path, string $name, float $ttl = null): FileDto {
-		$this->gc();
 		return FileStream::openRead($_FILES[$file]['tmp_name'])
 			->use(function (IStream $stream) use ($path, $name, $ttl) {
 				return $this->store($stream, $path, $name, $ttl, $this->currentUserService->optionalId());
@@ -76,8 +75,6 @@ class FileService implements IFileService {
 	 * @inheritdoc
 	 */
 	public function chunk(IStream $stream, string $name, ?string $userId = null): FileDto {
-		$this->gc();
-
 		$file = $this->file('/chunk', $name, 'application/vnd.chunk', 60 * 5, $userId);
 
 		FileStream::openAppend($file->native)->useToStream($stream);
@@ -89,7 +86,6 @@ class FileService implements IFileService {
 	}
 
 	public function commit(string $chunk, string $path, string $name = null, bool $replace = false): FileDto {
-		$this->gc();
 		$file = $this->fileRepository->findByPath('/chunk', $chunk);
 
 		$source = [
@@ -186,7 +182,6 @@ class FileService implements IFileService {
 	 */
 	public function store(IStream $stream, string $path, string $name, float $ttl = null, ?string $userId = null): FileDto {
 		try {
-			$this->gc();
 			$fileDto = $this->file(rtrim($path, '/'), ltrim($name, '/'), 'application/octet-stream', $ttl, $userId);
 			FileStream::openWrite($fileDto->native)->useToStream($stream);
 			return $this->fileMapper->item($this->fileRepository->change([
@@ -201,7 +196,6 @@ class FileService implements IFileService {
 	}
 
 	public function useFile(string $fileId, callable $callback) {
-		$this->gc();
 		return $callback($this->fileMapper->item($this->fileRepository->find($fileId)));
 	}
 
@@ -219,7 +213,6 @@ class FileService implements IFileService {
 	 * @throws RepositoryException
 	 */
 	public function consumeFile(string $fileId, callable $callback) {
-		$this->gc();
 		$file = $this->fileMapper->item($this->fileRepository->find($fileId));
 		try {
 			return $callback($file);
@@ -271,7 +264,6 @@ class FileService implements IFileService {
 	}
 
 	public function remove(string $path) {
-		$e = null;
 		for ($i = 0; $i < 5; $i++) {
 			try {
 				$this->directory->deleteDir($path);
@@ -281,7 +273,7 @@ class FileService implements IFileService {
 				sleep(1);
 			}
 		}
-		if ($e) {
+		if (isset($e)) {
 			throw $e;
 		}
 	}

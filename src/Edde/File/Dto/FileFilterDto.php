@@ -12,6 +12,8 @@ class FileFilterDto extends AbstractFilterDto {
 	public $paths;
 	/** @var string|void */
 	public $path;
+	/** @var string|void */
+	public $pathEndLike;
 	/** @var string[]|void */
 	public $mimes;
 }

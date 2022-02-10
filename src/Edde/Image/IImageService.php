@@ -13,4 +13,15 @@ interface IImageService {
 	 * @param string|null $copy
 	 */
 	public function resize(string $file, int $width, int $height = null, string $copy = null): void;
+
+	/**
+	 * TRy to convert an image; is copy is not specified, source file will be replaced.
+	 *
+	 * @param string      $source
+	 * @param string      $format
+	 * @param string|null $copy
+	 *
+	 * @return void
+	 */
+	public function convert(string $source, string $format, string $copy = null): void;
 }

@@ -54,31 +54,59 @@ abstract class AbstractSource implements ISource {
 			'parse',
 		], $queries);
 		$sources = [];
+		/**
+		 * To keep the stuff optimal, we've to take only source queries to do only
+		 * necessary requests to sources. Without this, request is made per query which
+		 * could lead to database doom.
+		 */
 		foreach ($_queries as $query) {
 			if ($query->source) {
 				$sources[$query->source] = $query;
 			}
 		}
+		/**
+		 * Love this thing - magical SPL iterator which enables us to iterate over all sources at once with source
+		 * name as a key and value from the underlying generator.
+		 */
 		$iterator = new MultipleIterator(MultipleIterator::MIT_NEED_ANY | MultipleIterator::MIT_KEYS_ASSOC);
 		array_map(function (?SourceQueryDto $query) use ($iterator) {
-			$iterator->attachIterator($this->query("$." . $query->source), $query->source);
+			/**
+			 * Trick: attach to a source, but take the value returned from source instead resolving value of the query.
+			 * With this all queries with the same source do only one request instead of request per query which is highly suboptimal.
+			 */
+			$iterator->attachIterator($this->iterator(SourceQueryDto::create(['source' => $query->source])), $query->source);
 		}, $sources);
 		$static = [];
 		foreach ($iterator as $items) {
 			/**
-			 * Update & keep values which may be missing. This could be a bug when one iterator ends up earlies, so
-			 * it's latest data could be repeated unexpected.
+			 * This is another little trick - take values and keep them for "values" - that means literal values will be properly populated,
+			 * also static values from the source will be properly populated; the rest will be filled by a generators.
 			 */
 			foreach ($items as $k => $v) {
 				$static[$k] = $v ?: $static[$k];
 			}
+			/**
+			 * The boring stuff:
+			 * It's necessary to know which kind of value must be emitted; most part of the trick is that sources returns source object instead of
+			 * resolved value, so it's done here.
+			 * Also because source supports copying the same value over and over, it has to be handled here.
+			 */
 			yield array_map(
 				function ($query) use ($items, $static) {
 					switch ($query->type) {
+						/**
+						 * Regular value from the source (generator), nothing to think about
+						 */
 						case 'iterator':
 							return isset($items[$query->source]) ? ObjectUtils::valueOf($items[$query->source], $query->value) : null;
+						/**
+						 * The shit in the box: reuse value taken from the first run of the generator and reuse it like a bitch
+						 */
 						case 'value':
 							return isset($static[$query->source]) ? ObjectUtils::valueOf($static[$query->source], $query->value) : null;
+						/**
+						 * Most simple one - just vomit the value
+						 */
 						case 'literal':
 							return $query->value;
 					}

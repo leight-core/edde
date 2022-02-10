@@ -13,6 +13,7 @@ use Edde\Query\Dto\Query;
 use Edde\Repository\AbstractRepository;
 use Edde\Repository\IRepository;
 use Throwable;
+use function array_unique;
 use function implode;
 use function sort;
 use const SORT_NATURAL;
@@ -42,7 +43,7 @@ class LogRepository extends AbstractRepository {
 			'stamp'     => new DateTime(),
 			'user_id'   => $createDto->userId,
 			'context'   => json_encode($createDto->context),
-			'tags'      => implode(',', $createDto->tags),
+			'tags'      => implode(',', array_unique($createDto->tags)),
 		]);
 	}
 

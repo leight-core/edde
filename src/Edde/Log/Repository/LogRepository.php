@@ -23,7 +23,7 @@ class LogRepository extends AbstractRepository {
 
 	public function select($fields = null): Select {
 		$select = parent::select($fields);
-		$this->join($select, 'z_log_tag', 'lt', 'log_id', '$.log_id');
+		$this->join($select, 'z_log_tag', 'lt', 'log_id', 'log_id');
 		return $select;
 	}
 

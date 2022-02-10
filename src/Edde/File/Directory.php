@@ -34,6 +34,7 @@ class Directory implements IteratorAggregate {
 	}
 
 	public function sizeOf(string $file): int {
+		clearstatcache();
 		return $this->filesystem->fileSize($this->base($file));
 	}
 

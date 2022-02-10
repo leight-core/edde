@@ -8,6 +8,7 @@ use Edde\Log\Dto\LogDto;
 use Edde\Mapper\AbstractMapper;
 use Edde\User\Mapper\UserMapperTrait;
 use Edde\User\Repository\UserRepositoryTrait;
+use function explode;
 
 class LogMapper extends AbstractMapper {
 	use UserRepositoryTrait;
@@ -25,7 +26,7 @@ class LogMapper extends AbstractMapper {
 			'microtime' => DateTime::createFromFormat('U.u', (string)$item->microtime)->format('Y-m-d H:i:s.u'),
 			'user'      => $item->user_id ? $this->userMapper->item($this->userRepository->find($item->user_id)) : null,
 			'context'   => json_decode($item->context),
-			'tags'      => [],
+			'tags'      => $item->tags ? explode(',', $item->tags) : [],
 		]);
 	}
 }

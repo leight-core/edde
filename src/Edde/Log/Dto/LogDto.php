@@ -5,7 +5,6 @@ namespace Edde\Log\Dto;
 
 use Edde\Bridge\User\UserDto;
 use Edde\Dto\AbstractDto;
-use Edde\Tag\Dto\TagDto;
 
 class LogDto extends AbstractDto {
 	/**
@@ -45,7 +44,7 @@ class LogDto extends AbstractDto {
 	 */
 	public $user;
 	/**
-	 * @var TagDto[]
+	 * @var string[]
 	 */
 	public $tags;
 }

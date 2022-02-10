@@ -24,7 +24,6 @@ class CreateDto extends AbstractDto {
 	public $context;
 	/**
 	 * @var string[]
-	 * @description array of tag codes this log record will be bound to
 	 */
 	public $tags = [];
 }

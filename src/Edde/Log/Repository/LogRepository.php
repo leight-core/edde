@@ -15,16 +15,8 @@ use Edde\Repository\IRepository;
 use Throwable;
 
 class LogRepository extends AbstractRepository {
-	use LogTagRepositoryTrait;
-
 	public function __construct() {
 		parent::__construct(['microtime' => IRepository::ORDER_DESC]);
-	}
-
-	public function select($fields = null): Select {
-		$select = parent::select($fields);
-//		$this->join($select, 'z_log_tag', 'lt', 'log_id', 'log_id');
-		return $select;
 	}
 
 	/**
@@ -36,7 +28,7 @@ class LogRepository extends AbstractRepository {
 	 * @throws Throwable
 	 */
 	public function create(CreateDto $createDto) {
-		$log = $this->insert([
+		return $this->insert([
 			'log'       => $createDto->log,
 			'type'      => $createDto->type,
 			'trace'     => $createDto->traceId,
@@ -47,8 +39,6 @@ class LogRepository extends AbstractRepository {
 			'user_id'   => $createDto->userId,
 			'context'   => json_encode($createDto->context),
 		]);
-		$this->logTagRepository->sync($log->id, $createDto->tags);
-		return $log;
 	}
 
 	public function toQuery(Query $query): Select {

@@ -5,17 +5,13 @@ namespace Edde\Log\Mapper;
 
 use DateTime;
 use Edde\Log\Dto\LogDto;
-use Edde\Log\Repository\LogTagRepositoryTrait;
 use Edde\Mapper\AbstractMapper;
-use Edde\Tag\Mapper\TagMapperTrait;
 use Edde\User\Mapper\UserMapperTrait;
 use Edde\User\Repository\UserRepositoryTrait;
 
 class LogMapper extends AbstractMapper {
 	use UserRepositoryTrait;
 	use UserMapperTrait;
-	use TagMapperTrait;
-	use LogTagRepositoryTrait;
 
 	public function item($item) {
 		return $this->dtoService->fromArray(LogDto::class, [
@@ -29,7 +25,7 @@ class LogMapper extends AbstractMapper {
 			'microtime' => DateTime::createFromFormat('U.u', (string)$item->microtime)->format('Y-m-d H:i:s.u'),
 			'user'      => $item->user_id ? $this->userMapper->item($this->userRepository->find($item->user_id)) : null,
 			'context'   => json_decode($item->context),
-			'tags'      => $this->tagMapper->map($this->logTagRepository->findTagByLog($item->id)),
+			'tags'      => [],
 		]);
 	}
 }

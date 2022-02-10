@@ -37,11 +37,5 @@ class LogUpgrade extends CommonMigration {
 				'delete' => 'SET_NULL',
 			])
 			->save();
-
-		$this
-			->createUuidTable('z_log_tag', ['comment' => 'Log item -> tag relation; useful for searching something.'])
-			->addUuidForeignColumn('log', 'z_log', ['comment' => 'Reference to a log record.'])
-			->addUuidForeignColumn('tag', 'z_tag', ['comment' => 'Reference to a tag.'])
-			->save();
 	}
 }

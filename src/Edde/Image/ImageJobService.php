@@ -38,14 +38,15 @@ class ImageJobService extends AbstractJobService {
 	 * @throws Throwable
 	 */
 	protected function handle(IJob $job) {
+		$query = (new Query())->withFilter(['pathEndLike' => '/image.raw']);
+
 		$progress = $job->getProgress();
-		$progress->onStart();
+		$progress->onStart($this->fileRepository->total($query));
 
 		/** @var $file FileDto */
-		foreach ($this->fileMapper->map($this->fileRepository->execute((new Query())->withFilter(['pathEndLike' => '/image.raw']))) as $file) {
+		foreach ($this->fileMapper->map($this->fileRepository->execute($query)) as $file) {
 			try {
 				$this->imageService->convert($file->native, 'jpeg');
-
 				$original = $this->fileService->store(
 					FileStream::openRead($file->native),
 					str_replace('/image.raw', '/original', $file->path),
@@ -77,9 +78,12 @@ class ImageJobService extends AbstractJobService {
 					'previewId'  => $preview->id,
 					'userId'     => $file->user->id,
 				]));
+				$progress->onProgress();
 			} catch (Throwable $exception) {
+				$progress->onError($exception);
 				$this->logger->error($exception);
 			}
+
 			/**
 			 * Mark raw file as stale (so it will be removed).
 			 */

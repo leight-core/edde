@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Edde\Api\Shared\File\Endpoint;
 
-use Edde\File\Dto\GcResultDto;
-use Edde\File\FileServiceTrait;
+use Edde\File\FileGcServiceTrait;
+use Edde\Job\Dto\JobDto;
 use Edde\Rest\Endpoint\AbstractMutationEndpoint;
 
 class GcEndpoint extends AbstractMutationEndpoint {
-	use FileServiceTrait;
+	use FileGcServiceTrait;
 
-	public function post(): GcResultDto {
-		return $this->fileService->gc(true);
+	public function post(): JobDto {
+		return $this->fileGcService->async();
 	}
 }

@@ -96,7 +96,7 @@ class ClassDto extends AbstractDto {
 	}
 
 	public function getResponseClassOf(string $name): ?string {
-		return ($method = $this->getResponseMethod($name)) ? (($request = $method->requestClass()) ? $request->class() : null) : null;
+		return ($method = $this->getResponseMethod($name)) ? (($response = $method->response()) ? $response->class() : null) : null;
 	}
 
 	public function __toString() {

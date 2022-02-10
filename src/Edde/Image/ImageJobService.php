@@ -80,7 +80,7 @@ class ImageJobService extends AbstractJobService {
 			$this->fileService->refresh($preview->id);
 
 			$this->imageRepository->create($this->dtoService->fromArray(CreateDto::class, [
-				'gallery'    => $file->path,
+				'gallery'    => str_replace('/image.raw', '', $file->path),
 				'originalId' => $original->id,
 				'previewId'  => $preview->id,
 				'userId'     => $file->user->id,

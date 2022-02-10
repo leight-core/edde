@@ -34,7 +34,10 @@ class ImageJobService extends AbstractJobService {
 	 * @throws Throwable
 	 */
 	protected function handle(IJob $job) {
-		static $allowed = ['image/jpeg'];
+		static $allowed = [
+			'image/jpeg',
+			'image/png',
+		];
 
 		$progress = $job->getProgress();
 		$progress->onStart();

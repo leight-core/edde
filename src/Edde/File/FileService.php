@@ -89,10 +89,11 @@ class FileService implements IFileService {
 		$file = $this->fileRepository->findByPath('/chunk', $chunk);
 
 		$source = [
-			'id'   => $file->id,
-			'path' => $path,
-			'mime' => $this->mimeService->detect($file->native),
-			'ttl'  => null,
+			'id'      => $file->id,
+			'path'    => $path,
+			'mime'    => $this->mimeService->detect($file->native),
+			'ttl'     => null,
+			'user_id' => $file->user_id,
 		];
 		$name && $source['name'] = $name;
 

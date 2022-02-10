@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Edde\Mapper;
 
 use Edde\Dto\DtoServiceTrait;
-use Edde\Dto\IDto;
 use Edde\Log\LoggerTrait;
 use Edde\Mapper\Exception\SkipException;
 use Edde\Reflection\ReflectionServiceTrait;
@@ -31,12 +30,7 @@ abstract class AbstractMapper implements IMapper {
 	public function stream(iterable $source): Generator {
 		foreach ($source as $item) {
 			try {
-				$item = $this->item($item);
-				if (($dto = $this->reflectionService->toClass(static::class)->getResponseClassOf('item')) && $this->reflectionService->toClass($dto)->is(IDto::class)) {
-					yield $this->dtoService->fromArray($dto, $item);
-					continue;
-				}
-				yield $item;
+				yield $this->item($item);
 			} catch (SkipException $exception) {
 				/**
 				 * Swallowing exceptions is road to hell, thus it's necessary to log

@@ -21,6 +21,9 @@ class ImageRepository extends AbstractRepository {
 
 		/** @var $filter ImageFilterDto */
 		$filter = $query->filter;
+		isset($filter->gallery) && $this->where($select, 'gallery', $filter->gallery);
+		isset($filter->userId) && $this->where($select, 'user_id', $filter->userId);
+		isset($filter->io) && $this->where($select, 'id', $filter->id);
 
 		$this->toOrderBy($query->orderBy, $select);
 

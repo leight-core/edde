@@ -3,11 +3,14 @@ declare(strict_types=1);
 
 namespace Edde\Image;
 
+use Edde\Dto\DtoServiceTrait;
 use Edde\File\Dto\FileDto;
 use Edde\File\FileGcServiceTrait;
 use Edde\File\FileServiceTrait;
 use Edde\File\Mapper\FileMapperTrait;
 use Edde\File\Repository\FileRepositoryTrait;
+use Edde\Image\Dto\CreateDto;
+use Edde\Image\Repository\ImageRepositoryTrait;
 use Edde\Job\AbstractJobService;
 use Edde\Job\IJob;
 use Edde\Query\Dto\Query;
@@ -26,6 +29,8 @@ class ImageJobService extends AbstractJobService {
 	use FileMapperTrait;
 	use FileServiceTrait;
 	use ImageServiceTrait;
+	use ImageRepositoryTrait;
+	use DtoServiceTrait;
 
 	/**
 	 * @param IJob $job
@@ -73,6 +78,14 @@ class ImageJobService extends AbstractJobService {
 			 */
 			$this->imageService->resize($preview->native, 200, 200);
 			$this->fileService->refresh($preview->id);
+
+			$this->imageRepository->create($this->dtoService->fromArray(CreateDto::class, [
+				'gallery'    => $file->path,
+				'originalId' => $original->id,
+				'previewId'  => $preview->id,
+				'userId'     => $file->user->id,
+			]));
+
 			/**
 			 * Mark raw file as stale (so it will be removed).
 			 */

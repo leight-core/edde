@@ -19,7 +19,10 @@ class ImageService implements IImageService {
 	/**
 	 * @inheritdoc
 	 */
-	public function convert(string $source, string $format, string $copy = null): void {
-
+	public function convert(string $file, string $format, string $copy = null): void {
+		$copy = $copy ?? $file;
+		$imagick = new Imagick($file);
+		$imagick->setFormat($format);
+		$imagick->writeImage($copy);
 	}
 }

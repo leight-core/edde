@@ -17,11 +17,11 @@ interface IImageService {
 	/**
 	 * TRy to convert an image; is copy is not specified, source file will be replaced.
 	 *
-	 * @param string      $source
+	 * @param string      $file
 	 * @param string      $format
 	 * @param string|null $copy
 	 *
 	 * @return void
 	 */
-	public function convert(string $source, string $format, string $copy = null): void;
+	public function convert(string $file, string $format, string $copy = null): void;
 }

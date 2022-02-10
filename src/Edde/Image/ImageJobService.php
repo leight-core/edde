@@ -59,7 +59,7 @@ class ImageJobService extends AbstractJobService {
 			/**
 			 * Prevent users for uploading some huuuge shits, so images will be kept in some sane dimensions.
 			 */
-			$this->imageService->resize($original->native, 1200, 1200);
+			$this->imageService->resize($original->native, 2400, 2400);
 			$preview = $this->fileService->store(
 				FileStream::openRead($file->native),
 				str_replace('/image.raw', '', $file->path),
@@ -70,7 +70,7 @@ class ImageJobService extends AbstractJobService {
 			/**
 			 * Image preview will be quite small to keep the size small too.
 			 */
-			$this->imageService->resize($preview->native, 400);
+			$this->imageService->resize($preview->native, 400, 400);
 			/**
 			 * Mark raw file as stale (so it will be removed).
 			 */

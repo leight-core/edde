@@ -17,6 +17,10 @@ class LogUpgrade extends CommonMigration {
 				'comment' => 'Optional log trace (call stack).',
 				'null'    => true,
 			])
+			->addStringColumn('tags', 256, [
+				'comment' => 'Comma separated log tags.',
+				'null'    => true,
+			])
 			->addColumn('stamp', 'datetime', [
 				'comment' => 'When a log record has been created.',
 			])

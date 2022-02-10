@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\File;
+namespace Edde\Image;
 
+use Edde\File\FileGcServiceTrait;
 use Edde\Job\AbstractJobService;
 use Edde\Job\IJob;
 

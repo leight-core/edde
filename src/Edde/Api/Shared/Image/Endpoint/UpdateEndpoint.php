@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Api\Shared\Image\Endpoint;
 
-use Edde\File\ImageJobServiceTrait;
+use Edde\Image\ImageJobServiceTrait;
 use Edde\Job\Dto\JobDto;
 use Edde\Rest\Endpoint\AbstractMutationEndpoint;
 

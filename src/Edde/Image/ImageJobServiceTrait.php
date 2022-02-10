@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\File;
+namespace Edde\Image;
 
 trait ImageJobServiceTrait {
 	/** @var ImageJobService */

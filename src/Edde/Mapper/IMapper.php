@@ -5,6 +5,7 @@ namespace Edde\Mapper;
 
 use Edde\Mapper\Exception\ItemException;
 use Edde\Mapper\Exception\SkipException;
+use Generator;
 
 interface IMapper {
 	/**
@@ -15,6 +16,15 @@ interface IMapper {
 	 * @return array
 	 */
 	public function map(iterable $source): array;
+
+	/**
+	 * Stream through the mapper.
+	 *
+	 * @param iterable $source
+	 *
+	 * @return Generator
+	 */
+	public function stream(iterable $source): Generator;
 
 	/**
 	 * Map one-to-one item.

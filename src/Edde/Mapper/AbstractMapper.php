@@ -6,6 +6,8 @@ namespace Edde\Mapper;
 use Edde\Dto\DtoServiceTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Mapper\Exception\SkipException;
+use Generator;
+use function iterator_to_array;
 
 abstract class AbstractMapper implements IMapper {
 	use MapperUtilsTrait;
@@ -20,10 +22,13 @@ abstract class AbstractMapper implements IMapper {
 	}
 
 	public function map(iterable $source): array {
-		$map = [];
+		return iterator_to_array($this->stream($source));
+	}
+
+	public function stream(iterable $source): Generator {
 		foreach ($source as $item) {
 			try {
-				$map[] = $this->item($item);
+				yield $this->item($item);
 			} catch (SkipException $exception) {
 				/**
 				 * Swallowing exceptions is road to hell, thus it's necessary to log
@@ -34,6 +39,5 @@ abstract class AbstractMapper implements IMapper {
 				]);
 			}
 		}
-		return $map;
 	}
 }

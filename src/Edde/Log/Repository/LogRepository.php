@@ -21,6 +21,12 @@ class LogRepository extends AbstractRepository {
 		parent::__construct(['microtime' => IRepository::ORDER_DESC]);
 	}
 
+	public function select($fields = null): Select {
+		$select = parent::select($fields);
+		$this->join($select, 'z_log_tag', 'lt', 'log_id', '$.log_id');
+		return $select;
+	}
+
 	/**
 	 * @param CreateDto $createDto
 	 *
@@ -50,20 +56,18 @@ class LogRepository extends AbstractRepository {
 
 		/** @var $filter LogFilterDto */
 		$filter = $query->filter;
-		isset($filter->types) && $select->where('type', 'in', $filter->types);
-		isset($filter->userIds) && $select->where('user_id', 'in', $filter->userIds);
+		!empty($filter->types) && $select->where('type', 'in', $filter->types);
+		!empty($filter->userIds) && $select->where('user_id', 'in', $filter->userIds);
 		isset($filter->reference) && $select->where(function (SelectBase $selectBase) use ($filter) {
 			$selectBase->orWhere('trace', $filter->reference);
 			$selectBase->orWhere('reference', $filter->reference);
 		});
 		isset($filter->stamp) && $filter->stamp->from && $select->where('stamp', '>=', $filter->stamp->from);
 		isset($filter->stamp) && $filter->stamp->to && $select->where('stamp', '<=', $filter->stamp->to);
-		isset($filter->tagIds) && $select
-			->rightJoin('z_log_tag as lt', 'lt.log_id', '=', 'z_log.id')
-			->where('tag_id', 'in', $filter->tagIds);
+		!empty($filter->tagIds) && $select->where('tag_id', 'in', $filter->tagIds);
 
 		$this->toOrderBy($query->orderBy, $select);
 
-		return $select;
+		return $select->distinct();
 	}
 }

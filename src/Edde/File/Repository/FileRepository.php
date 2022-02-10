@@ -46,7 +46,7 @@ class FileRepository extends AbstractRepository {
 		], $filter->fulltext);
 		isset($filter->userIds) && $select->where('user_id', 'in', $filter->userIds);
 		isset($filter->paths) && $select->where('path', 'in', $filter->paths);
-		isset($filter->path) && $this->fulltext($select, ['path'], $filter->path);
+		isset($filter->path) && $this->where($select, 'path', $filter->path);
 		isset($filter->mimes) && $select->where('mimes', 'in', $filter->mimes);
 
 		$this->toOrderBy($query->orderBy, $select);

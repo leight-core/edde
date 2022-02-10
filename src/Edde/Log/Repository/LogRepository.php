@@ -13,6 +13,9 @@ use Edde\Query\Dto\Query;
 use Edde\Repository\AbstractRepository;
 use Edde\Repository\IRepository;
 use Throwable;
+use function implode;
+use function sort;
+use const SORT_NATURAL;
 
 class LogRepository extends AbstractRepository {
 	public function __construct() {
@@ -28,6 +31,7 @@ class LogRepository extends AbstractRepository {
 	 * @throws Throwable
 	 */
 	public function create(CreateDto $createDto) {
+		sort($createDto->tags, SORT_NATURAL);
 		return $this->insert([
 			'log'       => $createDto->log,
 			'type'      => $createDto->type,
@@ -38,6 +42,7 @@ class LogRepository extends AbstractRepository {
 			'stamp'     => new DateTime(),
 			'user_id'   => $createDto->userId,
 			'context'   => json_encode($createDto->context),
+			'tags'      => implode(',', $createDto->tags),
 		]);
 	}
 

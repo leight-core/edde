@@ -40,6 +40,7 @@ use function iterator_to_array;
 use function json_encode;
 use function sha1_file;
 use function sprintf;
+use function strlen;
 
 class ExcelService implements IExcelService {
 	use LoggerTrait;
@@ -47,6 +48,27 @@ class ExcelService implements IExcelService {
 	use ContainerTrait;
 	use ReflectionServiceTrait;
 	use CacheTrait;
+
+	/**
+	 * @param ReadDto $readDto
+	 *
+	 * @return Generator
+	 *
+	 * @throws EmptySheetException
+	 * @throws Exception
+	 * @throws \PhpOffice\PhpSpreadsheet\Exception
+	 */
+	public function iterate(ReadDto $readDto): Generator {
+		$spreadsheet = $this->load($readDto);
+		if (($worksheet = $spreadsheet->getSheet($readDto->worksheet))->getHighestRow() === 1) {
+			throw new EmptySheetException(sprintf('Sheet [%d] of [%s] of Excel file [%s] is empty.', $readDto->worksheet, json_encode($readDto->sheets ?? 'default'), $readDto->file));
+		}
+		foreach ($worksheet->getRowIterator() as $index => $row) {
+			foreach ($row->getCellIterator() as $cell) {
+				yield $cell->getColumn() . $index => !!strlen($value = $readDto->translations[$cell->getFormattedValue()] ?? $cell->getFormattedValue()) ? $value : null;
+			}
+		}
+	}
 
 	/**
 	 * @inheritdoc

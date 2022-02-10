@@ -18,6 +18,15 @@ use ReflectionException;
 
 interface IExcelService {
 	/**
+	 * Iterate through the file cell by cell
+	 *
+	 * @param ReadDto $readDto
+	 *
+	 * @return Generator
+	 */
+	public function iterate(ReadDto $readDto): Generator;
+
+	/**
 	 * Iterate through the given file on the given worksheet.
 	 *
 	 * @return Generator|array[]

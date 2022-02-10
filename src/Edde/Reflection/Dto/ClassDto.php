@@ -5,10 +5,12 @@ namespace Edde\Reflection\Dto;
 
 use Edde\Dto\AbstractDto;
 use Edde\Reflection\Dto\Method\IRequestMethod;
+use Edde\Reflection\Dto\Method\IResponseMethod;
 use Edde\Reflection\Dto\Method\MethodDto;
 use Edde\Reflection\Dto\Property\AbstractProperty;
 use ReflectionClass;
 use ReflectionException;
+use function in_array;
 
 class ClassDto extends AbstractDto {
 	/**
@@ -81,12 +83,20 @@ class ClassDto extends AbstractDto {
 		return ($method = $this->getMethod($name)) instanceof IRequestMethod ? $method : null;
 	}
 
+	public function getResponseMethod(string $name): ?IResponseMethod {
+		return ($method = $this->getMethod($name)) instanceof IResponseMethod ? $method : null;
+	}
+
 	public function getMethod(string $name): ?MethodDto {
 		return $this->methods[$name] ?? null;
 	}
 
 	public function getRequestClassOf(string $name): ?string {
 		return ($method = $this->getRequestMethod($name)) ? (($request = $method->requestClass()) ? $request->class() : null) : null;
+	}
+
+	public function getResponseClassOf(string $name): ?string {
+		return ($method = $this->getResponseMethod($name)) ? (($request = $method->requestClass()) ? $request->class() : null) : null;
 	}
 
 	public function __toString() {

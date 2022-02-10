@@ -79,6 +79,15 @@ interface IFileService {
 	public function store(IStream $stream, string $path, string $name, float $ttl = null, ?string $userId = null): FileDto;
 
 	/**
+	 * When a file is changed, this method will update it's changes
+	 *
+	 * @param string $fileId
+	 *
+	 * @return FileDto
+	 */
+	public function refresh(string $fileId): FileDto;
+
+	/**
 	 * Return filesize
 	 *
 	 * @param string $file

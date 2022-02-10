@@ -185,15 +185,20 @@ class FileService implements IFileService {
 		try {
 			$fileDto = $this->file(rtrim($path, '/'), ltrim($name, '/'), 'application/octet-stream', $ttl, $userId);
 			FileStream::openWrite($fileDto->native)->useToStream($stream);
-			return $this->fileMapper->item($this->fileRepository->change([
-				'id'   => $fileDto->id,
-				'mime' => $this->mimeService->detect($fileDto->native),
-				'size' => $this->sizeOf($fileDto->native),
-			]));
+			return $this->refresh($fileDto->id);
 		} catch (Throwable $exception) {
 			$this->logger->error($exception);
 			throw $exception;
 		}
+	}
+
+	public function refresh(string $fileId): FileDto {
+		$fileDto = $this->fileMapper->item($this->fileRepository->find($fileId));
+		return $this->fileMapper->item($this->fileRepository->change([
+			'id'   => $fileDto->id,
+			'mime' => $this->mimeService->detect($fileDto->native),
+			'size' => $this->sizeOf($fileDto->native),
+		]));
 	}
 
 	public function useFile(string $fileId, callable $callback) {

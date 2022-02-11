@@ -7,8 +7,9 @@ use Edde\Reflection\Dto\Method\IRequestMethod;
 use Edde\Reflection\Dto\Method\IResponseMethod;
 use Edde\Reflection\Exception\UnknownTypeException;
 use Edde\Rest\EndpointInfoTrait;
+use Edde\Rest\IMutationEndpoint;
+use Edde\Rest\IQueryEndpoint;
 use Edde\Rest\Reflection\Endpoint;
-use Edde\Rest\Reflection\MutationEndpoint;
 use Edde\Sdk\NameResolverTrait;
 use Edde\Sdk\SdkException;
 use ReflectionException;
@@ -82,11 +83,19 @@ class EndpointGenerator {
 				$response,
 				$pair,
 				$id,
-			], $templates[$endpoint->method->name][$endpoint instanceof MutationEndpoint ? 'mutation' : 'query']) . ";";
+			], $templates[$endpoint->method->name][$endpoint instanceof IMutationEndpoint ? 'mutation' : 'query']) . ";";
 
-		if (!$endpoint instanceof MutationEndpoint) {
+		if (!$endpoint instanceof IMutationEndpoint) {
 			$export[] = <<<EXPORT
 export const use{$name}QueryInvalidate = () => {
+	const queryClient = useQueryClient();
+	return () => queryClient.invalidateQueries(["{$id}"])
+}
+EXPORT;
+		}
+		if ($endpoint instanceof IQueryEndpoint) {
+			$export[] = <<<EXPORT
+export const useQueryInvalidate = () => {
 	const queryClient = useQueryClient();
 	return () => queryClient.invalidateQueries(["{$id}"])
 }

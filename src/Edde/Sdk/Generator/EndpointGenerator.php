@@ -9,7 +9,6 @@ use Edde\Reflection\Exception\UnknownTypeException;
 use Edde\Rest\EndpointInfoTrait;
 use Edde\Rest\Reflection\Endpoint;
 use Edde\Rest\Reflection\MutationEndpoint;
-use Edde\Rest\Reflection\QueryEndpoint;
 use Edde\Sdk\NameResolverTrait;
 use Edde\Sdk\SdkException;
 use ReflectionException;
@@ -88,14 +87,6 @@ class EndpointGenerator {
 		if (!$endpoint instanceof MutationEndpoint) {
 			$export[] = <<<EXPORT
 export const use{$name}QueryInvalidate = () => {
-	const queryClient = useQueryClient();
-	return () => queryClient.invalidateQueries(["{$id}"])
-}
-EXPORT;
-		}
-		if ($endpoint instanceof QueryEndpoint) {
-			$export[] = <<<EXPORT
-export const useQueryInvalidate = () => {
 	const queryClient = useQueryClient();
 	return () => queryClient.invalidateQueries(["{$id}"])
 }

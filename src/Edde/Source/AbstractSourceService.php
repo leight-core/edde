@@ -11,7 +11,6 @@ use Edde\Repository\IRepository;
 use Edde\Source\Dto\QueriesDto;
 use Edde\Source\Dto\SourcesDto;
 use Edde\Source\Exception\SourceException;
-use Ramsey\Uuid\Exception\RandomSourceException;
 
 abstract class AbstractSourceService implements ISourceService {
 	use ContainerTrait;
@@ -40,7 +39,7 @@ abstract class AbstractSourceService implements ISourceService {
 		}
 		foreach ($queries->queries as $query) {
 			if (!isset($_repositories[$query->name])) {
-				throw new RandomSourceException(sprintf('Defined query [%s] for source not connected. Please add this source to [%s] parameter.', $query->name, Dto\SourcesDto::class));
+				throw new SourceException(sprintf('Defined query [%s] for source not connected. Please add this source to [%s] parameter.', $query->name, Dto\SourcesDto::class));
 			}
 			$_queries[$query->name] = $query;
 		}

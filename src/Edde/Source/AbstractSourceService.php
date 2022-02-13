@@ -38,9 +38,6 @@ abstract class AbstractSourceService implements ISourceService {
 			}
 		}
 		foreach ($queries->queries as $query) {
-			if (!isset($_repositories[$query->name])) {
-				throw new SourceException(sprintf('Defined query [%s] for source not connected. Please add this source to [%s] parameter.', $query->name, Dto\SourcesDto::class));
-			}
 			$_queries[$query->name] = $query;
 		}
 		return new Source($_repositories, $_mappers, $_queries);

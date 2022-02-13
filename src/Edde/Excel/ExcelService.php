@@ -65,7 +65,11 @@ class ExcelService implements IExcelService {
 		}
 		foreach ($worksheet->getRowIterator() as $index => $row) {
 			foreach ($row->getCellIterator() as $cell) {
-				yield $cell->getColumn() . $index => [
+				yield [
+					$cell->getColumn(),
+					$index,
+					$cell->getColumn() . $index,
+				] => [
 					$cell,
 					!!strlen($value = $readDto->translations[$cell->getFormattedValue()] ?? $cell->getFormattedValue()) ? $value : null,
 				];

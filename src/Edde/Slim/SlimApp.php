@@ -12,8 +12,10 @@ use Edde\Cache\ICache;
 use Edde\Cache\Impl\DatabaseCache;
 use Edde\Dto\IDtoService;
 use Edde\EddeException;
+use Edde\Excel\ExcelExportService;
 use Edde\Excel\ExcelImportService;
 use Edde\Excel\ExcelService;
+use Edde\Excel\IExcelExportService;
 use Edde\Excel\IExcelImportService;
 use Edde\Excel\IExcelService;
 use Edde\File\FileService;
@@ -149,6 +151,9 @@ class SlimApp {
 			},
 			IExcelImportService::class => function (ContainerInterface $container) {
 				return $container->get(ExcelImportService::class);
+			},
+			IExcelExportService::class => function (ContainerInterface $container) {
+				return $container->get(ExcelExportService::class);
 			},
 			LoggerInterface::class     => function (ContainerInterface $container) {
 				return $container->get(DatabaseLogger::class);

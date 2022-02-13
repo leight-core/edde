@@ -65,7 +65,7 @@ class DatabaseCache extends AbstractCache {
 
 	public function deleteMultiple($keys) {
 		try {
-			$this->cacheRepository->table()->delete()->where($keys, 'in', $keys)->execute();
+			!empty($keys) && $this->cacheRepository->table()->delete()->where($keys, 'in', $keys)->execute();
 			return true;
 		} catch (Throwable $throwable) {
 			$this->logger->error($throwable);

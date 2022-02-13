@@ -47,7 +47,6 @@ export interface I{$name}SourceProps extends Partial<ISourceContextProviderProps
 export const {$name}Source: FC<I{$name}SourceProps> = ({children, ...props}) => {
 	return <SourceContextProvider<$generic>
 		useQuery={use{$name}Query}
-		filter={use{$name}OptionalFilterContext()?.filter}
 		{...props}
 	>
 		{children}

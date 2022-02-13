@@ -36,6 +36,7 @@ use function rtrim;
 use function sleep;
 use function sprintf;
 use function str_replace;
+use function touch;
 use function unlink;
 
 class FileService implements IFileService {
@@ -175,6 +176,7 @@ class FileService implements IFileService {
 			'native' => $this->directory->normalize($native),
 		])));
 		$this->directory->create(dirname($this->directory->base($file->native)));
+		touch($file->native);
 		return $file;
 	}
 

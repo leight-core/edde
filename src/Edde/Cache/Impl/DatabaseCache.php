@@ -43,7 +43,9 @@ class DatabaseCache extends AbstractCache {
 
 	public function delete($key) {
 		try {
-			$this->cacheRepository->table()->delete()->where(['key' => $key])->execute();
+			$delete = $this->cacheRepository->table()->delete();
+			isset($key) && $delete->where(['key' => $key]);
+			$delete->execute();
 			return true;
 		} catch (Throwable $throwable) {
 			$this->logger->error($throwable);

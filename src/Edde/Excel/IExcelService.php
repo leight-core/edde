@@ -14,6 +14,7 @@ use Edde\Reflection\Exception\MissingReflectionClassException;
 use Edde\Reflection\Exception\UnknownTypeException;
 use Generator;
 use PhpOffice\PhpSpreadsheet\Exception;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use ReflectionException;
 
 interface IExcelService {
@@ -67,4 +68,11 @@ interface IExcelService {
 	 * @throws ReflectionException
 	 */
 	public function meta(string $file): MetaDto;
+
+	/**
+	 * @param ReadDto $readDto
+	 *
+	 * @return Spreadsheet
+	 */
+	public function load(ReadDto $readDto): Spreadsheet;
 }

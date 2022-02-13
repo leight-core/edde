@@ -218,7 +218,7 @@ class ExcelService implements IExcelService {
 	 *
 	 * @throws Exception
 	 */
-	protected function load(ReadDto $readDto): Spreadsheet {
+	public function load(ReadDto $readDto): Spreadsheet {
 		$reader = IOFactory::createReaderForFile($readDto->file);
 		$reader->setLoadSheetsOnly($readDto->sheets);
 		return $reader->load($readDto->file);

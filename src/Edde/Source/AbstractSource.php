@@ -15,6 +15,8 @@ use function array_filter;
 use function array_map;
 use function call_user_func;
 use function explode;
+use function ltrim;
+use function urldecode;
 
 abstract class AbstractSource implements ISource {
 	/**
@@ -151,7 +153,7 @@ abstract class AbstractSource implements ISource {
 				case 'static':
 					$result = [
 						'type'  => $type,
-						'value' => $uri->getPath(),
+						'value' => urldecode(ltrim($uri->getPath(), '/')),
 					];
 					break;
 			}

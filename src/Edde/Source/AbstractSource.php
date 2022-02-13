@@ -9,12 +9,12 @@ use Edde\Source\Dto\QueryDto;
 use Edde\Source\Dto\SourceQueryDto;
 use Edde\Utils\ObjectUtils;
 use Generator;
+use League\Uri\Uri;
 use MultipleIterator;
+use function array_filter;
 use function array_map;
-use function array_slice;
 use function call_user_func;
 use function explode;
-use function substr;
 
 abstract class AbstractSource implements ISource {
 	/**
@@ -102,12 +102,12 @@ abstract class AbstractSource implements ISource {
 						/**
 						 * The shit in the box: reuse value taken from the first run of the generator and reuse it like a bitch
 						 */
-						case 'value':
+						case 'single':
 							return isset($static[$query->source]) ? ObjectUtils::valueOf($static[$query->source], $query->value) : null;
 						/**
 						 * Most simple one - just vomit the value
 						 */
-						case 'literal':
+						case 'static':
 							return $query->value;
 					}
 				},
@@ -118,47 +118,49 @@ abstract class AbstractSource implements ISource {
 
 	public function parse(string $query): SourceQueryDto {
 		$result = [
-			'type'  => 'literal',
+			'type'  => 'static',
 			'value' => $query,
 		];
-		switch (substr($query, 0, 2)) {
-			/**
-			 * Single item from the source
-			 */
-			case '#.':
-				$explode = explode('.', $query);
-				$result = [
-					'type'   => 'value',
-					'source' => $explode[1],
-					'value'  => array_slice($explode, 2),
-				];
-				break;
-			/**
-			 * Iterate through all data available in the source
-			 */
-			case '$.':
-				$explode = explode('.', $query);
-				$result = [
-					'type'   => 'iterator',
-					'source' => $explode[1],
-					'value'  => array_slice($explode, 2),
-				];
-				break;
-			/**
-			 * Literal; does not take anything from source, just returns the same input
-			 */
-			case '&.':
-				$explode = explode('.', $query);
-				$result = [
-					'type'  => 'literal',
-					'value' => $explode[1],
-				];
-				break;
+		try {
+			$uri = Uri::createFromString($query);
+			switch ($type = ($uri->getUserInfo() ?? 'iterator')) {
+				/**
+				 * Single item from the source
+				 */
+				case 'single':
+					$result = [
+						'type'   => $type,
+						'source' => $uri->getHost(),
+						'value'  => array_filter(explode('/', $uri->getPath())),
+					];
+					break;
+				/**
+				 * Iterate through all data available in the source
+				 */
+				case 'iterator':
+					$explode = explode('.', $query);
+					$result = [
+						'type'   => $type,
+						'source' => $uri->getHost(),
+						'value'  => array_filter(explode('/', $uri->getPath())),
+					];
+					break;
+				/**
+				 * Literal; does not take anything from source, just returns the same input
+				 */
+				case 'static':
+					$result = [
+						'type'  => $type,
+						'value' => $uri->getPath(),
+					];
+					break;
+			}
+		} finally {
+			return SourceQueryDto::create($result);
 		}
-		return SourceQueryDto::create($result);
 	}
 
-	public function value(SourceQueryDto $sourceQuery): Generator {
+	public function single(SourceQueryDto $sourceQuery): Generator {
 		foreach ($this->iterator($sourceQuery) as $item) {
 			yield $item;
 			break;
@@ -171,7 +173,7 @@ abstract class AbstractSource implements ISource {
 		}
 	}
 
-	public function literal(SourceQueryDto $sourceQuery): Generator {
+	public function static(SourceQueryDto $sourceQuery): Generator {
 		yield $sourceQuery->value;
 	}
 }

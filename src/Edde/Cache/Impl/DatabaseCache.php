@@ -8,6 +8,8 @@ use Edde\Cache\Psr\AbstractCache;
 use Edde\Cache\Repository\CacheRepositoryTrait;
 use Throwable;
 use function is_array;
+use function is_iterable;
+use function iterator_to_array;
 
 class DatabaseCache extends AbstractCache {
 	use CacheRepositoryTrait;
@@ -65,7 +67,8 @@ class DatabaseCache extends AbstractCache {
 
 	public function deleteMultiple($keys) {
 		try {
-			!empty($keys) && $this->cacheRepository->table()->delete()->where($keys, 'in', $keys)->execute();
+			$keys = is_iterable($keys) ? iterator_to_array($keys) : $keys;
+			!empty($keys) && $this->cacheRepository->table()->delete()->where('key', 'in', $keys)->execute();
 			return true;
 		} catch (Throwable $throwable) {
 			$this->logger->error($throwable);

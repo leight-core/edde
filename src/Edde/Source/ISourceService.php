@@ -15,5 +15,5 @@ interface ISourceService {
 	 *
 	 * @return ISource result connected and filtered
 	 */
-	public function source(Dto\SourcesDto $sources, QueriesDto $queries): ISource;
+	public function source(SourcesDto $sources, QueriesDto $queries): ISource;
 }

@@ -26,7 +26,7 @@ abstract class AbstractSourceService implements ISourceService {
 	 * @throws DependencyException
 	 * @throws NotFoundException
 	 */
-	public function source(Dto\SourcesDto $sources, Dto\QueriesDto $queries): ISource {
+	public function source(SourcesDto $sources, QueriesDto $queries): ISource {
 		$_repositories = [];
 		$_mappers = [];
 		$_queries = [];

@@ -3,14 +3,29 @@ declare(strict_types=1);
 
 namespace Edde\Tag\Repository;
 
+use ClanCats\Hydrahon\Query\Sql\Select;
 use Dibi\Exception;
+use Edde\Query\Dto\Query;
 use Edde\Repository\AbstractRepository;
 use Edde\Repository\Exception\DuplicateEntryException;
 use Edde\Repository\IRepository;
+use Edde\Tag\Dto\TagFilterDto;
 
 class TagRepository extends AbstractRepository {
 	public function __construct() {
-		parent::__construct(['code' => IRepository::ORDER_ASC], ['z_tag_code_group_unique']);
+		parent::__construct(['sort' => IRepository::ORDER_ASC], ['z_tag_code_group_unique']);
+	}
+
+	public function toQuery(Query $query): Select {
+		$select = parent::toQuery($query);
+
+		/** @var $filter TagFilterDto */
+		$filter = $query->filter;
+		!empty($filter->groups) && $this->where($select, '$.group', 'in', $filter->groups);
+
+		$this->toOrderBy($query->orderBy, $select);
+
+		return $select;
 	}
 
 	/**

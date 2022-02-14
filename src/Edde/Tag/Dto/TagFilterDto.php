@@ -7,7 +7,7 @@ use Edde\Repository\Dto\AbstractFilterDto;
 
 class TagFilterDto extends AbstractFilterDto {
 	/**
-	 * @var string[]|null
+	 * @var string[]|null|void
 	 */
 	public $groups;
 }

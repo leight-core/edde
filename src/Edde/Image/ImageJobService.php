@@ -83,12 +83,15 @@ class ImageJobService extends AbstractJobService {
 				$this->imageService->resize($preview->native, 200, 200);
 				$this->fileService->refresh($preview->id);
 
+				$this->logger->debug('Everything OK, time for image record', ['tags' => [static::class]]);
+
 				$this->imageRepository->create($this->dtoService->fromArray(CreateDto::class, [
 					'gallery'    => str_replace('/image.raw', '', $file->path),
 					'originalId' => $original->id,
 					'previewId'  => $preview->id,
 					'userId'     => $file->user->id,
 				]));
+				$this->logger->debug('Done, time to go.', ['tags' => [static::class]]);
 				$progress->onProgress();
 			} catch (Throwable $exception) {
 				$progress->onError($exception);

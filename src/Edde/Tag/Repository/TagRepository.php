@@ -8,6 +8,7 @@ use Dibi\Exception;
 use Edde\Query\Dto\Query;
 use Edde\Repository\AbstractRepository;
 use Edde\Repository\Exception\DuplicateEntryException;
+use Edde\Repository\Exception\RequiredResultException;
 use Edde\Repository\IRepository;
 use Edde\Tag\Dto\TagFilterDto;
 
@@ -58,5 +59,12 @@ class TagRepository extends AbstractRepository {
 				'sort' => $sort,
 			]);
 		}
+	}
+
+	public function requireByCodeGroup(string $code, string $group) {
+		if (!($tag = $this->select()->where('code', $code)->where('group', $group)->execute()->fetch())) {
+			throw new RequiredResultException(sprintf('Cannot find tag by [%s] in group [%s].', $code, $group));
+		}
+		return $tag;
 	}
 }

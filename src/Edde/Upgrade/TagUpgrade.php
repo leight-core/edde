@@ -19,6 +19,10 @@ class TagUpgrade extends CommonMigration {
 				'comment' => 'An (optional) stable way, how to sort tags.',
 				'default' => 0,
 			])
+			->addUniqueIndex([
+				'code',
+				'group',
+			], 'code')
 			->save();
 	}
 }

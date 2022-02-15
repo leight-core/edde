@@ -13,7 +13,7 @@ use Edde\Tag\Dto\TagFilterDto;
 
 class TagRepository extends AbstractRepository {
 	public function __construct() {
-		parent::__construct(['sort' => IRepository::ORDER_ASC], ['z_tag_code_group_unique']);
+		parent::__construct(['sort' => IRepository::ORDER_ASC], ['z_tag_code_unique']);
 	}
 
 	public function toQuery(Query $query): Select {

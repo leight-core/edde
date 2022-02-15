@@ -52,7 +52,11 @@ class TagRepository extends AbstractRepository {
 				'sort'  => $sort,
 			]);
 		} catch (DuplicateEntryException $exception) {
-			return $this->select()->where('code', $code)->where('group', $group)->execute()->fetch();
+			$tag = $this->select()->where('code', $code)->where('group', $group)->execute()->fetch();
+			return $this->change([
+				'id'   => $tag->id,
+				'sort' => $sort,
+			]);
 		}
 	}
 }

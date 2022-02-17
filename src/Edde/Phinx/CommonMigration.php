@@ -110,6 +110,7 @@ abstract class CommonMigration extends AbstractMigration {
 		$table = $this->table($table);
 		try {
 			$callback($table);
+			$table->save();
 		} catch (Throwable $throwable) {
 			$this->logger->error($table);
 			$table->reset();

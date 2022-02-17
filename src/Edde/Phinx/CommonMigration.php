@@ -83,15 +83,11 @@ abstract class CommonMigration extends AbstractMigration {
 	}
 
 	public function ensureData(string $table, array $data, bool $generateId = true) {
-		$table = $this->table($table);
-		try {
-			$table
+		$this->tryTable($table, function (PhinxTable $phinxTable) use ($data, $generateId) {
+			$phinxTable
 				->insert($data, $generateId)
 				->saveData();
-		} catch (Throwable $throwable) {
-			$table->reset();
-			$this->logger->error($throwable);
-		}
+		});
 	}
 
 	public function deleteWhere(string $table, array $conditions) {
@@ -114,8 +110,8 @@ abstract class CommonMigration extends AbstractMigration {
 			$callback($table);
 			$table->save();
 		} catch (Throwable $throwable) {
-			$this->logger->error($table);
 			$table->reset();
+			$this->logger->error($table);
 		}
 	}
 }

@@ -179,11 +179,14 @@ class ExcelExportService implements IExcelExportService {
 	}
 
 	public function export(ExcelExportDto $excelExportDto, IProgress $progress = null): FileDto {
-		$progress->onStart();
+		$progress->onStart(8);
 		$template = ($templateFile = $this->fileRepository->find($excelExportDto->templateId))->native;
+		$progress->onProgress();
 		$target = date('Y-m-d H-i-s') . ' ' . $templateFile->name;
 		$meta = $this->meta($template);
+		$progress->onProgress();
 		$file = $this->fileService->store(FileStream::openRead($template), '/export/excel', $target, null, $this->currentUserService->requiredId());
+		$progress->onProgress();
 		if ($this->configService->system(self::CONFIG_USE_CACHE, true)) {
 			Settings::setCache(new Psr16Cache(new FilesystemAdapter()));
 		}
@@ -191,7 +194,9 @@ class ExcelExportService implements IExcelExportService {
 		$spreadsheet = $this->excelService->load($this->dtoService->fromArray(ReadDto::class, [
 			'file' => $template,
 		]));
+		$progress->onProgress();
 		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+		$progress->onProgress();
 		foreach ($meta->tabs as $tab) {
 			$source = $this->sourceService->source($tab->sources, $excelExportDto->queries);
 			$worksheet = $spreadsheet->getSheetByName($tab->name);
@@ -214,8 +219,11 @@ class ExcelExportService implements IExcelExportService {
 				}
 			}
 		}
+		$progress->onProgress();
 		$writer->save($file->native);
+		$progress->onProgress();
 		$this->fileService->refresh($file->id);
+		$progress->onProgress();
 		$this->memoryService->log();
 		return $file;
 	}

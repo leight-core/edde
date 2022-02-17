@@ -103,6 +103,8 @@ abstract class CommonMigration extends AbstractMigration {
 	}
 
 	/**
+	 * Try changes on table and if fails, reverts changes and logs an error; $->save() is called automatically
+	 *
 	 * @param string   $table
 	 * @param callable $callback
 	 */

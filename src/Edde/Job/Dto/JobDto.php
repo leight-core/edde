@@ -7,7 +7,7 @@ use Edde\Bridge\User\UserDto;
 use Edde\Dto\AbstractDto;
 
 /**
- * @template TResult=void
+ * @template TResult=mixed
  */
 class JobDto extends AbstractDto {
 	/**

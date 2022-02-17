@@ -13,6 +13,6 @@ class ExcelExportJobService extends AbstractJobService {
 	use DtoServiceTrait;
 
 	protected function handle(IJob $job) {
-		return $this->excelExportService->export($this->dtoService->fromArray(ExcelExportDto::class, $job->getParams()), $job->getProgress())->id;
+		return $this->excelExportService->export($this->dtoService->fromObject(ExcelExportDto::class, $job->getParams()), $job->getProgress())->id;
 	}
 }

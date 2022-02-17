@@ -5,31 +5,29 @@ namespace Edde\Excel;
 
 use Edde\Config\ConfigServiceTrait;
 use Edde\Dto\DtoServiceTrait;
+use Edde\Excel\Dto\Export\ExcelExportDto;
 use Edde\Excel\Dto\Export\MetaDto;
 use Edde\Excel\Dto\ReadDto;
 use Edde\File\Dto\FileDto;
 use Edde\File\FileServiceTrait;
-use Edde\Php\Exception\MemoryException;
-use Edde\Php\Exception\MemoryLimitException;
+use Edde\File\Repository\FileRepositoryTrait;
 use Edde\Php\MemoryServiceTrait;
-use Edde\Source\Dto\QueriesDto;
+use Edde\Progress\IProgress;
 use Edde\Source\SourceServiceTrait;
 use Edde\Storage\StorageTrait;
-use Edde\Stream\Exception\StreamException;
 use Edde\Stream\FileStream;
 use Edde\User\CurrentUserServiceTrait;
-use Edde\User\Exception\UserNotSelectedException;
 use League\Uri\Uri;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Settings;
-use PhpOffice\PhpSpreadsheet\Writer\Exception;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Psr16Cache;
 use Throwable;
 use function array_map;
 use function array_values;
 use function chr;
+use function date;
 use function ord;
 use function reset;
 
@@ -42,6 +40,7 @@ class ExcelExportService implements IExcelExportService {
 	use CurrentUserServiceTrait;
 	use MemoryServiceTrait;
 	use ConfigServiceTrait;
+	use FileRepositoryTrait;
 
 	const CONFIG_USE_CACHE = 'export.cache';
 
@@ -179,21 +178,10 @@ class ExcelExportService implements IExcelExportService {
 		]);
 	}
 
-	/**
-	 * @param QueriesDto $queries
-	 * @param string     $template
-	 * @param string     $target
-	 *
-	 * @return FileDto
-	 *
-	 * @throws Exception
-	 * @throws MemoryException
-	 * @throws MemoryLimitException
-	 * @throws StreamException
-	 * @throws UserNotSelectedException
-	 * @throws \PhpOffice\PhpSpreadsheet\Exception
-	 */
-	public function export(QueriesDto $queries, string $template, string $target): FileDto {
+	public function export(ExcelExportDto $excelExportDto, IProgress $progress = null): FileDto {
+		$progress->onStart();
+		$template = ($templateFile = $this->fileRepository->find($excelExportDto->templateId))->native;
+		$target = date('Y-m-d H-i-s') . ' ' . $templateFile->name;
 		$meta = $this->meta($template);
 		$file = $this->fileService->store(FileStream::openRead($template), '/export/excel', $target, null, $this->currentUserService->requiredId());
 		if ($this->configService->system(self::CONFIG_USE_CACHE, true)) {
@@ -205,7 +193,7 @@ class ExcelExportService implements IExcelExportService {
 		]));
 		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
 		foreach ($meta->tabs as $tab) {
-			$source = $this->sourceService->source($tab->sources, $queries);
+			$source = $this->sourceService->source($tab->sources, $excelExportDto->queries);
 			$worksheet = $spreadsheet->getSheetByName($tab->name);
 			foreach ($tab->groups->groups as $group) {
 				/**

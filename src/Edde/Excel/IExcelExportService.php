@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Edde\Excel;
 
+use Edde\Excel\Dto\Export\ExcelExportDto;
 use Edde\Excel\Dto\Export\MetaDto;
 use Edde\File\Dto\FileDto;
-use Edde\Source\Dto\QueriesDto;
+use Edde\Progress\IProgress;
 
 interface IExcelExportService {
 	/**
@@ -18,11 +19,9 @@ interface IExcelExportService {
 	public function meta(string $file): MetaDto;
 
 	/**
-	 * @param QueriesDto $queries
-	 * @param string     $template
-	 * @param string     $target
+	 * @param ExcelExportDto $excelExportDto
 	 *
 	 * @return FileDto
 	 */
-	public function export(QueriesDto $queries, string $template, string $target): FileDto;
+	public function export(ExcelExportDto $excelExportDto, IProgress $progress = null): FileDto;
 }

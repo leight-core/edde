@@ -101,4 +101,18 @@ abstract class CommonMigration extends AbstractMigration {
 	public function truncate(string $table) {
 		$this->deleteWhere($table, []);
 	}
+
+	/**
+	 * @param string   $table
+	 * @param callable $callback
+	 */
+	public function tryTable(string $table, callable $callback) {
+		$table = $this->table($table);
+		try {
+			$callback($table);
+		} catch (Throwable $throwable) {
+			$this->logger->error($table);
+			$table->reset();
+		}
+	}
 }

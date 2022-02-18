@@ -230,6 +230,19 @@ abstract class AbstractRepository implements IRepository {
 		}
 	}
 
+	public function changeWhere(array $data, callable $callable) {
+		if (empty($data['id'])) {
+			throw new RepositoryException(sprintf('Missing ID for an update of [%s]!', $this->table));
+		}
+		try {
+			$callable($where = $this->table()->update($data)->where(['id' => $data['id']]));
+			$where->execute();
+			return $this->find($data['id']);
+		} catch (Throwable $e) {
+			$this->exception($e);
+		}
+	}
+
 	public function exception(Throwable $throwable) {
 		try {
 			throw $throwable;

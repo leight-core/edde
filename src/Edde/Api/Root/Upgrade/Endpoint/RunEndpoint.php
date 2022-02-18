@@ -18,7 +18,7 @@ class RunEndpoint extends AbstractEndpoint {
 	public function get() {
 		try {
 			ob_start();
-			printf("Env: %s\n", $_ENV['PHINX']);
+			printf("Env: %s\n", $_ENV['PHINX'] ?? '- undefined -');
 			$this->upgradeManager->upgrade();
 			$response = ob_get_clean();
 			return $this->response

@@ -69,7 +69,8 @@ abstract class AbstractSource implements ISource {
 		 */
 		foreach ($_queries as $query) {
 			if ($query->source) {
-				$sources[$query->source] = $query;
+//				$sources[$query->source] = $query;
+				$sources[] = $query;
 			}
 		}
 		/**

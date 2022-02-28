@@ -140,7 +140,6 @@ abstract class AbstractSource implements ISource {
 				 * Iterate through all data available in the source
 				 */
 				case 'iterator':
-					$explode = explode('.', $query);
 					$result = [
 						'type'   => $type,
 						'source' => $uri->getHost(),

@@ -127,6 +127,7 @@ abstract class AbstractSource implements ISource {
 		try {
 			$uri = Uri::createFromString($query);
 			$query = Query::createFromUri($uri);
+			$params = $query->params();
 			switch ($type = ($uri->getUserInfo() ?? 'iterator')) {
 				/**
 				 * Single item from the source
@@ -137,6 +138,7 @@ abstract class AbstractSource implements ISource {
 						'type'   => $type,
 						'source' => $uri->getHost(),
 						'value'  => array_filter(explode('/', $uri->getPath())),
+						'params' => $params,
 					];
 					break;
 				/**
@@ -144,8 +146,9 @@ abstract class AbstractSource implements ISource {
 				 */
 				case 'static':
 					$result = [
-						'type'  => $type,
-						'value' => urldecode(ltrim($uri->getPath(), '/')),
+						'type'   => $type,
+						'value'  => urldecode(ltrim($uri->getPath(), '/')),
+						'params' => $params,
 					];
 					break;
 			}

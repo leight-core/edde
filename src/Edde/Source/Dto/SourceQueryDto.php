@@ -21,4 +21,8 @@ class SourceQueryDto extends AbstractDto {
 	 * @description an array of path or a single string as scalar (literal) value
 	 */
 	public $value;
+	/**
+	 * @var string[]
+	 */
+	public $params = [];
 }

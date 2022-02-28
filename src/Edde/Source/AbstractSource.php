@@ -130,15 +130,6 @@ abstract class AbstractSource implements ISource {
 				 * Single item from the source
 				 */
 				case 'single':
-					$result = [
-						'type'   => $type,
-						'source' => $uri->getHost(),
-						'value'  => array_filter(explode('/', $uri->getPath())),
-					];
-					break;
-				/**
-				 * Iterate through all data available in the source
-				 */
 				case 'iterator':
 					$result = [
 						'type'   => $type,

@@ -50,6 +50,7 @@
 		"phpoffice/phpspreadsheet": "^1.16",
 		"nelexa/zip": "^3.3.3 || ^4.0.0",
 		"league/uri": "^6.4",
+		"league/uri-components": "^2.2.1",
 		"symfony/process": "^5.2",
 		"diff/diff": "^3.2",
 		"symfony/yaml": "^5.2",

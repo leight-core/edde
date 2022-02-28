@@ -9,6 +9,7 @@ use Edde\Source\Dto\QueryDto;
 use Edde\Source\Dto\SourceQueryDto;
 use Edde\Utils\ObjectUtils;
 use Generator;
+use League\Uri\Components\Query;
 use League\Uri\Uri;
 use MultipleIterator;
 use function array_filter;
@@ -125,6 +126,7 @@ abstract class AbstractSource implements ISource {
 		];
 		try {
 			$uri = Uri::createFromString($query);
+			$query = Query::createFromUri($uri);
 			switch ($type = ($uri->getUserInfo() ?? 'iterator')) {
 				/**
 				 * Single item from the source

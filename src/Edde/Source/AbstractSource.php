@@ -69,8 +69,7 @@ abstract class AbstractSource implements ISource {
 		 */
 		foreach ($_queries as $query) {
 			if ($query->source) {
-//				$sources[$query->source] = $query;
-				$sources[] = $query;
+				$sources[$query->source] = $query;
 			}
 		}
 		/**
@@ -83,10 +82,7 @@ abstract class AbstractSource implements ISource {
 			 * Trick: attach to a source, but take the value returned from source instead resolving value of the query.
 			 * With this all queries with the same source do only one request instead of request per query which is highly suboptimal.
 			 */
-			$iterator->attachIterator($this->iterator(SourceQueryDto::create([
-				'source' => $query->source,
-				'params' => $query->params,
-			])), $query->source);
+			$iterator->attachIterator($this->iterator(SourceQueryDto::create(['source' => $query->source])), $query->source);
 		}, $sources);
 		$static = [];
 		foreach ($iterator as $items) {
@@ -177,10 +173,7 @@ abstract class AbstractSource implements ISource {
 		/** @var $mapper IMapper */
 		$mapper = isset($sourceQuery->params['mapper']) ? $this->container->get($sourceQuery->params['mapper']) : $this->noopMapper;
 		foreach ($this->repositories[$sourceQuery->source]->execute($this->queries[$sourceQuery->source]->query ?? null) as $item) {
-			yield ObjectUtils::valueOf($this->mappers[$sourceQuery->source]->item($mapper->item([
-				'value' => $item,
-				'query' => $sourceQuery,
-			])), $sourceQuery->value);
+			yield ObjectUtils::valueOf($this->mappers[$sourceQuery->source]->item($item), $sourceQuery->value);
 		}
 	}
 

@@ -101,23 +101,31 @@ abstract class AbstractSource implements ISource {
 			 */
 			yield array_map(
 				function ($query) use ($items, $static) {
+					$mapper = isset($query->params['mapper']) ? $this->container->get($query->params['mapper']) : $this->noopMapper;
 					switch ($query->type) {
 						/**
 						 * Regular value from the source (generator), nothing to think about
 						 */
 						case 'iterator':
-							return isset($items[$query->source]) ? ObjectUtils::valueOf($items[$query->source], $query->value) : null;
+							$value = isset($items[$query->source]) ? ObjectUtils::valueOf($items[$query->source], $query->value) : null;
+							break;
 						/**
 						 * The shit in the box: reuse value taken from the first run of the generator and reuse it like a bitch
 						 */
 						case 'single':
-							return isset($static[$query->source]) ? ObjectUtils::valueOf($static[$query->source], $query->value) : null;
+							$value = isset($static[$query->source]) ? ObjectUtils::valueOf($static[$query->source], $query->value) : null;
+							break;
 						/**
 						 * Most simple one - just vomit the value
 						 */
 						case 'static':
-							return $query->value;
+							$value = $query->value;
+							break;
 					}
+					return $mapper->item([
+						'value'  => $value,
+						'params' => $query->params,
+					]);
 				},
 				$_queries
 			);

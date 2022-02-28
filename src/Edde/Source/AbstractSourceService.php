@@ -40,6 +40,6 @@ abstract class AbstractSourceService implements ISourceService {
 		foreach ($queries->queries as $query) {
 			$_queries[$query->name] = $query;
 		}
-		return new Source($_repositories, $_mappers, $_queries);
+		return $this->container->injectOn(new Source($_repositories, $_mappers, $_queries));
 	}
 }

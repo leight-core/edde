@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Edde\Source;
 
 use Edde\Container\ContainerTrait;
+use Edde\Log\LoggerTrait;
 use Edde\Mapper\IMapper;
 use Edde\Repository\IRepository;
 use Edde\Source\Dto\QueryDto;
@@ -14,6 +15,7 @@ use Generator;
 use League\Uri\Components\Query;
 use League\Uri\Uri;
 use MultipleIterator;
+use Throwable;
 use function array_filter;
 use function array_map;
 use function call_user_func;
@@ -24,6 +26,7 @@ use function urldecode;
 abstract class AbstractSource implements ISource {
 	use ContainerTrait;
 	use NoopMapperTrait;
+	use LoggerTrait;
 
 	/**
 	 * @var IRepository[]
@@ -101,7 +104,12 @@ abstract class AbstractSource implements ISource {
 			 */
 			yield array_map(
 				function ($query) use ($items, $static) {
-					$mapper = isset($query->params['mapper']) ? $this->container->get($query->params['mapper']) : $this->noopMapper;
+					try {
+						$mapper = isset($query->params['mapper']) ? $this->container->get($query->params['mapper']) : $this->noopMapper;
+					} catch (Throwable $throwable) {
+						$this->logger->error($throwable);
+						$mapper = $this->noopMapper;
+					}
 					switch ($query->type) {
 						/**
 						 * Regular value from the source (generator), nothing to think about

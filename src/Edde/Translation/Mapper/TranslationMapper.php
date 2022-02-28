@@ -11,7 +11,7 @@ class TranslationMapper extends AbstractMapper {
 
 	public function item($item) {
 		return isset($item['value']) ?
-			$this->translationService->translate((isset($item['params']['prefix']) ? $item['params']['prefix'] . '.' : '') . $item['value'], $item['params']['language'] ?? 'en', $item['value']) :
+			$this->translationService->translate((isset($item['params']['prefix']) ? $item['params']['prefix'] . '.' : '') . $item['value'], $item['params']['language'] ?? 'en', (string)$item['value']) :
 			null;
 	}
 }

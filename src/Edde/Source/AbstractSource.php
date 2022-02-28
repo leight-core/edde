@@ -82,10 +82,7 @@ abstract class AbstractSource implements ISource {
 			 * Trick: attach to a source, but take the value returned from source instead resolving value of the query.
 			 * With this all queries with the same source do only one request instead of request per query which is highly suboptimal.
 			 */
-			$iterator->attachIterator($this->iterator(SourceQueryDto::create([
-				'source' => $query->source,
-				'params' => $query->params,
-			])), $query->source);
+			$iterator->attachIterator($this->iterator($query), $query->source);
 		}, $sources);
 		$static = [];
 		foreach ($iterator as $items) {

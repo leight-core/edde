@@ -5,10 +5,10 @@ namespace Edde\Source;
 
 use Edde\Container\ContainerTrait;
 use Edde\Mapper\IMapper;
-use Edde\Mapper\NoopMapper;
 use Edde\Repository\IRepository;
 use Edde\Source\Dto\QueryDto;
 use Edde\Source\Dto\SourceQueryDto;
+use Edde\Source\Mapper\NoopMapperTrait;
 use Edde\Utils\ObjectUtils;
 use Generator;
 use League\Uri\Components\Query;
@@ -23,6 +23,7 @@ use function urldecode;
 
 abstract class AbstractSource implements ISource {
 	use ContainerTrait;
+	use NoopMapperTrait;
 
 	/**
 	 * @var IRepository[]
@@ -173,9 +174,12 @@ abstract class AbstractSource implements ISource {
 
 	public function iterator(SourceQueryDto $sourceQuery): Generator {
 		/** @var $mapper IMapper */
-		$mapper = $this->container->get($sourceQuery->params['mapper'] ?? NoopMapper::class);
+		$mapper = isset($sourceQuery->params['mapper']) ? $this->container->get($sourceQuery->params['mapper']) : $this->noopMapper;
 		foreach ($this->repositories[$sourceQuery->source]->execute($this->queries[$sourceQuery->source]->query ?? null) as $item) {
-			yield ObjectUtils::valueOf($this->mappers[$sourceQuery->source]->item($mapper->item($item)), $sourceQuery->value);
+			yield ObjectUtils::valueOf($this->mappers[$sourceQuery->source]->item($mapper->item([
+				'value' => $item,
+				'query' => $sourceQuery,
+			])), $sourceQuery->value);
 		}
 	}
 

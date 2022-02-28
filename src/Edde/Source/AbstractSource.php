@@ -130,10 +130,10 @@ abstract class AbstractSource implements ISource {
 							$value = $query->value;
 							break;
 					}
-					return $mapper->item([
+					return isset($value) ? $mapper->item([
 						'value'  => $value,
 						'params' => $query->params,
-					]);
+					]) : null;
 				},
 				$_queries
 			);

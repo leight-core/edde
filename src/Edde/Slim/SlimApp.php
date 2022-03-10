@@ -79,9 +79,8 @@ class SlimApp {
 		return $this;
 	}
 
-	public function injectOn($instance): SlimApp {
-		$this->app->getContainer()->injectOn($instance);
-		return $this;
+	public function injectOn($instance) {
+		return $this->app->getContainer()->injectOn($instance);
 	}
 
 	public function dynamicBasePath(string $lookup = 'blackfox'): SlimApp {

@@ -4,11 +4,15 @@ declare(strict_types=1);
 namespace Edde\Translation\Repository;
 
 use ClanCats\Hydrahon\Query\Sql\Exception;
+use ClanCats\Hydrahon\Query\Sql\Select;
+use Edde\Query\Dto\Query;
 use Edde\Repository\AbstractRepository;
 use Edde\Repository\Exception\DuplicateEntryException;
 use Edde\Repository\IRepository;
 use Edde\Translation\Dto\Create\CreateDto;
 use Edde\Translation\Dto\Ensure\EnsureDto;
+use Edde\Translation\Dto\TranslationFilterDto;
+use Marsh\Insurrer\Dto\InsurrerFilterDto;
 use Throwable;
 use function sha1;
 
@@ -17,6 +21,11 @@ class TranslationRepository extends AbstractRepository {
 		parent::__construct(['key' => IRepository::ORDER_ASC], [
 			'z_translation_hash_unique',
 		]);
+		$this->orderByMap = [
+			'language' => '$.locale',
+			'label'    => '$.key',
+			'text'     => '$.translation',
+		];
 	}
 
 	/**
@@ -29,6 +38,23 @@ class TranslationRepository extends AbstractRepository {
 	 */
 	public function fetchByKey(string $locale, string $key) {
 		return $this->select()->where('locale', $locale)->where('hash', $this->key($key))->execute()->fetch();
+	}
+
+	public function toQuery(Query $query): Select {
+		$select = $this->select();
+
+		/** @var $filter TranslationFilterDto */
+		$filter = $query->filter;
+		$filter->fulltext && $this->fulltext($select, [
+			'$.id',
+			'$.language',
+			'$.label',
+			'$.text',
+		], $filter->fulltext);
+
+		$this->toOrderBy($query->orderBy, $select);
+
+		return $select;
 	}
 
 	/**

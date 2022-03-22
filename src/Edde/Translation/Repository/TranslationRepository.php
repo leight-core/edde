@@ -48,8 +48,8 @@ class TranslationRepository extends AbstractRepository {
 		$filter->fulltext && $this->fulltext($select, [
 			'$.id',
 			'$.locale',
-			'$.label',
-			'$.text',
+			'$.key',
+			'$.translation',
 		], $filter->fulltext);
 
 		$this->toOrderBy($query->orderBy, $select);

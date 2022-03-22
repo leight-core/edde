@@ -47,7 +47,7 @@ class TranslationRepository extends AbstractRepository {
 		$filter = $query->filter;
 		$filter->fulltext && $this->fulltext($select, [
 			'$.id',
-			'$.language',
+			'$.locale',
 			'$.label',
 			'$.text',
 		], $filter->fulltext);

@@ -51,6 +51,9 @@ class TranslationRepository extends AbstractRepository {
 			'$.key',
 			'$.translation',
 		], $filter->fulltext);
+		$filter->translation && $this->fulltext($select, ['$.translation'], $filter->translation);
+		$filter->key && $this->fulltext($select, ['$.key'], $filter->key);
+		$filter->locale && $this->where($select, 'locale', $filter->locale);
 
 		$this->toOrderBy($query->orderBy, $select);
 

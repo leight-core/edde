@@ -92,14 +92,14 @@ class CliJobExecutor extends AbstractJobExecutor {
 
 	protected function test() {
 		$php = $this->configService->get('php-cli') ?? $this->phpBinaryService->find();
-		$this->logger->info(sprintf('Testing PHP executable [%s].', $php), ['tags' => ['job']]);
 		$process = new Process([
 			$php,
 			realpath($this->configService->system(self::CONFIG_CLI_PHP)),
 			"-v",
 		], null, null, null, null);
+		$this->logger->info(sprintf('Testing PHP executable [%s].', $process->getCommandLine()), ['tags' => ['job']]);
 		$process->start();
-		$this->logger->info(sprintf("StdOut:\n%s\nStdErr:\n%s", $process->getOutput(), $process->getErrorOutput()), ['tags' => ['job']]);
+		$this->logger->info(sprintf("Code: [%d]\n StdOut:\n%s\nStdErr:\n%s", $process->getExitCode(), $process->getOutput(), $process->getErrorOutput()), ['tags' => ['job']]);
 		if ($process->getExitCode()) {
 			throw new JobException(sprintf('Process [%s] returned non-zero status code.', $process->getCommandLine()));
 		}

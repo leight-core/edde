@@ -21,7 +21,6 @@ use function realpath;
 use function sleep;
 use function sprintf;
 use function vsprintf;
-use const BLACKFOX_ROOT;
 
 class CliJobExecutor extends AbstractJobExecutor {
 	use LoggerTrait;
@@ -53,6 +52,7 @@ class CliJobExecutor extends AbstractJobExecutor {
 			$php = $this->configService->get('php-cli') ?? $this->phpBinaryService->find();
 			$jobProgress->log(IProgress::LOG_INFO, sprintf('PHP executable [%s].', $php));
 			$this->logger->info(sprintf('PHP executable [%s].', $php), ['tags' => ['job']]);
+			$this->test();
 			$process = new Process([
 				$php,
 				realpath($this->configService->system(self::CONFIG_CLI_PHP)),
@@ -88,5 +88,21 @@ class CliJobExecutor extends AbstractJobExecutor {
 			 */
 			return $this->jobMapper->item($this->jobRepository->find($job->id));
 		});
+	}
+
+	protected function test() {
+		$php = $this->configService->get('php-cli') ?? $this->phpBinaryService->find();
+		$this->logger->info(sprintf('Testing PHP executable [%s].', $php), ['tags' => ['job']]);
+		$process = new Process([
+			$php,
+			realpath($this->configService->system(self::CONFIG_CLI_PHP)),
+			"-v",
+		], null, null, null, null);
+		$process->setOptions(['create_new_console' => true]);
+		$process->start();
+		$this->logger->info(sprintf("StdOut:\n%s\nStdErr:\n%s", $process->getOutput(), $process->getErrorOutput()), ['tags' => ['job']]);
+		if ($process->getExitCode()) {
+			throw new JobException(sprintf('Process [%s] returned non-zero status code.', $process->getCommandLine()));
+		}
 	}
 }

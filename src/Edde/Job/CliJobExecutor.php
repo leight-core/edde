@@ -82,6 +82,7 @@ class CliJobExecutor extends AbstractJobExecutor {
 				$jobProgress->onFailure($throwable = new JobException(sprintf('Job is not running; check the PHP binary (%s).', $php)));
 				throw $throwable;
 			}
+			$this->logger->info(sprintf('Executed [%s] in [%s].', get_class($jobService), static::class), ['tags' => ['job']]);
 			/**
 			 * Refresh job as it could get some changes during start (like job-log).
 			 */

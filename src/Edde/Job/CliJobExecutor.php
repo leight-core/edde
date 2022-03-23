@@ -83,6 +83,7 @@ class CliJobExecutor extends AbstractJobExecutor {
 				throw $throwable;
 			}
 			$this->logger->info(sprintf('Executed [%s] in [%s].', get_class($jobService), static::class), ['tags' => ['job']]);
+			$this->logger->info(sprintf("StdOut:\n%s\nStdErr:\n%s", $process->getOutput(), $process->getErrorOutput()), ['tags' => ['job']]);
 			/**
 			 * Refresh job as it could get some changes during start (like job-log).
 			 */

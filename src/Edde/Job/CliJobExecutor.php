@@ -98,7 +98,6 @@ class CliJobExecutor extends AbstractJobExecutor {
 			realpath($this->configService->system(self::CONFIG_CLI_PHP)),
 			"-v",
 		], null, null, null, null);
-		$process->setOptions(['create_new_console' => true]);
 		$process->start();
 		$this->logger->info(sprintf("StdOut:\n%s\nStdErr:\n%s", $process->getOutput(), $process->getErrorOutput()), ['tags' => ['job']]);
 		if ($process->getExitCode()) {

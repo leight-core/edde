@@ -17,6 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
+use function sprintf;
 
 class JobExecutorCommand extends Command {
 	use JobExecutorTrait;
@@ -46,9 +47,10 @@ class JobExecutorCommand extends Command {
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		try {
+			$uuid = $input->getArgument('uuid');
+			$this->logger->debug(sprintf('Executing job [%s]; user [%s]', $uuid, $input->getOption('user')), ['tags' => ['job']]);
 			$this->currentUserService->select($input->getOption('user'));
 			$this->traceService->setReference($input->getOption('trace'));
-			$uuid = $input->getArgument('uuid');
 			$this->logger->debug(sprintf('Starting [%s]; job uuid [%s]', self::class, $uuid), ['tags' => ['job']]);
 			$this->jobExecutor->run($uuid);
 			$this->logger->debug(sprintf('Success of [%s]', self::class), ['tags' => ['job']]);

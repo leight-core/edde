@@ -62,6 +62,10 @@ class FileService implements IFileService {
 		$this->directory = new Directory($root);
 	}
 
+	public function root(): Directory {
+		return $this->directory;
+	}
+
 	/**
 	 * @inheritdoc
 	 */

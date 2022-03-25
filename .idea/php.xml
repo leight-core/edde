@@ -110,6 +110,7 @@
       <path value="$PROJECT_DIR$/vendor/league/mime-type-detection" />
       <path value="$PROJECT_DIR$/vendor/league/flysystem" />
       <path value="$PROJECT_DIR$/vendor/league/uri-components" />
+      <path value="$PROJECT_DIR$/vendor/nette/safe-stream" />
     </include_path>
   </component>
   <component name="PhpInterpreters">

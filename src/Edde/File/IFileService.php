@@ -14,6 +14,11 @@ use Throwable;
 
 interface IFileService {
 	/**
+	 * @return Directory
+	 */
+	public function root(): Directory;
+
+	/**
 	 * @param IStream     $stream
 	 * @param string      $name
 	 * @param string|null $userId

@@ -17,11 +17,7 @@ use Edde\Profiler\ProfilerServiceTrait;
 use Edde\Progress\IProgress;
 use Edde\User\CurrentUserServiceTrait;
 use Symfony\Component\Process\Process;
-use function defined;
-use function file_put_contents;
 use function get_class;
-use function gzcompress;
-use function json_encode;
 use function realpath;
 use function sleep;
 use function sprintf;
@@ -58,7 +54,6 @@ class CliJobExecutor extends AbstractJobExecutor {
 			$php = $this->configService->get('php-cli') ?? $this->phpBinaryService->find();
 			$jobProgress->log(IProgress::LOG_INFO, sprintf('PHP executable [%s].', $php));
 			$this->logger->info(sprintf('PHP executable [%s].', $php), ['tags' => ['job']]);
-			@file_put_contents('nette.safe://' . (defined('APP_ROOT') ? APP_ROOT . '/.env' : $this->fileService->root()->prefix('.env')), gzcompress(json_encode($_SERVER)));
 			$process = new Process([
 				$php,
 				realpath($this->configService->system(self::CONFIG_CLI_PHP)),

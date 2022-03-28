@@ -66,7 +66,7 @@ class CliJobExecutor extends AbstractJobExecutor {
 				'--trace=' . $this->traceService->trace(),
 				'--user=' . $this->currentUserService->requiredId(),
 				$job->id,
-			], null, null, null, null);
+			], null, $_SERVER, null, null);
 			$process->setOptions(['create_new_console' => true]);
 			$process->disableOutput();
 			$process->start();

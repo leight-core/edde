@@ -19,7 +19,6 @@ use Edde\User\CurrentUserServiceTrait;
 use Symfony\Component\Process\Process;
 use function get_class;
 use function realpath;
-use function sleep;
 use function sprintf;
 use function vsprintf;
 
@@ -78,7 +77,6 @@ class CliJobExecutor extends AbstractJobExecutor {
 				]),
 				['tags' => ['job']]
 			);
-			sleep(1);
 			if (!$process->isRunning()) {
 				$jobProgress->onFailure($throwable = new JobException(sprintf('Job is not running; check the PHP binary (%s).', $php)));
 				throw $throwable;

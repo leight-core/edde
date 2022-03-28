@@ -57,7 +57,7 @@ class CliJobExecutor extends AbstractJobExecutor {
 			$php = $this->configService->get('php-cli') ?? $this->phpBinaryService->find();
 			$jobProgress->log(IProgress::LOG_INFO, sprintf('PHP executable [%s].', $php));
 			$this->logger->info(sprintf('PHP executable [%s].', $php), ['tags' => ['job']]);
-			@file_put_contents('nette.safe://' . $this->fileService->root()->prefix('.env'), gzcompress(json_encode($_SERVER)));
+			@file_put_contents('nette.safe://' . $this->fileService->root()->prefix('.env'), gzcompress(json_encode($_ENV)));
 			$process = new Process([
 				$php,
 				realpath($this->configService->system(self::CONFIG_CLI_PHP)),

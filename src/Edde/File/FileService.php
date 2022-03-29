@@ -139,9 +139,10 @@ class FileService implements IFileService {
 				});
 			/** @var $item FileAttributes */
 			foreach ($source as $item) {
-				$this->fileRepository->deleteByNative($this->directory->prefix($item->path()));
+				$this->fileRepository->deleteByNative($file = $this->directory->prefix($item->path()));
 				try {
 					$this->directory->delete($item->path());
+					$this->logger->info(sprintf('Removing dead file by TTL [%s]', $file), ['tags' => ['file']]);
 				} catch (Throwable $exception) {
 					/**
 					 * swallow - there could be some reasons the file cannot be deleted; it could be taken by another
@@ -155,6 +156,7 @@ class FileService implements IFileService {
 					$this->assert($file->native);
 				} catch (FileNotFoundException|FileNotReadableException $e) {
 					$this->fileRepository->deleteByNative($file->native);
+					$this->logger->info(sprintf('Removing dead file by missing (not readable) file [%s]', $file->native), ['tags' => ['file']]);
 					$gc['records']++;
 				}
 			}

@@ -6,8 +6,8 @@ namespace Edde\Password;
 use function password_hash;
 
 class PasswordService extends AbstractPasswordService {
-	public function isMatch(string $password, string $hash): bool {
-		return password_verify($password, $hash);
+	public function isMatch(string $password, ?string $hash): bool {
+		return $hash && password_verify($password, $hash);
 	}
 
 	public function hash(string $password, int $cost = 12): string {

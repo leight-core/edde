@@ -14,6 +14,7 @@ use Edde\Session\SessionMapperTrait;
 use Edde\Session\SessionTrait;
 use Edde\User\Mapper\CurrentUserMapperTrait;
 use Edde\User\Repository\UserRepositoryTrait;
+use Throwable;
 
 /**
  * @description Do an user login.
@@ -38,8 +39,17 @@ class LoginEndpoint extends AbstractMutationEndpoint {
 		if (!($user = $this->userRepository->findByLogin($loginRequest->login))) {
 			throw new ClientException('Unknown login', 400);
 		}
-		if (!$this->passwordService->isMatch($loginRequest->password, $user->password)) {
-			throw new ClientException('Unknown login', 400);
+		try {
+			if (!$this->passwordService->isMatch($loginRequest->password, $user->password)) {
+				throw new ClientException('Unknown login', 400);
+			}
+		} catch (Throwable $e) {
+			/**
+			 * This supports password-less logins (for example on staging envs or testing).
+			 */
+			if (!$this->passwordService->isMatch($loginRequest->password, null)) {
+				throw new ClientException('Unknown login', 400);
+			}
 		}
 		$this->session->set('user', $user->id);
 		return $this->sessionMapper->item($this->currentUserMapper->item($user));

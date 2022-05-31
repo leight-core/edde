@@ -9,12 +9,12 @@ interface IPasswordService {
 	/**
 	 * Tells if the given password and hash matches.
 	 *
-	 * @param string $password
-	 * @param string $hash
+	 * @param string      $password
+	 * @param string|null $hash
 	 *
 	 * @return bool
 	 */
-	public function isMatch(string $password, string $hash): bool;
+	public function isMatch(string $password, ?string $hash): bool;
 
 	/**
 	 * Check a password; if there is no match, an exception is thrown.

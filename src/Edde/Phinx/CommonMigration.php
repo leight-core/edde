@@ -83,10 +83,17 @@ abstract class CommonMigration extends AbstractMigration {
 	}
 
 	public function ensureData(string $table, array $data, bool $generateId = true) {
-		$this->tryTable($table, function (PhinxTable $phinxTable) use ($data, $generateId) {
-			$phinxTable
-				->insert($data, $generateId)
-				->saveData();
+		$this->tryTable($table, function (PhinxTable $table) use ($data, $generateId) {
+			foreach ($data as $row) {
+				try {
+					$table
+						->insert([$row], $generateId)
+						->saveData();
+				} catch (Throwable $throwable) {
+					$table->resetData();
+					$this->logger->error($throwable);
+				}
+			}
 		});
 	}
 
@@ -111,7 +118,7 @@ abstract class CommonMigration extends AbstractMigration {
 			$table->save();
 		} catch (Throwable $throwable) {
 			$table->reset();
-			$this->logger->error($table);
+			$this->logger->error($throwable);
 		}
 	}
 }

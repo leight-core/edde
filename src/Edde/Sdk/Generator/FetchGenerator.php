@@ -71,7 +71,7 @@ export const Fetch{$name}: FC<IFetch{$name}Props> = ({query, ...props}) => <Quer
 export type I{$name}PageExtra = ReactElement | ((entityContext: IEntityContext<{$response}>) => ReactElement);
 export type I{$name}PageBreadcrumb = BreadcrumbProps | ReactElement<typeof Breadcrumb> | ((entityContext: IEntityContext<{$response}>) => BreadcrumbProps | ReactElement<typeof Breadcrumb>);
 
-export interface I{$name}PageProps extends Omit<IPageProps, "breadcrumbProps" | "breadcrumbMobileProps" | "breadcrumbBrowserProps" | "extra" | "extraBrowser" | "extraMobile"> {
+export interface I{$name}PageProps extends Omit<IPageProps, "children" | "breadcrumbProps" | "breadcrumbMobileProps" | "breadcrumbBrowserProps" | "extra" | "extraBrowser" | "extraMobile"> {
 	children?: ReactNode | ((data: {$response}) => ReactNode);
 	breadcrumbProps?: I{$name}PageBreadcrumb;
 	breadcrumbMobileProps?: I{$name}PageBreadcrumb;

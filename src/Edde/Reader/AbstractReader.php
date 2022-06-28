@@ -38,7 +38,9 @@ abstract class AbstractReader implements IReader {
 						'index' => $index,
 						'item'  => $item,
 					]);
-					$source = ($dto ? $this->dtoService->fromArray($dto, $item) : $item);
+					if (($source = ($dto ? $this->dtoService->fromArray($dto, $item, true) : $item)) === null) {
+						throw new SkipException(sprintf('An empty source of [%s].', $dto));
+					}
 					/**
 					 * Again, current - but now we have also the source DTO (if the DTO is used).
 					 */

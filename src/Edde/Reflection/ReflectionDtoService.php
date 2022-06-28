@@ -14,6 +14,9 @@ use Edde\Reflection\Exception\MissingValueException;
 use Exception;
 use Psr\SimpleCache\InvalidArgumentException;
 use ReflectionException as NativeReflectionException;
+use function is_array;
+use function is_object;
+use function sprintf;
 
 /**
  * This implementation uses in-house reflection to rebuild objects from an array.
@@ -33,7 +36,7 @@ class ReflectionDtoService extends AbstractDtoService {
 	 * @throws MissingValueException
 	 * @throws NativeReflectionException
 	 */
-	public function fromObject(string $class, ?object $source) {
+	public function fromObject(string $class, ?object $source, bool $allowNull = false) {
 		if (empty($source)) {
 			return null;
 		}
@@ -50,8 +53,17 @@ class ReflectionDtoService extends AbstractDtoService {
 			return $value;
 		});
 		$instance = new $class;
+		$object = [];
 		foreach ($classDto->properties as $name => $propertyDto) {
-			$instance->{$name} = $this->resolveValue($classDto, $propertyDto, $source->{$class . '.' . $name} ?? $source->{$name} ?? null);
+			if (($value = $source->{$class . '.' . $name} ?? $source->{$name} ?? null) !== null) {
+				$object[$name] = $value;
+			}
+		}
+		if ($allowNull && empty($object)) {
+			return null;
+		}
+		foreach ($classDto->properties as $name => $propertyDto) {
+			$instance->{$name} = $this->resolveValue($classDto, $propertyDto, $object[$name] ?? null);
 		}
 		return $instance;
 	}

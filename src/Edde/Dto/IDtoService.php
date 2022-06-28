@@ -12,7 +12,7 @@ interface IDtoService {
 	 *
 	 * @see self::fromObject()
 	 */
-	public function fromArray(string $class, ?array $source);
+	public function fromArray(string $class, ?array $source, bool $allowNull = false);
 
 	/**
 	 * @param string $class
@@ -28,7 +28,7 @@ interface IDtoService {
 	 *
 	 * @return mixed
 	 */
-	public function fromObject(string $class, ?object $source);
+	public function fromObject(string $class, ?object $source, bool $allowNull = false);
 
 	/**
 	 * @param string   $class

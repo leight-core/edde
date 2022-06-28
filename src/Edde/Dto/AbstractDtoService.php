@@ -6,8 +6,8 @@ namespace Edde\Dto;
 use function array_map;
 
 abstract class AbstractDtoService implements IDtoService {
-	public function fromArray(string $class, ?array $source) {
-		return $source ? $this->fromObject($class, (object)$source) : null;
+	public function fromArray(string $class, ?array $source, bool $allowNull = false) {
+		return $source ? $this->fromObject($class, (object)$source, $allowNull) : null;
 	}
 
 	public function fromArrays(string $class, array $sources): array {

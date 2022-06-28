@@ -37,7 +37,7 @@ class ReflectionDtoService extends AbstractDtoService {
 	 * @throws NativeReflectionException
 	 */
 	public function fromObject(string $class, ?object $source, bool $allowNull = false) {
-		if (empty($source)) {
+		if ($allowNull && empty($source)) {
 			return null;
 		}
 		/**

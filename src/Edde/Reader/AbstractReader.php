@@ -47,7 +47,7 @@ abstract class AbstractReader implements IReader {
 						'source' => $source,
 						'item'   => $item,
 					]);
-					yield $this->handle($source);
+					$source && yield $this->handle($source);
 					$progress->onProgress();
 				} catch (SkipException $exception) {
 					$progress->log(

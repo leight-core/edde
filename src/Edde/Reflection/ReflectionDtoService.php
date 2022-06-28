@@ -34,6 +34,9 @@ class ReflectionDtoService extends AbstractDtoService {
 	 * @throws NativeReflectionException
 	 */
 	public function fromObject(string $class, ?object $source) {
+		if (empty($source)) {
+			return null;
+		}
 		/**
 		 * Be careful - this piece uses proprietary implementation used just in DatabaseCache - that's the reason CacheTrait is not
 		 * used here.

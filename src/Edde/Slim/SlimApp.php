@@ -202,6 +202,7 @@ class SlimApp {
 		$app->add(SessionMiddleware::class);
 		$app->add(MemoryUsageMiddleware::class);
 		$app->add(ProfilerMiddleware::class);
+		$app->add(CorsMiddleware::class);
 
 		$app->addBodyParsingMiddleware()
 			->registerBodyParser('application/json', [

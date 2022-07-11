@@ -54,6 +54,9 @@ abstract class AbstractEndpoint implements IEndpoint {
 	 * @throws JsonException
 	 */
 	public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
+		if (strtoupper($request->getMethod()) === 'OPTIONS') {
+			return Response::withJson($response, null);
+		}
 		return $this->profilerService->profile(static::class, function () use ($request, $response) {
 			$this->request = $request;
 			$this->response = $response;

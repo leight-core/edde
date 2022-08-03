@@ -59,8 +59,9 @@ interface IRepository {
 	/**
 	 * Executed when changes are detected on an update/create/update.
 	 *
-	 * @param mixed $original original row (null when created)
-	 * @param mixed $changed  new values (null when deleted)
+	 * @param mixed  $original original row (null when created)
+	 * @param mixed  $changed  new values (null when deleted)
+	 * @param string $type     type of a diff (create/update/delete)
 	 */
-	public function diffOf($original, $changed): void;
+	public function diffOf($original, $changed, string $type): void;
 }

@@ -202,7 +202,7 @@ abstract class AbstractRepository implements IRepository {
 			$this->storage->insert($table, $data);
 			$increment && ($data['id'] = $this->storage->connection()->getInsertId());
 			$item = $this->findById($data['id'], $table);
-			$this->diffOf(null, $item);
+			$this->diffOf(null, $item, 'create');
 			return $item;
 		} catch (Throwable $e) {
 			$this->exception($e);
@@ -228,7 +228,7 @@ abstract class AbstractRepository implements IRepository {
 			$original = $this->find($data['id']);
 			$this->storage->update($this->table, $data, $data['id']);
 			$item = $this->find($data['id']);
-			$this->diffService->isDiff($original, $item) && $this->diffOf($original, $item);
+			$this->diffService->isDiff($original, $item) && $this->diffOf($original, $item, 'update');
 			return $item;
 		} catch (Throwable $e) {
 			$this->exception($e);
@@ -287,7 +287,7 @@ abstract class AbstractRepository implements IRepository {
 	public function delete(string $id) {
 		$data = $this->find($id);
 		$this->storage->delete($this->table, $id);
-		$this->diffOf($data, null);
+		$this->diffOf($data, null, 'delete');
 		return $data;
 	}
 
@@ -342,7 +342,7 @@ abstract class AbstractRepository implements IRepository {
 		return $this->table()->select($fields ?? $this->table . '.*')->orderBy($this->toBy($this->orderBy));
 	}
 
-	public function diffOf($original, $changed): void {
+	public function diffOf($original, $changed, string $type): void {
 	}
 
 	protected function toBy(?array $orderBy): ?array {

@@ -50,7 +50,7 @@ class DiffService {
 	}
 
 	public function diffOf($alfa, $beta, array $exclude = []): array {
-		return array_diff_key(array_diff_assoc((array)$alfa, (array)$beta), array_flip($exclude));
+		return array_diff_key(array_diff_assoc((array)$beta, (array)$alfa), array_flip($exclude));
 	}
 
 	public function isDiff($alfa, $beta, array $exclude = []): bool {

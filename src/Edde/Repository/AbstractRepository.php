@@ -201,7 +201,9 @@ abstract class AbstractRepository implements IRepository {
 		try {
 			$this->storage->insert($table, $data);
 			$increment && ($data['id'] = $this->storage->connection()->getInsertId());
-			return $this->findById($data['id'], $table);
+			$item = $this->findById($data['id'], $table);
+			$this->diffOf(null, $item);
+			return $item;
 		} catch (Throwable $e) {
 			$this->exception($e);
 		}
@@ -223,8 +225,11 @@ abstract class AbstractRepository implements IRepository {
 			throw new RepositoryException(sprintf('Missing ID for an update of [%s]!', $this->table));
 		}
 		try {
+			$original = $this->find($data['id']);
 			$this->storage->update($this->table, $data, $data['id']);
-			return $this->find($data['id']);
+			$item = $this->find($data['id']);
+			$this->diffOf($original, $item);
+			return $item;
 		} catch (Throwable $e) {
 			$this->exception($e);
 		}
@@ -282,6 +287,7 @@ abstract class AbstractRepository implements IRepository {
 	public function delete(string $id) {
 		$data = $this->find($id);
 		$this->storage->delete($this->table, $id);
+		$this->diffOf($data, null);
 		return $data;
 	}
 
@@ -334,6 +340,9 @@ abstract class AbstractRepository implements IRepository {
 
 	public function select($fields = null): Select {
 		return $this->table()->select($fields ?? $this->table . '.*')->orderBy($this->toBy($this->orderBy));
+	}
+
+	public function diffOf($original, $changed): void {
 	}
 
 	protected function toBy(?array $orderBy): ?array {

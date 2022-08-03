@@ -55,4 +55,12 @@ interface IRepository {
 	 * @return QueryResult<TItem>
 	 */
 	public function toResult(Query $query, IMapper $mapper): QueryResult;
+
+	/**
+	 * Executed when changes are detected on an update/create/update.
+	 *
+	 * @param mixed $original original row (null when created)
+	 * @param mixed $changed  new values (null when deleted)
+	 */
+	public function diffOf($original, $changed): void;
 }

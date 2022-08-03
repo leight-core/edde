@@ -8,6 +8,10 @@ use Diff\Differ\MapDiffer;
 use Diff\DiffOp\DiffOp;
 use Diff\DiffOp\DiffOpChange;
 use Exception;
+use function array_diff_assoc;
+use function array_diff_key;
+use function array_filter;
+use function array_flip;
 
 class DiffService {
 	/** @var Differ */
@@ -43,5 +47,13 @@ class DiffService {
 	 */
 	public function hasChanges(array $alfa, array $beta, array $exclude = []): bool {
 		return !empty($this->changes($alfa, $beta, $exclude));
+	}
+
+	public function diffOf($alfa, $beta, array $exclude = []): array {
+		return array_diff_key(array_diff_assoc((array)$alfa, (array)$beta), array_flip($exclude));
+	}
+
+	public function isDiff($alfa, $beta, array $exclude = []): bool {
+		return !empty($this->diffOf($alfa, $beta, $exclude));
 	}
 }

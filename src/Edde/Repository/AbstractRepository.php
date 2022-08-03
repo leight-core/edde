@@ -26,7 +26,6 @@ use Edde\Uuid\UuidServiceTrait;
 use Nette\Utils\Arrays;
 use Throwable;
 use function array_combine;
-use function array_diff_assoc;
 use function array_filter;
 use function array_keys;
 use function array_map;
@@ -229,7 +228,7 @@ abstract class AbstractRepository implements IRepository {
 			$original = $this->find($data['id']);
 			$this->storage->update($this->table, $data, $data['id']);
 			$item = $this->find($data['id']);
-			!empty(array_diff_assoc((array)$original, (array)$item)) && $this->diffOf($original, $item);
+			$this->diffService->isDiff($original, $item) && $this->diffOf($original, $item);
 			return $item;
 		} catch (Throwable $e) {
 			$this->exception($e);

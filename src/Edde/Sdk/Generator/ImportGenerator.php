@@ -158,7 +158,7 @@ class ImportGenerator {
 				];
 			}
 			yield $endpoint->class->module => [
-				"react-query",
+				"@tanstack/react-query",
 				"useQueryClient",
 			];
 			if ($endpoint->method instanceof IRequestMethod) {

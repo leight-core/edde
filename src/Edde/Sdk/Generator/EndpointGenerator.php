@@ -62,7 +62,7 @@ class EndpointGenerator {
 		if ($endpoint->method instanceof IResponseMethod) {
 			$response = $this->typeGenerator->resolve($endpoint->method->response());
 		}
-		$id = $this->endpointInfo->getId($endpoint->class->fqdn);
+		$id = $endpoint->link;
 		$pair = "$request, $response";
 
 		$params = "{\n\t" . implode("\n\t", array_map(function (string $name) {

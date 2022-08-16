@@ -70,5 +70,5 @@ interface IRepository extends IMapper {
 	/**
 	 * General way how to apply a filter on select/update/delete.
 	 */
-	public function applyWhere(?AbstractFilterDto $filterDto, SelectBase $selectBase): void;
+	public function applyWhere(AbstractFilterDto $filterDto, SelectBase $selectBase): void;
 }

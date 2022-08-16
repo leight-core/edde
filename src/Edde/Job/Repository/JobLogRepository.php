@@ -26,7 +26,7 @@ class JobLogRepository extends AbstractRepository {
 		]);
 	}
 
-	public function applyWhere(?AbstractFilterDto $filterDto, SelectBase $selectBase): void {
+	public function applyWhere(AbstractFilterDto $filterDto, SelectBase $selectBase): void {
 		/** @var $filter JobLogFilterDto */
 		parent::applyWhere($filterDto, $selectBase);
 		isset($filterDto->jobId) && $selectBase->where('job_id', $filterDto->jobId);

@@ -356,8 +356,8 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 	public function diffOf($original, $changed, string $type): void {
 	}
 
-	public function applyWhere(?AbstractFilterDto $filterDto, SelectBase $selectBase): void {
-		$this->fulltext && $filterDto->fulltext && $this->fulltext($selectBase, $this->fulltext, $filterDto->fulltext);
+	public function applyWhere(AbstractFilterDto $filterDto, SelectBase $selectBase): void {
+		$this->fulltext && $this->fulltext($selectBase, $this->fulltext, $filterDto->fulltext);
 	}
 
 	public function item($item) {

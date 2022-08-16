@@ -30,7 +30,7 @@ class JobRepository extends AbstractRepository {
 		];
 	}
 
-	public function applyWhere(?AbstractFilterDto $filterDto, SelectBase $selectBase): void {
+	public function applyWhere(AbstractFilterDto $filterDto, SelectBase $selectBase): void {
 		/** @var $filterDto JobFilterDto */
 		parent::applyWhere($filterDto, $selectBase);
 		isset($filterDto->userId) && $selectBase->where('user_id', $filterDto->userId);

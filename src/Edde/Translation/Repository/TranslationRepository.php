@@ -45,7 +45,7 @@ class TranslationRepository extends AbstractRepository {
 		return $this->select()->where('locale', $locale)->where('hash', $this->key($key))->execute()->fetch();
 	}
 
-	public function applyWhere(?AbstractFilterDto $filterDto, SelectBase $selectBase): void {
+	public function applyWhere(AbstractFilterDto $filterDto, SelectBase $selectBase): void {
 		/** @var $filterDto TranslationFilterDto */
 		parent::applyWhere($filterDto, $selectBase);
 		$filterDto->translation && $this->fulltext($selectBase, ['$.translation'], $filterDto->translation);

@@ -5,10 +5,12 @@ namespace Edde\Repository;
 
 use ClanCats\Hydrahon\Query\Sql\Delete;
 use ClanCats\Hydrahon\Query\Sql\Select;
+use ClanCats\Hydrahon\Query\Sql\SelectBase;
 use Dibi\Result;
 use Edde\Mapper\IMapper;
 use Edde\Query\Dto\Query;
 use Edde\Query\Dto\QueryResult;
+use Edde\Repository\Dto\AbstractFilterDto;
 
 /**
  * @template TItem
@@ -64,4 +66,9 @@ interface IRepository {
 	 * @param string $type     type of a diff (create/update/delete)
 	 */
 	public function diffOf($original, $changed, string $type): void;
+
+	/**
+	 * General way how to apply a filter on select/update/delete.
+	 */
+	public function applyWhere(AbstractFilterDto $filterDto, SelectBase $selectBase): void;
 }

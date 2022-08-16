@@ -17,6 +17,7 @@ use Edde\Diff\DiffServiceTrait;
 use Edde\Mapper\IMapper;
 use Edde\Query\Dto\Query;
 use Edde\Query\Dto\QueryResult;
+use Edde\Repository\Dto\AbstractFilterDto;
 use Edde\Repository\Exception\DuplicateEntryException;
 use Edde\Repository\Exception\RepositoryException;
 use Edde\Repository\Exception\RequiredResultException;
@@ -343,6 +344,9 @@ abstract class AbstractRepository implements IRepository {
 	}
 
 	public function diffOf($original, $changed, string $type): void {
+	}
+
+	public function applyWhere(AbstractFilterDto $filterDto, SelectBase $selectBase): void {
 	}
 
 	protected function toBy(?array $orderBy): ?array {

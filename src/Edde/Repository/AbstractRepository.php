@@ -171,8 +171,8 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 	 */
 	public function toQuery(Query $query): Select {
 		$select = $this->select();
-		$this->applyWhere($query->filter, $select);
-		$this->applyOrderBy($query->orderBy, $select);
+		$query->filter && $this->applyWhere($query->filter, $select);
+		$query->orderBy && $this->applyOrderBy($query->orderBy, $select);
 		return $select;
 	}
 

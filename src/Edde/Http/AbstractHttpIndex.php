@@ -29,6 +29,7 @@ use Edde\Rest\Reflection\MutationEndpoint;
 use Edde\Rest\Reflection\PlotEndpoint;
 use Edde\Rest\Reflection\QueryEndpoint;
 use Edde\Utils\StringUtils;
+use Nette\Utils\Strings;
 use Psr\SimpleCache\InvalidArgumentException;
 use ReflectionException;
 use function array_diff;
@@ -43,9 +44,12 @@ use function count;
 use function explode;
 use function get_class;
 use function implode;
+use function lcfirst;
 use function reset;
 use function sprintf;
 use function str_replace;
+use function strlen;
+use function trim;
 
 abstract class AbstractHttpIndex implements IHttpIndex {
 	use CacheTrait;
@@ -127,11 +131,19 @@ abstract class AbstractHttpIndex implements IHttpIndex {
 								'/',
 								'',
 							], implode('/', array_map(function (string $part) {
+								if ($part[0] === '_' && $part[strlen($part) - 1] === '_') {
+									return "{" . lcfirst(trim($part, '_')) . "}";
+								}
 								return StringUtils::recamel($part);
 							}, explode('\\', $class->fqdn)))) . implode('', array_map(function (string $param) {
 								return '/{' . $param . '}';
 							}, array_unique($query))))),
 			];
+
+			foreach (Strings::matchAll($defaults['link'], '~{([a-zA-Z]+)}~') as [, $param]) {
+				$defaults['query'][] = $param;
+			}
+			$defaults['query'] = array_unique($defaults['query'] ?? []);
 
 			$endpoint = Endpoint::create($defaults);
 			if ($class->is(IQueryEndpoint::class)) {

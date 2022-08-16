@@ -129,8 +129,9 @@ abstract class AbstractRepository implements IRepository {
 	 *
 	 */
 	public function total(Query $query): int {
-		return $this
-			->toQuery($query)
+		$select = $this->toQuery($query);
+		$this->applyWhere($query->filter, $select);
+		return $select
 			->page(0, 1)
 			->orderBy(null)
 			->fields(null)
@@ -147,14 +148,21 @@ abstract class AbstractRepository implements IRepository {
 	 * @return Result
 	 */
 	public function query(Query $query): iterable {
-		return $this->toQuery($query)->page($query->page, $query->size)->execute();
+		$select = $this->toQuery($query);
+		$this->applyWhere($query->filter, $select);
+		return $select->page($query->page, $query->size)->execute();
 	}
 
 	/**
 	 * @inheritdoc
 	 */
 	public function execute(?Query $query = null): iterable {
-		return $query ? $this->toQuery($query)->execute() : $this->all();
+		if ($query) {
+			$select = $this->toQuery($query);
+			$this->applyWhere($query->filter, $select);
+			return $select->execute();
+		}
+		return $this->all();
 	}
 
 	/**
@@ -346,7 +354,7 @@ abstract class AbstractRepository implements IRepository {
 	public function diffOf($original, $changed, string $type): void {
 	}
 
-	public function applyWhere(AbstractFilterDto $filterDto, SelectBase $selectBase): void {
+	public function applyWhere(?AbstractFilterDto $filterDto, SelectBase $selectBase): void {
 	}
 
 	protected function toBy(?array $orderBy): ?array {

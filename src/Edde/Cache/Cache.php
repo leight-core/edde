@@ -10,6 +10,9 @@ use function count;
 use function sha1;
 use function sprintf;
 
+/**
+ * @Injectable(lazy=true)
+ */
 class Cache extends AbstractCache {
 	public function get(string $key, $default = null) {
 		try {

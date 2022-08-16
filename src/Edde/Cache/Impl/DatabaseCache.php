@@ -11,6 +11,9 @@ use function is_array;
 use function is_iterable;
 use function iterator_to_array;
 
+/**
+ * @Injectable(lazy=true)
+ */
 class DatabaseCache extends AbstractCache {
 	use CacheRepositoryTrait;
 

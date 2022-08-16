@@ -24,7 +24,7 @@ class TagRepository extends AbstractRepository {
 		$filter = $query->filter;
 		!empty($filter->groups) && $this->where($select, '$.group', 'in', $filter->groups);
 
-		$this->toOrderBy($query->orderBy, $select);
+		$this->applyOrderBy($query->orderBy, $select);
 
 		return $select;
 	}

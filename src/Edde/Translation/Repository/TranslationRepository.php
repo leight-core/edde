@@ -4,15 +4,14 @@ declare(strict_types=1);
 namespace Edde\Translation\Repository;
 
 use ClanCats\Hydrahon\Query\Sql\Exception;
-use ClanCats\Hydrahon\Query\Sql\Select;
-use Edde\Query\Dto\Query;
+use ClanCats\Hydrahon\Query\Sql\SelectBase;
 use Edde\Repository\AbstractRepository;
+use Edde\Repository\Dto\AbstractFilterDto;
 use Edde\Repository\Exception\DuplicateEntryException;
 use Edde\Repository\IRepository;
 use Edde\Translation\Dto\Create\CreateDto;
 use Edde\Translation\Dto\Ensure\EnsureDto;
 use Edde\Translation\Dto\TranslationFilterDto;
-use Marsh\Insurrer\Dto\InsurrerFilterDto;
 use Throwable;
 use function sha1;
 
@@ -25,6 +24,12 @@ class TranslationRepository extends AbstractRepository {
 			'language' => '$.locale',
 			'label'    => '$.key',
 			'text'     => '$.translation',
+		];
+		$this->fulltext = [
+			'$.id',
+			'$.locale',
+			'$.key',
+			'$.translation',
 		];
 	}
 
@@ -40,24 +45,12 @@ class TranslationRepository extends AbstractRepository {
 		return $this->select()->where('locale', $locale)->where('hash', $this->key($key))->execute()->fetch();
 	}
 
-	public function toQuery(Query $query): Select {
-		$select = $this->select();
-
-		/** @var $filter TranslationFilterDto */
-		$filter = $query->filter;
-		$filter->fulltext && $this->fulltext($select, [
-			'$.id',
-			'$.locale',
-			'$.key',
-			'$.translation',
-		], $filter->fulltext);
-		$filter->translation && $this->fulltext($select, ['$.translation'], $filter->translation);
-		$filter->key && $this->fulltext($select, ['$.key'], $filter->key);
-		$filter->locale && $this->where($select, 'locale', $filter->locale);
-
-		$this->toOrderBy($query->orderBy, $select);
-
-		return $select;
+	public function applyWhere(?AbstractFilterDto $filterDto, SelectBase $selectBase): void {
+		/** @var $filterDto TranslationFilterDto */
+		parent::applyWhere($filterDto, $selectBase);
+		$filterDto->translation && $this->fulltext($selectBase, ['$.translation'], $filterDto->translation);
+		$filterDto->key && $this->fulltext($selectBase, ['$.key'], $filterDto->key);
+		$filterDto->locale && $this->where($selectBase, 'locale', $filterDto->locale);
 	}
 
 	/**

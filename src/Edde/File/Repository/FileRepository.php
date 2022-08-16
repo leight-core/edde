@@ -50,7 +50,7 @@ class FileRepository extends AbstractRepository {
 		isset($filter->pathEndLike) && $this->where($select, 'path', 'like', '%' . $filter->pathEndLike);
 		isset($filter->mimes) && $select->where('mimes', 'in', $filter->mimes);
 
-		$this->toOrderBy($query->orderBy, $select);
+		$this->applyOrderBy($query->orderBy, $select);
 
 		return $select;
 	}

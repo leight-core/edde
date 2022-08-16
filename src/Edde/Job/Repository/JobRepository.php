@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Job\Repository;
 
-use ClanCats\Hydrahon\Query\Sql\Select;
+use ClanCats\Hydrahon\Query\Sql\SelectBase;
 use DateTime;
 use Dibi\Exception;
 use Edde\Job\Dto\Commit\CommitDto;
@@ -12,8 +12,8 @@ use Edde\Job\Dto\Interrupt\InterruptDto;
 use Edde\Job\Dto\JobFilterDto;
 use Edde\Job\IJobService;
 use Edde\Job\JobStatus;
-use Edde\Query\Dto\Query;
 use Edde\Repository\AbstractRepository;
+use Edde\Repository\Dto\AbstractFilterDto;
 use Edde\Repository\IRepository;
 use Throwable;
 
@@ -22,31 +22,25 @@ class JobRepository extends AbstractRepository {
 
 	public function __construct() {
 		parent::__construct(['created' => IRepository::ORDER_DESC]);
-	}
-
-	public function toQuery(Query $query): Select {
-		$select = $this->select();
-
-		/** @var $filter JobFilterDto */
-		$filter = $query->filter;
-		isset($filter->userId) && $select->where('user_id', $filter->userId);
-		isset($filter->services) && $select->where('service', 'in', $filter->services);
-		isset($filter->id) && $select->where('id', $filter->id);
-		isset($filter->status) && $select->where('status', 'in', $filter->status);
-		isset($filter->commit) && $select->where('commit', $filter->commit);
-		isset($filter->params) && $this->fulltext($select, [
-			'params',
-		], $filter->params);
-		isset($filter->fulltext) && $this->fulltext($select, [
+		$this->fulltext = [
 			'id',
 			'service',
 			'user_id',
 			'params',
-		], $filter->fulltext);
+		];
+	}
 
-		$this->toOrderBy($query->orderBy, $select);
-
-		return $select;
+	public function applyWhere(?AbstractFilterDto $filterDto, SelectBase $selectBase): void {
+		/** @var $filterDto JobFilterDto */
+		parent::applyWhere($filterDto, $selectBase);
+		isset($filterDto->userId) && $selectBase->where('user_id', $filterDto->userId);
+		isset($filterDto->services) && $selectBase->where('service', 'in', $filterDto->services);
+		isset($filterDto->id) && $selectBase->where('id', $filterDto->id);
+		isset($filterDto->status) && $selectBase->where('status', 'in', $filterDto->status);
+		isset($filterDto->commit) && $selectBase->where('commit', $filterDto->commit);
+		isset($filterDto->params) && $this->fulltext($selectBase, [
+			'params',
+		], $filterDto->params);
 	}
 
 	/**
@@ -105,8 +99,7 @@ class JobRepository extends AbstractRepository {
 			$commitDto->jobId && $update->where('id', $commitDto->jobId);
 		}
 
-		$update
-			->execute();
+		$update->execute();
 	}
 
 	public function interruptBy(?InterruptDto $interruptDto) {
@@ -124,8 +117,7 @@ class JobRepository extends AbstractRepository {
 			$interruptDto->jobId && $update->where('id', $interruptDto->jobId);
 		}
 
-		$update
-			->execute();
+		$update->execute();
 	}
 
 	public function deleteBy(?DeleteDto $deleteDto) {
@@ -147,7 +139,6 @@ class JobRepository extends AbstractRepository {
 			$deleteDto->services && $update->where('service', 'in', $deleteDto->services);
 		}
 
-		$update
-			->execute();
+		$update->execute();
 	}
 }

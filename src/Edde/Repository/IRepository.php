@@ -15,7 +15,7 @@ use Edde\Repository\Dto\AbstractFilterDto;
 /**
  * @template TItem
  */
-interface IRepository {
+interface IRepository extends IMapper {
 	const ORDER_ASC = true;
 	const ORDER_DESC = false;
 

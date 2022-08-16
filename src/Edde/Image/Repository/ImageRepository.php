@@ -25,7 +25,7 @@ class ImageRepository extends AbstractRepository {
 		isset($filter->userId) && $this->where($select, 'user_id', $filter->userId);
 		isset($filter->io) && $this->where($select, 'id', $filter->id);
 
-		$this->toOrderBy($query->orderBy, $select);
+		$this->applyOrderBy($query->orderBy, $select);
 
 		return $select;
 	}

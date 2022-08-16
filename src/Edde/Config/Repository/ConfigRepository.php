@@ -33,7 +33,7 @@ class ConfigRepository extends AbstractRepository {
 		], $filter->fulltext);
 		$filter->id && $select->where('id', $filter->id);
 
-		$this->toOrderBy($query->orderBy, $select);
+		$this->applyOrderBy($query->orderBy, $select);
 
 		return $select;
 	}

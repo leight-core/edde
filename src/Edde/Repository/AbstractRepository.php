@@ -14,6 +14,7 @@ use Dibi\Result;
 use Dibi\Row;
 use Dibi\UniqueConstraintViolationException;
 use Edde\Diff\DiffServiceTrait;
+use Edde\Mapper\AbstractMapper;
 use Edde\Mapper\IMapper;
 use Edde\Query\Dto\Query;
 use Edde\Query\Dto\QueryResult;
@@ -25,6 +26,7 @@ use Edde\Storage\StorageTrait;
 use Edde\Utils\StringUtils;
 use Edde\Uuid\UuidServiceTrait;
 use Nette\Utils\Arrays;
+use RuntimeException;
 use Throwable;
 use function array_combine;
 use function array_filter;
@@ -36,7 +38,7 @@ use function sprintf;
 use function str_replace;
 use function strpos;
 
-abstract class AbstractRepository implements IRepository {
+abstract class AbstractRepository extends AbstractMapper implements IRepository {
 	use DiffServiceTrait;
 	use StorageTrait;
 	use UuidServiceTrait;
@@ -51,6 +53,7 @@ abstract class AbstractRepository implements IRepository {
 	protected $id;
 	/** @var string */
 	protected $orderByMap = [];
+	protected $fulltext = [];
 
 	public function __construct(
 		array  $orderBy = null,
@@ -58,6 +61,7 @@ abstract class AbstractRepository implements IRepository {
 		string $id = "$.id",
 		string $table = null
 	) {
+		parent::__construct();
 		$this->table = $table ?? 'z_' . StringUtils::recamel(Arrays::last(explode('\\', str_replace('Repository', '', static::class))), '_');
 		$this->orderBy = $orderBy;
 		$this->unique = array_map([
@@ -129,9 +133,8 @@ abstract class AbstractRepository implements IRepository {
 	 *
 	 */
 	public function total(Query $query): int {
-		$select = $this->toQuery($query);
-		$this->applyWhere($query->filter, $select);
-		return $select
+		return $this
+			->toQuery($query)
 			->page(0, 1)
 			->orderBy(null)
 			->fields(null)
@@ -148,9 +151,7 @@ abstract class AbstractRepository implements IRepository {
 	 * @return Result
 	 */
 	public function query(Query $query): iterable {
-		$select = $this->toQuery($query);
-		$this->applyWhere($query->filter, $select);
-		return $select->page($query->page, $query->size)->execute();
+		return $this->toQuery($query)->page($query->page, $query->size)->execute();
 	}
 
 	/**
@@ -158,9 +159,7 @@ abstract class AbstractRepository implements IRepository {
 	 */
 	public function execute(?Query $query = null): iterable {
 		if ($query) {
-			$select = $this->toQuery($query);
-			$this->applyWhere($query->filter, $select);
-			return $select->execute();
+			return $this->toQuery($query)->execute();
 		}
 		return $this->all();
 	}
@@ -171,7 +170,10 @@ abstract class AbstractRepository implements IRepository {
 	 * @return Select
 	 */
 	public function toQuery(Query $query): Select {
-		return $this->select();
+		$select = $this->select();
+		$this->applyWhere($query->filter, $select);
+		$this->applyOrderBy($query->orderBy, $select);
+		return $select;
 	}
 
 	/**
@@ -355,6 +357,11 @@ abstract class AbstractRepository implements IRepository {
 	}
 
 	public function applyWhere(?AbstractFilterDto $filterDto, SelectBase $selectBase): void {
+		$this->fulltext && $filterDto->fulltext && $this->fulltext($selectBase, $this->fulltext, $filterDto->fulltext);
+	}
+
+	public function item($item) {
+		throw new RuntimeException(sprintf("Repository Mapper (%s::item()) not implemented.", static::class));
 	}
 
 	protected function toBy(?array $orderBy): ?array {
@@ -371,7 +378,7 @@ abstract class AbstractRepository implements IRepository {
 		}, $orderBy);
 	}
 
-	protected function toOrderBy($orderBy, Select $select) {
+	protected function applyOrderBy($orderBy, Select $select) {
 		if (!$orderBy) {
 			return;
 		}
@@ -385,18 +392,17 @@ abstract class AbstractRepository implements IRepository {
 		}
 	}
 
-	protected function fulltext(Select $select, array $columns, $values): Select {
+	protected function fulltext(SelectBase $selectBase, array $columns, $values): void {
 		if (empty($values)) {
-			return $select;
+			return;
 		}
 		if (is_string($values)) {
 			foreach (explode(' ', $values) as $part) {
-				$this->fulltext($select, $columns, [trim($part)]);
+				$this->fulltext($selectBase, $columns, [trim($part)]);
 			}
-			return $select;
+			return;
 		}
-
-		return $select->where(function (SelectBase $select) use ($columns, $values) {
+		$selectBase->where(function (SelectBase $select) use ($columns, $values) {
 			foreach ((array)$values as $value) {
 				foreach ($columns as $column) {
 					$select->where($this->col($column), 'like', '%' . $value . '%', 'or');

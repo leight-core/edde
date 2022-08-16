@@ -28,7 +28,7 @@ class ProfilerRepository extends AbstractRepository {
 		], $filter->name);
 		$filter->names && $select->where('name', 'in', $filter->names);
 
-		$this->toOrderBy($query->orderBy, $select);
+		$this->applyOrderBy($query->orderBy, $select);
 
 		return $select;
 	}

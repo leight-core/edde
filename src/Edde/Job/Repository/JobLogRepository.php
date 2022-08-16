@@ -6,7 +6,6 @@ namespace Edde\Job\Repository;
 use ClanCats\Hydrahon\Query\Sql\SelectBase;
 use Edde\Job\Dto\Log\JobLogFilterDto;
 use Edde\Repository\AbstractRepository;
-use Edde\Repository\Dto\AbstractFilterDto;
 use Edde\Repository\IRepository;
 
 class JobLogRepository extends AbstractRepository {
@@ -26,14 +25,14 @@ class JobLogRepository extends AbstractRepository {
 		]);
 	}
 
-	public function applyWhere(AbstractFilterDto $filterDto, SelectBase $selectBase): void {
+	public function applyWhere($filter, SelectBase $selectBase): void {
 		/** @var $filter JobLogFilterDto */
-		parent::applyWhere($filterDto, $selectBase);
-		isset($filterDto->jobId) && $selectBase->where('job_id', $filterDto->jobId);
-		isset($filterDto->id) && $selectBase->where('id', $filterDto->id);
-		isset($filterDto->type) && $selectBase->where('type', 'in', $filterDto->type);
-		isset($filterDto->notType) && $selectBase->whereNotIn('type', $filterDto->notType);
-		isset($filterDto->level) && $selectBase->where('level', 'in', $filterDto->level);
+		parent::applyWhere($filter, $selectBase);
+		isset($filter->jobId) && $selectBase->where('job_id', $filter->jobId);
+		isset($filter->id) && $selectBase->where('id', $filter->id);
+		isset($filter->type) && $selectBase->where('type', 'in', $filter->type);
+		isset($filter->notType) && $selectBase->whereNotIn('type', $filter->notType);
+		isset($filter->level) && $selectBase->where('level', 'in', $filter->level);
 	}
 
 	public function hasLog(string $jobId): bool {

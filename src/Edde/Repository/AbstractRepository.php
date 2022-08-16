@@ -18,7 +18,6 @@ use Edde\Mapper\AbstractMapper;
 use Edde\Mapper\IMapper;
 use Edde\Query\Dto\Query;
 use Edde\Query\Dto\QueryResult;
-use Edde\Repository\Dto\AbstractFilterDto;
 use Edde\Repository\Exception\DuplicateEntryException;
 use Edde\Repository\Exception\RepositoryException;
 use Edde\Repository\Exception\RequiredResultException;
@@ -356,8 +355,8 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 	public function diffOf($original, $changed, string $type): void {
 	}
 
-	public function applyWhere(AbstractFilterDto $filterDto, SelectBase $selectBase): void {
-		$this->fulltext && $this->fulltext($selectBase, $this->fulltext, $filterDto->fulltext);
+	public function applyWhere($filter, SelectBase $selectBase): void {
+		$this->fulltext && $filter->fulltext && $this->fulltext($selectBase, $this->fulltext, $filter->fulltext);
 	}
 
 	public function item($item) {

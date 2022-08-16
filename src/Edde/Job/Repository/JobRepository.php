@@ -13,7 +13,6 @@ use Edde\Job\Dto\JobFilterDto;
 use Edde\Job\IJobService;
 use Edde\Job\JobStatus;
 use Edde\Repository\AbstractRepository;
-use Edde\Repository\Dto\AbstractFilterDto;
 use Edde\Repository\IRepository;
 use Throwable;
 
@@ -30,17 +29,17 @@ class JobRepository extends AbstractRepository {
 		];
 	}
 
-	public function applyWhere(AbstractFilterDto $filterDto, SelectBase $selectBase): void {
-		/** @var $filterDto JobFilterDto */
-		parent::applyWhere($filterDto, $selectBase);
-		isset($filterDto->userId) && $selectBase->where('user_id', $filterDto->userId);
-		isset($filterDto->services) && $selectBase->where('service', 'in', $filterDto->services);
-		isset($filterDto->id) && $selectBase->where('id', $filterDto->id);
-		isset($filterDto->status) && $selectBase->where('status', 'in', $filterDto->status);
-		isset($filterDto->commit) && $selectBase->where('commit', $filterDto->commit);
-		isset($filterDto->params) && $this->fulltext($selectBase, [
+	public function applyWhere($filter, SelectBase $selectBase): void {
+		/** @var $filter JobFilterDto */
+		parent::applyWhere($filter, $selectBase);
+		isset($filter->userId) && $selectBase->where('user_id', $filter->userId);
+		isset($filter->services) && $selectBase->where('service', 'in', $filter->services);
+		isset($filter->id) && $selectBase->where('id', $filter->id);
+		isset($filter->status) && $selectBase->where('status', 'in', $filter->status);
+		isset($filter->commit) && $selectBase->where('commit', $filter->commit);
+		isset($filter->params) && $this->fulltext($selectBase, [
 			'params',
-		], $filterDto->params);
+		], $filter->params);
 	}
 
 	/**

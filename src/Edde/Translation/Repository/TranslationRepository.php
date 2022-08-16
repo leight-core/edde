@@ -6,7 +6,6 @@ namespace Edde\Translation\Repository;
 use ClanCats\Hydrahon\Query\Sql\Exception;
 use ClanCats\Hydrahon\Query\Sql\SelectBase;
 use Edde\Repository\AbstractRepository;
-use Edde\Repository\Dto\AbstractFilterDto;
 use Edde\Repository\Exception\DuplicateEntryException;
 use Edde\Repository\IRepository;
 use Edde\Translation\Dto\Create\CreateDto;
@@ -45,12 +44,12 @@ class TranslationRepository extends AbstractRepository {
 		return $this->select()->where('locale', $locale)->where('hash', $this->key($key))->execute()->fetch();
 	}
 
-	public function applyWhere(AbstractFilterDto $filterDto, SelectBase $selectBase): void {
-		/** @var $filterDto TranslationFilterDto */
-		parent::applyWhere($filterDto, $selectBase);
-		$filterDto->translation && $this->fulltext($selectBase, ['$.translation'], $filterDto->translation);
-		$filterDto->key && $this->fulltext($selectBase, ['$.key'], $filterDto->key);
-		$filterDto->locale && $this->where($selectBase, 'locale', $filterDto->locale);
+	public function applyWhere($filter, SelectBase $selectBase): void {
+		/** @var $filter TranslationFilterDto */
+		parent::applyWhere($filter, $selectBase);
+		$filter->translation && $this->fulltext($selectBase, ['$.translation'], $filter->translation);
+		$filter->key && $this->fulltext($selectBase, ['$.key'], $filter->key);
+		$filter->locale && $this->where($selectBase, 'locale', $filter->locale);
 	}
 
 	/**

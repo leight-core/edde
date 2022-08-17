@@ -137,7 +137,7 @@ abstract class AbstractHttpIndex implements IHttpIndex {
 								return StringUtils::recamel($part);
 							}, explode('\\', $class->fqdn)))) . implode('', array_map(function (string $param) {
 								return '/{' . $param . '}';
-							}, array_unique($query))))),
+							}, array_unique($query))))) . ($class->annotations['linkOf'] ?? ''),
 			];
 
 			foreach (Strings::matchAll($defaults['link'], '~{([a-zA-Z]+)}~') as [, $param]) {

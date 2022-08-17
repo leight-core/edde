@@ -38,6 +38,7 @@ use function array_flip;
 use function array_keys;
 use function array_map;
 use function array_merge;
+use function array_pop;
 use function array_unique;
 use function array_values;
 use function count;
@@ -137,13 +138,19 @@ abstract class AbstractHttpIndex implements IHttpIndex {
 								return StringUtils::recamel($part);
 							}, explode('\\', $class->fqdn)))) . implode('', array_map(function (string $param) {
 								return '/{' . $param . '}';
-							}, array_unique($query))))) . ($class->annotations['linkOf'] ?? ''),
+							}, array_unique($query))))),
 			];
 
 			foreach (Strings::matchAll($defaults['link'], '~{([a-zA-Z]+)}~') as [, $param]) {
 				$defaults['query'][] = $param;
 			}
 			$defaults['query'] = array_unique($defaults['query'] ?? []);
+
+			if (!empty($class->annotations['alterLink'])) {
+				$link = explode('/', trim($defaults['link'], '/'));
+				array_pop($link);
+				$defaults['link'] = '/' . implode('/', $link) . $class->annotations['alterLink'];
+			}
 
 			$endpoint = Endpoint::create($defaults);
 			if ($class->is(IQueryEndpoint::class)) {

@@ -8,6 +8,8 @@ use Edde\Http\Exception\HttpException;
 use Edde\Plot\Dto\PlotDto;
 use Edde\Profiler\ProfilerServiceTrait;
 use Edde\Query\Dto\Query;
+use Edde\Query\Dto\QueryResult;
+use Edde\Reflection\Dto\Method\IRequestResponseMethod;
 use Edde\Reflection\Dto\Method\IResponseMethod;
 use Edde\Reflection\Dto\TemplateDto;
 use Edde\Reflection\Dto\Type\Utils\IClassType;
@@ -152,8 +154,21 @@ abstract class AbstractHttpIndex implements IHttpIndex {
 
 			$endpoint = Endpoint::create($defaults);
 			if ($class->is(IQueryEndpoint::class)) {
-				$request = $method->request();
-				$response = $method->response();
+				if (!$method instanceof IRequestResponseMethod) {
+					throw new HttpException(sprintf('Query endpoint [%s] does not have request/response method [%s] (check method types).', $name, $method->name));
+				}
+				/** @var $request IGenericType|IClassType */
+				if (!($request = $method->request()) instanceof IGenericType && !$request instanceof IClassType) {
+					throw new HttpException(sprintf('Query endpoint [%s] does not have generic/class request type for method [%s]!', $name, $method->name));
+				}
+				/** @var $response IGenericType */
+				if (!($response = $method->response()) instanceof IGenericType) {
+					throw new HttpException(sprintf('Query endpoint [%s] does not have generic response type for method [%s]!', $name, $method->name));
+				}
+				/** @var $class IClassType */
+				if (!(($class = $response->type()) instanceof IClassType) || $class->class() !== QueryResult::class) {
+					throw new HttpException(sprintf('Response of method [%s] of query endpoint [%s] is not required [%s] response.', $method->name, $name, QueryResult::class));
+				}
 
 				$pageRequestClass = $this->reflectionService->toClass(Query::class);
 				$pageRequestReflection = $pageRequestClass->reflection();

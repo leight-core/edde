@@ -44,6 +44,10 @@ class TranslationRepository extends AbstractRepository {
 		return $this->select()->where('locale', $locale)->where('hash', $this->key($key))->execute()->fetch();
 	}
 
+	public function fetchByLocale(string $locale) {
+		return $this->select()->where('locale', $locale)->execute();
+	}
+
 	public function applyWhere($filter, SelectBase $selectBase): void {
 		/** @var $filter TranslationFilterDto */
 		parent::applyWhere($filter, $selectBase);

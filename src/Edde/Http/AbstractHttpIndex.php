@@ -141,16 +141,16 @@ abstract class AbstractHttpIndex implements IHttpIndex {
 							}, array_unique($query))))),
 			];
 
-			foreach (Strings::matchAll($defaults['link'], '~{([a-zA-Z]+)}~') as [, $param]) {
-				$defaults['query'][] = $param;
-			}
-			$defaults['query'] = array_unique($defaults['query'] ?? []);
-
 			if (!empty($class->annotations['alterLink'])) {
 				$link = explode('/', trim($defaults['link'], '/'));
 				array_pop($link);
 				$defaults['link'] = '/' . implode('/', $link) . $class->annotations['alterLink'];
 			}
+
+			foreach (Strings::matchAll($defaults['link'], '~{([a-zA-Z]+)}~') as [, $param]) {
+				$defaults['query'][] = $param;
+			}
+			$defaults['query'] = array_unique($defaults['query'] ?? []);
 
 			$endpoint = Endpoint::create($defaults);
 			if ($class->is(IQueryEndpoint::class)) {

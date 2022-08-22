@@ -20,7 +20,7 @@ class UpgradesEndpoint extends AbstractEndpoint {
 		isset($query->orderBy->name) && usort($upgrades, function (UpgradeDto $a, UpgradeDto $b) use ($query) {
 			return $query->orderBy->name ? strcmp($a->name, $b->name) : strcmp($b->name, $a->name);
 		});
-		isset($query->orderBy->version) && usort($upgrades, function (UpgradeDto $a, UpgradeDto $b) use ($query) {
+		(true || isset($query->orderBy->version)) && usort($upgrades, function (UpgradeDto $a, UpgradeDto $b) use ($query) {
 			return $query->orderBy->version ? strcmp($a->version, $b->version) : strcmp($b->version, $a->version);
 		});
 		isset($query->orderBy->active) && usort($upgrades, function (UpgradeDto $a, UpgradeDto $b) use ($query) {

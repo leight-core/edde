@@ -3,25 +3,16 @@ declare(strict_types=1);
 
 namespace Edde\Api\Shared\Job\Log\Endpoint;
 
-use Edde\Job\Dto\Log\JobLogDto;
-use Edde\Job\Dto\Log\JobLogFilterDto;
-use Edde\Job\Dto\Log\JobLogOrderByDto;
 use Edde\Job\Mapper\JobLogMapperTrait;
 use Edde\Job\Repository\JobLogRepositoryTrait;
 use Edde\Query\Dto\Query;
-use Edde\Query\Dto\QueryResult;
-use Edde\Rest\Endpoint\AbstractQueryEndpoint;
+use Edde\Rest\Endpoint\AbstractEndpoint;
 
-class JobLogsEndpoint extends AbstractQueryEndpoint {
+class JobLogsEndpoint extends AbstractEndpoint {
 	use JobLogMapperTrait;
 	use JobLogRepositoryTrait;
 
-	/**
-	 * @param Query<JobLogOrderByDto, JobLogFilterDto> $query
-	 *
-	 * @return QueryResult<JobLogDto>
-	 */
-	public function post(Query $query): QueryResult {
-		return $this->jobLogRepository->toResult($query, $this->jobLogMapper);
+	public function post(Query $query) {
+		return $this->jobLogMapper->map($this->jobLogRepository->query($query));
 	}
 }

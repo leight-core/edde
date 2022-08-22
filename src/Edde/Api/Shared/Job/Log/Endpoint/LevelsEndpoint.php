@@ -3,20 +3,13 @@ declare(strict_types=1);
 
 namespace Edde\Api\Shared\Job\Log\Endpoint;
 
-use Edde\Job\Dto\Log\LogLevelDto;
 use Edde\Progress\IProgress;
 use Edde\Query\Dto\Query;
-use Edde\Query\Dto\QueryResult;
-use Edde\Rest\Endpoint\AbstractQueryEndpoint;
+use Edde\Rest\Endpoint\AbstractEndpoint;
 
-class LevelsEndpoint extends AbstractQueryEndpoint {
-	/**
-	 * @param Query $query
-	 *
-	 * @return QueryResult<LogLevelDto>
-	 */
-	public function post(Query $query): QueryResult {
-		return $this->queryService->toResponse([
+class LevelsEndpoint extends AbstractEndpoint {
+	public function post(Query $query) {
+		return [
 			[
 				'level' => IProgress::LOG_INFO,
 				'label' => 'info',
@@ -29,6 +22,6 @@ class LevelsEndpoint extends AbstractQueryEndpoint {
 				'level' => IProgress::LOG_ERROR,
 				'label' => 'error',
 			],
-		], LogLevelDto::class);
+		];
 	}
 }

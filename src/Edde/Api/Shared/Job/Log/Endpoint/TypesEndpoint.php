@@ -3,19 +3,12 @@ declare(strict_types=1);
 
 namespace Edde\Api\Shared\Job\Log\Endpoint;
 
-use Edde\Job\Dto\Log\LogTypeDto;
 use Edde\Query\Dto\Query;
-use Edde\Query\Dto\QueryResult;
-use Edde\Rest\Endpoint\AbstractQueryEndpoint;
+use Edde\Rest\Endpoint\AbstractEndpoint;
 
-class TypesEndpoint extends AbstractQueryEndpoint {
-	/**
-	 * @param Query $query
-	 *
-	 * @return QueryResult<LogTypeDto>
-	 */
-	public function post(Query $query): QueryResult {
-		return $this->queryService->toResponse([
+class TypesEndpoint extends AbstractEndpoint {
+	public function post(Query $query) {
+		return [
 			[
 				'id'   => 'vehicle.recovery',
 				'type' => 'vehicle.recovery',
@@ -24,6 +17,6 @@ class TypesEndpoint extends AbstractQueryEndpoint {
 				'id'   => 'common',
 				'type' => null,
 			],
-		], LogTypeDto::class);
+		];
 	}
 }

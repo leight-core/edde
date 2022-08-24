@@ -121,4 +121,15 @@ abstract class CommonMigration extends AbstractMigration {
 			$this->logger->error($throwable);
 		}
 	}
+
+	/**
+	 * Migrate the given file and make it available in the app.
+	 *
+	 * @param string $source
+	 * @param string $path
+	 * @param string $name
+	 */
+	public function useFile(string $source, string $path, string $name) {
+		$this->fileService->store(FileStream::openRead($source), $path, $name);
+	}
 }

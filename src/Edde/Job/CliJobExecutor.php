@@ -17,6 +17,7 @@ use Edde\Profiler\ProfilerServiceTrait;
 use Edde\Progress\IProgress;
 use Edde\User\CurrentUserServiceTrait;
 use Symfony\Component\Process\Process;
+use Throwable;
 use function get_class;
 use function realpath;
 use function sprintf;
@@ -82,7 +83,12 @@ class CliJobExecutor extends AbstractJobExecutor {
 				throw $throwable;
 			}
 			$this->logger->info(sprintf('Executed [%s] in [%s].', get_class($jobService), static::class), ['tags' => ['job']]);
-			$this->jobRepository->update($job->id, ['pid' => $process->getPid()]);
+			try {
+				$this->jobRepository->update($job->id, ['pid' => $process->getPid()]);
+			} catch (Throwable $exception) {
+				$this->logger->error($exception);
+				// if the PID column is not available, swallow the exception.
+			}
 			/**
 			 * Refresh job as it could get some changes during start (like job-log).
 			 */

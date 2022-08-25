@@ -8,6 +8,7 @@ use Edde\Job\Repository\JobLogRepositoryTrait;
 use Edde\Mapper\AbstractMapper;
 use Edde\User\Mapper\UserMapperTrait;
 use Edde\User\Repository\UserRepositoryTrait;
+use Edde\Utils\ProcessUtils;
 
 class JobMapper extends AbstractMapper {
 	use JobLogRepositoryTrait;
@@ -38,6 +39,7 @@ class JobMapper extends AbstractMapper {
 			'commit'      => $item->commit,
 			'logs'        => $this->jobLogRepository->hasLog($item->id),
 			'user'        => $item->user_id ? $this->userMapper->item($this->userRepository->find($item->user_id)) : null,
+			'running'     => ProcessUtils::isRunning($item->pid),
 		]);
 	}
 }

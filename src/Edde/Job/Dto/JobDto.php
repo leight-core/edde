@@ -100,4 +100,6 @@ class JobDto extends AbstractDto {
 	 * @var string|null
 	 */
 	public $done;
+	/** @var bool|null */
+	public $running;
 }

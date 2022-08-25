@@ -13,6 +13,7 @@ use Edde\File\FileServiceTrait;
 use Edde\File\Repository\FileRepositoryTrait;
 use Edde\Php\MemoryServiceTrait;
 use Edde\Progress\IProgress;
+use Edde\Progress\NoProgress;
 use Edde\Source\SourceServiceTrait;
 use Edde\Storage\StorageTrait;
 use Edde\Stream\FileStream;
@@ -30,6 +31,7 @@ use function chr;
 use function date;
 use function ord;
 use function reset;
+use function sprintf;
 
 class ExcelExportService implements IExcelExportService {
 	use StorageTrait;
@@ -144,9 +146,9 @@ class ExcelExportService implements IExcelExportService {
 			foreach ($groups as $name => $cellGroups) {
 				foreach ($cellGroups as $cellGroup) {
 					$groupExport[$name] = $groupExport[$name] ?? [
-							'name'   => $name,
-							'groups' => [],
-						];
+						'name'   => $name,
+						'groups' => [],
+					];
 
 					$first = reset($cellGroup);
 					$groupExport[$name]['groups'][] = [
@@ -179,13 +181,18 @@ class ExcelExportService implements IExcelExportService {
 	}
 
 	public function export(ExcelExportDto $excelExportDto, IProgress $progress = null): FileDto {
+		$progress = NoProgress::ensure($progress);
+		$progress->log(IProgress::LOG_INFO, 'Starting Export Service.');
 		$progress->onStart(8);
 		$template = ($templateFile = $this->fileRepository->find($excelExportDto->templateId))->native;
+		$progress->log(IProgress::LOG_INFO, sprintf('Resolved export template [%s].', $template));
 		$progress->onProgress();
 		$target = date('Y-m-d H-i-s') . ' ' . $templateFile->name;
 		$meta = $this->meta($template);
+		$progress->log(IProgress::LOG_INFO, 'Resolved template meta data.');
 		$progress->onProgress();
 		$file = $this->fileService->store(FileStream::openRead($template), '/export/excel', $target, null, $this->currentUserService->requiredId());
+		$progress->log(IProgress::LOG_INFO, sprintf('Storing to [%s].', $file->native));
 		$progress->onProgress();
 		if ($this->configService->system(self::CONFIG_USE_CACHE, true)) {
 			Settings::setCache(new Psr16Cache(new FilesystemAdapter()));
@@ -194,10 +201,13 @@ class ExcelExportService implements IExcelExportService {
 		$spreadsheet = $this->excelService->load($this->dtoService->fromArray(ReadDto::class, [
 			'file' => $template,
 		]));
+		$progress->log(IProgress::LOG_INFO, 'Read spreadsheets.');
 		$progress->onProgress();
 		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
 		$progress->onProgress();
+		$progress->log(IProgress::LOG_INFO, 'Reading tabs.');
 		foreach ($meta->tabs as $tab) {
+			$progress->log(IProgress::LOG_INFO, sprintf('Reading tab [%s].', $tab->name));
 			$source = $this->sourceService->source($tab->sources, $excelExportDto->queries);
 			$worksheet = $spreadsheet->getSheetByName($tab->name);
 			foreach ($tab->groups->groups as $group) {
@@ -219,12 +229,15 @@ class ExcelExportService implements IExcelExportService {
 				}
 			}
 		}
+		$progress->log(IProgress::LOG_INFO, 'All exported.');
 		$progress->onProgress();
 		$writer->save($file->native);
+		$progress->log(IProgress::LOG_INFO, 'Save done.');
 		$progress->onProgress();
 		$this->fileService->refresh($file->id);
 		$progress->onProgress();
 		$this->memoryService->log();
+		$progress->log(IProgress::LOG_INFO, 'Finished.');
 		return $file;
 	}
 }

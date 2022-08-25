@@ -82,6 +82,7 @@ class CliJobExecutor extends AbstractJobExecutor {
 				throw $throwable;
 			}
 			$this->logger->info(sprintf('Executed [%s] in [%s].', get_class($jobService), static::class), ['tags' => ['job']]);
+			$this->jobRepository->update($job->id, ['pid' => $process->getPid()]);
 			/**
 			 * Refresh job as it could get some changes during start (like job-log).
 			 */

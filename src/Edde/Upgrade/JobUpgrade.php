@@ -46,6 +46,10 @@ class JobUpgrade extends CommonMigration {
 				'limit'   => 1,
 				'comment' => 'Status code of the job',
 			])
+			->addColumn('pid', 'integer', [
+				'comment' => 'If a job is processed by an executable, this is a PID; or other identifier to check if a process is running.',
+				'null'    => true,
+			])
 			->addColumn('created', 'datetime', ['comment' => 'Timestamp when a job was scheduled (basically also started).'])
 			->addColumn('done', 'datetime', [
 				'comment' => 'Timestamp when a job was done (finished); should **not** be used as value for job status check!',

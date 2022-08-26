@@ -214,21 +214,25 @@ class ExcelExportService implements IExcelExportService {
 			$worksheet = $spreadsheet->getSheetByName($tab->name);
 			foreach ($tab->groups->groups as $group) {
 				$progress->log(IProgress::LOG_INFO, 'Querying data from the group.');
-				/**
-				 * Make a query
-				 */
-				$row = 0;
-				foreach ($source->group($group->queries) as $values) {
+				try {
 					/**
-					 * Run through all returned values of the query and fill cells
+					 * Make a query
 					 */
-					foreach ($values as $index => $value) {
-						$this->memoryService->check(80);
-						$cell = $group->cells[$index];
-						$worksheetCell = $worksheet->getCell($cell->x . ($cell->y + $row))->setValue($value);
-						$worksheetCell->setHyperlink();
+					$row = 0;
+					foreach ($source->group($group->queries) as $values) {
+						/**
+						 * Run through all returned values of the query and fill cells
+						 */
+						foreach ($values as $index => $value) {
+							$this->memoryService->check(80);
+							$cell = $group->cells[$index];
+							$worksheetCell = $worksheet->getCell($cell->x . ($cell->y + $row))->setValue($value);
+							$worksheetCell->setHyperlink();
+						}
+						$row++;
 					}
-					$row++;
+				} catch (Throwable $exception) {
+					$progress->log(IProgress::LOG_ERROR, sprintf('Cannot query data from the group: %s', $exception->getMessage()));
 				}
 			}
 		}

@@ -92,7 +92,9 @@ abstract class AbstractSource implements ISource {
 		}, $sources);
 		$this->logger->debug('Sources attached to the iterator.');
 		$static = [];
+		$iterations = 0;
 		foreach ($iterator as $items) {
+			$iterations++;
 			/**
 			 * This is another little trick - take values and keep them for "values" - that means literal values will be properly populated,
 			 * also static values from the source will be properly populated; the rest will be filled by a generators.
@@ -142,7 +144,7 @@ abstract class AbstractSource implements ISource {
 				$_queries
 			);
 		}
-		$this->logger->debug('Group iterator is done.');
+		$this->logger->debug(sprintf('Group iterator is done; iterations (yields) done [%d].', $iterations));
 	}
 
 	public function parse(string $query): SourceQueryDto {

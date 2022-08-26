@@ -59,11 +59,13 @@ abstract class AbstractSource implements ISource {
 	}
 
 	public function group(array $queries): Generator {
+		$this->logger->debug('Executing group query on a Source.');
 		/** @var $_queries SourceQueryDto[] */
 		$_queries = array_map([
 			$this,
 			'parse',
 		], $queries);
+		$this->logger->debug('Queries parsed.');
 		$sources = [];
 		/**
 		 * To keep the stuff optimal, we've to take only source queries to do only
@@ -75,6 +77,7 @@ abstract class AbstractSource implements ISource {
 				$sources[$query->source] = $query;
 			}
 		}
+		$this->logger->debug('Prepared query sources.');
 		/**
 		 * Love this thing - magical SPL iterator which enables us to iterate over all sources at once with source
 		 * name as a key and value from the underlying generator.
@@ -87,6 +90,7 @@ abstract class AbstractSource implements ISource {
 			 */
 			$iterator->attachIterator($this->iterator(SourceQueryDto::create(['source' => $query->source])), $query->source);
 		}, $sources);
+		$this->logger->debug('Sources attached to the iterator.');
 		$static = [];
 		foreach ($iterator as $items) {
 			/**
@@ -138,6 +142,7 @@ abstract class AbstractSource implements ISource {
 				$_queries
 			);
 		}
+		$this->logger->debug('Group iterator is done.');
 	}
 
 	public function parse(string $query): SourceQueryDto {

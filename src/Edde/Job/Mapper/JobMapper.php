@@ -6,14 +6,15 @@ namespace Edde\Job\Mapper;
 use Edde\Job\Dto\JobDto;
 use Edde\Job\Repository\JobLogRepositoryTrait;
 use Edde\Mapper\AbstractMapper;
+use Edde\Process\ProcessServiceTrait;
 use Edde\User\Mapper\UserMapperTrait;
 use Edde\User\Repository\UserRepositoryTrait;
-use Edde\Utils\ProcessUtils;
 
 class JobMapper extends AbstractMapper {
 	use JobLogRepositoryTrait;
 	use UserRepositoryTrait;
 	use UserMapperTrait;
+	use ProcessServiceTrait;
 
 	public function item($item) {
 		if (!$item) {
@@ -39,7 +40,7 @@ class JobMapper extends AbstractMapper {
 			'commit'      => $item->commit,
 			'logs'        => $this->jobLogRepository->hasLog($item->id),
 			'user'        => $item->user_id ? $this->userMapper->item($this->userRepository->find($item->user_id)) : null,
-			'running'     => ProcessUtils::isRunning($item->pid),
+			'running'     => $this->processService->isRunning($item->pid),
 		]);
 	}
 }

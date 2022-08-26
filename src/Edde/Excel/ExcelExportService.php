@@ -29,6 +29,7 @@ use function array_map;
 use function array_values;
 use function chr;
 use function date;
+use function json_encode;
 use function ord;
 use function reset;
 use function sprintf;
@@ -190,6 +191,7 @@ class ExcelExportService implements IExcelExportService {
 		$target = date('Y-m-d H-i-s') . ' ' . $templateFile->name;
 		$meta = $this->meta($template);
 		$progress->log(IProgress::LOG_INFO, 'Resolved template meta data.');
+		$progress->log(IProgress::LOG_INFO, json_encode($meta));
 		$progress->onProgress();
 		$file = $this->fileService->store(FileStream::openRead($template), '/export/excel', $target, null, $this->currentUserService->requiredId());
 		$progress->log(IProgress::LOG_INFO, sprintf('Storing to [%s].', $file->native));
@@ -211,6 +213,7 @@ class ExcelExportService implements IExcelExportService {
 			$source = $this->sourceService->source($tab->sources, $excelExportDto->queries);
 			$worksheet = $spreadsheet->getSheetByName($tab->name);
 			foreach ($tab->groups->groups as $group) {
+				$progress->log(IProgress::LOG_INFO, 'Querying data from the group.');
 				/**
 				 * Make a query
 				 */

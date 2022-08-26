@@ -84,6 +84,7 @@ abstract class AbstractSource implements ISource {
 		 */
 		$iterator = new MultipleIterator(MultipleIterator::MIT_NEED_ANY | MultipleIterator::MIT_KEYS_ASSOC);
 		array_map(function (?SourceQueryDto $query) use ($iterator) {
+			$this->logger->debug(sprintf('Attaching source [%s] of type [%s].', $query->source, $query->type));
 			/**
 			 * Trick: attach to a source, but take the value returned from source instead resolving value of the query.
 			 * With this all queries with the same source do only one request instead of request per query which is highly suboptimal.

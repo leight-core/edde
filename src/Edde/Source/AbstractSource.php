@@ -135,7 +135,7 @@ abstract class AbstractSource implements ISource {
 							 * Regular value from the source (generator), nothing to think about
 							 */
 							case 'iterator':
-								$this->logger->debug(sprintf('Getting from iterator [%s::%s], value [%s], items [%s].', $query->source, $query->type, implode(', ', $query->value), implode(', ', array_keys($items))));
+								$this->logger->debug(sprintf('Getting from iterator [%s::%s], value [%s], items [%s].', $query->source, $query->type, implode(', ', $query->value), implode(', ', array_keys($items[$query->source]))));
 								$value = isset($items[$query->source]) ? ObjectUtils::valueOf($items[$query->source], $query->value) : null;
 								break;
 							/**

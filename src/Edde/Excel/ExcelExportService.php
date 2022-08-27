@@ -226,7 +226,7 @@ class ExcelExportService implements IExcelExportService {
 			$worksheet = $spreadsheet->getSheetByName($tab->name);
 			foreach ($tab->groups->groups as $group) {
 				$progress->log(IProgress::LOG_INFO, 'Querying data from the group.');
-				$this->logger->debug('Querying data from the group.', ['tags' => ['export']]);
+				$this->logger->debug(sprintf('Querying data from the group [%s].', json_encode($group)), ['tags' => ['export']]);
 				try {
 					/**
 					 * Make a query

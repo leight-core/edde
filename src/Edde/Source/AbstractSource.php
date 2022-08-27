@@ -21,6 +21,7 @@ use function array_map;
 use function call_user_func;
 use function explode;
 use function get_class;
+use function json_encode;
 use function ltrim;
 use function sprintf;
 use function urldecode;
@@ -62,6 +63,7 @@ abstract class AbstractSource implements ISource {
 
 	public function group(array $queries): Generator {
 		$this->logger->debug('Executing group query on a Source.');
+		$this->logger->debug(json_encode($queries));
 		/** @var $_queries SourceQueryDto[] */
 		$_queries = array_map([
 			$this,

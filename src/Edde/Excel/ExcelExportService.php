@@ -11,6 +11,7 @@ use Edde\Excel\Dto\ReadDto;
 use Edde\File\Dto\FileDto;
 use Edde\File\FileServiceTrait;
 use Edde\File\Repository\FileRepositoryTrait;
+use Edde\Log\LoggerTrait;
 use Edde\Php\MemoryServiceTrait;
 use Edde\Progress\IProgress;
 use Edde\Progress\NoProgress;
@@ -44,6 +45,7 @@ class ExcelExportService implements IExcelExportService {
 	use MemoryServiceTrait;
 	use ConfigServiceTrait;
 	use FileRepositoryTrait;
+	use LoggerTrait;
 
 	const CONFIG_USE_CACHE = 'export.cache';
 
@@ -184,17 +186,25 @@ class ExcelExportService implements IExcelExportService {
 	public function export(ExcelExportDto $excelExportDto, IProgress $progress = null): FileDto {
 		$progress = NoProgress::ensure($progress);
 		$progress->log(IProgress::LOG_INFO, 'Starting Export Service.');
+		$this->logger->debug('Starting Export Service.', ['tags' => ['export']]);
 		$progress->onStart(8);
 		$template = ($templateFile = $this->fileRepository->find($excelExportDto->templateId))->native;
 		$progress->log(IProgress::LOG_INFO, sprintf('Resolved export template [%s].', $template));
+		$this->logger->debug(sprintf('Resolved export template [%s].', $template), ['tags' => ['export']]);
 		$progress->onProgress();
 		$target = date('Y-m-d H-i-s') . ' ' . $templateFile->name;
 		$meta = $this->meta($template);
 		$progress->log(IProgress::LOG_INFO, 'Resolved template meta data.');
 		$progress->log(IProgress::LOG_INFO, json_encode($meta));
+		$this->logger->debug('Resolved template meta data.', ['tags' => ['export']]);
+		$this->logger->debug(json_encode($meta), [
+			'tags' => ['export'],
+			'meta' => $meta,
+		]);
 		$progress->onProgress();
 		$file = $this->fileService->store(FileStream::openRead($template), '/export/excel', $target, null, $this->currentUserService->requiredId());
 		$progress->log(IProgress::LOG_INFO, sprintf('Storing to [%s].', $file->native));
+		$this->logger->debug(sprintf('Storing to [%s].', $file->native), ['tags' => ['export']]);
 		$progress->onProgress();
 		if ($this->configService->system(self::CONFIG_USE_CACHE, true)) {
 			Settings::setCache(new Psr16Cache(new FilesystemAdapter()));
@@ -204,16 +214,19 @@ class ExcelExportService implements IExcelExportService {
 			'file' => $template,
 		]));
 		$progress->log(IProgress::LOG_INFO, 'Read spreadsheets.');
+		$this->logger->debug('Read spreadsheets.', ['tags' => ['export']]);
 		$progress->onProgress();
 		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
 		$progress->onProgress();
 		$progress->log(IProgress::LOG_INFO, 'Reading tabs.');
+		$this->logger->debug('Reading tabs.', ['tags' => ['export']]);
 		foreach ($meta->tabs as $tab) {
 			$progress->log(IProgress::LOG_INFO, sprintf('Reading tab [%s].', $tab->name));
 			$source = $this->sourceService->source($tab->sources, $excelExportDto->queries);
 			$worksheet = $spreadsheet->getSheetByName($tab->name);
 			foreach ($tab->groups->groups as $group) {
 				$progress->log(IProgress::LOG_INFO, 'Querying data from the group.');
+				$this->logger->debug('Querying data from the group.', ['tags' => ['export']]);
 				try {
 					/**
 					 * Make a query
@@ -233,18 +246,22 @@ class ExcelExportService implements IExcelExportService {
 					}
 				} catch (Throwable $exception) {
 					$progress->log(IProgress::LOG_ERROR, sprintf('Cannot query data from the group: %s', $exception->getMessage()));
+					$this->logger->error($exception, ['tags' => ['export']]);
 				}
 			}
 		}
 		$progress->log(IProgress::LOG_INFO, 'All exported.');
+		$this->logger->debug('All exported.', ['tags' => ['export']]);
 		$progress->onProgress();
 		$writer->save($file->native);
 		$progress->log(IProgress::LOG_INFO, 'Save done.');
+		$this->logger->debug('Save done.', ['tags' => ['export']]);
 		$progress->onProgress();
 		$this->fileService->refresh($file->id);
 		$progress->onProgress();
 		$this->memoryService->log();
 		$progress->log(IProgress::LOG_INFO, 'Finished.');
+		$this->logger->debug('Finished.', ['tags' => ['export']]);
 		return $file;
 	}
 }

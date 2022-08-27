@@ -17,6 +17,7 @@ use League\Uri\Uri;
 use MultipleIterator;
 use Throwable;
 use function array_filter;
+use function array_keys;
 use function array_map;
 use function call_user_func;
 use function explode;
@@ -128,13 +129,13 @@ abstract class AbstractSource implements ISource {
 							$this->logger->error($throwable);
 							$mapper = $this->noopMapper;
 						}
-						$this->logger->debug(sprintf('Resolving query type [%s].', $query->type));
+						$this->logger->debug(sprintf('Resolving value of query type [%s].', $query->type));
 						switch ($query->type) {
 							/**
 							 * Regular value from the source (generator), nothing to think about
 							 */
 							case 'iterator':
-								$this->logger->debug(sprintf('Getting from iterator [%s::%s], value [%s].', $query->source, $query->type, implode(', ', $query->value)));
+								$this->logger->debug(sprintf('Getting from iterator [%s::%s], value [%s], items [%s].', $query->source, $query->type, implode(', ', $query->value), implode(', ', array_keys($items))));
 								$value = isset($items[$query->source]) ? ObjectUtils::valueOf($items[$query->source], $query->value) : null;
 								break;
 							/**
@@ -152,6 +153,7 @@ abstract class AbstractSource implements ISource {
 								$value = $query->value;
 								break;
 						}
+						$this->logger->debug(sprintf('Resolved value [%s].', $value ?? '- no value -'));
 						return isset($value) ? $mapper->item([
 							'value'  => $value,
 							'params' => $query->params,

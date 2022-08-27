@@ -7,6 +7,8 @@ use function is_object;
 
 class ObjectUtils {
 	/**
+	 * Get a value from an object by the given property array (like foo->bar->goo, [foo, bar, goo].
+	 *
 	 * @param object     $object
 	 * @param array|null $value
 	 *

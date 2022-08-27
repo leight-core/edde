@@ -21,6 +21,7 @@ use function array_map;
 use function call_user_func;
 use function explode;
 use function get_class;
+use function implode;
 use function json_encode;
 use function ltrim;
 use function sprintf;
@@ -133,18 +134,21 @@ abstract class AbstractSource implements ISource {
 							 * Regular value from the source (generator), nothing to think about
 							 */
 							case 'iterator':
+								$this->logger->debug(sprintf('Getting from iterator [%s::%s], value [%s].', $query->source, $query->type, implode(', ', $query->value)));
 								$value = isset($items[$query->source]) ? ObjectUtils::valueOf($items[$query->source], $query->value) : null;
 								break;
 							/**
 							 * The shit in the box: reuse value taken from the first run of the generator and reuse it like a bitch
 							 */
 							case 'single':
+								$this->logger->debug(sprintf('Resolved [%s::%s].', $query->source, $query->type));
 								$value = isset($static[$query->source]) ? ObjectUtils::valueOf($static[$query->source], $query->value) : null;
 								break;
 							/**
 							 * Most simple one - just vomit the value
 							 */
 							case 'static':
+								$this->logger->debug('Resolved static value.');
 								$value = $query->value;
 								break;
 						}

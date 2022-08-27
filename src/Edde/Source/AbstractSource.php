@@ -70,6 +70,7 @@ abstract class AbstractSource implements ISource {
 			'parse',
 		], $queries);
 		$this->logger->debug('Queries parsed.');
+		$this->logger->debug(json_encode($_queries));
 		$sources = [];
 		/**
 		 * To keep the stuff optimal, we've to take only source queries to do only

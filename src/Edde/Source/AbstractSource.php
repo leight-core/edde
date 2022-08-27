@@ -211,8 +211,15 @@ abstract class AbstractSource implements ISource {
 	public function iterator(SourceQueryDto $sourceQuery): Generator {
 		/** @var $mapper IMapper */
 		$mapper = isset($sourceQuery->params['mapper']) ? $this->container->get($sourceQuery->params['mapper']) : $this->noopMapper;
-		foreach ($this->repositories[$sourceQuery->source]->execute($this->queries[$sourceQuery->source]->query ?? null) as $item) {
-			yield ObjectUtils::valueOf($this->mappers[$sourceQuery->source]->item($item), $sourceQuery->value);
+		$this->logger->debug(sprintf('Running iterator on source [%s], mapper [%s].', $sourceQuery->source, $sourceQuery->params['mapper'] ?? '- no mapper provided -'));
+		try {
+			foreach ($this->repositories[$sourceQuery->source]->execute($this->queries[$sourceQuery->source]->query ?? null) as $item) {
+				yield ObjectUtils::valueOf($this->mappers[$sourceQuery->source]->item($item), $sourceQuery->value);
+			}
+			$this->logger->debug(sprintf('Source [%s] iteration done.', $sourceQuery->source));
+		} catch (Throwable $exception) {
+			$this->logger->error($exception);
+			throw $exception;
 		}
 	}
 

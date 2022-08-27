@@ -222,6 +222,7 @@ class ExcelExportService implements IExcelExportService {
 		$this->logger->debug('Reading tabs.', ['tags' => ['export']]);
 		foreach ($meta->tabs as $tab) {
 			$progress->log(IProgress::LOG_INFO, sprintf('Reading tab [%s].', $tab->name));
+			$this->logger->debug(sprintf('Reading tab [%s], [%s].', $tab->name, json_encode($tab)), ['tags' => ['export']]);
 			$source = $this->sourceService->source($tab->sources, $excelExportDto->queries);
 			$worksheet = $spreadsheet->getSheetByName($tab->name);
 			foreach ($tab->groups->groups as $group) {

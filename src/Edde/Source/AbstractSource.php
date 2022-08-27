@@ -20,6 +20,7 @@ use function array_filter;
 use function array_map;
 use function call_user_func;
 use function explode;
+use function get_class;
 use function ltrim;
 use function sprintf;
 use function urldecode;
@@ -98,6 +99,7 @@ abstract class AbstractSource implements ISource {
 		$this->logger->debug('Starting iterator.');
 		try {
 			foreach ($iterator as $items) {
+				$this->logger->debug(sprintf('Running iteration [%d].', $iterations));
 				$iterations++;
 				/**
 				 * This is another little trick - take values and keep them for "values" - that means literal values will be properly populated,
@@ -114,12 +116,15 @@ abstract class AbstractSource implements ISource {
 				 */
 				yield array_map(
 					function ($query) use ($items, $static) {
+						$this->logger->debug(sprintf('Running query [%s::%s].', $query->source, $query->type));
 						try {
 							$mapper = isset($query->params['mapper']) ? $this->container->get($query->params['mapper']) : $this->noopMapper;
+							$this->logger->debug(sprintf('Using mapper [%s].', get_class($mapper)));
 						} catch (Throwable $throwable) {
 							$this->logger->error($throwable);
 							$mapper = $this->noopMapper;
 						}
+						$this->logger->debug(sprintf('Resolving query type [%s].', $query->type));
 						switch ($query->type) {
 							/**
 							 * Regular value from the source (generator), nothing to think about

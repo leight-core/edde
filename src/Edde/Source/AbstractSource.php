@@ -119,7 +119,7 @@ abstract class AbstractSource implements ISource {
 						$this->logger->debug(sprintf('Running query [%s::%s].', $query->source, $query->type));
 						try {
 							$mapper = isset($query->params['mapper']) ? $this->container->get($query->params['mapper']) : $this->noopMapper;
-							$this->logger->debug(sprintf('Using mapper [%s].', get_class($mapper)));
+							$this->logger->debug(sprintf('Using mapper [%s], requested [%s].', get_class($mapper), $query->params['mapper'] ?? '- mapper not provided -'));
 						} catch (Throwable $throwable) {
 							$this->logger->error($throwable);
 							$mapper = $this->noopMapper;

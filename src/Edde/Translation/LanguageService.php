@@ -12,6 +12,7 @@ use Edde\User\CurrentUserServiceTrait;
 use Edde\User\Exception\UserNotSelectedException;
 use function array_map;
 use function array_merge;
+use function json_encode;
 
 class LanguageService {
 	use CurrentUserServiceTrait;
@@ -40,7 +41,7 @@ class LanguageService {
 	 */
 	public function forCurrentUser(string $default = null): ?string {
 		$language = $this->resolve($user = $this->currentUserService->requireUser(), $default);
-		$this->logger->info(sprintf('Resolved language [%s] for current user [%s]; default [%s].', $language, $user->email, $default ?? 'null'));
+		$this->logger->debug(sprintf('Resolved language [%s] for current user [%s]; default [%s].', $language, json_encode($user), $default ?? '- without default -'));
 		return $language;
 	}
 

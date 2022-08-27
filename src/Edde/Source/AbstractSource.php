@@ -21,6 +21,7 @@ use function array_map;
 use function call_user_func;
 use function explode;
 use function ltrim;
+use function sprintf;
 use function urldecode;
 
 abstract class AbstractSource implements ISource {
@@ -94,58 +95,64 @@ abstract class AbstractSource implements ISource {
 		$this->logger->debug('Sources attached to the iterator.');
 		$static = [];
 		$iterations = 0;
-		foreach ($iterator as $items) {
-			$iterations++;
-			/**
-			 * This is another little trick - take values and keep them for "values" - that means literal values will be properly populated,
-			 * also static values from the source will be properly populated; the rest will be filled by a generators.
-			 */
-			foreach ($items as $k => $v) {
-				$static[$k] = $v ?: $static[$k];
+		$this->logger->debug('Starting iterator.');
+		try {
+			foreach ($iterator as $items) {
+				$iterations++;
+				/**
+				 * This is another little trick - take values and keep them for "values" - that means literal values will be properly populated,
+				 * also static values from the source will be properly populated; the rest will be filled by a generators.
+				 */
+				foreach ($items as $k => $v) {
+					$static[$k] = $v ?: $static[$k];
+				}
+				/**
+				 * The boring stuff:
+				 * It's necessary to know which kind of value must be emitted; most part of the trick is that sources returns source object instead of
+				 * resolved value, so it's done here.
+				 * Also because source supports copying the same value over and over, it has to be handled here.
+				 */
+				yield array_map(
+					function ($query) use ($items, $static) {
+						try {
+							$mapper = isset($query->params['mapper']) ? $this->container->get($query->params['mapper']) : $this->noopMapper;
+						} catch (Throwable $throwable) {
+							$this->logger->error($throwable);
+							$mapper = $this->noopMapper;
+						}
+						switch ($query->type) {
+							/**
+							 * Regular value from the source (generator), nothing to think about
+							 */
+							case 'iterator':
+								$value = isset($items[$query->source]) ? ObjectUtils::valueOf($items[$query->source], $query->value) : null;
+								break;
+							/**
+							 * The shit in the box: reuse value taken from the first run of the generator and reuse it like a bitch
+							 */
+							case 'single':
+								$value = isset($static[$query->source]) ? ObjectUtils::valueOf($static[$query->source], $query->value) : null;
+								break;
+							/**
+							 * Most simple one - just vomit the value
+							 */
+							case 'static':
+								$value = $query->value;
+								break;
+						}
+						return isset($value) ? $mapper->item([
+							'value'  => $value,
+							'params' => $query->params,
+						]) : null;
+					},
+					$_queries
+				);
 			}
-			/**
-			 * The boring stuff:
-			 * It's necessary to know which kind of value must be emitted; most part of the trick is that sources returns source object instead of
-			 * resolved value, so it's done here.
-			 * Also because source supports copying the same value over and over, it has to be handled here.
-			 */
-			yield array_map(
-				function ($query) use ($items, $static) {
-					try {
-						$mapper = isset($query->params['mapper']) ? $this->container->get($query->params['mapper']) : $this->noopMapper;
-					} catch (Throwable $throwable) {
-						$this->logger->error($throwable);
-						$mapper = $this->noopMapper;
-					}
-					switch ($query->type) {
-						/**
-						 * Regular value from the source (generator), nothing to think about
-						 */
-						case 'iterator':
-							$value = isset($items[$query->source]) ? ObjectUtils::valueOf($items[$query->source], $query->value) : null;
-							break;
-						/**
-						 * The shit in the box: reuse value taken from the first run of the generator and reuse it like a bitch
-						 */
-						case 'single':
-							$value = isset($static[$query->source]) ? ObjectUtils::valueOf($static[$query->source], $query->value) : null;
-							break;
-						/**
-						 * Most simple one - just vomit the value
-						 */
-						case 'static':
-							$value = $query->value;
-							break;
-					}
-					return isset($value) ? $mapper->item([
-						'value'  => $value,
-						'params' => $query->params,
-					]) : null;
-				},
-				$_queries
-			);
+			$this->logger->debug(sprintf('Group iterator is done; iterations (yields) done [%d].', $iterations));
+		} catch (Throwable $throwable) {
+			$this->logger->error($throwable);
+			throw $throwable;
 		}
-		$this->logger->debug(sprintf('Group iterator is done; iterations (yields) done [%d].', $iterations));
 	}
 
 	public function parse(string $query): SourceQueryDto {

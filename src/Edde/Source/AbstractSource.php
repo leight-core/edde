@@ -156,7 +156,7 @@ abstract class AbstractSource implements ISource {
 								$value = $query->value;
 								break;
 						}
-						$this->logger->debug(sprintf('Resolved value [%s].', $value ?? '- no value -'));
+						$this->logger->debug(sprintf('Resolved value [%s].', isset($value) ? json_encode($value) : '- no value -'));
 						return isset($value) ? $mapper->item([
 							'value'  => $value,
 							'params' => $query->params,

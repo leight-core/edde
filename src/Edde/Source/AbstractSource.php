@@ -113,6 +113,9 @@ abstract class AbstractSource implements ISource {
 				foreach ($items as $k => $v) {
 					$static[$k] = $v ?: $static[$k];
 				}
+				$this->logger->debug(sprintf('Items [%s].', json_encode($items)));
+				$this->logger->debug(sprintf('Static [%s].', json_encode($static)));
+
 				/**
 				 * The boring stuff:
 				 * It's necessary to know which kind of value must be emitted; most part of the trick is that sources returns source object instead of
@@ -136,14 +139,14 @@ abstract class AbstractSource implements ISource {
 							 */
 							case 'iterator':
 								$this->logger->debug(sprintf('Getting from iterator [%s::%s], value [%s], items [%s].', $query->source, $query->type, implode(', ', $query->value), implode(', ', array_keys((array)$items[$query->source]))));
-								$value = isset($items[$query->source]) ? ObjectUtils::valueOf($items[$query->source], $query->value) : null;
+								$value = isset($items[$query->source]) ? @ObjectUtils::valueOf($items[$query->source], $query->value) : null;
 								break;
 							/**
 							 * The shit in the box: reuse value taken from the first run of the generator and reuse it like a bitch
 							 */
 							case 'single':
 								$this->logger->debug(sprintf('Resolved [%s::%s].', $query->source, $query->type));
-								$value = isset($static[$query->source]) ? ObjectUtils::valueOf($static[$query->source], $query->value) : null;
+								$value = isset($static[$query->source]) ? @ObjectUtils::valueOf($static[$query->source], $query->value) : null;
 								break;
 							/**
 							 * Most simple one - just vomit the value

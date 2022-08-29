@@ -10,6 +10,10 @@ use Ramsey\Uuid\Uuid;
  * Just a proxy service for internal implementation of UUID and other hash stuff.
  */
 class UuidService {
+	public function uuid1(): string {
+		return Uuid::uuid1()->toString();
+	}
+
 	public function uuid4(): string {
 		return Uuid::uuid4()->toString();
 	}

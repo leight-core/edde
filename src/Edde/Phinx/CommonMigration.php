@@ -136,7 +136,10 @@ abstract class CommonMigration extends AbstractMigration {
 		$this->fileService->store(FileStream::openRead($source), $path, $name);
 	}
 
-	public function applyTo(array $applyTo, callable $callback) {
-		in_array($this->configService->get('app.codename'), $applyTo, true) && $callback();
+	/**
+	 * Run the provided callback only when it could be applied on the selected environment.
+	 */
+	public function applyTo(array $applyTo, callable $callback, string $config = 'app.codename') {
+		in_array($this->configService->get($config), $applyTo, true) && $callback();
 	}
 }

@@ -137,6 +137,6 @@ abstract class CommonMigration extends AbstractMigration {
 	}
 
 	public function applyTo(array $applyTo, callable $callback) {
-		in_array($this->configService->get('app.codename', ''), $applyTo) && $callback();
+		in_array($this->configService->get('app.codename'), $applyTo, true) && $callback();
 	}
 }

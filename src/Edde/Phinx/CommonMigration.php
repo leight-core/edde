@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Phinx;
 
+use Edde\Config\ConfigServiceTrait;
 use Edde\Excel\ExcelImportServiceTrait;
 use Edde\Excel\IExcelImportService;
 use Edde\File\FileServiceTrait;
@@ -16,6 +17,7 @@ use Edde\Uuid\UuidServiceTrait;
 use Phinx\Migration\AbstractMigration;
 use Throwable;
 use function basename;
+use function in_array;
 
 /**
  * Utility class for Phinx migration which helps with some common stuff like creating
@@ -28,6 +30,7 @@ abstract class CommonMigration extends AbstractMigration {
 	use UuidServiceTrait;
 	use ExcelImportServiceTrait;
 	use LoggerTrait;
+	use ConfigServiceTrait;
 
 	public function init() {
 		SlimApp::$instance->injectOn($this);
@@ -131,5 +134,9 @@ abstract class CommonMigration extends AbstractMigration {
 	 */
 	public function useFile(string $source, string $path, string $name) {
 		$this->fileService->store(FileStream::openRead($source), $path, $name);
+	}
+
+	public function applyTo(array $applyTo, callable $callback) {
+		in_array($this->configService->get('app.codename') || '', $applyTo) && $callback();
 	}
 }

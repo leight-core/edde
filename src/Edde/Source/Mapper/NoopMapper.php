@@ -6,7 +6,7 @@ namespace Edde\Source\Mapper;
 use Edde\Mapper\AbstractMapper;
 
 class NoopMapper extends AbstractMapper {
-	public function item($item) {
+	public function item($item, $params = null) {
 		return $item['value'] ?? null;
 	}
 }

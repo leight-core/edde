@@ -363,7 +363,7 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 		$this->fulltext && $filter->fulltext && $this->fulltext($selectBase, $this->fulltext, $filter->fulltext);
 	}
 
-	public function item($item) {
+	public function item($item, $params = null) {
 		throw new RuntimeException(sprintf("Repository Mapper (%s::item()) not implemented.", static::class));
 	}
 

@@ -7,7 +7,7 @@ use Edde\Job\Dto\Log\JobLogDto;
 use Edde\Mapper\AbstractMapper;
 
 class JobLogMapper extends AbstractMapper {
-	public function item($item) {
+	public function item($item, $params = null) {
 		return $this->dtoService->fromArray(JobLogDto::class, [
 			'id'        => $item->id,
 			'level'     => $item->level,

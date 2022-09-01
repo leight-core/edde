@@ -21,15 +21,14 @@ abstract class AbstractMapper implements IMapper {
 	public function __construct() {
 	}
 
-	public function map(iterable $source): array {
-		return iterator_to_array($this->stream($source));
+	public function map(iterable $source, $params = null): array {
+		return iterator_to_array($this->stream($source, $params));
 	}
 
-	public function stream(iterable $source): Generator {
-//		$dto = $this->reflectionService->toClass(static::class)->getResponseClassOf('item') && $this->reflectionService->toClass($dto)->is(IDto::class);
+	public function stream(iterable $source, $params = null): Generator {
 		foreach ($source as $item) {
 			try {
-				yield $this->item($item);
+				yield $this->item($item, $params);
 			} catch (SkipException $exception) {
 				/**
 				 * Swallowing exceptions is road to hell, thus it's necessary to log

@@ -7,7 +7,7 @@ use Edde\Bridge\User\CurrentUser;
 use Edde\Mapper\AbstractMapper;
 
 abstract class AbstractCurrentUserMapper extends AbstractMapper implements ICurrentUserMapper {
-	public function item($item) {
+	public function item($item, $params = null) {
 		if (!$item) {
 			return null;
 		}

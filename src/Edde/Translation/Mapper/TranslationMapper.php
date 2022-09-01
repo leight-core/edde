@@ -9,7 +9,7 @@ use Edde\Translation\TranslationServiceTrait;
 class TranslationMapper extends AbstractMapper {
 	use TranslationServiceTrait;
 
-	public function item($item) {
+	public function item($item, $params = null) {
 		return isset($item['value']) ?
 			$this->translationService->translate((isset($item['params']['prefix']) ? $item['params']['prefix'] . '.' : '') . $item['value'], $item['params']['language'] ?? 'en', (string)$item['value']) :
 			null;

@@ -16,7 +16,7 @@ class JobMapper extends AbstractMapper {
 	use UserMapperTrait;
 	use ProcessServiceTrait;
 
-	public function item($item) {
+	public function item($item, $params = null) {
 		if (!$item) {
 			return null;
 		}
@@ -39,7 +39,7 @@ class JobMapper extends AbstractMapper {
 			'formatted'   => sprintf('%.1f%%', $item->progress),
 			'commit'      => $item->commit,
 			'logs'        => $this->jobLogRepository->hasLog($item->id),
-			'user'        => $item->user_id ? $this->userMapper->item($this->userRepository->find($item->user_id)) : null,
+			'user'        => $item->user_id ? $this->userMapper->item($this->userRepository->find($item->user_id), $params) : null,
 			'running'     => $this->processService->isRunning($item->pid),
 		]);
 	}

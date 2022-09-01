@@ -7,7 +7,7 @@ use Edde\Mapper\AbstractMapper;
 use Edde\Tag\Dto\TagDto;
 
 class TagMapper extends AbstractMapper {
-	public function item($item) {
+	public function item($item, $params = null) {
 		return $this->dtoService->fromArray(TagDto::class, [
 			'id'    => $item->id,
 			'code'  => $item->code,

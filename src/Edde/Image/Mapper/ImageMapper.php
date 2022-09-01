@@ -12,12 +12,12 @@ class ImageMapper extends AbstractMapper {
 	use FileRepositoryTrait;
 	use FileMapperTrait;
 
-	public function item($item) {
+	public function item($item, $params = null) {
 		return $this->dtoService->fromArray(ImageDto::class, [
 			'id'         => $item->id,
-			'preview'    => $this->fileMapper->item($this->fileRepository->find($item->preview_id)),
+			'preview'    => $this->fileMapper->item($this->fileRepository->find($item->preview_id), $params),
 			'previewId'  => $item->preview_id,
-			'original'   => $this->fileMapper->item($this->fileRepository->find($item->original_id)),
+			'original'   => $this->fileMapper->item($this->fileRepository->find($item->original_id), $params),
 			'originalId' => $item->original_id,
 			'gallery'    => $item->gallery,
 			'stamp'      => $this->isoDateNull($item->stamp),

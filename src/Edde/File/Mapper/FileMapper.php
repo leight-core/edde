@@ -16,13 +16,14 @@ class FileMapper extends AbstractMapper {
 
 	/**
 	 * @param       $item
+	 * @param null  $params
 	 *
 	 * @return FileDto
 	 *
 	 * @throws ItemException
 	 * @throws SkipException
 	 */
-	public function item($item) {
+	public function item($item, $params = null) {
 		return $this->dtoService->fromArray(FileDto::class, [
 			'id'      => $item->id,
 			'path'    => $item->path,
@@ -30,7 +31,7 @@ class FileMapper extends AbstractMapper {
 			'mime'    => $item->mime,
 			'native'  => $item->native,
 			'size'    => $item->size,
-			'user'    => $item->user_id ? $this->userMapper->item($this->userRepository->find($item->user_id)) : null,
+			'user'    => $item->user_id ? $this->userMapper->item($this->userRepository->find($item->user_id), $params) : null,
 			'created' => $this->isoDateNull($item->created),
 			'updated' => $this->isoDateNull($item->updated),
 			'ttl'     => $item->ttl,

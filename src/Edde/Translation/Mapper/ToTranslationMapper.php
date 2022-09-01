@@ -7,7 +7,7 @@ use Edde\Mapper\AbstractMapper;
 use Edde\Translation\Dto\TranslationDto;
 
 class ToTranslationMapper extends AbstractMapper {
-	public function item($item) {
+	public function item($item, $params = null) {
 		return $this->dtoService->fromArray(TranslationDto::class, [
 			'id'        => $item->id,
 			'language'  => $item->locale,

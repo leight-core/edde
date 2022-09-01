@@ -70,6 +70,10 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 		$this->id = $id;
 	}
 
+	public function getTableName(): string {
+		return $this->table;
+	}
+
 	/**
 	 * @param string|int  $id
 	 * @param string|null $table

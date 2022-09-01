@@ -144,6 +144,7 @@ class FileService implements IFileService {
 					$this->directory->delete($item->path());
 					$this->logger->info(sprintf('Removing dead file by TTL [%s]', $file), ['tags' => ['file']]);
 				} catch (Throwable $exception) {
+					$this->logger->error($exception, ['tags' => ['file']]);
 					/**
 					 * swallow - there could be some reasons the file cannot be deleted; it could be taken by another
 					 * GC run

@@ -305,6 +305,15 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 		return $data;
 	}
 
+	public function deleteBy(Query $query): void {
+		if (!isset($query->filter)) {
+			return;
+		}
+		$delete = $this->deleteWhere();
+		$this->applyWhere($query->filter, $delete);
+		$delete->execute();
+	}
+
 	public function deleteWhere(): Delete {
 		return $this->table()->delete();
 	}

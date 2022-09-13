@@ -47,6 +47,8 @@ interface IRepository extends IMapper {
 
 	public function delete(string $id);
 
+	public function deleteBy(Query $query): void;
+
 	public function deleteWhere(): Delete;
 
 	/**

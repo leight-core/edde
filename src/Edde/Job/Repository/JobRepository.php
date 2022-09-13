@@ -32,9 +32,9 @@ class JobRepository extends AbstractRepository {
 	public function applyWhere($filter, SelectBase $selectBase): void {
 		/** @var $filter JobFilterDto */
 		parent::applyWhere($filter, $selectBase);
+		isset($filter->id) && $selectBase->where('id', $filter->id);
 		isset($filter->userId) && $selectBase->where('user_id', $filter->userId);
 		isset($filter->services) && $selectBase->where('service', 'in', $filter->services);
-		isset($filter->id) && $selectBase->where('id', $filter->id);
 		isset($filter->status) && $selectBase->where('status', 'in', $filter->status);
 		isset($filter->commit) && $selectBase->where('commit', $filter->commit);
 		isset($filter->params) && $this->fulltext($selectBase, [
@@ -119,8 +119,8 @@ class JobRepository extends AbstractRepository {
 		$update->execute();
 	}
 
-	public function deleteBy(?DeleteDto $deleteDto) {
-		$update = $this
+	public function deleteJob(?DeleteDto $deleteDto) {
+		$delete = $this
 			->table()
 			->delete()
 			->where('status', 'in', [
@@ -131,13 +131,7 @@ class JobRepository extends AbstractRepository {
 				JobStatus::JOB_SCHEDULED,
 				JobStatus::JOB_CREATED,
 			]);
-
-		if ($deleteDto) {
-			$deleteDto->userId && $update->where('user_id', $deleteDto->userId);
-			$deleteDto->jobId && $update->where('id', $deleteDto->jobId);
-			$deleteDto->services && $update->where('service', 'in', $deleteDto->services);
-		}
-
-		$update->execute();
+		!empty($deleteDto) && $this->applyWhere($deleteDto, $delete);
+		$delete->execute();
 	}
 }

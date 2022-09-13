@@ -14,6 +14,6 @@ class DeleteEndpoint extends AbstractMutationEndpoint {
 	 * @param DeleteDto|void|null $deleteDto
 	 */
 	public function post(?DeleteDto $deleteDto) {
-		$this->jobRepository->deleteBy($deleteDto);
+		$this->jobRepository->deleteJob($deleteDto);
 	}
 }

@@ -32,12 +32,6 @@ class Storage {
 	public function connection(): Connection {
 		if (!$this->connection) {
 			$this->connection = new Connection($this->storageConfig->getConfig());
-			try {
-				$this->query("SET GLOBAL wait_timeout=3600");
-				$this->query("SET GLOBAL max_allowed_packet=" . (1024 * 1024 * 1024/** b -> kb -> mb (in this case 1G) */));
-			} catch (Throwable $exception) {
-				// swallowed
-			}
 			$this->builder = new Builder('mysql', function ($_, string $sql, $params) {
 				return $this->connection->query($sql, ...$params);
 			});

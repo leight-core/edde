@@ -32,6 +32,13 @@ class Query extends AbstractDto {
 	 */
 	public $filter;
 
+	public function __construct($filter = null, $orderBy = null, ?int $page = 0, ?int $size = 10) {
+		$this->filter = $filter;
+		$this->orderBy = $orderBy;
+		$this->page = $page;
+		$this->size = $size;
+	}
+
 	public function offset() {
 		return $this->page * $this->size;
 	}

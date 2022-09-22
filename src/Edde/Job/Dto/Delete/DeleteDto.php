@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Edde\Job\Dto\Delete;
 
-use Edde\Dto\AbstractDto;
+use Edde\Repository\Dto\AbstractFilterDto;
 
-class DeleteDto extends AbstractDto {
+class DeleteDto extends AbstractFilterDto {
 	/** @var string|void */
 	public $jobId;
 	/** @var string|void */

@@ -10,8 +10,7 @@ class TagMapper extends AbstractMapper {
 	public function item($item, $params = null) {
 		return $this->dtoService->fromArray(TagDto::class, [
 			'id'    => $item->id,
-			'code'  => $item->code,
-			'label' => $item->label,
+			'tag'   => $item->tag,
 			'sort'  => $item->sort,
 			'group' => $item->group,
 		]);

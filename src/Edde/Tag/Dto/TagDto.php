@@ -11,13 +11,9 @@ class TagDto extends AbstractDto {
 	 */
 	public $id;
 	/**
-	 * @var string|null
-	 */
-	public $code;
-	/**
 	 * @var string
 	 */
-	public $label;
+	public $tag;
 	/**
 	 * @var string|null
 	 */

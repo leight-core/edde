@@ -22,6 +22,8 @@ abstract class AbstractCurrentUser extends AbstractDto {
 	public $settings;
 	/** @var RoleDto[] */
 	public $roles = [];
+	/** @var string[] */
+	public $tokens = [];
 
 	public function toLocalDate($date): ?string {
 		if (!$date) {

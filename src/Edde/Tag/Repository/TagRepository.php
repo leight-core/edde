@@ -63,7 +63,7 @@ class TagRepository extends AbstractRepository {
 	}
 
 	public function useEnsure(EnsureTagDto $ensureTagDto) {
-		return $this->ensure($ensureTagDto->tag, $ensureTagDto->group, $ensureTagDto->sort);
+		return $this->ensure($ensureTagDto->tag, $ensureTagDto->group, $ensureTagDto->sort ?? 0);
 	}
 
 	public function requireByCodeGroup(string $code, string $group) {

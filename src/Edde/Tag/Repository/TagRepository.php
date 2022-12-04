@@ -10,6 +10,7 @@ use Edde\Repository\AbstractRepository;
 use Edde\Repository\Exception\DuplicateEntryException;
 use Edde\Repository\Exception\RequiredResultException;
 use Edde\Repository\IRepository;
+use Edde\Tag\Dto\EnsureTagDto;
 use Edde\Tag\Dto\TagFilterDto;
 
 class TagRepository extends AbstractRepository {
@@ -59,6 +60,10 @@ class TagRepository extends AbstractRepository {
 				'sort' => $sort,
 			]);
 		}
+	}
+
+	public function useEnsure(EnsureTagDto $ensureTagDto) {
+		return $this->ensure($ensureTagDto->tag, $ensureTagDto->group, $ensureTagDto->sort);
 	}
 
 	public function requireByCodeGroup(string $code, string $group) {

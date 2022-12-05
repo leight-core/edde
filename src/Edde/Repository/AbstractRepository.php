@@ -404,15 +404,15 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 		}
 	}
 
-	protected function fulltext(SelectBase $selectBase, array $columns, $values): void {
+	protected function fulltext(SelectBase $selectBase, array $columns, $values): SelectBase {
 		if (empty($values)) {
-			return;
+			return $selectBase;
 		}
 		if (is_string($values)) {
 			foreach (explode(' ', $values) as $part) {
 				$this->fulltext($selectBase, $columns, [trim($part)]);
 			}
-			return;
+			return $selectBase;
 		}
 		$selectBase->where(function (SelectBase $select) use ($columns, $values) {
 			foreach ((array)$values as $value) {
@@ -421,6 +421,7 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 				}
 			}
 		});
+		return $selectBase;
 	}
 
 	protected function col(string $name): string {

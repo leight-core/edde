@@ -29,6 +29,6 @@ class UpgradesEndpoint extends AbstractEndpoint {
 		isset($query->filter->active) && $upgrades = array_filter($upgrades, function (UpgradeDto $upgrade) use ($query) {
 			return $upgrade->active === $query->filter->active;
 		});
-		return $upgrades;
+		return array_slice($upgrades, ($query->page ?? 0) * ($query->size ?? 10), $query->size ?? 10);
 	}
 }

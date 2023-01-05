@@ -6,6 +6,10 @@ namespace Edde\Phinx\Dto;
 use Edde\Dto\AbstractDto;
 
 class UpgradeDto extends AbstractDto {
+	/**
+	 * @var string
+	 */
+	public $id;
 	/** @var string */
 	public $version;
 	/** @var string */

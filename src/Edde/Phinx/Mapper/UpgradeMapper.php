@@ -19,6 +19,7 @@ class UpgradeMapper extends AbstractMapper {
 	 */
 	public function item($item, $params = null) {
 		return $this->dtoService->fromArray(UpgradeDto::class, [
+			'id'      => $item->getVersion(),
 			'version' => $item->getVersion(),
 			'name'    => $item->getName(),
 			'active'  => $this->upgradeManager->isActive($item),

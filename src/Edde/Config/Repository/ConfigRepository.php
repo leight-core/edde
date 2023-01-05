@@ -3,11 +3,10 @@ declare(strict_types=1);
 
 namespace Edde\Config\Repository;
 
-use ClanCats\Hydrahon\Query\Sql\Select;
+use ClanCats\Hydrahon\Query\Sql\SelectBase;
 use Dibi\Exception;
 use Edde\Config\Dto\ConfigFilterDto;
 use Edde\Config\Dto\Create\CreateDto;
-use Edde\Query\Dto\Query;
 use Edde\Repository\AbstractRepository;
 use Edde\Repository\Exception\DuplicateEntryException;
 use Edde\Repository\Exception\RepositoryException;
@@ -21,21 +20,15 @@ class ConfigRepository extends AbstractRepository {
 		]);
 	}
 
-	public function toQuery(Query $query): Select {
-		$select = $this->select();
-
+	public function applyWhere($filter, SelectBase $selectBase): void {
 		/** @var $filter ConfigFilterDto */
-		$filter = $query->filter;
-		$filter->fulltext && $this->fulltext($select, [
+		$filter->fulltext && $this->fulltext($selectBase, [
 			'id',
 			'key',
 			'value',
 		], $filter->fulltext);
-		$filter->id && $select->where('id', $filter->id);
-
-		$this->applyOrderBy($query->orderBy, $select);
-
-		return $select;
+		isset($filter->id) && $this->where($selectBase, 'id', $filter->id);
+		isset($filter->private) && $this->where($selectBase, 'private', $filter->private);
 	}
 
 	/**

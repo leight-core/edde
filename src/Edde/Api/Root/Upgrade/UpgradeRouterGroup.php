@@ -5,6 +5,7 @@ namespace Edde\Api\Root\Upgrade;
 
 use Edde\Api\Root\Upgrade\Endpoint\RunEndpoint;
 use Edde\Api\Root\Upgrade\Endpoint\UpgradeEndpoint;
+use Edde\Api\Root\Upgrade\Endpoint\UpgradesCountEndpoint;
 use Edde\Api\Root\Upgrade\Endpoint\UpgradesEndpoint;
 use Edde\Http\AbstractRouterGroup;
 use Slim\Interfaces\RouteCollectorProxyInterface;
@@ -14,6 +15,7 @@ class UpgradeRouterGroup extends AbstractRouterGroup {
 		$this->endpoints($routeCollectorProxy, [
 			RunEndpoint::class,
 			UpgradeEndpoint::class,
+			UpgradesCountEndpoint::class,
 			UpgradesEndpoint::class,
 		]);
 	}

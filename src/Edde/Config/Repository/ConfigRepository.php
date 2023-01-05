@@ -94,8 +94,9 @@ class ConfigRepository extends AbstractRepository {
 	 */
 	public function create(CreateDto $createDto) {
 		return $this->insert([
-			'key'   => $createDto->config->key,
-			'value' => $createDto->config->value,
+			'key'     => $createDto->config->key,
+			'value'   => $createDto->config->value,
+			'private' => $createDto->config->private,
 		]);
 	}
 }

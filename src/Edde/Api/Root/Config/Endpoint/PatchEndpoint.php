@@ -32,9 +32,10 @@ class PatchEndpoint extends AbstractPatchEndpoint {
 	 */
 	public function patch(PatchDto $patchDto): ConfigDto {
 		return $this->configMapper->item($this->configRepository->change([
-			'id'    => $patchDto->id,
-			'key'   => $patchDto->config->key,
-			'value' => $patchDto->config->value,
+			'id'      => $patchDto->id,
+			'key'     => $patchDto->config->key,
+			'value'   => $patchDto->config->value,
+			'private' => $patchDto->config->private,
 		]));
 	}
 }

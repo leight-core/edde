@@ -11,7 +11,11 @@ class ConfigDto extends AbstractDto {
 	 */
 	public $key;
 	/**
-	 * @var mixed|null|void
+	 * @var mixed|void
 	 */
 	public $value;
+	/**
+	 * @var bool|void
+	 */
+	public $private;
 }

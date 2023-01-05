@@ -9,9 +9,10 @@ use Edde\Mapper\AbstractMapper;
 class ConfigMapper extends AbstractMapper {
 	public function item($item, $params = null) {
 		return ConfigDto::create([
-			'id'    => $item->id,
-			'key'   => $item->key,
-			'value' => $item->value,
+			'id'      => $item->id,
+			'key'     => $item->key,
+			'value'   => $item->value,
+			'private' => $item->private,
 		]);
 	}
 }

@@ -61,6 +61,10 @@ class ConfigService {
 		}
 	}
 
+	public function getBool(string $key, bool $default): bool {
+		return filter_var($this->get($key, $default), FILTER_VALIDATE_BOOLEAN);
+	}
+
 	public function system(string $key, $default = null) {
 		try {
 			return $this->container->get($key);

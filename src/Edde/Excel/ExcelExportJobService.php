@@ -15,4 +15,11 @@ class ExcelExportJobService extends AbstractJobService {
 	protected function handle(IJob $job) {
 		return $this->excelExportService->export($this->dtoService->fromObject(ExcelExportDto::class, $job->getParams()), $job->getProgress());
 	}
+
+	public function isLocked(IJob $job): bool {
+		/**
+		 * This will enable parallel run of multiple export jobs.
+		 */
+		return false;
+	}
 }

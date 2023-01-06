@@ -19,7 +19,6 @@ class ExcelExportJobService extends AbstractJobService {
 	public function isLocked(IJob $job): bool {
 		/**
 		 * This will enable parallel run of multiple export jobs.
-		 *
 		 */
 		return false;
 	}

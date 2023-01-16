@@ -439,4 +439,8 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 	protected function join(Select $select, string $target, ?string $alias, string $column, string $bind = 'id'): Select {
 		return $select->join($target . ($alias ? ' as ' . $alias : ''), ($alias ? ($alias . '.') : '') . $bind, '=', $this->col($column));
 	}
+
+	protected function joinRight(Select $select, string $target, ?string $alias, string $column, string $bind = 'id'): Select {
+		return $select->rightJoin($target . ($alias ? ' as ' . $alias : ''), ($alias ? ($alias . '.') : '') . $bind, '=', $this->col($column));
+	}
 }

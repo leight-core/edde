@@ -285,14 +285,16 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 	/**
 	 * Patch filters out NULL values (thus patch - update just present values).
 	 *
-	 * @param array $data
+	 * @param array      $data
+	 * @param array|null $fields select fields for patch
 	 *
 	 * @return mixed
 	 *
+	 * @throws DuplicateEntryException
 	 * @throws RepositoryException
 	 * @throws Throwable
 	 */
-	public function patch(array $data, bool $fields = null) {
+	public function patch(array $data, array $fields = null) {
 		return $this->change($fields ? array_intersect_key($data, array_combine($fields = array_merge($fields, ['id']), $fields)) : $data);
 	}
 

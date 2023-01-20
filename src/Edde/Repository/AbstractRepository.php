@@ -238,10 +238,15 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 		if (empty($data['id'])) {
 			throw new RepositoryException(sprintf('Missing ID for an update of [%s]!', $this->table));
 		}
+		$id = $data['id'];
+		unset($data['id']);
 		try {
-			$original = $this->find($data['id']);
-			$this->storage->update($this->table, $data, $data['id']);
-			$item = $this->find($data['id']);
+			$original = $this->find($id);
+			if (empty($data)) {
+				return $original;
+			}
+			$this->storage->update($this->table, $data, $id);
+			$item = $this->find($id);
 			$this->diffService->isDiff($original, $item) && $this->diffOf($original, $item, 'update');
 			return $item;
 		} catch (Throwable $e) {
@@ -287,8 +292,8 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 	 * @throws RepositoryException
 	 * @throws Throwable
 	 */
-	public function patch(array $data) {
-		return $this->change($data);
+	public function patch(array $data, bool $fields = null) {
+		return $this->change($fields ? array_intersect_key($data, array_combine($fields = array_merge($fields, ['id']), $fields)) : $data);
 	}
 
 	/**

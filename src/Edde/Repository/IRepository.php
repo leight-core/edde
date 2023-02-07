@@ -69,6 +69,14 @@ interface IRepository extends IMapper {
 	public function diffOf($original, $changed, string $type): void;
 
 	/**
+	 * If repository should support more complex queries with access to main select, this method could be used.
+	 * You can add joins and other parameters based on the filter.
+	 *
+	 * This method should call applyWhere, keep that in mind.
+	 */
+	public function applyFilter($filter, Select $select): void;
+
+	/**
 	 * General way how to apply a filter on select/update/delete.
 	 */
 	public function applyWhere($filter, SelectBase $selectBase): void;

@@ -174,7 +174,7 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 	 */
 	public function toQuery(Query $query): Select {
 		$select = $this->select();
-		$query->filter && $this->applyWhere($query->filter, $select);
+		$query->filter && $this->applyFilter($query->filter, $select);
 		$query->orderBy && $this->applyOrderBy($query->orderBy, $select);
 		return $select;
 	}
@@ -373,6 +373,10 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 	}
 
 	public function diffOf($original, $changed, string $type): void {
+	}
+
+	public function applyFilter($filter, Select $select): void {
+		$this->applyWhere($filter, $select);
 	}
 
 	public function applyWhere($filter, SelectBase $selectBase): void {

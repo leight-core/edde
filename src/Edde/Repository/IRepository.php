@@ -6,6 +6,7 @@ namespace Edde\Repository;
 use ClanCats\Hydrahon\Query\Sql\Delete;
 use ClanCats\Hydrahon\Query\Sql\Select;
 use ClanCats\Hydrahon\Query\Sql\SelectBase;
+use ClanCats\Hydrahon\Query\Sql\Table;
 use Dibi\Result;
 use Edde\Mapper\IMapper;
 use Edde\Query\Dto\Query;
@@ -42,6 +43,11 @@ interface IRepository extends IMapper {
 	 * @return Result
 	 */
 	public function execute(?Query $query = null): iterable;
+
+	/**
+	 * @return Table
+	 */
+	public function table(): Table;
 
 	public function toQuery(Query $query): Select;
 

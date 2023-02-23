@@ -62,6 +62,7 @@ class JobRepository extends AbstractRepository {
 			'service' => get_class($jobService),
 			'params'  => json_encode($params),
 			'created' => new DateTime(),
+			'success' => 0,
 			'user_id' => $userId,
 		]);
 	}

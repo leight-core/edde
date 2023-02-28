@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Api\Shared\Endpoint;
 
+use Doctrine\ORM\Query;
 use Edde\Cache\CacheTrait;
 use Edde\Doctrine\EntityManagerTrait;
 use Edde\Dto\DtoServiceTrait;
@@ -28,6 +29,7 @@ class TranslationEndpoint extends AbstractFetchEndpoint {
 			$languages = $this->entityManager->createQuery("
 				SELECT DISTINCT t.locale FROM \Edde\Translation\Entity\TranslationEntity t
 			");
+			$languages->setHint(Query::HINT_READ_ONLY, true);
 			foreach ($languages->toIterable() as ['locale' => $locale]) {
 				$bundles[] = [
 					'language'     => $locale,
@@ -41,6 +43,7 @@ class TranslationEndpoint extends AbstractFetchEndpoint {
 							WHERE
 								t.locale = :locale
 						')
+						->setHint(Query::HINT_READ_ONLY, true)
 						->setParameter('locale', $locale)
 						->getArrayResult(),
 				];

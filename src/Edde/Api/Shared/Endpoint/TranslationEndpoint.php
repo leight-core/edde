@@ -7,6 +7,7 @@ use Edde\Cache\CacheTrait;
 use Edde\Doctrine\EntityManagerTrait;
 use Edde\Dto\DtoServiceTrait;
 use Edde\Rest\Endpoint\AbstractFetchEndpoint;
+use Edde\Translation\Dto\TranslationsDto;
 use Edde\Translation\Repository\TranslationRepositoryTrait;
 
 /**
@@ -18,6 +19,9 @@ class TranslationEndpoint extends AbstractFetchEndpoint {
 	use DtoServiceTrait;
 	use CacheTrait;
 
+	/**
+	 * @return TranslationsDto
+	 */
 	public function get() {
 		return $this->cache->get('translations', function (string $key) {
 			$bundles = [];

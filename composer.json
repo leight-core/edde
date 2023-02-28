@@ -30,8 +30,7 @@
 			"./vendor/clancats/hydrahon/src/Query/Sql/Select.php"
 		],
 		"classmap": [
-			"src/",
-			"tests/"
+			"src/"
 		]
 	},
 	"require": {

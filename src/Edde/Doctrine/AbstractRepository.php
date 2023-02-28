@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Edde\Doctrine;
 
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Edde\Query\Dto\Query;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @template TEntity
@@ -14,18 +14,18 @@ abstract class AbstractRepository {
 	use EntityManagerTrait;
 
 	/**
-	 * @var EntityRepository
+	 * @var string
 	 */
-	protected $entityRepository;
+	protected $className;
 	protected $orderBy;
 
 	public function __construct(string $className, array $orderBy = []) {
-		$this->entityRepository = $this->entityManager->getRepository($className);
-		$this->orderBy = [];
+		$this->className = $className;
+		$this->orderBy = $orderBy;
 	}
 
 	public function getQueryBuilder(string $alias): QueryBuilder {
-		return $this->entityRepository
+		return $this->entityManager->getRepository($this->className)
 			->createQueryBuilder($alias);
 	}
 
@@ -36,6 +36,15 @@ abstract class AbstractRepository {
 		return $this->getQueryBuilder($alias)
 			->getQuery()
 			->getResult();
+	}
+
+	public function total(Query $query): int {
+		$queryBuilder = $this->entityManager->createQueryBuilder();
+		$queryBuilder
+			->select("COUNT(c)")
+			->from($this->className, "c");
+		$this->applyWhere("c", $query->filter, $queryBuilder);
+		return (int)$queryBuilder->getQuery()->getSingleScalarResult();
 	}
 
 	/**
@@ -70,5 +79,11 @@ abstract class AbstractRepository {
 	public function save($entity) {
 		$this->entityManager->persist($entity);
 		return $this;
+	}
+
+	protected function fulltextOf(QueryBuilder $queryBuilder, string $field, string $value) {
+		$param = Uuid::uuid4()->toString();
+		$queryBuilder->where("$field LIKE :$param");
+		$queryBuilder->setParameter($param, "%$value%");
 	}
 }

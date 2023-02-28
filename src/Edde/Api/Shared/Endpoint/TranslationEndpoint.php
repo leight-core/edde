@@ -26,9 +26,11 @@ class TranslationEndpoint extends AbstractFetchEndpoint {
 	public function get() {
 		return $this->cache->get('translations', function (string $key) {
 			$bundles = [];
-			$languages = $this->entityManager->createQuery("
-				SELECT DISTINCT t.locale FROM \Edde\Translation\Entity\TranslationEntity t
-			");
+			$languages = $this->entityManager
+				->createQuery("
+					SELECT DISTINCT t.locale FROM \Edde\Translation\Entity\TranslationEntity t
+				")
+				->enableResultCache();
 			$languages->setHint(Query::HINT_READ_ONLY, true);
 			foreach ($languages->toIterable() as ['locale' => $locale]) {
 				$bundles[] = [
@@ -43,6 +45,7 @@ class TranslationEndpoint extends AbstractFetchEndpoint {
 							WHERE
 								t.locale = :locale
 						')
+						->enableResultCache()
 						->setHint(Query::HINT_READ_ONLY, true)
 						->setParameter('locale', $locale)
 						->getArrayResult(),

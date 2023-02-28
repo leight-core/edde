@@ -58,6 +58,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\SimpleCache\CacheInterface;
 use Slim\App;
+use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
@@ -205,6 +206,9 @@ class SlimApp {
 				$config = ORMSetup::createAnnotationMetadataConfiguration(
 					[$container->get('source.root')]
 				);
+				$config->setQueryCache(new PhpFilesAdapter('doctrine.query', 3600));
+				$config->setResultCache(new PhpFilesAdapter('doctrine.result', 3600));
+				$config->setMetadataCache(new PhpFilesAdapter('doctrine.metadata', 3600));
 				$connection = DriverManager::getConnection(array_merge(
 					['doctrine.driver' => $driver] = $storageConfig->getConfig(),
 					[

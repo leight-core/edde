@@ -17,9 +17,11 @@ abstract class AbstractRepository {
 	 * @var EntityRepository
 	 */
 	protected $entityRepository;
+	protected $orderBy;
 
-	public function __construct(string $className) {
+	public function __construct(string $className, array $orderBy = []) {
 		$this->entityRepository = $this->entityManager->getRepository($className);
+		$this->orderBy = [];
 	}
 
 	public function getQueryBuilder(string $alias): QueryBuilder {
@@ -53,6 +55,9 @@ abstract class AbstractRepository {
 			->setFirstResult($query->page)
 			->setMaxResults($query->size);
 		$this->applyWhere($alias, $query->filter, $queryBuilder);
+		foreach ($this->orderBy as $name => $order) {
+			$queryBuilder->addOrderBy("$alias.$name", $order ? "ASC" : "DESC");
+		}
 		return $queryBuilder;
 	}
 

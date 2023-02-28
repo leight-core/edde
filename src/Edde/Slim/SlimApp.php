@@ -208,7 +208,8 @@ class SlimApp {
 				$connection = DriverManager::getConnection(array_merge(
 					['doctrine.driver' => $driver] = $storageConfig->getConfig(),
 					[
-						'driver' => $driver,
+						'driver'  => $driver,
+						'charset' => 'UTF8',
 					]
 				), $config);
 				return new EntityManager($connection, $config);

@@ -24,4 +24,8 @@ class RandomService {
 	public function code(): string {
 		return Random::generate(8);
 	}
+
+	public function chars(int $limit = 12): string {
+		return Random::generate($limit, 'a-zA-Z');
+	}
 }

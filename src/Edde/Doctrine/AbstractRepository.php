@@ -4,14 +4,15 @@ declare(strict_types=1);
 namespace Edde\Doctrine;
 
 use Doctrine\ORM\QueryBuilder;
+use Edde\Math\RandomServiceTrait;
 use Edde\Query\Dto\Query;
-use Ramsey\Uuid\Uuid;
 
 /**
  * @template TEntity
  */
 abstract class AbstractRepository {
 	use EntityManagerTrait;
+	use RandomServiceTrait;
 
 	/**
 	 * @var string
@@ -82,7 +83,7 @@ abstract class AbstractRepository {
 	}
 
 	protected function fulltextOf(QueryBuilder $queryBuilder, string $field, string $value) {
-		$param = Uuid::uuid4()->toString();
+		$param = $this->randomService->chars(16);
 		$queryBuilder->where("$field LIKE :$param");
 		$queryBuilder->setParameter($param, "%$value%");
 	}

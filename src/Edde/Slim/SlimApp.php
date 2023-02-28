@@ -120,6 +120,7 @@ class SlimApp {
 		$containerBuilder = new ContainerBuilder();
 		$containerBuilder->useAnnotations(true);
 		$containerBuilder->addDefinitions([
+			'doctrine.dev'                => false,
 			SessionInterface::class       => function (ContainerInterface $container) {
 				return $container->get(Session::class);
 			},
@@ -204,7 +205,8 @@ class SlimApp {
 				/** @var $storageConfig StorageConfig */
 				$storageConfig = $container->get(StorageConfig::class);
 				$config = ORMSetup::createAnnotationMetadataConfiguration(
-					[$container->get('source.root')]
+					[$container->get('source.root')],
+					$container->get('doctrine.dev') ?? false,
 				);
 				$config->setQueryCache(new PhpFilesAdapter('doctrine.query', 3600));
 				$config->setResultCache(new PhpFilesAdapter('doctrine.result', 3600));

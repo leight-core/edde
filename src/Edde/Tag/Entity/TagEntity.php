@@ -16,7 +16,7 @@ class TagEntity extends AbstractUuidEntity {
 	 * @var string
 	 */
 	public $code;
-	/**
+	/**0
 	 * @ORM\Column(type="string", length=128, name="label")
 	 * @var string
 	 */

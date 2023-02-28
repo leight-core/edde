@@ -43,11 +43,20 @@ abstract class AbstractRepository {
 	 * @return TEntity
 	 */
 	public function query(string $alias, Query $query) {
-		return $this->getQueryBuilder($alias)
-			->setFirstResult($query->page)
-			->setMaxResults($query->size)
+		return $this->toQuery($alias, $query)
 			->getQuery()
 			->getResult();
+	}
+
+	public function toQuery(string $alias, Query $query): QueryBuilder {
+		$queryBuilder = $this->getQueryBuilder($alias)
+			->setFirstResult($query->page)
+			->setMaxResults($query->size);
+		$this->applyWhere($query->filter, $queryBuilder);
+		return $queryBuilder;
+	}
+
+	public function applyWhere($filter, QueryBuilder $queryBuilder) {
 	}
 
 	/**

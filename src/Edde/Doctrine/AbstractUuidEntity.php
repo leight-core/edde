@@ -5,7 +5,7 @@ namespace Edde\Doctrine;
 
 use Doctrine\ORM\Mapping as ORM;
 
-abstract class AbstractUuidEntity {
+abstract class AbstractUuidEntity extends AbstractEntity {
 	/**
 	 * @ORM\Id()
 	 * @ORM\Column(type="uuid", unique=true)

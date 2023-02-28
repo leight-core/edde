@@ -1,7 +1,7 @@
 version: '2'
 services:
     php:
-        image: marekhanzal/php:7.2
+        image: marekhanzal/php:7.3
         container_name: edde
         hostname: edde
         restart: always
@@ -14,7 +14,7 @@ services:
             - edde
 
     mysql:
-        image: mysql:5.5
+        image: mysql:5.7
         container_name: edde-mysql
         hostname: edde-mysql
         restart: always

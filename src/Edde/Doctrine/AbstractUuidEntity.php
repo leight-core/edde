@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 abstract class AbstractUuidEntity extends AbstractEntity {
 	/**
 	 * @ORM\Id()
-	 * @ORM\Column(type="uuid", unique=true)
+	 * @ORM\Column(type="string", length=36, unique=true)
 	 * @ORM\GeneratedValue(strategy="CUSTOM")
 	 * @ORM\CustomIdGenerator(class="Edde\Doctrine\UuidGenerator")
 	 */

@@ -206,11 +206,13 @@ class SlimApp {
 				$storageConfig = $container->get(StorageConfig::class);
 				$config = ORMSetup::createAnnotationMetadataConfiguration(
 					[$container->get('source.root')],
-					$container->get('doctrine.dev') ?? false,
+					$isDev = $container->get('doctrine.dev') ?? false,
 				);
-				$config->setQueryCache(new PhpFilesAdapter('doctrine.query', 3600));
-				$config->setResultCache(new PhpFilesAdapter('doctrine.result', 3600));
-				$config->setMetadataCache(new PhpFilesAdapter('doctrine.metadata', 3600));
+				if (!$isDev) {
+					$config->setQueryCache(new PhpFilesAdapter('doctrine.query', 3600));
+					$config->setResultCache(new PhpFilesAdapter('doctrine.result', 3600));
+					$config->setMetadataCache(new PhpFilesAdapter('doctrine.metadata', 3600));
+				}
 				$connection = DriverManager::getConnection(array_merge(
 					['doctrine.driver' => $driver] = $storageConfig->getConfig(),
 					[

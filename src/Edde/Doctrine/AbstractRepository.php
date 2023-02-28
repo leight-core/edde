@@ -52,11 +52,11 @@ abstract class AbstractRepository {
 		$queryBuilder = $this->getQueryBuilder($alias)
 			->setFirstResult($query->page)
 			->setMaxResults($query->size);
-		$this->applyWhere($query->filter, $queryBuilder);
+		$this->applyWhere($alias, $query->filter, $queryBuilder);
 		return $queryBuilder;
 	}
 
-	public function applyWhere($filter, QueryBuilder $queryBuilder) {
+	public function applyWhere(string $alias, $filter, QueryBuilder $queryBuilder) {
 	}
 
 	/**

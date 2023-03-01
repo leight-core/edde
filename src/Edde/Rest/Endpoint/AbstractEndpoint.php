@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Edde\Rest\Endpoint;
 
 use Edde\Cache\CacheTrait;
+use Edde\Doctrine\EntityManagerTrait;
 use Edde\Dto\DtoServiceTrait;
 use Edde\Http\HttpIndexTrait;
 use Edde\Log\LoggerTrait;
@@ -27,6 +28,7 @@ use function in_array;
 use function is_string;
 
 abstract class AbstractEndpoint implements IEndpoint {
+	use EntityManagerTrait;
 	use LoggerTrait;
 	use DtoServiceTrait;
 	use HttpIndexTrait;
@@ -72,6 +74,7 @@ abstract class AbstractEndpoint implements IEndpoint {
 					];
 				}
 				$result = $this->{$this->endpoint->method->name}(...$args);
+				$this->entityManager->flush();
 				return $result instanceof ResponseInterface ? $result : Response::withJson($response, $result);
 			} catch (Throwable $e) {
 				$this->logger->error('Endpoint exception, cache cleared!', ['tags' => ['request']]);

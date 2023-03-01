@@ -23,6 +23,7 @@ abstract class AbstractRepository {
 	protected $className;
 	protected $orderBy = [];
 	protected $fulltextOf = [];
+	protected $searchOf = [];
 
 	public function __construct(string $className) {
 		$this->className = $className;
@@ -67,7 +68,7 @@ abstract class AbstractRepository {
 		$queryBuilder
 			->select("COUNT(c)")
 			->from($this->className, "c");
-		$this->applyWhere("c", $query->filter, $queryBuilder);
+		$this->alterQuery("c", $query->filter, $queryBuilder);
 		return (int)$queryBuilder->getQuery()->getSingleScalarResult();
 	}
 
@@ -98,17 +99,18 @@ abstract class AbstractRepository {
 
 	/**
 	 * @param string        $alias
-	 * @param object        $filter
+	 * @param object|null   $filter
 	 * @param QueryBuilder  $queryBuilder
 	 *
 	 * @psalm-param TFilter $filter
 	 *
 	 * @return void
 	 */
-	public function alterQuery(string $alias, $filter, QueryBuilder $queryBuilder) {
+	public function alterQuery(string $alias, ?object $filter, QueryBuilder $queryBuilder) {
 		foreach ($this->fulltextOf as $field => $value) {
 			isset($filter->$value) && $this->fulltextOf($queryBuilder, "$alias.$field", $filter->$value);
 		}
+		isset($filter->fulltext) && !empty($this->searchOf) && $this->searchOf($queryBuilder, $filter->fulltext, $this->searchOf);
 	}
 
 	/**
@@ -130,7 +132,7 @@ abstract class AbstractRepository {
 		return $item;
 	}
 
-	protected function paramOf(QueryBuilder $queryBuilder, $value) {
+	protected function paramOf(QueryBuilder $queryBuilder, $value): string {
 		$param = $this->randomService->chars(16);
 		$queryBuilder->setParameter($param, "%$value%");
 		return $param;

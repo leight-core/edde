@@ -68,7 +68,7 @@ abstract class AbstractRepository {
 		$queryBuilder
 			->select("COUNT(c)")
 			->from($this->className, "c");
-		$this->alterQuery("c", $query->filter, $queryBuilder);
+		$this->applyWhere("c", $query->filter, $queryBuilder);
 		return (int)$queryBuilder->getQuery()->getSingleScalarResult();
 	}
 
@@ -98,6 +98,14 @@ abstract class AbstractRepository {
 	}
 
 	/**
+	 * @param TEntity $entity
+	 */
+	public function save($entity) {
+		$this->entityManager->persist($entity);
+		return $this;
+	}
+
+	/**
 	 * @param string        $alias
 	 * @param object|null   $filter
 	 * @param QueryBuilder  $queryBuilder
@@ -106,19 +114,15 @@ abstract class AbstractRepository {
 	 *
 	 * @return void
 	 */
-	public function alterQuery(string $alias, ?object $filter, QueryBuilder $queryBuilder) {
+	protected function alterQuery(string $alias, ?object $filter, QueryBuilder $queryBuilder) {
+		$this->applyWhere($alias, $filter, $queryBuilder);
+	}
+
+	protected function applyWhere(string $alias, ?object $filter, QueryBuilder $queryBuilder) {
 		foreach ($this->fulltextOf as $field => $value) {
 			isset($filter->$value) && $this->fulltextOf($queryBuilder, $alias, $field, $filter->$value);
 		}
 		isset($filter->fulltext) && !empty($this->searchOf) && $this->searchOf($queryBuilder, $alias, $filter->fulltext, $this->searchOf);
-	}
-
-	/**
-	 * @param TEntity $entity
-	 */
-	public function save($entity) {
-		$this->entityManager->persist($entity);
-		return $this;
 	}
 
 	protected function toHydrate(array $result) {

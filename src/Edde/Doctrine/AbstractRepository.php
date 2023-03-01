@@ -92,7 +92,7 @@ abstract class AbstractRepository {
 			->setMaxResults($query->size);
 		$this->alterQuery($alias, $query->filter, $queryBuilder);
 		foreach ($this->orderBy as $name => $order) {
-			$queryBuilder->addOrderBy("$alias.$name", $order ? "ASC" : "DESC");
+			$queryBuilder->addOrderBy($this->field($name, $alias), $order ? "ASC" : "DESC");
 		}
 		return $queryBuilder;
 	}
@@ -108,9 +108,9 @@ abstract class AbstractRepository {
 	 */
 	public function alterQuery(string $alias, ?object $filter, QueryBuilder $queryBuilder) {
 		foreach ($this->fulltextOf as $field => $value) {
-			isset($filter->$value) && $this->fulltextOf($queryBuilder, "$alias.$field", $filter->$value);
+			isset($filter->$value) && $this->fulltextOf($queryBuilder, $alias, $field, $filter->$value);
 		}
-		isset($filter->fulltext) && !empty($this->searchOf) && $this->searchOf($queryBuilder, $filter->fulltext, $this->searchOf);
+		isset($filter->fulltext) && !empty($this->searchOf) && $this->searchOf($queryBuilder, $alias, $filter->fulltext, $this->searchOf);
 	}
 
 	/**
@@ -138,17 +138,21 @@ abstract class AbstractRepository {
 		return $param;
 	}
 
-	protected function fulltextOf(QueryBuilder $queryBuilder, string $field, string $value) {
-		$queryBuilder->where("$field LIKE :" . $this->paramOf($queryBuilder, $value));
+	protected function fulltextOf(QueryBuilder $queryBuilder, string $alias, string $field, string $value) {
+		$queryBuilder->where($this->field($field, $alias) . " LIKE :" . $this->paramOf($queryBuilder, $value));
 	}
 
-	protected function matchOf(QueryBuilder $queryBuilder, string $field, string $value) {
-		$queryBuilder->where("$field = :" . $this->paramOf($queryBuilder, $value));
+	protected function matchOf(QueryBuilder $queryBuilder, string $alias, string $field, string $value) {
+		$queryBuilder->where($this->field($field, $alias) . " = :" . $this->paramOf($queryBuilder, $value));
 	}
 
-	protected function searchOf(QueryBuilder $queryBuilder, string $value, $fields) {
-		$queryBuilder->where($queryBuilder->expr()->orX(array_map(function (string $field) use ($queryBuilder, $value) {
-			return $queryBuilder->expr()->like($field, ':' . $this->paramOf($queryBuilder, $value));
+	protected function searchOf(QueryBuilder $queryBuilder, string $alias, string $value, $fields) {
+		$queryBuilder->where($queryBuilder->expr()->orX(array_map(function (string $field) use ($queryBuilder, $value, $alias) {
+			return $queryBuilder->expr()->like($this->field($field, $alias), ':' . $this->paramOf($queryBuilder, $value));
 		}, $fields)));
+	}
+
+	protected function field(string $field, string $alias): string {
+		return str_replace('$', $alias, $field);
 	}
 }

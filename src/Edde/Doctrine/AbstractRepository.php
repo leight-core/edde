@@ -116,6 +116,10 @@ abstract class AbstractRepository {
 		$queryBuilder->where("$field LIKE :" . $this->paramOf($queryBuilder, $value));
 	}
 
+	protected function matchOf(QueryBuilder $queryBuilder, string $field, string $value) {
+		$queryBuilder->where("$field = :" . $this->paramOf($queryBuilder, $value));
+	}
+
 	protected function searchOf(QueryBuilder $queryBuilder, string $value, $fields) {
 		$queryBuilder->where($queryBuilder->expr()->orX(array_map(function (string $field) use ($queryBuilder, $value) {
 			return $queryBuilder->expr()->like($field, ':' . $this->paramOf($queryBuilder, $value));

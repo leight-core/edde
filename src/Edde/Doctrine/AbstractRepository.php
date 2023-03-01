@@ -142,12 +142,12 @@ abstract class AbstractRepository {
 
 	protected function paramOf(QueryBuilder $queryBuilder, $value): string {
 		$param = $this->randomService->chars(16);
-		$queryBuilder->setParameter($param, "%$value%");
+		$queryBuilder->setParameter($param, $value);
 		return $param;
 	}
 
 	protected function fulltextOf(QueryBuilder $queryBuilder, string $alias, string $field, string $value) {
-		$queryBuilder->where($this->field($field, $alias) . " LIKE :" . $this->paramOf($queryBuilder, $value));
+		$queryBuilder->where($this->field($field, $alias) . " LIKE :" . $this->paramOf($queryBuilder, "%$value%"));
 	}
 
 	protected function matchOf(QueryBuilder $queryBuilder, string $alias, string $field, string $value) {

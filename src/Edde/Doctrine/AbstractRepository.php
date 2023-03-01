@@ -90,7 +90,7 @@ abstract class AbstractRepository {
 		$queryBuilder = $this->getQueryBuilder($alias)
 			->setFirstResult($query->page)
 			->setMaxResults($query->size);
-		$this->alterQuery($alias, $query->filter, $queryBuilder);
+		$this->applyQuery($alias, $query->filter, $queryBuilder);
 		foreach ($this->orderBy as $name => $order) {
 			$queryBuilder->addOrderBy($this->field($name, $alias), $order ? "ASC" : "DESC");
 		}
@@ -114,7 +114,7 @@ abstract class AbstractRepository {
 	 *
 	 * @return void
 	 */
-	protected function alterQuery(string $alias, ?object $filter, QueryBuilder $queryBuilder) {
+	protected function applyQuery(string $alias, ?object $filter, QueryBuilder $queryBuilder) {
 		$this->applyWhere($alias, $filter, $queryBuilder);
 	}
 

@@ -3,13 +3,15 @@ declare(strict_types=1);
 
 namespace Edde\Doctrine;
 
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use Edde\Doctrine\Exception\RepositoryException;
 use Edde\Math\RandomServiceTrait;
 use Edde\Query\Dto\Query;
 
 /**
- * @template TEntity
- * @template TFilter
+ * @template TEntity of object
+ * @template TFilter of object
  */
 abstract class AbstractRepository {
 	use EntityManagerTrait;
@@ -26,13 +28,33 @@ abstract class AbstractRepository {
 		$this->className = $className;
 	}
 
+	public function getRepository(): EntityRepository {
+		return $this->entityManager->getRepository($this->className);
+	}
+
 	public function getQueryBuilder(string $alias): QueryBuilder {
-		return $this->entityManager->getRepository($this->className)
+		return $this->getRepository()
 			->createQueryBuilder($alias);
 	}
 
 	/**
-	 * @return TEntity[]
+	 * @param string $id
+	 *
+	 * @return object
+	 * @psal-return TEntity
+	 *
+	 * @throws RepositoryException
+	 */
+	public function find(string $id) {
+		if (!($entity = $this->getRepository()->find($id))) {
+			throw new RepositoryException(sprintf('Cannot find [%s] by [%s]!', $this->className, $id), 500);
+		}
+		return $entity;
+	}
+
+	/**
+	 * @return object[]
+	 * @psalm-return TEntity[]
 	 */
 	public function all(string $alias) {
 		return $this->toHydrate($this->getQueryBuilder($alias)
@@ -75,9 +97,11 @@ abstract class AbstractRepository {
 	}
 
 	/**
-	 * @param string       $alias
-	 * @param TFilter      $filter
-	 * @param QueryBuilder $queryBuilder
+	 * @param string        $alias
+	 * @param object        $filter
+	 * @param QueryBuilder  $queryBuilder
+	 *
+	 * @psalm-param TFilter $filter
 	 *
 	 * @return void
 	 */

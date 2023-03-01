@@ -9,6 +9,7 @@ use Edde\Query\Dto\Query;
 
 /**
  * @template TEntity
+ * @template TFilter
  */
 abstract class AbstractRepository {
 	use EntityManagerTrait;
@@ -18,11 +19,11 @@ abstract class AbstractRepository {
 	 * @var string
 	 */
 	protected $className;
-	protected $orderBy;
+	protected $orderBy = [];
+	protected $fulltextOf = [];
 
-	public function __construct(string $className, array $orderBy = []) {
+	public function __construct(string $className) {
 		$this->className = $className;
-		$this->orderBy = $orderBy;
 	}
 
 	public function getQueryBuilder(string $alias): QueryBuilder {
@@ -34,9 +35,9 @@ abstract class AbstractRepository {
 	 * @return TEntity[]
 	 */
 	public function all(string $alias) {
-		return $this->getQueryBuilder($alias)
+		return $this->toHydrate($this->getQueryBuilder($alias)
 			->getQuery()
-			->getResult();
+			->getResult());
 	}
 
 	public function total(Query $query): int {
@@ -55,23 +56,46 @@ abstract class AbstractRepository {
 	 * @return TEntity
 	 */
 	public function query(string $alias, Query $query) {
-		return $this->toQuery($alias, $query)
-			->getQuery()
-			->getResult();
+		return $this->toHydrate(
+			$this->toQuery($alias, $query)
+				->getQuery()
+				->getResult()
+		);
 	}
 
 	public function toQuery(string $alias, Query $query): QueryBuilder {
 		$queryBuilder = $this->getQueryBuilder($alias)
 			->setFirstResult($query->page)
 			->setMaxResults($query->size);
-		$this->applyWhere($alias, $query->filter, $queryBuilder);
+		$this->alterQuery($alias, $query->filter, $queryBuilder);
 		foreach ($this->orderBy as $name => $order) {
 			$queryBuilder->addOrderBy("$alias.$name", $order ? "ASC" : "DESC");
 		}
 		return $queryBuilder;
 	}
 
-	public function applyWhere(string $alias, $filter, QueryBuilder $queryBuilder) {
+	/**
+	 * @param string       $alias
+	 * @param TFilter      $filter
+	 * @param QueryBuilder $queryBuilder
+	 *
+	 * @return void
+	 */
+	public function alterQuery(string $alias, $filter, QueryBuilder $queryBuilder) {
+		foreach ($this->fulltextOf as $field => $value) {
+			isset($filter->$value) && $this->fulltextOf($queryBuilder, "$alias.$field", $filter->$value);
+		}
+	}
+
+	protected function toHydrate(array $result) {
+		return array_map([
+			$this,
+			'hydrate',
+		], $result);
+	}
+
+	protected function hydrate($item) {
+		return $item;
 	}
 
 	/**

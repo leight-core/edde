@@ -51,7 +51,7 @@ abstract class AbstractRepository {
 		if (!($entity = $this->getRepository()->find($id))) {
 			throw new RequiredResultException(sprintf('Cannot find [%s] by [%s]!', $this->className, $id), 500);
 		}
-		return $entity;
+		return $this->hydrate($entity);
 	}
 
 	/**

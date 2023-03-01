@@ -5,7 +5,7 @@ namespace Edde\Doctrine;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Edde\Doctrine\Exception\RepositoryException;
+use Edde\Doctrine\Exception\RequiredResultException;
 use Edde\Math\RandomServiceTrait;
 use Edde\Query\Dto\Query;
 
@@ -45,11 +45,11 @@ abstract class AbstractRepository {
 	 * @return object
 	 * @psal-return TEntity
 	 *
-	 * @throws RepositoryException
+	 * @throws RequiredResultException
 	 */
 	public function find(string $id) {
 		if (!($entity = $this->getRepository()->find($id))) {
-			throw new RepositoryException(sprintf('Cannot find [%s] by [%s]!', $this->className, $id), 500);
+			throw new RequiredResultException(sprintf('Cannot find [%s] by [%s]!', $this->className, $id), 500);
 		}
 		return $entity;
 	}

@@ -7,6 +7,7 @@ use DI\Bridge\Slim\Bridge;
 use DI\Container;
 use DI\ContainerBuilder;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Logging\SQLLogger;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
@@ -213,6 +214,13 @@ class SlimApp {
 					$config->setResultCache(new PhpFilesAdapter('doctrine.result', 3600));
 					$config->setMetadataCache(new PhpFilesAdapter('doctrine.metadata', 3600));
 				}
+				$isDev && $config->setSQLLogger(new class implements SQLLogger {
+					public function startQuery($sql, ?array $params = null, ?array $types = null) {
+					}
+
+					public function stopQuery() {
+					}
+				});
 				$connection = DriverManager::getConnection(array_merge(
 					['doctrine.driver' => $driver] = $storageConfig->getConfig(),
 					[

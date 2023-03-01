@@ -87,6 +87,14 @@ abstract class AbstractRepository {
 		}
 	}
 
+	/**
+	 * @param TEntity $entity
+	 */
+	public function save($entity) {
+		$this->entityManager->persist($entity);
+		return $this;
+	}
+
 	protected function toHydrate(array $result) {
 		return array_map([
 			$this,
@@ -98,17 +106,19 @@ abstract class AbstractRepository {
 		return $item;
 	}
 
-	/**
-	 * @param TEntity $entity
-	 */
-	public function save($entity) {
-		$this->entityManager->persist($entity);
-		return $this;
+	protected function paramOf(QueryBuilder $queryBuilder, $value) {
+		$param = $this->randomService->chars(16);
+		$queryBuilder->setParameter($param, "%$value%");
+		return $param;
 	}
 
 	protected function fulltextOf(QueryBuilder $queryBuilder, string $field, string $value) {
-		$param = $this->randomService->chars(16);
-		$queryBuilder->where("$field LIKE :$param");
-		$queryBuilder->setParameter($param, "%$value%");
+		$queryBuilder->where("$field LIKE :" . $this->paramOf($queryBuilder, $value));
+	}
+
+	protected function searchOf(QueryBuilder $queryBuilder, string $value, $fields) {
+		$queryBuilder->where($queryBuilder->expr()->orX(array_map(function (string $field) use ($queryBuilder, $value) {
+			return $queryBuilder->expr()->like($field, ':' . $this->paramOf($queryBuilder, $value));
+		}, $fields)));
 	}
 }

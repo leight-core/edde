@@ -151,7 +151,7 @@ abstract class AbstractRepository {
 	}
 
 	protected function searchOf(QueryBuilder $queryBuilder, string $alias, string $value, $fields) {
-		$queryBuilder->where($queryBuilder->expr()->orX(array_map(function (string $field) use ($queryBuilder, $value, $alias) {
+		$queryBuilder->where($queryBuilder->expr()->orX(...array_map(function (string $field) use ($queryBuilder, $value, $alias) {
 			return $queryBuilder->expr()->like($this->field($field, $alias), ':' . $this->paramOf($queryBuilder, $value));
 		}, $fields)));
 	}

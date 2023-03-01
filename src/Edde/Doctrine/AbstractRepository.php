@@ -24,6 +24,7 @@ abstract class AbstractRepository {
 	protected $orderBy = [];
 	protected $fulltextOf = [];
 	protected $searchOf = [];
+	protected $matchOf = [];
 
 	public function __construct(string $className) {
 		$this->className = $className;
@@ -123,6 +124,9 @@ abstract class AbstractRepository {
 			isset($filter->$value) && $this->fulltextOf($queryBuilder, $alias, $field, $filter->$value);
 		}
 		isset($filter->fulltext) && !empty($this->searchOf) && $this->searchOf($queryBuilder, $alias, $filter->fulltext, $this->searchOf);
+		foreach ($this->matchOf as $field => $value) {
+			isset($filter->$value) && $this->matchOf($queryBuilder, $alias, $field, $filter->$value);
+		}
 	}
 
 	protected function toHydrate(array $result) {

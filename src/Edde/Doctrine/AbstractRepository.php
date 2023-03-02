@@ -129,7 +129,7 @@ abstract class AbstractRepository {
 		}
 	}
 
-	protected function toHydrate(array $result) {
+	protected function toHydrate(array $result): array {
 		return array_map([
 			$this,
 			'hydrate',

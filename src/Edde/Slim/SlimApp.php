@@ -16,6 +16,8 @@ use Edde\Cache\Cache;
 use Edde\Cache\ICache;
 use Edde\Cache\Impl\DatabaseCache;
 use Edde\Dto\IDtoService;
+use Edde\Dto\ISmartService;
+use Edde\Dto\SmartService;
 use Edde\EddeException;
 use Edde\Excel\ExcelExportService;
 use Edde\Excel\ExcelImportService;
@@ -43,6 +45,10 @@ use Edde\Profiler\ProfilerMiddleware;
 use Edde\Reflection\ReflectionDtoService;
 use Edde\Rest\EndpointInfo;
 use Edde\Rest\IEndpointInfo;
+use Edde\Schema\ISchemaLoader;
+use Edde\Schema\ISchemaManager;
+use Edde\Schema\ReflectionSchemaLoader;
+use Edde\Schema\SchemaManager;
 use Edde\Session\ISessionMapper;
 use Edde\Session\ISessionResolver;
 use Edde\Session\SessionMiddleware;
@@ -197,6 +203,15 @@ class SlimApp {
 				return $container->get(DatabaseCache::class);
 			},
 			SlimApp::CONFIG_CLI           => [],
+			ISmartService::class          => function (ContainerInterface $container) {
+				return $container->get(SmartService::class);
+			},
+			ISchemaLoader::class          => function (ContainerInterface $container) {
+				return $container->get(ReflectionSchemaLoader::class);
+			},
+			ISchemaManager::class         => function (ContainerInterface $container) {
+				return $container->get(SchemaManager::class);
+			},
 			Manager::class                => function (ContainerInterface $container) {
 				$manager = new Manager($container->get(ConfigInterface::class), new ArrayInput([]), new StreamOutput(fopen('php://output', 'w')));
 				$manager->setContainer($container);

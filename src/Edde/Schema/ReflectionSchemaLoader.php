@@ -93,9 +93,13 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 						case 'required':
 							$attributeBuilder->required($parameter->getDefaultValue());
 							break;
-						case 'schema':
+						case 'load':
 							$attributeBuilder->load($parameter->getDefaultValue());
 							$attributeBuilder->schema($this->load($propertyType));
+							break;
+						case 'schema':
+							$attributeBuilder->load();
+							$attributeBuilder->schema($this->load($parameter->getDefaultValue()));
 							break;
 						case 'array':
 							$attributeBuilder->array($parameter->getDefaultValue());

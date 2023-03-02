@@ -3,12 +3,18 @@ declare(strict_types=1);
 
 namespace Edde\Dto;
 
+use Edde\Schema\IAttribute;
+
 /**
  * Value of a smart object; because PHP does not have an undefined, this class somehow solves it
  * by managing that state: if value on the input does not exists, it can return null (or default),
  * but also knows if was provided.
  */
 class Value {
+	/**
+	 * @var IAttribute
+	 */
+	protected $attribute;
 	/**
 	 * Undefined state changes in the moment, when any value (including false, null and so on) is
 	 * set. If you need to mark value as undefined, use explicit method for it.
@@ -17,12 +23,6 @@ class Value {
 	 */
 	protected $isUndefined = true;
 	/**
-	 * Default value when value is undefined (controlled by value state).
-	 *
-	 * @var mixed
-	 */
-	protected $default;
-	/**
 	 * A value of this... value; may be null or something
 	 *
 	 * @var mixed
@@ -30,10 +30,17 @@ class Value {
 	protected $value;
 
 	/**
-	 * @param mixed $default
+	 * @param IAttribute $attribute
 	 */
-	public function __construct($default) {
-		$this->default = $default;
+	public function __construct(IAttribute $attribute) {
+		$this->attribute = $attribute;
+	}
+
+	/**
+	 * @return IAttribute
+	 */
+	public function getAttribute(): IAttribute {
+		return $this->attribute;
 	}
 
 	/**
@@ -51,7 +58,7 @@ class Value {
 	}
 
 	public function get() {
-		return $this->isUndefined ? $this->default : $this->value;
+		return $this->isUndefined ? $this->attribute->getDefault() : $this->value;
 	}
 
 	public function isUndefined(): bool {

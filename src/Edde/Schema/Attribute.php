@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Edde\Schema;
 
 use stdClass;
-use function property_exists;
 
 class Attribute implements IAttribute {
 	/** @var stdClass */
@@ -30,7 +29,7 @@ class Attribute implements IAttribute {
 
 	/** @inheritdoc */
 	public function getValidator(): ?string {
-		return isset($this->source->validator) ? (string)$this->source->validator : null;
+		return $this->source->validator ?? null;
 	}
 
 	/** @inheritdoc */
@@ -40,7 +39,7 @@ class Attribute implements IAttribute {
 
 	/** @inheritdoc */
 	public function getFilter(string $name): ?string {
-		return isset($this->source->filters[$name]) ? (string)$this->source->filters[$name] : null;
+		return $this->source->filters[$name] ?? null;
 	}
 
 	public function isArray(): bool {
@@ -49,7 +48,7 @@ class Attribute implements IAttribute {
 
 	/** @inheritdoc */
 	public function hasSchema(): bool {
-		return property_exists($this->source, 'schema') !== false && $this->source->schema !== null;
+		return isset($this->source->schema);
 	}
 
 	/** @inheritdoc */

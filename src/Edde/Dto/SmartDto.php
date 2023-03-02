@@ -7,8 +7,12 @@ use Edde\Dto\Exception\SmartDtoException;
 use Edde\Schema\IAttribute;
 use Edde\Schema\ISchema;
 use Edde\Schema\SchemaException;
+use Generator;
+use IteratorAggregate;
+use ReflectionClass;
+use Traversable;
 
-class SmartDto implements IDto {
+class SmartDto implements IDto, IteratorAggregate {
 	/**
 	 * @var ISchema
 	 */
@@ -99,6 +103,46 @@ class SmartDto implements IDto {
 			$this->known($k) && $this->set($k, $v);
 		}
 		return $this;
+	}
+
+	/**
+	 * Merge non-undefined values into to given object (on a property level).
+	 *
+	 * @param object $object
+	 *
+	 * @return object
+	 */
+	public function mergeTo(object $object): object {
+		$reflection = new ReflectionClass($object);
+		foreach ($this->values as $k => $value) {
+			if ($value->isUndefined() || !$reflection->hasProperty($k)) {
+				continue;
+			}
+			$property = $reflection->getProperty($k);
+			$property->setAccessible(true);
+			$property->setValue($object, $value->get());
+		}
+		return $object;
+	}
+
+	/**
+	 * Return all non-undefined values
+	 *
+	 * @return Value[]|Generator|Traversable
+	 */
+	public function getValues() {
+		foreach ($this->values as $k => $value) {
+			!$value->isUndefined() && yield $k => $value->get();
+		}
+	}
+
+	/**
+	 * @return Value[]|Generator|Traversable
+	 */
+	public function getIterator() {
+		foreach ($this->values as $value) {
+			yield $value;
+		}
 	}
 
 	static public function ofSchema(ISchema $schema): self {

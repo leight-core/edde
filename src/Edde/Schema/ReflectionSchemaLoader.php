@@ -13,13 +13,19 @@ use function is_string;
 class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoader {
 	/** @var ISchema[] */
 	protected $schemas = [];
+	/** @var bool[] */
+	protected $loading = [];
 
 	/** @inheritdoc */
 	public function load(string $schema): ISchema {
 		try {
+			if (isset($this->loading[$schema])) {
+				throw new SchemaException(sprintf('Detected cyclic dependency on [%s]; this schema is already in loading process [%s].', $schema, implode(' -> ', array_keys($this->loading))));
+			}
 			if (isset($this->schemas[$schema])) {
 				return $this->schemas[$schema];
 			}
+			$this->loading[$schema] = true;
 			$reflectionClass = new ReflectionClass($schema);
 			$schemaBuilder = new SchemaBuilder($schema);
 			foreach ($reflectionClass->getConstants() as $name => $value) {
@@ -118,6 +124,8 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 			throw $exception;
 		} catch (Throwable $throwable) {
 			throw new SchemaException(sprintf('Cannot do schema reflection of [%s]: %s', $schema, $throwable->getMessage()), 0, $throwable);
+		} finally {
+			$this->loading[$schema] = false;
 		}
 	}
 }

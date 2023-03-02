@@ -49,6 +49,11 @@ interface IAttribute {
 	public function getFilter(string $name): ?string;
 
 	/**
+	 * @return bool
+	 */
+	public function isArray(): bool;
+
+	/**
 	 * is this property reference to another schema?
 	 *
 	 * @return bool
@@ -62,5 +67,5 @@ interface IAttribute {
 	 *
 	 * @throws SchemaException
 	 */
-	public function getSchema(): string;
+	public function getSchema(): ISchema;
 }

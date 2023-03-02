@@ -43,16 +43,20 @@ class Attribute implements IAttribute {
 		return isset($this->source->filters[$name]) ? (string)$this->source->filters[$name] : null;
 	}
 
+	public function isArray(): bool {
+		return $this->source->array;
+	}
+
 	/** @inheritdoc */
 	public function hasSchema(): bool {
 		return property_exists($this->source, 'schema') !== false && $this->source->schema !== null;
 	}
 
 	/** @inheritdoc */
-	public function getSchema(): string {
+	public function getSchema(): ISchema {
 		if ($this->hasSchema() === false) {
 			throw new SchemaException(sprintf('Property [%s] does not have a reference to schema.', $this->getName()));
 		}
-		return (string)$this->source->schema;
+		return $this->source->schema;
 	}
 }

@@ -19,11 +19,11 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 	/** @inheritdoc */
 	public function load(string $schema): ISchema {
 		try {
-			if (isset($this->loading[$schema])) {
-				throw new SchemaException(sprintf('Detected cyclic dependency on [%s]; this schema is already in loading process [%s].', $schema, implode(' -> ', array_keys($this->loading))));
-			}
 			if (isset($this->schemas[$schema])) {
 				return $this->schemas[$schema];
+			}
+			if (isset($this->loading[$schema])) {
+				throw new SchemaException(sprintf('Detected cyclic dependency on [%s]; this schema is already in loading process [%s].', $schema, implode(' -> ', array_keys($this->loading))));
 			}
 			$this->loading[$schema] = true;
 			$reflectionClass = new ReflectionClass($schema);

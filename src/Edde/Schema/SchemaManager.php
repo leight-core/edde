@@ -10,33 +10,21 @@ class SchemaManager implements ISchemaManager {
 	protected $schemas = [];
 
 	/** @inheritdoc */
-	public function load(string $name): ISchemaManager {
-		if (isset($this->schemas[$name]) !== false) {
-			return $this;
-		}
-		$this->schemas[$name] = $this->schemaLoader->load($name);
-		return $this;
+	public function load(string $name): ISchema {
+		return $this->schemas[$name] ?? $this->schemas[$name] = $this->schemaLoader->load($name);
 	}
 
-	/** @inheritdoc */
-	public function loads(array $names): ISchemaManager {
+	public function loads(array $names): array {
+		$schemas = [];
 		foreach ($names as $name) {
-			$this->load($name);
+			$schemas[] = $this->load($name);
 		}
-		return $this;
+		return $schemas;
 	}
 
 	/** @inheritdoc */
 	public function hasSchema(string $name): bool {
 		return isset($this->schemas[$name]);
-	}
-
-	/** @inheritdoc */
-	public function getSchema(string $name): ISchema {
-		if (isset($this->schemas[$name]) === false) {
-			throw new SchemaException(sprintf('Requested schema [%s] is not loaded; try to use [%s::load("%s")].', $name, ISchemaManager::class, $name));
-		}
-		return $this->schemas[$name];
 	}
 
 	/** @inheritdoc */

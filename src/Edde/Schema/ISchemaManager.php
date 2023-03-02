@@ -14,18 +14,18 @@ interface ISchemaManager {
 	 *
 	 * @throws SchemaException
 	 */
-	public function load(string $name): ISchemaManager;
+	public function load(string $name): ISchema;
 
 	/**
 	 * just array of schemas to be loaded
 	 *
 	 * @param string[] $names
 	 *
-	 * @return ISchemaManager
+	 * @return ISchema[]
 	 *
 	 * @throws SchemaException
 	 */
-	public function loads(array $names): ISchemaManager;
+	public function loads(array $names): array;
 
 	/**
 	 * is the given schema available?
@@ -35,17 +35,6 @@ interface ISchemaManager {
 	 * @return bool
 	 */
 	public function hasSchema(string $name): bool;
-
-	/**
-	 * return schema with the given name; if a schema is not loaded
-	 *
-	 * @param string $name
-	 *
-	 * @return ISchema
-	 *
-	 * @throws SchemaException
-	 */
-	public function getSchema(string $name): ISchema;
 
 	/**
 	 * return all known schemas

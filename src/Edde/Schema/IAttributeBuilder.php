@@ -49,13 +49,31 @@ interface IAttributeBuilder {
 	public function default($default): IAttributeBuilder;
 
 	/**
-	 * attribute is a reference to another schema
+	 * Marks value of an attribute as an array
 	 *
-	 * @param string $schema
+	 * @param bool $array
 	 *
 	 * @return IAttributeBuilder
 	 */
-	public function schema(string $schema): IAttributeBuilder;
+	public function array(bool $array = true): IAttributeBuilder;
+
+	/**
+	 * Tells an attribute it should load a schema.
+	 *
+	 * @param bool $load
+	 *
+	 * @return IAttributeBuilder
+	 */
+	public function load(bool $load = true): IAttributeBuilder;
+
+	/**
+	 * Set explicit reference to a schema.
+	 *
+	 * @param ISchema $schema
+	 *
+	 * @return IAttributeBuilder
+	 */
+	public function schema(ISchema $schema): IAttributeBuilder;
 
 	/**
 	 * creates and return a attribute

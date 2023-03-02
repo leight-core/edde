@@ -45,9 +45,18 @@ class AttributeBuilder implements IAttributeBuilder {
 		return $this;
 	}
 
-	/** @inheritdoc */
-	public function schema(string $schema): IAttributeBuilder {
-		$this->source->schema = $schema;
+	public function array(bool $array = true): IAttributeBuilder {
+		$this->source->array = $array;
+		return $this;
+	}
+
+	public function load(bool $load = true): IAttributeBuilder {
+		$this->source->load = $load;
+		return $this;
+	}
+
+	public function schema(ISchema $schema): IAttributeBuilder {
+		$this->source->scema = $schema;
 		return $this;
 	}
 

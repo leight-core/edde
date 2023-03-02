@@ -11,9 +11,15 @@ use function is_array;
 use function is_string;
 
 class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoader {
+	/** @var ISchema[] */
+	protected $schemas = [];
+
 	/** @inheritdoc */
 	public function load(string $schema): ISchema {
 		try {
+			if (isset($this->schemas[$schema])) {
+				return $this->schemas[$schema];
+			}
 			$reflectionClass = new ReflectionClass($schema);
 			$schemaBuilder = new SchemaBuilder($schema);
 			foreach ($reflectionClass->getConstants() as $name => $value) {
@@ -32,7 +38,7 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 			 * go through all methods as they're used as schema definition
 			 */
 			foreach ($reflectionClass->getMethods() as $reflectionMethod) {
-				$attributeBuilder = $schemaBuilder->attribute($propertyName = $reflectionMethod->getName());
+				$attributeBuilder = $schemaBuilder->attribute($attributeName = $reflectionMethod->getName());
 				/**
 				 * set default property type to a string
 				 */
@@ -45,34 +51,31 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 					switch ($parameterName = $parameter->getName()) {
 						case 'filter':
 							try {
-								$filter = $parameter->getDefaultValue();
-								if (is_string($filter) === false) {
+								if (is_string($filter = $parameter->getDefaultValue()) === false) {
 									throw new ReflectionException('Filter name is not a string value.');
 								}
 							} catch (ReflectionException $exception) {
-								throw new SchemaException(sprintf('Parameter [%s::%s($filter)] must have a default string value as a filter name.', $schema, $propertyName), 0, $exception);
+								throw new SchemaException(sprintf('Parameter [%s::%s($filter)] must have a default string value as a filter name.', $schema, $attributeName), 0, $exception);
 							}
 							$attributeBuilder->filter($parameterName, $filter);
 							break;
 						case 'validator':
 							try {
-								$validator = $parameter->getDefaultValue();
-								if (is_string($validator) === false) {
+								if (is_string($validator = $parameter->getDefaultValue()) === false) {
 									throw new ReflectionException('Validator name is not a string value.');
 								}
 							} catch (ReflectionException $exception) {
-								throw new SchemaException(sprintf('Parameter [%s::%s($validator)] must have a default string value as a validator name.', $schema, $propertyName), 0, $exception);
+								throw new SchemaException(sprintf('Parameter [%s::%s($validator)] must have a default string value as a validator name.', $schema, $attributeName), 0, $exception);
 							}
 							$attributeBuilder->validator($validator);
 							break;
 						case 'type':
 							try {
-								$type = $parameter->getDefaultValue();
-								if (is_string($type) === false) {
+								if (is_string($type = $parameter->getDefaultValue()) === false) {
 									throw new ReflectionException('Type name is not a string value.');
 								}
 							} catch (ReflectionException $exception) {
-								throw new SchemaException(sprintf('Parameter [%s::%s($type)] must have a default string value as a type name.', $schema, $propertyName), 0, $exception);
+								throw new SchemaException(sprintf('Parameter [%s::%s($type)] must have a default string value as a type name.', $schema, $attributeName), 0, $exception);
 							}
 							$attributeBuilder->type($type);
 							$attributeBuilder->required($parameter->isOptional());
@@ -84,8 +87,15 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 						case 'required':
 							$attributeBuilder->required($parameter->getDefaultValue());
 							break;
+						case 'schema':
+							$attributeBuilder->load($parameter->getDefaultValue());
+							$attributeBuilder->schema($this->load($propertyType));
+							break;
+						case 'array':
+							$attributeBuilder->array($parameter->getDefaultValue());
+							break;
 						default:
-							throw new SchemaException(sprintf('Unknown schema [%s::%s] directive [%s].', $schema, $propertyName, $propertyName));
+							throw new SchemaException(sprintf('Unknown schema [%s::%s] directive [%s].', $schema, $attributeName, $attributeName));
 					}
 				}
 				switch ($propertyType) {
@@ -103,7 +113,7 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 						break;
 				}
 			}
-			return $schemaBuilder->create();
+			return $this->schemas[$schema] = $schemaBuilder->create();
 		} catch (SchemaException $exception) {
 			throw $exception;
 		} catch (Throwable $throwable) {

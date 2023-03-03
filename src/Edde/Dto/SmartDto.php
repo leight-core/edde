@@ -81,6 +81,22 @@ class SmartDto implements IDto, IteratorAggregate {
 		return $this;
 	}
 
+	public function isValid(): bool {
+		foreach ($this->values as $value) {
+			if (!$value->isValid()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public function validate(): self {
+		if (!$this->isValid()) {
+			throw new SmartDtoException(sprintf("Smart DTO [%s] is not valid.", $this->schema->getName()));
+		}
+		return $this;
+	}
+
 	/**
 	 * Merge known properties into the object; there is no validation running
 	 * in this method, so it's up to the developer to ensure here are data he

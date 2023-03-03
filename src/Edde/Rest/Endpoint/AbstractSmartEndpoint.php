@@ -13,6 +13,6 @@ abstract class AbstractSmartEndpoint extends AbstractEndpoint {
 		if (!($schema = $this->schema[$this->endpoint->method->name] ?? null)) {
 			throw new RestException(sprintf("Missing schema for method [%s::%s].", static::class, $this->endpoint->method->name), 400);
 		}
-		return $this->smartService->from($this->request->getParsedBody(), $schema);
+		return $this->smartService->from($this->request->getParsedBody(), $schema)->validate();
 	}
 }

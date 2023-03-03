@@ -61,6 +61,26 @@ class Value {
 		return $this->isUndefined ? $this->attribute->getDefault() : $this->value;
 	}
 
+	public function isValid(): bool {
+		/**
+		 * Required & null is valid state
+		 */
+		if ($this->value === null && !$this->attribute->isRequired()) {
+			return true;
+		}
+		/**
+		 * Even when there could be a default value, undefined means "no value" from the user side,
+		 * so it's evaluated as "not valid".
+		 */
+		if ($this->isUndefined && $this->attribute->isRequired()) {
+			return false;
+		}
+		if ($this->value !== null && $this->attribute->isArray() && !is_array($this->value)) {
+			return false;
+		}
+		return true;
+	}
+
 	public function isUndefined(): bool {
 		return $this->isUndefined;
 	}

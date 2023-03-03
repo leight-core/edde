@@ -121,7 +121,7 @@ abstract class AbstractRepository {
 	 * @throws ReflectionException
 	 */
 	public function save(SmartDto $dto) {
-		$entity = $dto->known('id') && $dto->isDefined('id') ? $this->find($dto->getValueOrThrow('id')) : $dto->instanceOf($this->className);
+		$entity = $dto->known('id') && $dto->isDefined('id') ? $dto->exportTo($this->find($dto->getValueOrThrow('id'))) : $dto->instanceOf($this->className);
 		$this->entityManager->persist($entity);
 		return $entity;
 	}

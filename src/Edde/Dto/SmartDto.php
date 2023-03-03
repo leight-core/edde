@@ -90,9 +90,14 @@ class SmartDto implements IDto, IteratorAggregate {
 		return true;
 	}
 
+	/**
+	 * @return $this
+	 *
+	 * @throws SmartDtoException
+	 */
 	public function validate(): self {
-		if (!$this->isValid()) {
-			throw new SmartDtoException(sprintf("Smart DTO [%s] is not valid.", $this->schema->getName()));
+		foreach ($this->values as $value) {
+			$value->validate();
 		}
 		return $this;
 	}
@@ -203,8 +208,8 @@ class SmartDto implements IDto, IteratorAggregate {
 		return new self(
 			$schema,
 			array_map(
-				function (IAttribute $attribute) {
-					return new Value($attribute);
+				function (IAttribute $attribute) use ($schema) {
+					return new Value($schema, $attribute);
 				},
 				$schema->getAttributes()
 			)

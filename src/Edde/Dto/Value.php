@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Edde\Dto;
 
+use Edde\Dto\Exception\SmartDtoException;
 use Edde\Schema\IAttribute;
+use Edde\Schema\ISchema;
 
 /**
  * Value of a smart object; because PHP does not have an undefined, this class somehow solves it
@@ -11,6 +13,8 @@ use Edde\Schema\IAttribute;
  * but also knows if was provided.
  */
 class Value {
+	/** @var ISchema */
+	protected $schema;
 	/**
 	 * @var IAttribute
 	 */
@@ -30,9 +34,11 @@ class Value {
 	protected $value;
 
 	/**
+	 * @param ISchema    $schema
 	 * @param IAttribute $attribute
 	 */
-	public function __construct(IAttribute $attribute) {
+	public function __construct(ISchema $schema, IAttribute $attribute) {
+		$this->schema = $schema;
 		$this->attribute = $attribute;
 	}
 
@@ -62,23 +68,36 @@ class Value {
 	}
 
 	public function isValid(): bool {
+		try {
+			return true;
+		} catch (SmartDtoException $exception) {
+			return false;
+		}
+	}
+
+	/**
+	 * @return $this
+	 *
+	 * @throws SmartDtoException
+	 */
+	public function validate(): self {
 		/**
 		 * Required & null is valid state
 		 */
 		if ($this->value === null && !$this->attribute->isRequired()) {
-			return true;
+			return $this;
 		}
 		/**
 		 * Even when there could be a default value, undefined means "no value" from the user side,
 		 * so it's evaluated as "not valid".
 		 */
 		if ($this->isUndefined && $this->attribute->isRequired()) {
-			return false;
+			throw new SmartDtoException(sprintf("Value [%s::%s] is required, but is undefined (default value from attribute is omitted).", $this->schema->getName(), $this->attribute->getName()));
 		}
 		if ($this->value !== null && $this->attribute->isArray() && !is_array($this->value)) {
-			return false;
+			throw new SmartDtoException(sprintf("Value [%s::%s] is present, but is not an array.", $this->schema->getName(), $this->attribute->getName()));
 		}
-		return true;
+		return $this;
 	}
 
 	public function isUndefined(): bool {

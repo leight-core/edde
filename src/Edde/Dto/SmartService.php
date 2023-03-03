@@ -13,6 +13,6 @@ class SmartService implements ISmartService {
 	}
 
 	public function from(object $object, string $schema): SmartDto {
-		return $this->create($schema)->merge($object);
+		return $this->create($schema)->export($object);
 	}
 }

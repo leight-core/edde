@@ -84,7 +84,7 @@ class SmartDto implements IDto, IteratorAggregate {
 	 * @throws SmartDtoException
 	 * @throws SchemaException
 	 */
-	public function merge(object $object): self {
+	public function export(object $object): self {
 		/**
 		 * Running on an object side instead of "values" side is because
 		 * $object could be partial, thus rendering some of the "values" as "undefined".
@@ -98,10 +98,10 @@ class SmartDto implements IDto, IteratorAggregate {
 			}
 			$value = $this->get($k);
 			if (($attribute = $value->getAttribute())->hasSchema() && $schema = $attribute->getSchema()) {
-				$v = $dto = self::ofSchema($schema)->merge($v);
+				$v = $dto = self::ofSchema($schema)->export($v);
 				if ($attribute->hasInstanceOf()) {
 					$target = (new ReflectionClass($attribute->getInstanceOf()))->newInstance();
-					$dto->mergeTo($v = $target);
+					$dto->exportTo($v = $target);
 				}
 			}
 			$this->set($k, $v);
@@ -112,11 +112,15 @@ class SmartDto implements IDto, IteratorAggregate {
 	/**
 	 * Merge non-undefined values into to given object (on a property level).
 	 *
-	 * @param object $object
+	 * @template T of object
 	 *
-	 * @return object
+	 * @param T $object
+	 *
+	 * @return T
+	 *
+	 * @throws ReflectionException
 	 */
-	public function mergeTo(object $object): object {
+	public function exportTo($object): object {
 		$reflection = new ReflectionClass($object);
 		foreach ($this->values as $k => $value) {
 			if ($value->isUndefined() || !$reflection->hasProperty($k)) {
@@ -134,15 +138,17 @@ class SmartDto implements IDto, IteratorAggregate {
 	 *
 	 * Constructor is being called.
 	 *
-	 * @param string $instanceOf
+	 * @template T
 	 *
-	 * @return object Newly created instance
+	 * @param callable-string<T> $instanceOf
+	 *
+	 * @return T Newly created instance
 	 *
 	 * @throws ReflectionException
 	 */
 	public function instanceOf(string $instanceOf): object {
 		$reflection = new ReflectionClass($instanceOf);
-		$this->mergeTo($target = $reflection->newInstance());
+		$this->exportTo($target = $reflection->newInstance());
 		return $target;
 	}
 

@@ -146,7 +146,7 @@ class SmartDto implements IDto, IteratorAggregate {
 	 * @throws SmartDtoException
 	 * @throws SchemaException
 	 */
-	public function export(object $object): self {
+	public function from(object $object): self {
 		/**
 		 * Running on an object side instead of "values" side is because
 		 * $object could be partial, thus rendering some of the "values" as "undefined".
@@ -160,11 +160,7 @@ class SmartDto implements IDto, IteratorAggregate {
 			}
 			$value = $this->get($k);
 			if (($attribute = $value->getAttribute())->hasSchema() && $schema = $attribute->getSchema()) {
-				$v = $dto = self::ofSchema($schema)->export($v);
-				if ($attribute->hasInstanceOf()) {
-					$target = (new ReflectionClass($attribute->getInstanceOf()))->newInstance();
-					$dto->exportTo($v = $target);
-				}
+				$v = self::ofSchema($schema)->from($v);
 			}
 			$this->set($k, $v);
 		}
@@ -188,6 +184,12 @@ class SmartDto implements IDto, IteratorAggregate {
 			if ($value->isUndefined() || !$reflection->hasProperty($k)) {
 				continue;
 			}
+
+//			if ($attribute->hasInstanceOf()) {
+//				$target = (new ReflectionClass($attribute->getInstanceOf()))->newInstance();
+//				$dto->exportTo($v = $target);
+//			}
+
 			$property = $reflection->getProperty($k);
 			$property->setAccessible(true);
 			$property->setValue($object, $value->get());

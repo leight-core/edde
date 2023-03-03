@@ -6,6 +6,7 @@ namespace Edde\Rest\Endpoint;
 use Edde\Cache\CacheTrait;
 use Edde\Doctrine\EntityManagerTrait;
 use Edde\Dto\DtoServiceTrait;
+use Edde\Dto\SmartServiceTrait;
 use Edde\Http\HttpIndexTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Profiler\ProfilerServiceTrait;
@@ -28,6 +29,7 @@ use function in_array;
 use function is_string;
 
 abstract class AbstractEndpoint implements IEndpoint {
+	use SmartServiceTrait;
 	use EntityManagerTrait;
 	use LoggerTrait;
 	use DtoServiceTrait;
@@ -70,7 +72,7 @@ abstract class AbstractEndpoint implements IEndpoint {
 				/** @var $method IRequestMethod */
 				if (($method = $this->endpoint->method) instanceof IRequestMethod) {
 					$args = [
-						$this->dtoService->fromObject($method->toClass(), $this->request->getParsedBody()),
+						$this->createRequest($method),
 					];
 				}
 				$result = $this->{$this->endpoint->method->name}(...$args);
@@ -87,6 +89,10 @@ abstract class AbstractEndpoint implements IEndpoint {
 				return $this->handleException($e, $response);
 			}
 		});
+	}
+
+	protected function createRequest(IRequestMethod $requestMethod) {
+		return $this->dtoService->fromObject($requestMethod->toClass(), $this->request->getParsedBody());
 	}
 
 	/**

@@ -97,6 +97,9 @@ class Value {
 		if ($this->value !== null && $this->attribute->isArray() && !is_array($this->value)) {
 			throw new SmartDtoException(sprintf("Value [%s::%s] is present, but is not an array.", $this->schema->getName(), $this->attribute->getName()));
 		}
+		if ($this->attribute->hasInstanceOf() && !is_a($this->value, $this->attribute->getInstanceOf())) {
+			throw new SmartDtoException(sprintf("Value [%s::%s] is not instance of [%s].", $this->schema->getName(), $this->attribute->getName(), $this->attribute->getInstanceOf()));
+		}
 		return $this;
 	}
 

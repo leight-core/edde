@@ -10,6 +10,7 @@ use Edde\Schema\SchemaException;
 use Generator;
 use IteratorAggregate;
 use ReflectionClass;
+use ReflectionException;
 use Traversable;
 
 class SmartDto implements IDto, IteratorAggregate {
@@ -126,6 +127,23 @@ class SmartDto implements IDto, IteratorAggregate {
 			$property->setValue($object, $value->get());
 		}
 		return $object;
+	}
+
+	/**
+	 * Creates the given instance and fill all non-undefined values; same as mergeTo(new $instanceOf).
+	 *
+	 * Constructor is being called.
+	 *
+	 * @param string $instanceOf
+	 *
+	 * @return object Newly created instance
+	 *
+	 * @throws ReflectionException
+	 */
+	public function instanceOf(string $instanceOf): object {
+		$reflection = new ReflectionClass($instanceOf);
+		$this->mergeTo($target = $reflection->newInstance());
+		return $target;
 	}
 
 	/**

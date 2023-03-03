@@ -81,6 +81,23 @@ class SmartDto implements IDto, IteratorAggregate {
 		return $this;
 	}
 
+	/**
+	 * Merge the given object/array into this smart dto; if there is an unknown property,
+	 * an exception is thrown.
+	 *
+	 * @param array|object $values
+	 *
+	 * @return $this
+	 *
+	 * @throws SmartDtoException
+	 */
+	public function merge($values): self {
+		foreach ($values as $k => $v) {
+			$this->set($k, $v);
+		}
+		return $this;
+	}
+
 	public function isValid(): bool {
 		foreach ($this->values as $value) {
 			if (!$value->isValid()) {

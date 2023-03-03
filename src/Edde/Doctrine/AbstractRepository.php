@@ -6,8 +6,12 @@ namespace Edde\Doctrine;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Edde\Doctrine\Exception\RequiredResultException;
+use Edde\Dto\Exception\SmartDtoException;
+use Edde\Dto\SmartDto;
 use Edde\Math\RandomServiceTrait;
 use Edde\Query\Dto\Query;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * @template TEntity of object
@@ -18,6 +22,10 @@ abstract class AbstractRepository {
 	use RandomServiceTrait;
 
 	/**
+	 * @var ReflectionClass
+	 */
+	protected $reflectionClass;
+	/**
 	 * @var string
 	 */
 	protected $className;
@@ -27,7 +35,12 @@ abstract class AbstractRepository {
 	protected $matchOf = [];
 
 	public function __construct(string $className) {
+		$this->reflectionClass = new ReflectionClass($className);
 		$this->className = $className;
+	}
+
+	public function createEntity() {
+		return $this->reflectionClass->newInstance();
 	}
 
 	public function getRepository(): EntityRepository {
@@ -99,9 +112,16 @@ abstract class AbstractRepository {
 	}
 
 	/**
-	 * @param TEntity $entity
+	 * @param SmartDto $dto
+	 *
+	 * @return AbstractRepository
+	 *
+	 * @throws RequiredResultException
+	 * @throws SmartDtoException
+	 * @throws ReflectionException
 	 */
-	public function save($entity) {
+	public function save(SmartDto $dto) {
+		$entity = $dto->known('id') && $dto->isDefined('id') ? $this->find($dto->getValueOrThrow('id')) : $dto->instanceOf($this->className);
 		$this->entityManager->persist($entity);
 		return $this;
 	}

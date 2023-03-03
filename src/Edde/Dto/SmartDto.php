@@ -46,6 +46,19 @@ class SmartDto implements IDto, IteratorAggregate {
 	}
 
 	/**
+	 * Tells if the given value has been provided (regardless of a value).
+	 *
+	 * @param string $name
+	 *
+	 * @return bool
+	 *
+	 * @throws SmartDtoException
+	 */
+	public function isDefined(string $name): bool {
+		return !$this->get($name)->isUndefined();
+	}
+
+	/**
 	 * @param string $name
 	 *
 	 * @return Value

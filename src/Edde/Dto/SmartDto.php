@@ -177,6 +177,7 @@ class SmartDto implements IDto, IteratorAggregate {
 	 * @return T
 	 *
 	 * @throws ReflectionException
+	 * @throws SmartDtoException
 	 */
 	public function exportTo($object): object {
 		$reflection = new ReflectionClass($object);
@@ -184,15 +185,17 @@ class SmartDto implements IDto, IteratorAggregate {
 			if ($value->isUndefined() || !$reflection->hasProperty($k)) {
 				continue;
 			}
-
-//			if ($attribute->hasInstanceOf()) {
-//				$target = (new ReflectionClass($attribute->getInstanceOf()))->newInstance();
-//				$dto->exportTo($v = $target);
-//			}
-
+			$attribute = $value->getAttribute();
+			if ($attribute->hasInstanceOf() && !empty($object->$k) && !is_a($object->$k, $attribute->getInstanceOf())) {
+				throw new SmartDtoException(sprintf("Property [%s::%s] instanceOf mismatch: schema [%s], present [%s].", $this->schema->getName(), $k, $attribute->getInstanceOf(), get_class($object->$k)));
+			}
+			$set = $value->get();
+			if ($attribute->hasInstanceOf() && $set instanceof SmartDto) {
+				$set->exportTo($set = empty($object->$k) ? (new ReflectionClass($attribute->getInstanceOf()))->newInstance() : $object->$k);
+			}
 			$property = $reflection->getProperty($k);
 			$property->setAccessible(true);
-			$property->setValue($object, $value->get());
+			$property->setValue($object, $set);
 		}
 		return $object;
 	}
@@ -204,11 +207,12 @@ class SmartDto implements IDto, IteratorAggregate {
 	 *
 	 * @template T
 	 *
-	 * @param callable-string<T> $instanceOf
+	 * @param callable-string $instanceOf
 	 *
 	 * @return T Newly created instance
 	 *
 	 * @throws ReflectionException
+	 * @throws SmartDtoException
 	 */
 	public function instanceOf(string $instanceOf): object {
 		$reflection = new ReflectionClass($instanceOf);

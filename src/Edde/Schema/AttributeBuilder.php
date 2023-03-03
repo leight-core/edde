@@ -56,7 +56,7 @@ class AttributeBuilder implements IAttributeBuilder {
 	}
 
 	public function schema(ISchema $schema): IAttributeBuilder {
-		$this->source->scema = $schema;
+		$this->source->schema = $schema;
 		return $this;
 	}
 

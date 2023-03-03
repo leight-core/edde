@@ -123,7 +123,7 @@ abstract class AbstractRepository {
 	public function save(SmartDto $dto) {
 		$entity = $dto->known('id') && $dto->isDefined('id') ? $this->find($dto->getValueOrThrow('id')) : $dto->instanceOf($this->className);
 		$this->entityManager->persist($entity);
-		return $this;
+		return $entity;
 	}
 
 	/**

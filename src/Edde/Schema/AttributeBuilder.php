@@ -12,7 +12,17 @@ class AttributeBuilder implements IAttributeBuilder {
 	protected $attribute;
 
 	public function __construct(string $name) {
-		$this->source = (object)['name' => $name];
+		$this->source = (object)[
+			'name'       => $name,
+			'required'   => false,
+			'default'    => null,
+			'filter'     => null,
+			'validator'  => null,
+			'array'      => false,
+			'load'       => false,
+			'schema'     => null,
+			'instanceOf' => null,
+		];
 	}
 
 	/** @inheritdoc */

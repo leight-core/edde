@@ -53,7 +53,7 @@ class SmartDto implements IDto, IteratorAggregate {
 	 */
 	public function get(string $name): Value {
 		if (!$this->known($name)) {
-			throw new SmartDtoException(sprintf("Requested unknown property [%s] on [%s]." . $name, $this->schema->getName()));
+			throw new SmartDtoException(sprintf("Requested unknown property [%s] on [%s].", $name, $this->schema->getName()));
 		}
 		return $this->values[$name];
 	}

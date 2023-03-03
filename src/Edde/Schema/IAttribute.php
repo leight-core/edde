@@ -54,6 +54,20 @@ interface IAttribute {
 	public function isArray(): bool;
 
 	/**
+	 * Is target instance (class for schema) set?
+	 *
+	 * @return bool
+	 */
+	public function hasInstanceOf(): bool;
+
+	/**
+	 * Returns target object class for this property
+	 *
+	 * @return string
+	 */
+	public function getInstanceOf(): string;
+
+	/**
 	 * is this property reference to another schema?
 	 *
 	 * @return bool

@@ -96,11 +96,14 @@ class SmartDto implements IDto, IteratorAggregate {
 				continue;
 			}
 			$value = $this->get($k);
-			if ($value->getAttribute()->hasSchema() && $schema = $value->getAttribute()->getSchema()) {
-				$v = self::ofSchema($schema)->merge($v);
+			if (($attribute = $value->getAttribute())->hasSchema() && $schema = $attribute->getSchema()) {
+				$v = $dto = self::ofSchema($schema)->merge($v);
+				if ($attribute->hasInstanceOf()) {
+					$target = (new ReflectionClass($attribute->getInstanceOf()))->newInstance();
+					$dto->mergeTo($v = $target);
+				}
 			}
-
-			$this->known($k) && $this->set($k, $v);
+			$this->set($k, $v);
 		}
 		return $this;
 	}

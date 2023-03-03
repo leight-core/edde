@@ -46,6 +46,17 @@ class Attribute implements IAttribute {
 		return $this->source->array;
 	}
 
+	public function hasInstanceOf(): bool {
+		return isset($this->source->instanceOf);
+	}
+
+	public function getInstanceOf(): string {
+		if (!$this->hasInstanceOf()) {
+			throw new SchemaException(sprintf('Attribute [%s] does not have an instanceOf property.', $this->getName()));
+		}
+		return $this->source->instanceOf;
+	}
+
 	/** @inheritdoc */
 	public function hasSchema(): bool {
 		return isset($this->source->schema);
@@ -54,7 +65,7 @@ class Attribute implements IAttribute {
 	/** @inheritdoc */
 	public function getSchema(): ISchema {
 		if ($this->hasSchema() === false) {
-			throw new SchemaException(sprintf('Property [%s] does not have a reference to schema.', $this->getName()));
+			throw new SchemaException(sprintf('Attribute [%s] does not have a reference to schema.', $this->getName()));
 		}
 		return $this->source->schema;
 	}

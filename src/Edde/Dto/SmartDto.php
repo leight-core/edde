@@ -58,6 +58,17 @@ class SmartDto implements IDto, IteratorAggregate {
 		return $this->values[$name];
 	}
 
+	public function getValue(string $name) {
+		return $this->get($name)->get();
+	}
+
+	public function getValueOrThrow(string $name) {
+		if (($value = $this->getValue($name)) === null) {
+			throw new SmartDtoException(sprintf("Requested value [%s::%s] is not set (=== null).", $this->schema->getName(), $name));
+		}
+		return $value;
+	}
+
 	/**
 	 * @param string $name
 	 * @param        $value

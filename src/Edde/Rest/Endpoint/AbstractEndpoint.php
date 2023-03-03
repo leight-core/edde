@@ -6,6 +6,7 @@ namespace Edde\Rest\Endpoint;
 use Edde\Cache\CacheTrait;
 use Edde\Doctrine\EntityManagerTrait;
 use Edde\Dto\DtoServiceTrait;
+use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\Http\HttpIndexTrait;
 use Edde\Log\LoggerTrait;
@@ -76,6 +77,9 @@ abstract class AbstractEndpoint implements IEndpoint {
 					];
 				}
 				$result = $this->{$this->endpoint->method->name}(...$args);
+				if ($result instanceof SmartDto) {
+					$result = $result->getValues();
+				}
 				$this->entityManager->flush();
 				return $result instanceof ResponseInterface ? $result : Response::withJson($response, $result);
 			} catch (Throwable $e) {

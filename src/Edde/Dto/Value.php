@@ -69,6 +69,7 @@ class Value {
 
 	public function isValid(): bool {
 		try {
+			$this->validate();
 			return true;
 		} catch (SmartDtoException $exception) {
 			return false;
@@ -96,6 +97,9 @@ class Value {
 		}
 		if ($this->value !== null && $this->attribute->isArray() && !is_array($this->value)) {
 			throw new SmartDtoException(sprintf("Value [%s::%s] is present, but is not an array.", $this->schema->getName(), $this->attribute->getName()));
+		}
+		if ($this->value instanceof SmartDto) {
+			$this->value->validate();
 		}
 		return $this;
 	}

@@ -114,7 +114,7 @@ abstract class AbstractRepository {
 	/**
 	 * @param SmartDto $dto
 	 *
-	 * @return AbstractRepository
+	 * @return TEntity
 	 *
 	 * @throws RequiredResultException
 	 * @throws SmartDtoException

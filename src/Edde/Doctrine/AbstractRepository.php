@@ -54,7 +54,7 @@ abstract class AbstractRepository implements IRepository {
 		return $this->entityManager->getRepository($this->className);
 	}
 
-	public function getQueryBuilder(string $alias): QueryBuilder {
+	public function select(string $alias): QueryBuilder {
 		return $this->getRepository()
 			->createQueryBuilder($alias);
 	}
@@ -67,12 +67,16 @@ abstract class AbstractRepository implements IRepository {
 	}
 
 	public function all(string $alias): array {
-		return $this->toHydrate($this->getQueryBuilder($alias)
+		return $this->toHydrate($this->select($alias)
 			->getQuery()
 			->getResult());
 	}
 
 	public function total(Query $query): int {
+		/**
+		 * Here we have to create empty query builder and setup it manually as the one from Repository
+		 * creates default SELECT / FROM parts in the query.
+		 */
 		$queryBuilder = $this->entityManager->createQueryBuilder();
 		$queryBuilder
 			->select("COUNT(c)")
@@ -82,7 +86,7 @@ abstract class AbstractRepository implements IRepository {
 	}
 
 	public function toQuery(string $alias, Query $query): QueryBuilder {
-		$queryBuilder = $this->getQueryBuilder($alias)
+		$queryBuilder = $this->select($alias)
 			->setFirstResult($query->page)
 			->setMaxResults($query->size);
 		$this->applyQuery($alias, $query->filter, $queryBuilder);
@@ -121,20 +125,11 @@ abstract class AbstractRepository implements IRepository {
 		return $entity;
 	}
 
-	/**
-	 * @param string        $alias
-	 * @param object|null   $filter
-	 * @param QueryBuilder  $queryBuilder
-	 *
-	 * @psalm-param TFilter $filter
-	 *
-	 * @return void
-	 */
-	protected function applyQuery(string $alias, ?object $filter, QueryBuilder $queryBuilder) {
+	public function applyQuery(string $alias, ?object $filter, QueryBuilder $queryBuilder): void {
 		$this->applyWhere($alias, $filter, $queryBuilder);
 	}
 
-	protected function applyWhere(string $alias, ?object $filter, QueryBuilder $queryBuilder) {
+	public function applyWhere(string $alias, ?object $filter, QueryBuilder $queryBuilder): void {
 		foreach ($this->fulltextOf as $field => $value) {
 			isset($filter->$value) && $this->fulltextOf($queryBuilder, $alias, $field, $filter->$value);
 		}

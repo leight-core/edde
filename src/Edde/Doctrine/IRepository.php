@@ -36,7 +36,7 @@ interface IRepository {
 	 *
 	 * @return QueryBuilder
 	 */
-	public function getQueryBuilder(string $alias): QueryBuilder;
+	public function select(string $alias): QueryBuilder;
 
 	/**
 	 * @param string $id
@@ -103,4 +103,28 @@ interface IRepository {
 	 * @throws SmartDtoException
 	 */
 	public function patch(SmartDto $dto);
+
+	/**
+	 * This method enables heavy query modifications; it's not intended to use with adding simple filter and so on. It's more like
+	 * adding joins, another selects and so on.
+	 *
+	 * @param string       $alias
+	 * @param object|null  $filter
+	 * @param QueryBuilder $queryBuilder
+	 *
+	 * @return void
+	 */
+	public function applyQuery(string $alias, ?object $filter, QueryBuilder $queryBuilder): void;
+
+	/**
+	 * Here you should really only apply filters; you could eventually append some data, if they're related to the filter only, but
+	 * main idea is to just put "simple" `where foo = bar`.
+	 *
+	 * @param string       $alias
+	 * @param object|null  $filter
+	 * @param QueryBuilder $queryBuilder
+	 *
+	 * @return void
+	 */
+	public function applyWhere(string $alias, ?object $filter, QueryBuilder $queryBuilder): void;
 }

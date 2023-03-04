@@ -26,6 +26,13 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 				throw new SchemaException(sprintf('Detected cyclic dependency on [%s]; this schema is already in loading process [%s].', $schema, implode(' -> ', array_keys($this->loading))));
 			}
 			$this->loading[$schema] = true;
+
+			/**
+			 * Schema "global" modifiers (on the schema level).
+			 */
+			$isPartial = false;
+			$overrideRequired = [];
+
 			$reflectionClass = new ReflectionClass($schema);
 			$schemaBuilder = new SchemaBuilder($schema);
 			foreach ($reflectionClass->getConstants() as $name => $value) {
@@ -35,6 +42,12 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 							throw new SchemaException(sprintf('Meta for schema [%s] must be an array.', $schema));
 						}
 						$schemaBuilder->meta($value);
+						break;
+					case 'partial':
+						$isPartial = $value;
+						break;
+					case 'required':
+						$overrideRequired = $value;
 						break;
 					default:
 						throw new SchemaException(sprintf('Unknown directive (constant) in schema [%s::%s] must be an array.', $schema, $name));
@@ -126,6 +139,21 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 						break;
 				}
 			}
+
+			if ($isPartial) {
+				foreach ($schemaBuilder->attributes() as $attributeBuilder) {
+					$attributeBuilder->required(false);
+				}
+			}
+			if (!empty($overrideRequired)) {
+				foreach ($overrideRequired as $k => $v) {
+					if (!$schemaBuilder->has($k)) {
+						throw new SchemaException(sprintf("Overriding 'required' of unknown schema attribute [%s::%s].", $schema, $k));
+					}
+					$schemaBuilder->attribute($k)->required($v);
+				}
+			}
+
 			return $this->schemas[$schema] = $schemaBuilder->create();
 		} catch (SchemaException $exception) {
 			throw $exception;

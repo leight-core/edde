@@ -23,9 +23,17 @@ class SchemaBuilder implements ISchemaBuilder {
 		return $this;
 	}
 
+	public function has(string $name): bool {
+		return isset($this->attributeBuilders[$name]);
+	}
+
 	/** @inheritdoc */
 	public function attribute(string $name): IAttributeBuilder {
 		return $this->attributeBuilders[$name] ?? $this->attributeBuilders[$name] = new AttributeBuilder($name);
+	}
+
+	public function attributes(string $name): array {
+		return $this->attributeBuilders;
 	}
 
 	/** @inheritdoc */
@@ -34,8 +42,8 @@ class SchemaBuilder implements ISchemaBuilder {
 			return $this->schema;
 		}
 		$attributes = [];
-		foreach ($this->attributeBuilders as $name => $propertyBuilder) {
-			$attributes[$name] = $propertyBuilder->getAttribute();
+		foreach ($this->attributeBuilders as $name => $attributeBuilder) {
+			$attributes[$name] = $attributeBuilder->getAttribute();
 		}
 		return $this->schema = new Schema(
 			$this->source,

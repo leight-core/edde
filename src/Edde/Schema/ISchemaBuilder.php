@@ -14,6 +14,15 @@ interface ISchemaBuilder {
 	public function meta(array $meta): ISchemaBuilder;
 
 	/**
+	 * Is the given attribute builder present?
+	 *
+	 * @param string $name
+	 *
+	 * @return bool
+	 */
+	public function has(string $name): bool;
+
+	/**
 	 * create a new attribute with the given name
 	 *
 	 * @param string $name
@@ -21,6 +30,13 @@ interface ISchemaBuilder {
 	 * @return IAttributeBuilder
 	 */
 	public function attribute(string $name): IAttributeBuilder;
+
+	/**
+	 * @param string $name
+	 *
+	 * @return IAttributeBuilder[]
+	 */
+	public function attributes(string $name): array;
 
 	/**
 	 * build and return a schema

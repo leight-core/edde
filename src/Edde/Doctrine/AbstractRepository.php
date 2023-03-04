@@ -5,6 +5,7 @@ namespace Edde\Doctrine;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use Edde\Doctrine\Exception\RepositoryException;
 use Edde\Doctrine\Exception\RequiredResultException;
 use Edde\Dto\Exception\SmartDtoException;
 use Edde\Dto\SmartDto;
@@ -112,17 +113,45 @@ abstract class AbstractRepository {
 	}
 
 	/**
+	 * Saves a new entity.
+	 *
 	 * @param SmartDto $dto
 	 *
 	 * @return TEntity
 	 *
-	 * @throws RequiredResultException
-	 * @throws SmartDtoException
 	 * @throws ReflectionException
+	 * @throws SmartDtoException
 	 */
 	public function save(SmartDto $dto) {
-		$entity = $dto->known('id') && $dto->isDefined('id') ? $dto->exportTo($this->find($dto->getValueOrThrow('id'))) : $dto->instanceOf($this->className);
-		$this->entityManager->persist($entity);
+		$this->entityManager->persist(
+			$entity = $dto->instanceOf($this->className)
+		);
+		return $entity;
+	}
+
+	/**
+	 * Updates an existing entity, requires ID property present.
+	 *
+	 * @param SmartDto $dto
+	 *
+	 * @return TEntity
+	 *
+	 * @throws ReflectionException
+	 * @throws RepositoryException
+	 * @throws RequiredResultException
+	 * @throws SmartDtoException
+	 */
+	public function patch(SmartDto $dto) {
+		if (!$dto->known('id')) {
+			throw new RepositoryException(sprintf('Smart DTO [%s] does not have ID attribute in the schema.', $dto->getName()));
+		} else if ($dto->isUndefined('id')) {
+			throw new RepositoryException(sprintf('Smart DTO [%s::id] is undefined.', $dto->getName()));
+		}
+		$this->entityManager->persist(
+			$entity = $dto->exportTo(
+				$this->find($dto->getValueOrThrow('id'))
+			),
+		);
 		return $entity;
 	}
 

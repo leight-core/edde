@@ -34,6 +34,14 @@ class SmartDto implements IDto, IteratorAggregate {
 		$this->values = $values;
 	}
 
+	public function getName(): string {
+		return $this->schema->getName();
+	}
+
+	public function getSchema(): ISchema {
+		return $this->schema;
+	}
+
 	/**
 	 * Is the property known to this DTO?
 	 *
@@ -46,7 +54,7 @@ class SmartDto implements IDto, IteratorAggregate {
 	}
 
 	/**
-	 * Tells if the given value has been provided (regardless of a value).
+	 * Tells if the given value has not been provided (regardless of a value).
 	 *
 	 * @param string $name
 	 *
@@ -54,8 +62,8 @@ class SmartDto implements IDto, IteratorAggregate {
 	 *
 	 * @throws SmartDtoException
 	 */
-	public function isDefined(string $name): bool {
-		return !$this->get($name)->isUndefined();
+	public function isUndefined(string $name): bool {
+		return $this->get($name)->isUndefined();
 	}
 
 	/**

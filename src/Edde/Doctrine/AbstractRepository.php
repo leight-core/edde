@@ -7,7 +7,6 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Edde\Doctrine\Exception\RepositoryException;
 use Edde\Doctrine\Exception\RequiredResultException;
-use Edde\Dto\Exception\SmartDtoException;
 use Edde\Dto\SmartDto;
 use Edde\Math\RandomServiceTrait;
 use Edde\Query\Dto\Query;
@@ -17,8 +16,10 @@ use ReflectionException;
 /**
  * @template TEntity of object
  * @template TFilter of object
+ *
+ * @template-extends IRepository<TEntity, TFilter>
  */
-abstract class AbstractRepository {
+abstract class AbstractRepository implements IRepository {
 	use EntityManagerTrait;
 	use RandomServiceTrait;
 
@@ -35,6 +36,11 @@ abstract class AbstractRepository {
 	protected $searchOf = [];
 	protected $matchOf = [];
 
+	/**
+	 * @param string $className
+	 *
+	 * @throws ReflectionException
+	 */
 	public function __construct(string $className) {
 		$this->reflectionClass = new ReflectionClass($className);
 		$this->className = $className;
@@ -53,14 +59,6 @@ abstract class AbstractRepository {
 			->createQueryBuilder($alias);
 	}
 
-	/**
-	 * @param string $id
-	 *
-	 * @return object
-	 * @psal-return TEntity
-	 *
-	 * @throws RequiredResultException
-	 */
 	public function find(string $id) {
 		if (!($entity = $this->getRepository()->find($id))) {
 			throw new RequiredResultException(sprintf('Cannot find [%s] by [%s]!', $this->className, $id), 500);
@@ -68,11 +66,7 @@ abstract class AbstractRepository {
 		return $this->hydrate($entity);
 	}
 
-	/**
-	 * @return object[]
-	 * @psalm-return TEntity[]
-	 */
-	public function all(string $alias) {
+	public function all(string $alias): array {
 		return $this->toHydrate($this->getQueryBuilder($alias)
 			->getQuery()
 			->getResult());
@@ -87,20 +81,6 @@ abstract class AbstractRepository {
 		return (int)$queryBuilder->getQuery()->getSingleScalarResult();
 	}
 
-	/**
-	 * @param string $alias
-	 * @param Query  $query
-	 *
-	 * @return TEntity
-	 */
-	public function query(string $alias, Query $query) {
-		return $this->toHydrate(
-			$this->toQuery($alias, $query)
-				->getQuery()
-				->getResult()
-		);
-	}
-
 	public function toQuery(string $alias, Query $query): QueryBuilder {
 		$queryBuilder = $this->getQueryBuilder($alias)
 			->setFirstResult($query->page)
@@ -112,16 +92,14 @@ abstract class AbstractRepository {
 		return $queryBuilder;
 	}
 
-	/**
-	 * Saves a new entity.
-	 *
-	 * @param SmartDto $dto
-	 *
-	 * @return TEntity
-	 *
-	 * @throws ReflectionException
-	 * @throws SmartDtoException
-	 */
+	public function query(string $alias, Query $query): array {
+		return $this->toHydrate(
+			$this->toQuery($alias, $query)
+				->getQuery()
+				->getResult()
+		);
+	}
+
 	public function save(SmartDto $dto) {
 		$this->entityManager->persist(
 			$entity = $dto->instanceOf($this->className)
@@ -129,18 +107,6 @@ abstract class AbstractRepository {
 		return $entity;
 	}
 
-	/**
-	 * Updates an existing entity, requires ID property present.
-	 *
-	 * @param SmartDto $dto
-	 *
-	 * @return TEntity
-	 *
-	 * @throws ReflectionException
-	 * @throws RepositoryException
-	 * @throws RequiredResultException
-	 * @throws SmartDtoException
-	 */
 	public function patch(SmartDto $dto) {
 		if (!$dto->known('id')) {
 			throw new RepositoryException(sprintf('Smart DTO [%s] does not have ID attribute in the schema.', $dto->getName()));

@@ -6,11 +6,7 @@ namespace Edde\Tag\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Edde\Doctrine\AbstractUuidEntity;
 
-/**
- * @ORM\Entity()
- * @ORM\Table(name="tag")
- */
-class TagEntity extends AbstractUuidEntity {
+abstract class TagEntity extends AbstractUuidEntity {
 	/**
 	 * @ORM\Column(type="string", length=128)
 	 * @var string

@@ -32,11 +32,9 @@ interface ISchemaBuilder {
 	public function attribute(string $name): IAttributeBuilder;
 
 	/**
-	 * @param string $name
-	 *
 	 * @return IAttributeBuilder[]
 	 */
-	public function attributes(string $name): array;
+	public function attributes(): array;
 
 	/**
 	 * build and return a schema

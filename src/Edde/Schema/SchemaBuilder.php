@@ -32,7 +32,7 @@ class SchemaBuilder implements ISchemaBuilder {
 		return $this->attributeBuilders[$name] ?? $this->attributeBuilders[$name] = new AttributeBuilder($name);
 	}
 
-	public function attributes(string $name): array {
+	public function attributes(): array {
 		return $this->attributeBuilders;
 	}
 

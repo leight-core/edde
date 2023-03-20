@@ -39,13 +39,14 @@ interface IRepository {
 	public function select(string $alias): QueryBuilder;
 
 	/**
-	 * @param string $id
+	 * @param string      $id
+	 * @param string|null $message
 	 *
 	 * @return TEntity
 	 *
 	 * @throws RequiredResultException
 	 */
-	public function find(string $id);
+	public function find(string $id, string $message = null);
 
 	/**
 	 * @return TEntity[]

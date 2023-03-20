@@ -14,8 +14,8 @@ use ReflectionClass;
 use ReflectionException;
 
 /**
- * @template TEntity of object
- * @template TFilter of object
+ * @template         TEntity of object
+ * @template         TFilter of object
  *
  * @template-extends IRepository<TEntity, TFilter>
  */
@@ -59,9 +59,9 @@ abstract class AbstractRepository implements IRepository {
 			->createQueryBuilder($alias);
 	}
 
-	public function find(string $id) {
+	public function find(string $id, string $message = null) {
 		if (!($entity = $this->getRepository()->find($id))) {
-			throw new RequiredResultException(sprintf('Cannot find [%s] by [%s]!', $this->className, $id), 500);
+			throw new RequiredResultException($message || sprintf('Cannot find [%s] by [%s]!', $this->className, $id), 500);
 		}
 		return $this->hydrate($entity);
 	}

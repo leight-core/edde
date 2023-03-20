@@ -24,11 +24,9 @@ class ProcessService {
 
 	protected function isRunningWin($pid): ?bool {
 		try {
-			$wmi = new COM('winmgmts://');
-			$processes = $wmi->ExecQuery('SELECT ProcessId FROM Win32_Process WHERE ProcessId = \'' . (int)$pid . '\'');
+			$processes = (new COM('winmgmts://'))->ExecQuery('SELECT ProcessId FROM Win32_Process WHERE ProcessId = \'' . (int)$pid . '\'');
 			return count($processes) > 0;
 		} catch (Throwable $exception) {
-			$this->logger->error($exception);
 			return null;
 		}
 	}
@@ -37,7 +35,6 @@ class ProcessService {
 		try {
 			return posix_kill($pid, 0);
 		} catch (Throwable $exception) {
-			$this->logger->error($exception);
 			return null;
 		}
 	}

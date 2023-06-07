@@ -124,8 +124,6 @@ class ExcelService implements IExcelService {
 	 */
 	public function handle(HandleDto $handleDto, IProgress $progress = null): void {
 		$progress = NoProgress::ensure($progress);
-		$progress->check();
-		$progress->onStart();
 		$meta = $this->meta($handleDto->file);
 		$progress->check();
 		$progress->onStart($meta->total);
@@ -224,6 +222,9 @@ class ExcelService implements IExcelService {
 	 * @throws Exception
 	 */
 	public function load(ReadDto $readDto): Spreadsheet {
+		/**
+		 * This service should run only with >=30% free memory, or it could silently kill the process.
+		 */
 		$this->memoryService->check(70);
 		$reader = IOFactory::createReaderForFile($readDto->file);
 		$reader->setLoadSheetsOnly($readDto->sheets);

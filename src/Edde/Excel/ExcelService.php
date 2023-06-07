@@ -15,6 +15,7 @@ use Edde\Excel\Exception\EmptySheetException;
 use Edde\Excel\Exception\ExcelException;
 use Edde\Excel\Exception\MissingHeaderException;
 use Edde\Log\LoggerTrait;
+use Edde\Php\MemoryServiceTrait;
 use Edde\Progress\IProgress;
 use Edde\Progress\NoProgress;
 use Edde\Reader\IReader;
@@ -48,6 +49,7 @@ class ExcelService implements IExcelService {
 	use ContainerTrait;
 	use ReflectionServiceTrait;
 	use CacheTrait;
+	use MemoryServiceTrait;
 
 	/**
 	 * @param ReadDto $readDto
@@ -105,6 +107,9 @@ class ExcelService implements IExcelService {
 			}
 			yield str_pad((string)$index, 8, '0', STR_PAD_LEFT) => $item;
 		}
+		$spreadsheet->disconnectWorksheets();
+		$spreadsheet->garbageCollect();
+		unset($spreadsheet);
 	}
 
 	public function safeRead(ReadDto $readDto): Generator {
@@ -119,6 +124,8 @@ class ExcelService implements IExcelService {
 	 */
 	public function handle(HandleDto $handleDto, IProgress $progress = null): void {
 		$progress = NoProgress::ensure($progress);
+		$progress->check();
+		$progress->onStart();
 		$meta = $this->meta($handleDto->file);
 		$progress->check();
 		$progress->onStart($meta->total);
@@ -140,6 +147,7 @@ class ExcelService implements IExcelService {
 	 */
 	public function meta(string $file): MetaDto {
 		return $this->cache->get($hash = sha1_file($file), function () use ($hash, $file) {
+			$this->memoryService->check(70);
 			/** @var $tabs TabDto[] */
 			$tabs = [];
 			$services = [];
@@ -160,16 +168,13 @@ class ExcelService implements IExcelService {
 					'count'    => $count,
 				]);
 			}
-			foreach ($tabs as $tab) {
-				foreach ($tab->services as $_) {
-					$total += iterator_count($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
-						'file'   => $file,
-						'sheets' => $tab->name,
-					])));
-				}
-			}
 
 			$services = array_unique($services);
+
+			foreach ($tabs as $tab) {
+				$total += count($tab->services) * $tab->count;
+			}
+
 			$translations = [];
 			foreach ($this->safeRead($this->dtoService->fromArray(ReadDto::class, [
 				'file'   => $file,
@@ -219,6 +224,7 @@ class ExcelService implements IExcelService {
 	 * @throws Exception
 	 */
 	public function load(ReadDto $readDto): Spreadsheet {
+		$this->memoryService->check(70);
 		$reader = IOFactory::createReaderForFile($readDto->file);
 		$reader->setLoadSheetsOnly($readDto->sheets);
 		return $reader->load($readDto->file);

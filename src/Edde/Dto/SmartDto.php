@@ -168,7 +168,15 @@ class SmartDto implements IDto, IteratorAggregate {
 			}
 			$value = $this->get($k);
 			if (($attribute = $value->getAttribute())->hasSchema() && $schema = $attribute->getSchema()) {
-				$v = self::ofSchema($schema)->from($v);
+				if ($attribute->isArray()) {
+					$array = [];
+					foreach ($v as $_k => $_v) {
+						$array[$_k] = self::ofSchema($schema)->from($_v);
+					}
+					$v = $array;
+				} else {
+					$v = self::ofSchema($schema)->from($v);
+				}
 			}
 			$this->set($k, $v);
 		}

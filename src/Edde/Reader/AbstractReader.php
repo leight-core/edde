@@ -5,10 +5,12 @@ namespace Edde\Reader;
 
 use Edde\Dto\DtoServiceTrait;
 use Edde\Job\Exception\JobInterruptedException;
+use Edde\Log\LoggerTrait;
 use Edde\Mapper\Exception\SkipException;
 use Edde\Php\Exception\MemoryLimitException;
 use Edde\Progress\IProgress;
 use Edde\Progress\NoProgress;
+use Edde\Reflection\Exception\PartialException;
 use Edde\Reflection\ReflectionServiceTrait;
 use Generator;
 use Throwable;
@@ -16,6 +18,7 @@ use Throwable;
 abstract class AbstractReader implements IReader {
 	use DtoServiceTrait;
 	use ReflectionServiceTrait;
+	use LoggerTrait;
 
 	/**
 	 * @inheritdoc
@@ -65,6 +68,11 @@ abstract class AbstractReader implements IReader {
 				} catch (MemoryLimitException $exception) {
 					$progress->onError($exception, $index);
 					throw new JobInterruptedException($exception->getMessage(), 0, $exception);
+				} catch (PartialException $exception) {
+					/**
+					 *  This sould be logged inly in   to logs, not into job logs
+					 */
+					$this->logger->error($exception);
 				} catch (Throwable $throwable) {
 					$progress->onError($throwable, $index);
 				}

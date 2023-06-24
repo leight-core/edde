@@ -130,7 +130,7 @@ class ReflectionService {
 	public function toConstants(ReflectionClass $class): array {
 		$constants = [];
 		foreach ($class->getConstants() as $name => $value) {
-			$constants[] = ConstantDto::create([
+			$constants[$name] = ConstantDto::create([
 				'name'  => $name,
 				'value' => $value,
 			]);

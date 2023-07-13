@@ -24,18 +24,18 @@ class SchemaExport extends AbstractExport {
 	protected function toZod(ISchema $schema): string {
 		$zod = [];
 		foreach ($schema->getAttributes() as $attribute) {
+			$type = "z.any()";
 			switch ($attribute->getType()) {
 				case 'string':
-					$zod[] = sprintf("z.string()%s,", $attribute->isRequired() ? '' : '.optional()');
+					$type = sprintf("z.string()%s", $attribute->isRequired() ? '' : '.optional()');
 					break;
-				default:
-					$zod[] = "z.any()";
 			}
+			$zod[] = sprintf('%s: %s,', $attribute->getName(), $type);
 		}
 		$zod = implode("\n\t", $zod);
 		return <<<E
 z.object({
-$zod
+	$zod
 });
 E;
 

@@ -3,16 +3,13 @@ declare(strict_types=1);
 
 namespace Edde\User;
 
-use Edde\Bridge\User\CurrentUser;
 use Edde\Mapper\Exception\ItemException;
 use Edde\Mapper\Exception\SkipException;
 use Edde\User\Exception\UserNotSelectedException;
-use Edde\User\Mapper\CurrentUserMapperTrait;
 use Edde\User\Repository\UserRepositoryTrait;
 
 class CurrentUserService {
 	use UserRepositoryTrait;
-	use CurrentUserMapperTrait;
 
 	/** @var CurrentUser|null */
 	protected $user;
@@ -27,15 +24,15 @@ class CurrentUserService {
 	 * @throws ItemException
 	 * @throws SkipException
 	 */
-	public function select($userId): ?CurrentUser {
+	public function select($userId) {
 		$this->user = null;
 		if ($userId) {
-			$this->user = $this->currentUserMapper->item($this->userRepository->findByLogin($userId));
+			$this->user = $this->userRepository->findByLogin($userId);
 		}
 		return $this->user;
 	}
 
-	public function selectBy(string $login): ?CurrentUser {
+	public function selectBy(string $login) {
 		if ($user = $this->userRepository->findByLogin($login)) {
 			return $this->select($user->id);
 		}
@@ -69,7 +66,7 @@ class CurrentUserService {
 		return !!$this->user;
 	}
 
-	public function requireUser(): CurrentUser {
+	public function requireUser() {
 		if (!$this->user) {
 			throw new UserNotSelectedException('Requested an user, but no user has been selected.');
 		}

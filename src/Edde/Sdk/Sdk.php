@@ -11,8 +11,7 @@ class Sdk {
 	use FileServiceTrait;
 
 	public function generate(?string $output = null) {
-		$output = $output ?? sprintf('%s/sdk', getcwd());
-		$this->fileService->remove($output);
+		$this->fileService->remove($output = $output ?? sprintf('%s/sdk', getcwd()));
 		$this->container->injectOn($generator = new RpcHandlerGenerator());
 		$generator
 			->withOutput($output)

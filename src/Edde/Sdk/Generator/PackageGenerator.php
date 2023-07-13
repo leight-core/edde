@@ -41,5 +41,7 @@ class PackageGenerator extends AbstractGenerator {
             ->injectOn(new SchemaGenerator())
             ->withOutput($this->output)
             ->generate();
+
+        return null;
     }
 }

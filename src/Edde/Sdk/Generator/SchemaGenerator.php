@@ -31,8 +31,8 @@ class SchemaGenerator extends AbstractGenerator {
 	public function generate(): ?string {
 		$schemaExport = $this->container->injectOn(new SchemaExport());
 
-		$schemaOutput = sprintf("%s/src/schema", $this->output);
-		$exportOutput = sprintf("%s/src/\$export", $this->output);
+		$schemaOutput = sprintf('%s/src/schema', $this->output);
+		$exportOutput = sprintf('%s/src/$export', $this->output);
 		@mkdir($schemaOutput, 0777, true);
 		@mkdir($exportOutput, 0777, true);
 

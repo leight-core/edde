@@ -30,7 +30,7 @@ class RpcHandlerGenerator extends AbstractGenerator {
 			$export = $handler->isMutator() ? $mutationExport->withHandler($handler)->export() : $queryExport->withHandler($handler)->export();
 			$export && file_put_contents(sprintf('%s/with%s.ts', $rpcOutput, $handler->getName()), $export);
 
-			file_put_contents(sprintf('%s/with%s.ts', $exportOutput, $handler->getName()), sprintf('export {with%s} from "../rpc/with%s.ts";', $handler->getName(), $handler->getName()));
+			file_put_contents(sprintf('%s/with%s.ts', $exportOutput, $handler->getName()), sprintf('export {with%s} from "../rpc/with%s";', $handler->getName(), $handler->getName()));
 
 			file_put_contents(sprintf('%s/$export.ts', $exportOutput), implode("\n", [
 				sprintf('export * from "./with%s";', $handler->getName()),

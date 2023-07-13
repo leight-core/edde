@@ -27,5 +27,5 @@ interface SessionSchema {
 	 */
 	function site(): ?string;
 
-	function tokens($isArray = true): string;
+	function tokens($array = true): string;
 }

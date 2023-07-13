@@ -20,10 +20,14 @@ class SchemaGenerator extends AbstractGenerator {
 	protected function generateSchema(ISchema $schema, SchemaExport $schemaExport, string $schemaOutput, string $exportOutput): void {
 		$export = $schemaExport->withSchema($schema)->export();
 		if ($export) {
-			$schemaName = $schemaExport->getSchemaName($schema) . 'Schema';
+			$type = $schemaExport->getSchemaName($schema);
+			$schemaName = $type . 'Schema';
 			file_put_contents(sprintf('%s/%s.ts', $schemaOutput, $schemaName), $export);
 
 			file_put_contents(sprintf('%s/%s.ts', $exportOutput, $schemaName), sprintf('export {%s} from "../schema/%s.ts";', $schemaName, $schemaName));
+			file_put_contents(sprintf('%s/I%s.ts', $exportOutput, $schemaName), sprintf('export {I%s} from "../schema/%s.ts";', $schemaName, $schemaName));
+			file_put_contents(sprintf('%s/I%s.ts', $exportOutput, $type), sprintf('export {I%s} from "../schema/%s.ts";', $type, $type));
+
 			file_put_contents(sprintf('%s/$export.ts', $exportOutput), sprintf('export * from "./%s";' . "\n", $schemaName), FILE_APPEND);
 		}
 	}

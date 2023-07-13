@@ -7,6 +7,7 @@ use Edde\Container\ContainerTrait;
 use Edde\Rpc\Service\RpcHandlerIndexTrait;
 use Edde\Rpc\Service\RpcServiceTrait;
 use Edde\Sdk\AbstractGenerator;
+use Edde\Sdk\Export\SchemaExport;
 use Throwable;
 
 class RpcHandlerGenerator extends AbstractGenerator {
@@ -22,12 +23,30 @@ class RpcHandlerGenerator extends AbstractGenerator {
 		foreach ($this->rpcHandlerIndex->getHandlers() as $name) {
 			try {
 				printf("\tGenerating [%s] to [%s]\n", $name, $output = $this->module($name));
+				@mkdir($output, 0777, true);
 				$handler = $this->rpcService->resolve($name);
-				$this->container->injectOn($schemaGenerator = new SchemaGenerator());
-				$schemaGenerator
-					->withOutput(sprintf('%s/schema', $output))
-					->withHandler($handler)
-					->generate();
+
+				$export = [];
+
+				$this->container->injectOn($schemaExport = new SchemaExport());
+
+				$export[] = $schemaExport
+					->withHandler($handler->getRequestSchema())
+					->export();
+				$export[] = $schemaExport
+					->withHandler($handler->getResponseSchema())
+					->export();
+
+				file_put_contents(
+					sprintf('%s/index.ts', $output),
+					implode(
+						"\n",
+						array_map(
+							'trim',
+							array_filter($export)
+						)
+					)
+				);
 			} catch (Throwable $throwable) {
 				// swallow
 			}

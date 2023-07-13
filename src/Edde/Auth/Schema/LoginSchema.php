@@ -8,7 +8,7 @@ namespace Edde\Auth\Schema;
  */
 interface LoginSchema {
 	const meta = [
-		'module' => 'LoginSchema',
+		'export' => 'Login',
 	];
 
 	function login(): string;

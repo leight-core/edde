@@ -24,6 +24,7 @@ class PackageGenerator extends AbstractGenerator {
             ],
             'devDependencies' => [
                 '@leight/tsconfig' => '^0.5.0',
+                '@leight/eslint' => '^0.5.0',
                 'typescript'       => '^5.1.3',
             ],
         ], JSON_PRETTY_PRINT)));
@@ -33,11 +34,62 @@ class PackageGenerator extends AbstractGenerator {
         file_put_contents("$this->output/src/index.ts", 'export * from "./$export/$export.ts"');
     }
 
+    protected function generateEslintIgnore() {
+        file_put_contents("$this->output/.eslintignore", "
+node_modules
+dist
+");
+    }
+
+    protected function generateEslintRc() {
+        file_put_contents("$this->output/.eslintrc", '{
+	"root": true,
+	"extends": [
+		"@leight/eslint"
+	],
+	"overrides": [
+		{
+			"files": [
+				"src/**/*"
+			],
+			"settings": {
+				"disable/plugins": [
+					"react",
+					"eslint-plugin-react"
+				]
+			}
+		}
+	]
+}
+');
+    }
+
+    protected function generateTsConfig() {
+        file_put_contents("$this->output/tsconfig.json", '{
+	"extends": "@leight/tsconfig/esbuild.json",
+	"compilerOptions": {
+		"rootDir": "src",
+		"baseUrl": "src"
+	},
+	"include": [
+		"src/**/*",
+		"src/**/*.json"
+	],
+	"exclude": [
+		"node_modules"
+	]
+}
+');
+    }
+
     public function generate(): ?string {
         @mkdir("$this->output/src", 0777, true);
 
         $this->generatePackageJson();
         $this->generateIndexTs();
+        $this->generateEslintIgnore();
+        $this->generateEslintRc();
+        $this->generateTsConfig();
 
         $this->container
             ->injectOn(new RpcHandlerGenerator())

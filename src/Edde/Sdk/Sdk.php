@@ -5,13 +5,13 @@ namespace Edde\Sdk;
 
 use Edde\Container\ContainerTrait;
 
-class SdkGenerator {
+class Sdk {
 	use ContainerTrait;
 
-	public function generate(string $output = './sdk') {
+	public function generate(?string $output = null) {
 		$this->container->injectOn($generator = new RpcHandlerGenerator());
 		$generator
-			->withOutput($output)
+			->withOutput($output ?? sprintf('%s/sdk', getcwd()))
 			->generate();
 	}
 }

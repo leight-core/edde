@@ -34,9 +34,8 @@ class SchemaExport extends AbstractExport {
 				'%s: %s,',
 				$attribute->getName(),
 				$attribute->isArray() ?
-					$attribute->isRequired() ?
-						"z.array($type)" : "z.array($type).optional()"
-					: $attribute->isRequired() ? $type : "$type.optional()",
+					($attribute->isRequired() ? "z.array($type)" : "z.array($type).optional()")
+					: ($attribute->isRequired() ? $type : "$type.optional()")
 			);
 		}
 		$zod = implode("\n\t", $zod);

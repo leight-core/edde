@@ -7,6 +7,7 @@ use DI\DependencyException;
 use DI\NotFoundException;
 use Edde\Container\ContainerTrait;
 use Edde\Dto\SmartDto;
+use Edde\Dto\SmartServiceTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Rpc\Exception\RpcException;
 use Throwable;
@@ -14,6 +15,7 @@ use Throwable;
 class RpcService {
 	use ContainerTrait;
 	use LoggerTrait;
+	use SmartServiceTrait;
 
 	/**
 	 * @param string $name
@@ -38,7 +40,10 @@ class RpcService {
 			$name = $bulk->get('service')->get();
 			try {
 				$service = $this->resolve($name);
-				$response[$id] = $service->handle($bulk->get('data')->get());
+				$requestName = $service->getRequestSchema();
+				$response[$id] = $service->handle(
+					$requestName ? $this->smartService->from((object)$bulk->get('data')->get(), $requestName) : SmartDto::ofDummy()
+				);
 			} catch (NotFoundException $exception) {
 				$this->logger->error($exception);
 				$response[$id] = (object)[

@@ -11,10 +11,11 @@ class Sdk {
 	use FileServiceTrait;
 
 	public function generate(?string $output = null) {
-		$this->container->injectOn($generator = new RpcHandlerGenerator());
+		$output = $output ?? sprintf('%s/sdk', getcwd());
 		$this->fileService->remove($output);
+		$this->container->injectOn($generator = new RpcHandlerGenerator());
 		$generator
-			->withOutput($output ?? sprintf('%s/sdk', getcwd()))
+			->withOutput($output)
 			->generate();
 	}
 }

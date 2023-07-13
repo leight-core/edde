@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Edde\Auth\Rpc;
 
+use Edde\Auth\Mapper\SessionMapperTrait;
 use Edde\Dto\SmartDto;
 use Edde\Rpc\AbstractRpcHandler;
-use Edde\Session\SessionMapperTrait;
 use Edde\User\CurrentUserServiceTrait;
 use Edde\User\Repository\UserRepositoryTrait;
 

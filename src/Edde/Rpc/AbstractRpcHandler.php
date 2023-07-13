@@ -9,11 +9,15 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 	protected $requestSchema = null;
 	protected $responseSchema = null;
 
-	function getRequestSchema(): ?string {
+	public function getName(): string {
+		return substr(strrchr(get_class($this), '\\'), 1);
+	}
+
+	public function getRequestSchema(): ?string {
 		return $this->requestSchema;
 	}
 
-	function getResponseSchema(): ?string {
+	public function getResponseSchema(): ?string {
 		return $this->responseSchema;
 	}
 }

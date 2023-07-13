@@ -17,7 +17,7 @@ class TicketRpcHandler extends AbstractRpcHandler {
 	use UserRepositoryTrait;
 	use SessionMapperTrait;
 
-	function handle(SmartDto $request): ?SmartDto {
+	public function handle(SmartDto $request): ?SmartDto {
 		if ($this->currentUserService->isSelected()) {
 			return $this->sessionMapper->item($this->currentUserService->requireUser());
 		}

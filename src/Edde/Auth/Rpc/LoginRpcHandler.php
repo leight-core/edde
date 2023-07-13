@@ -22,7 +22,7 @@ class LoginRpcHandler extends AbstractRpcHandler {
 	protected $requestSchema = LoginSchema::class;
 	protected $responseSchema = SessionSchema::class;
 
-	function handle(SmartDto $request): ?SmartDto {
+	public function handle(SmartDto $request): ?SmartDto {
 		if (!($user = $this->userRepository->findByLogin($request->getValue('login')))) {
 			throw new RpcException('Unknown login', 400);
 		}

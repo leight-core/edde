@@ -21,6 +21,10 @@ class SchemaExport extends AbstractExport {
 		return $this;
 	}
 
+	protected function getSchemaName(ISchema $schema): string {
+		return str_replace('Schema', '', substr(strrchr($schema->getName(), '\\'), 1));
+	}
+
 	protected function toZod(ISchema $schema): string {
 		$zod = [];
 		foreach ($schema->getAttributes() as $attribute) {
@@ -50,6 +54,15 @@ E;
 
 	}
 
+	protected function toZodSchema(ISchema $schema): string {
+		$schemaName = $this->getSchemaName($schema);
+		return <<<E
+export const ${schemaName}Schema = {$this->toZod($schema)};
+export type I${schemaName}Schema = typeof {$schemaName}Schema;
+export type I${schemaName} = z.infer<I${schemaName}Schema>;
+E;
+	}
+
 	public function export(): ?string {
 		$export = [];
 		$export[] = <<<E
@@ -57,20 +70,10 @@ import {z} from "@leight/utils";
 E;
 
 		if (($name = $this->handler->getRequestSchema()) && $schema = $this->schemaLoader->load($name)) {
-			$schemaName = $schema->getMeta('export', 'Request');
-			$export[] = <<<E
-export const ${schemaName}Schema = {$this->toZod($schema)};
-export type I${schemaName}Schema = typeof {$schemaName}Schema;
-export type I${schemaName} = z.infer<I${schemaName}Schema>;
-E;
+			$export[] = $this->toZodSchema($schema);
 		}
 		if (($name = $this->handler->getResponseSchema()) && $schema = $this->schemaLoader->load($name)) {
-			$schemaName = $schema->getMeta('export', 'Request');
-			$export[] = <<<E
-export const ${schemaName}Schema = {$this->toZod($schema)};
-export type I${schemaName}Schema = typeof {$schemaName}Schema;
-export type I${schemaName} = z.infer<I${schemaName}Schema>;
-E;
+			$export[] = $this->toZodSchema($schema);
 		}
 
 		return $this->toExport($export);

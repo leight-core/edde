@@ -11,23 +11,30 @@ use Edde\Dto\SmartDto;
  */
 interface IRpcHandler {
 	/**
+	 * Get name
+	 *
+	 * @return string
+	 */
+	public function getName(): string;
+
+	/**
 	 * Get schema name used to construct/validate SmartDto.
 	 *
 	 * @return string
 	 */
-	function getRequestSchema(): ?string;
+	public function getRequestSchema(): ?string;
 
 	/**
 	 * Schema used to validate response from the handler.
 	 *
 	 * @return string
 	 */
-	function getResponseSchema(): ?string;
+	public function getResponseSchema(): ?string;
 
 	/**
 	 * Handle incoming request; handler should be responsible for
 	 * data validation or AbstractRpcHandler can be used to do so
 	 * automagically.
 	 */
-	function handle(SmartDto $request): ?SmartDto;
+	public function handle(SmartDto $request): ?SmartDto;
 }

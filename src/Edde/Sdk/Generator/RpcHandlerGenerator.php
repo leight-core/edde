@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Edde\Sdk\Generator;
 
 use Edde\Container\ContainerTrait;
+use Edde\Rpc\Service\IRpcHandler;
 use Edde\Rpc\Service\RpcHandlerIndexTrait;
 use Edde\Rpc\Service\RpcServiceTrait;
 use Edde\Sdk\AbstractGenerator;
@@ -15,16 +16,16 @@ class RpcHandlerGenerator extends AbstractGenerator {
 	use RpcHandlerIndexTrait;
 	use ContainerTrait;
 
-	public function module(string $name): string {
-		return sprintf('%s/%s', $this->output, str_replace('\\', '/', $name));
+	public function module(IRpcHandler $handler): string {
+		return sprintf('%s/%s.ts', $this->output, $handler->getName());
 	}
 
 	public function generate(): ?string {
 		foreach ($this->rpcHandlerIndex->getHandlers() as $name) {
 			try {
-				printf("\tGenerating [%s] to [%s]\n", $name, $output = $this->module($name));
-				@mkdir($output, 0777, true);
 				$handler = $this->rpcService->resolve($name);
+
+				printf("\tGenerating [%s] to [%s]\n", $name, $output = $this->module($handler));
 
 				$export = [];
 
@@ -35,7 +36,7 @@ class RpcHandlerGenerator extends AbstractGenerator {
 					->export();
 
 				file_put_contents(
-					sprintf('%s/index.ts', $output),
+					$output,
 					implode(
 						"\n",
 						array_map(

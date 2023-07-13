@@ -32,6 +32,7 @@ class SchemaGenerator extends AbstractGenerator {
 				sprintf('export * from "./%s";', $schemaName),
 				sprintf('export * from "./I%s";', $schemaName),
 				sprintf('export * from "./I%s";', $type),
+				"",
 			]), FILE_APPEND);
 		}
 	}

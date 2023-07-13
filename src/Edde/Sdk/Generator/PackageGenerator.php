@@ -92,12 +92,12 @@ dist
         $this->generateTsConfig();
 
         $this->container
-            ->injectOn(new RpcHandlerGenerator())
+            ->injectOn(new SchemaGenerator())
             ->withOutput($this->output)
             ->generate();
 
         $this->container
-            ->injectOn(new SchemaGenerator())
+            ->injectOn(new RpcHandlerGenerator())
             ->withOutput($this->output)
             ->generate();
 

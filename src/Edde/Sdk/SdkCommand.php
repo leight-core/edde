@@ -18,5 +18,6 @@ class SdkCommand extends Command {
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$output->writeln('SDK Generator started');
 		$output->writeln('SDK Generator finished');
+		return 0;
 	}
 }

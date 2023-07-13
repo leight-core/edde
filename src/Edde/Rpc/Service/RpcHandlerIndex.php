@@ -9,6 +9,10 @@ class RpcHandlerIndex implements IRpcHandlerIndex {
 	 */
 	protected $handlers = [];
 
+	function getHandlers(): array {
+		return $this->handlers;
+	}
+
 	function register(string $rpcHandlerClass): void {
 		$this->handlers[] = $rpcHandlerClass;
 	}

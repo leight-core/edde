@@ -3,12 +3,15 @@ declare(strict_types=1);
 
 namespace Edde\Sdk;
 
+use Edde\Rpc\Service\RpcHandlerIndexTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class SdkCommand extends Command {
+	use RpcHandlerIndexTrait;
+
 	protected function configure() {
 		$this->setName('sdk');
 		$this->setDescription('Generates client-side SDK.');
@@ -17,6 +20,8 @@ class SdkCommand extends Command {
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$output->writeln('SDK Generator started');
+		$output->writeln('Found RPC handlers:');
+		$output->writeln(implode("\n\t- ", $this->rpcHandlerIndex->getHandlers()));
 		$output->writeln('SDK Generator finished');
 		return 0;
 	}

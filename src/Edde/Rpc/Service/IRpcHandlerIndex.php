@@ -10,6 +10,11 @@ namespace Edde\Rpc\Service;
  */
 interface IRpcHandlerIndex {
 	/**
+	 * @return string[]
+	 */
+	function getHandlers(): array;
+
+	/**
 	 * Register RPC handler into an index; this name  is used as a service name for RPC calls.
 	 *
 	 * @param string $rpcHandlerClass

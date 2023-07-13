@@ -8,7 +8,6 @@ use Edde\Rpc\Service\IRpcHandler;
 use Edde\Rpc\Service\RpcHandlerIndexTrait;
 use Edde\Rpc\Service\RpcServiceTrait;
 use Edde\Sdk\AbstractGenerator;
-use Edde\Sdk\Export\SchemaExport;
 use Throwable;
 
 class RpcHandlerGenerator extends AbstractGenerator {
@@ -28,12 +27,6 @@ class RpcHandlerGenerator extends AbstractGenerator {
 				printf("\tGenerating [%s] to [%s]\n", $name, $output = $this->module($handler));
 
 				$export = [];
-
-				$this->container->injectOn($schemaExport = new SchemaExport());
-
-				$export[] = $schemaExport
-					->withHandler($handler)
-					->export();
 
 				file_put_contents(
 					$output,

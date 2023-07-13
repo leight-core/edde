@@ -3,25 +3,21 @@ declare(strict_types=1);
 
 namespace Edde\Sdk\Export;
 
-use Edde\Rpc\Service\IRpcHandler;
 use Edde\Schema\ISchema;
-use Edde\Schema\SchemaLoaderTrait;
 use Edde\Sdk\AbstractExport;
 
 class SchemaExport extends AbstractExport {
-	use SchemaLoaderTrait;
-
 	/**
-	 * @var IRpcHandler
+	 * @var ISchema
 	 */
-	protected $handler;
+	protected $schema;
 
-	public function withHandler(IRpcHandler $handler): SchemaExport {
-		$this->handler = $handler;
+	public function withSchema(ISchema $schema): SchemaExport {
+		$this->schema = $schema;
 		return $this;
 	}
 
-	protected function getSchemaName(ISchema $schema): string {
+	public function getSchemaName(ISchema $schema): string {
 		return str_replace('Schema', '', substr(strrchr($schema->getName(), '\\'), 1));
 	}
 
@@ -64,18 +60,9 @@ E;
 	}
 
 	public function export(): ?string {
-		$export = [];
-		$export[] = <<<E
-import {z} from "@leight/utils";
-E;
-
-		if (($name = $this->handler->getRequestSchema()) && $schema = $this->schemaLoader->load($name)) {
-			$export[] = $this->toZodSchema($schema);
-		}
-		if (($name = $this->handler->getResponseSchema()) && $schema = $this->schemaLoader->load($name)) {
-			$export[] = $this->toZodSchema($schema);
-		}
-
-		return $this->toExport($export);
+		return $this->toExport([
+			'import {z} from "@leight/utils";',
+			$this->toZodSchema($this->schema),
+		]);
 	}
 }

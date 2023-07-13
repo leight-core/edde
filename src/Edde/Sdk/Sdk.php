@@ -20,7 +20,7 @@ class Sdk {
 //		} finally {
 //		}
 		@mkdir($output, 0777, true);
-		file_put_contents("$output/package.json", json_encode([
+		file_put_contents("$output/package.json", str_replace('\/', '/', json_encode([
 			'version'         => '0.5.0',
 			'name'            => '@edde/sdk',
 			'description'     => 'Generated SDK',
@@ -36,7 +36,7 @@ class Sdk {
 				'@leight/tsconfig' => '^0.5.0',
 				'typescript'       => '^5.1.3',
 			],
-		]));
+		], JSON_PRETTY_PRINT)));
 		$this->container->injectOn($generator = new RpcHandlerGenerator());
 		$generator
 			->withOutput($output)

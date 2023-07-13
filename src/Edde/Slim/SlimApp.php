@@ -46,6 +46,8 @@ use Edde\Profiler\ProfilerMiddleware;
 use Edde\Reflection\ReflectionDtoService;
 use Edde\Rest\EndpointInfo;
 use Edde\Rest\IEndpointInfo;
+use Edde\Rpc\Service\IRpcHandlerIndex;
+use Edde\Rpc\Service\RpcHandlerIndex;
 use Edde\Schema\ISchemaLoader;
 use Edde\Schema\ISchemaManager;
 use Edde\Schema\ReflectionSchemaLoader;
@@ -212,6 +214,9 @@ class SlimApp {
 			},
 			ISchemaManager::class         => function (ContainerInterface $container) {
 				return $container->get(SchemaManager::class);
+			},
+			IRpcHandlerIndex::class => function (ContainerInterface $container) {
+				return $container->get(RpcHandlerIndex::class);
 			},
 			Manager::class                => function (ContainerInterface $container) {
 				$manager = new Manager($container->get(ConfigInterface::class), new ArrayInput([]), new StreamOutput(fopen('php://output', 'w')));

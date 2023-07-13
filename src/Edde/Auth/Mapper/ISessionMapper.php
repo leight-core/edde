@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\Session;
+namespace Edde\Auth\Mapper;
 
 use Edde\Mapper\IMapper;
 

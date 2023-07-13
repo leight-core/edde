@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
 use Edde\Api\ApiRouter;
+use Edde\Bootstrap\IBootstrap;
 use Edde\Cache\Cache;
 use Edde\Cache\ICache;
 use Edde\Cache\Impl\DatabaseCache;
@@ -247,7 +248,7 @@ class SlimApp {
 			},
 		]);
 		$containerBuilder->addDefinitions(...$definitions);
-		$app = Bridge::create($containerBuilder->build());
+		$app = Bridge::create($container = $containerBuilder->build());
 
 		$app->add(SessionMiddleware::class);
 		$app->add(MemoryUsageMiddleware::class);
@@ -259,6 +260,8 @@ class SlimApp {
 				Json::class,
 				'decode',
 			]);
+
+		$container->has(IBootstrap::class) && $container->get(IBootstrap::class)->bootstrap();
 
 		return self::$instance = new self($app);
 	}

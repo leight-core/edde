@@ -19,8 +19,8 @@ class RpcHandlerGenerator extends AbstractGenerator {
 		$queryExport = $this->container->injectOn(new QueryExport());
 		$mutationExport = $this->container->injectOn(new MutationExport());
 
-		$rpcOutput = sprintf('%s/rpc', $this->output);
-		$exportOutput = sprintf('%s/$export', $this->output);
+		$rpcOutput = sprintf('%s/src/rpc', $this->output);
+		$exportOutput = sprintf('%s/src/$export', $this->output);
 		$this->mkdir($rpcOutput);
 		$this->mkdir($exportOutput);
 

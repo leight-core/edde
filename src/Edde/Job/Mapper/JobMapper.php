@@ -7,13 +7,9 @@ use Edde\Job\Dto\JobDto;
 use Edde\Job\Repository\JobLogRepositoryTrait;
 use Edde\Mapper\AbstractMapper;
 use Edde\Process\ProcessServiceTrait;
-use Edde\User\Mapper\UserMapperTrait;
-use Edde\User\Repository\UserRepositoryTrait;
 
 class JobMapper extends AbstractMapper {
 	use JobLogRepositoryTrait;
-	use UserRepositoryTrait;
-	use UserMapperTrait;
 	use ProcessServiceTrait;
 
 	public function item($item, $params = null) {
@@ -39,7 +35,7 @@ class JobMapper extends AbstractMapper {
 			'formatted'   => sprintf('%.1f%%', $item->progress),
 			'commit'      => $item->commit,
 			'logs'        => $this->jobLogRepository->hasLog($item->id),
-			'user'        => $item->user_id ? $this->userMapper->item($this->userRepository->find($item->user_id), $params) : null,
+			'userId' => $item->user_id,
 			'running'     => $this->processService->isRunning($item->pid),
 		]);
 	}

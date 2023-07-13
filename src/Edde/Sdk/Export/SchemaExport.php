@@ -22,23 +22,25 @@ class SchemaExport extends AbstractExport {
 
 	function export(): ?string {
 		$export = [];
-		$export[] = `import {z} from "@leight/utils";`;
+		$export[] = <<<E
+import {z} from "@leight/utils";
+E;
 
 		if (($name = $this->handler->getRequestSchema()) && $schema = $this->schemaLoader->load($name)) {
 			$schemaName = $schema->getMeta('export', 'Request');
-			$export[] = `
+			$export[] = <<<E
 export const ${schemaName}Schema = z.object({});
 export type I${schemaName}Schema = typeof $schemaName;
 export type I${schemaName} = z.infer<I${schemaName}Schema>;
-`;
+E;
 		}
 		if (($name = $this->handler->getResponseSchema()) && $schema = $this->schemaLoader->load($name)) {
 			$schemaName = $schema->getMeta('export', 'Request');
-			$export[] = `
+			$export[] = <<<E
 export const ${schemaName}Schema = z.object({});
 export type I${schemaName}Schema = typeof $schemaName;
 export type I${schemaName} = z.infer<I${schemaName}Schema>;
-`;
+E;
 		}
 
 		return $this->toExport($export);

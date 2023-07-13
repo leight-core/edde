@@ -15,7 +15,7 @@ interface SessionSchema {
 	/**
 	 * User id
 	 */
-	function id(): string;
+	function id(): int;
 
 	/**
 	 * Display name of the user

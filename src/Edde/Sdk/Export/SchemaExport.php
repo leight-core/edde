@@ -29,6 +29,9 @@ class SchemaExport extends AbstractExport {
 				case 'string':
 					$type = "z.string()";
 					break;
+				case 'int':
+					$type = "z.number()";
+					break;
 			}
 			$zod[] = sprintf(
 				'%s: %s,',
@@ -57,7 +60,7 @@ E;
 			$schemaName = $schema->getMeta('export', 'Request');
 			$export[] = <<<E
 export const ${schemaName}Schema = {$this->toZod($schema)};
-export type I${schemaName}Schema = typeof $schemaName;
+export type I${schemaName}Schema = typeof {$schemaName}Schema;
 export type I${schemaName} = z.infer<I${schemaName}Schema>;
 E;
 		}
@@ -65,7 +68,7 @@ E;
 			$schemaName = $schema->getMeta('export', 'Request');
 			$export[] = <<<E
 export const ${schemaName}Schema = {$this->toZod($schema)};
-export type I${schemaName}Schema = typeof $schemaName;
+export type I${schemaName}Schema = typeof {$schemaName}Schema;
 export type I${schemaName} = z.infer<I${schemaName}Schema>;
 E;
 		}

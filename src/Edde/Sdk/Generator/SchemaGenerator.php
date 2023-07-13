@@ -24,9 +24,9 @@ class SchemaGenerator extends AbstractGenerator {
 			$schemaName = $type . 'Schema';
 			file_put_contents(sprintf('%s/%s.ts', $schemaOutput, $schemaName), $export);
 
-			file_put_contents(sprintf('%s/%s.ts', $exportOutput, $schemaName), sprintf('export {%s} from "../schema/%s.ts";', $schemaName, $schemaName));
-			file_put_contents(sprintf('%s/I%s.ts', $exportOutput, $schemaName), sprintf('export {type I%s} from "../schema/%s.ts";', $schemaName, $schemaName));
-			file_put_contents(sprintf('%s/I%s.ts', $exportOutput, $type), sprintf('export {type I%s} from "../schema/%s.ts";', $type, $schemaName));
+			file_put_contents(sprintf('%s/%s.ts', $exportOutput, $schemaName), sprintf('export {%s} from "../schema/%s";', $schemaName, $schemaName));
+			file_put_contents(sprintf('%s/I%s.ts', $exportOutput, $schemaName), sprintf('export {type I%s} from "../schema/%s";', $schemaName, $schemaName));
+			file_put_contents(sprintf('%s/I%s.ts', $exportOutput, $type), sprintf('export {type I%s} from "../schema/%s";', $type, $schemaName));
 
 			file_put_contents(sprintf('%s/$export.ts', $exportOutput), implode("\n", [
 				sprintf('export * from "./%s";', $schemaName),

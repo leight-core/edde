@@ -22,7 +22,7 @@ class SdkCommand extends Command {
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$output->writeln('SDK Generator started');
 		$output->write("Found RPC handlers:\n\t-");
-		$output->writeln(implode("\n\t- ", $this->rpcHandlerIndex->getHandlers()));
+		$output->writeln(implode("\n\t - ", $this->rpcHandlerIndex->getHandlers()));
 		$this->sdk->generate($input->getOption('output'));
 		$output->writeln('SDK Generator finished');
 		return 0;

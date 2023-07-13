@@ -5,6 +5,7 @@ namespace Edde\Sdk;
 
 use Edde\Container\ContainerTrait;
 use Edde\File\FileServiceTrait;
+use Throwable;
 
 class Sdk {
 	use ContainerTrait;
@@ -14,6 +15,8 @@ class Sdk {
 		printf("Output: [%s]\n", $output = $output ?? sprintf('%s/sdk', getcwd()));
 		try {
 			$this->fileService->remove($output);
+		} catch (Throwable $throwable) {
+			// swallow
 		} finally {
 			mkdir($output, 0777, true);
 		}

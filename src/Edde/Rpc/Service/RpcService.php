@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Rpc\Service;
 
+use DI\DependencyException;
 use DI\NotFoundException;
 use Edde\Container\ContainerTrait;
 use Edde\Dto\SmartDto;
@@ -14,16 +15,29 @@ class RpcService {
 	use ContainerTrait;
 	use LoggerTrait;
 
+	/**
+	 * @param string $name
+	 *
+	 * @return IRpcHandler
+	 * @throws NotFoundException
+	 * @throws RpcException
+	 * @throws DependencyException
+	 */
+	public function resolve(string $name): IRpcHandler {
+		$service = $this->container->get($name);
+		if (!$service instanceof IRpcHandler) {
+			throw new RpcException(sprintf('Requested service [%s] is not a handler.', $name));
+		}
+		return $service;
+	}
+
 	public function execute(SmartDto $dto) {
 		$response = [];
 		/** @var $bulk SmartDto */
 		foreach ($dto->get('bulk')->get() as $id => $bulk) {
 			$name = $bulk->get('service')->get();
 			try {
-				$service = $this->container->get($name);
-				if (!$service instanceof IRpcHandler) {
-					throw new RpcException(sprintf('Requested service [%s] is not a handler.', $name));
-				}
+				$service = $this->resolve($name);
 				$response[$id] = $service->handle($bulk->get('data')->get());
 			} catch (NotFoundException $exception) {
 				$this->logger->error($exception);

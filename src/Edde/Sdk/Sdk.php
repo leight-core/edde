@@ -5,6 +5,7 @@ namespace Edde\Sdk;
 
 use Edde\Container\ContainerTrait;
 use Edde\File\FileServiceTrait;
+use Edde\Sdk\Generator\RpcHandlerGenerator;
 use Throwable;
 
 class Sdk {

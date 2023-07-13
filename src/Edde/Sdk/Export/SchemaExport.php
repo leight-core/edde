@@ -20,7 +20,6 @@ class SchemaExport extends AbstractExport {
 	}
 
 	function export(): ?string {
-
-		return null;
+		return 'schema';
 	}
 }

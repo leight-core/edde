@@ -18,7 +18,7 @@ class Sdk {
 		} catch (Throwable $throwable) {
 			// swallow
 		} finally {
-			mkdir($output, 0777, true);
+			@mkdir($output, 0777, true);
 		}
 		$this->container->injectOn($generator = new RpcHandlerGenerator());
 		$generator

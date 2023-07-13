@@ -15,10 +15,10 @@ class MutationExport extends AbstractRpcExport {
 		$responseSchema = 'undefined';
 
 		if (($name = $this->handler->getRequestSchema()) && $schema = $this->schemaLoader->load($name)) {
-			$import[] = sprintf('import {%s} from "../schema/%s";', $requestSchema = $schemaExport->getSchemaName($schema), $requestSchema);
+			$import[] = sprintf('import {%s} from "../schema/%s";', $requestSchema = $schemaExport->getSchemaName($schema) . 'Schema', $requestSchema);
 		}
 		if (($name = $this->handler->getResponseSchema()) && $schema = $this->schemaLoader->load($name)) {
-			$import[] = sprintf('import {%s} from "../schema/%s";', $responseSchema = $schemaExport->getSchemaName($schema), $responseSchema);
+			$import[] = sprintf('import {%s} from "../schema/%s";', $responseSchema = $schemaExport->getSchemaName($schema) . 'Schema', $responseSchema);
 		}
 
 		$export = [

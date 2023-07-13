@@ -35,8 +35,8 @@ e
 
 		$schemaOutput = sprintf("%s/src/schema", $this->output);
 		$exportOutput = sprintf("%s/src/\$export", $this->output);
-		mkdir($schemaOutput);
-		mkdir($exportOutput);
+		@mkdir($schemaOutput, 0777, true);
+		@mkdir($exportOutput, 0777, true);
 
 		foreach ($this->rpcHandlerIndex->getHandlers() as $name) {
 			$handler = $this->rpcService->resolve($name);

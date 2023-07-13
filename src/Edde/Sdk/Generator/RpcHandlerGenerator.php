@@ -22,6 +22,7 @@ class RpcHandlerGenerator extends AbstractGenerator {
 		$rpcOutput = sprintf('%s/rpc', $this->output);
 		$exportOutput = sprintf('%s/$export', $this->output);
 		$this->mkdir($rpcOutput);
+		$this->mkdir($exportOutput);
 
 		foreach ($this->rpcHandlerIndex->getHandlers() as $name) {
 			$handler = $this->rpcService->resolve($name);

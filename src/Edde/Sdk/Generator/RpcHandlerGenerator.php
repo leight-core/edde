@@ -31,10 +31,7 @@ class RpcHandlerGenerator extends AbstractGenerator {
 				$this->container->injectOn($schemaExport = new SchemaExport());
 
 				$export[] = $schemaExport
-					->withHandler($handler->getRequestSchema())
-					->export();
-				$export[] = $schemaExport
-					->withHandler($handler->getResponseSchema())
+					->withHandler($handler)
 					->export();
 
 				file_put_contents(

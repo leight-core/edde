@@ -20,7 +20,7 @@ class SchemaGenerator extends AbstractGenerator {
 	protected function generateSchema(ISchema $schema, SchemaExport $schemaExport, string $schemaOutput, string $exportOutput): void {
 		$export = $schemaExport->withSchema($schema)->export();
 		if ($export) {
-			$schemaName = $schemaExport->getSchemaName($schema);
+			$schemaName = $schemaExport->getSchemaName($schema) . 'Schema';
 			file_put_contents(sprintf("%s/%s.ts", $schemaOutput, $schemaName), $export);
 			file_put_contents(sprintf("%s/%s.ts", $export, $schemaName), <<<e
 export \{$schemaName\} from "../schema/$schemaName.ts";
@@ -35,8 +35,8 @@ e
 
 		$schemaOutput = sprintf("%s/src/schema", $this->output);
 		$exportOutput = sprintf("%s/src/\$export", $this->output);
-		@mkdir($schemaOutput);
-		@mkdir($exportOutput);
+		mkdir($schemaOutput);
+		mkdir($exportOutput);
 
 		foreach ($this->rpcHandlerIndex->getHandlers() as $name) {
 			$handler = $this->rpcService->resolve($name);

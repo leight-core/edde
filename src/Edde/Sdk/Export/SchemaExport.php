@@ -27,10 +27,17 @@ class SchemaExport extends AbstractExport {
 			$type = "z.any()";
 			switch ($attribute->getType()) {
 				case 'string':
-					$type = sprintf("z.string()%s", $attribute->isRequired() ? '' : '.optional()');
+					$type = "z.string()";
 					break;
 			}
-			$zod[] = sprintf('%s: %s,', $attribute->getName(), $type);
+			$zod[] = sprintf(
+				'%s: %s,',
+				$attribute->getName(),
+				$attribute->isArray() ?
+					$attribute->isRequired() ?
+						"z.array($type)" : "z.array($type).optional()"
+					: $attribute->isRequired() ? $type : "$type.optional()",
+			);
 		}
 		$zod = implode("\n\t", $zod);
 		return <<<E

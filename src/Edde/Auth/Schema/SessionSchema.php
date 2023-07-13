@@ -26,4 +26,6 @@ interface SessionSchema {
 	 * Default site of the user
 	 */
 	function site(): ?string;
+
+	function tokens($isArray = true): string;
 }

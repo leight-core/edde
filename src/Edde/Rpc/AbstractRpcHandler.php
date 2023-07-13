@@ -8,10 +8,16 @@ use Edde\Rpc\Service\IRpcHandler;
 abstract class AbstractRpcHandler implements IRpcHandler {
 	protected $requestSchema = null;
 	protected $responseSchema = null;
+	protected $isMutator = false;
 
 	public function getName(): string {
 		return substr(strrchr(get_class($this), '\\'), 1);
 	}
+
+	public function isMutator(): bool {
+		return $this->isMutator;
+	}
+
 
 	public function getRequestSchema(): ?string {
 		return $this->requestSchema;

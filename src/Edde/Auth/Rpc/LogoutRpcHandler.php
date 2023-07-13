@@ -10,6 +10,8 @@ use Edde\Session\SessionTrait;
 class LogoutRpcHandler extends AbstractRpcHandler {
 	use SessionTrait;
 
+	protected $isMutator = true;
+
 	public function handle(SmartDto $request): ?SmartDto {
 		$this->session->remove('user');
 		return null;

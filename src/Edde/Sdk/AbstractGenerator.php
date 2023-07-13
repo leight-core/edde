@@ -11,8 +11,12 @@ abstract class AbstractGenerator implements IGenerator {
 		return $this;
 	}
 
+	protected function mkdir(string $dir): void {
+		@mkdir($dir, 0777, true);
+	}
+
 	protected function makeOutput(): self {
-		@mkdir($this->output, 0777, true);
+		$this->mkdir($this->output);
 		return $this;
 	}
 }

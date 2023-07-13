@@ -17,6 +17,8 @@ interface IRpcHandler {
 	 */
 	public function getName(): string;
 
+	public function isMutator(): bool;
+
 	/**
 	 * Get schema name used to construct/validate SmartDto.
 	 *

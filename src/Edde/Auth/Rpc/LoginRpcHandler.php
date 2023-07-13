@@ -21,6 +21,7 @@ class LoginRpcHandler extends AbstractRpcHandler {
 
 	protected $requestSchema = LoginSchema::class;
 	protected $responseSchema = SessionSchema::class;
+	protected $isMutator = true;
 
 	public function handle(SmartDto $request): ?SmartDto {
 		if (!($user = $this->userRepository->findByLogin($request->getValue('login')))) {

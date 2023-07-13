@@ -28,16 +28,16 @@ class RpcHandlerGenerator extends AbstractGenerator {
 
 				$export = [];
 
-				file_put_contents(
-					$output,
-					implode(
-						"\n",
-						array_map(
-							'trim',
-							array_filter($export)
-						)
-					)
-				);
+//				file_put_contents(
+//					$output,
+//					implode(
+//						"\n",
+//						array_map(
+//							'trim',
+//							array_filter($export)
+//						)
+//					)
+//				);
 			} catch (Throwable $throwable) {
 				// swallow
 			}

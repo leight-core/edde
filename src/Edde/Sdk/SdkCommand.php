@@ -11,6 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class SdkCommand extends Command {
 	use RpcHandlerIndexTrait;
+	use SdkGeneratorTrait;
 
 	protected function configure() {
 		$this->setName('sdk');
@@ -20,8 +21,9 @@ class SdkCommand extends Command {
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$output->writeln('SDK Generator started');
-		$output->writeln('Found RPC handlers:');
+		$output->writeln("Found RPC handlers:\t-");
 		$output->writeln(implode("\n\t- ", $this->rpcHandlerIndex->getHandlers()));
+		$this->sdkGenerator->generate($input->getOption('output'));
 		$output->writeln('SDK Generator finished');
 		return 0;
 	}

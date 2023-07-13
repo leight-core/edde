@@ -29,8 +29,15 @@ class PackageGenerator extends AbstractGenerator {
         ], JSON_PRETTY_PRINT)));
     }
 
+    protected function generateIndexTs() {
+        file_put_contents("$this->output/src/index.ts", 'export * from "./$export/$export.ts"');
+    }
+
     public function generate(): ?string {
+        @mkdir("$this->output/src", 0777, true);
+
         $this->generatePackageJson();
+        $this->generateIndexTs();
 
         $this->container
             ->injectOn(new RpcHandlerGenerator())

@@ -12,7 +12,7 @@ class Sdk {
 	use FileServiceTrait;
 
 	public function generate(?string $output = null) {
-		printf("Output: [%s]\n", $output = $output ?? sprintf('%s/@edde/sdk', getcwd()));
+		printf("Output: [%s]\n", $output = $output ?? sprintf('%s/client/packages/@edde/sdk', getcwd()));
 //		try {
 //			$this->fileService->remove($output);
 //		} catch (Throwable $throwable) {

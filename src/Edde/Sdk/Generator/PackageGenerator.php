@@ -32,7 +32,7 @@ class PackageGenerator extends AbstractGenerator {
     }
 
     protected function generateIndexTs() {
-        file_put_contents("$this->output/src/index.ts", 'export * from "./$export/$export.ts"');
+        file_put_contents("$this->output/src/index.ts", 'export * from "./$export/$export"');
     }
 
     protected function generateEslintIgnore() {

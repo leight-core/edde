@@ -24,12 +24,13 @@ class SchemaGenerator extends AbstractGenerator {
 	}
 
 	public function generate(): ?string {
-		printf("\t Generating schemas to [%s]\n", $this->output);
+		printf("\t\tGenerating schemas to [%s]\n", $this->output);
 		$this->makeOutput();
 		$this->container->injectOn($schemaExport = new SchemaExport());
 		if ($export = $schemaExport->withSchema($schema = $this->handler->getRequestSchema())->export()) {
 			$schema = $this->schemaLoader->load($schema);
-			file_put_contents(sprintf('%s/%s', $this->output, $schema->getName()), $export);
+			printf("\t\t\t- Generating schema [%s]\n", $file = sprintf('%s/%s', $this->output, $schema->getName()));
+			file_put_contents($file, $export);
 		}
 		return null;
 	}

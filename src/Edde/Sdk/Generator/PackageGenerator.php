@@ -24,7 +24,7 @@ class PackageGenerator extends AbstractGenerator {
                 '@leight/utils'      => '^0.5.0',
             ],
             'devDependencies' => [
-                '@leight/eslint' => '^0.5.0',
+                '@leight/eslint-config-eslint' => '^0.5.0',
                 '@leight/tsconfig' => '^0.5.0',
                 'typescript'       => '^5.1.3',
             ],

@@ -11,12 +11,10 @@ use Edde\Password\PasswordServiceTrait;
 use Edde\Rpc\AbstractRpcHandler;
 use Edde\Rpc\Exception\RpcException;
 use Edde\Session\SessionTrait;
-use Edde\User\Mapper\CurrentUserMapperTrait;
 use Edde\User\Repository\UserRepositoryTrait;
 
 class LoginRpcHandler extends AbstractRpcHandler {
 	use SessionTrait;
-	use CurrentUserMapperTrait;
 	use UserRepositoryTrait;
 	use PasswordServiceTrait;
 	use SessionMapperTrait;

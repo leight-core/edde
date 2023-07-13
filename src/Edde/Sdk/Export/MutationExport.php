@@ -33,7 +33,7 @@ export const with%s = withMutation({
 		response: %s,
 	},
 });
-		', $rpcName, get_class($this->handler), $requestSchema, $responseSchema);
+		', $rpcName, $this->escapeHandlerName(get_class($this->handler)), $requestSchema, $responseSchema);
 
 		return $this->toExport($export);
 	}

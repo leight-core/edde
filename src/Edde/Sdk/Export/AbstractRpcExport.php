@@ -19,4 +19,8 @@ abstract class AbstractRpcExport extends AbstractExport {
 		$this->handler = $handler;
 		return $this;
 	}
+
+	protected function escapeHandlerName(string $name): string {
+		return str_replace('\\', '\\\\', $name);
+	}
 }

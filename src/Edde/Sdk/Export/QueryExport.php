@@ -5,5 +5,6 @@ namespace Edde\Sdk\Export;
 
 class QueryExport extends AbstractRpcExport {
 	public function export(): ?string {
+		return null;
 	}
 }

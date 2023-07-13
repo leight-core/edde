@@ -12,7 +12,11 @@ class Sdk {
 
 	public function generate(?string $output = null) {
 		printf("Output: [%s]\n", $output = $output ?? sprintf('%s/sdk', getcwd()));
-		$this->fileService->remove($output);
+		try {
+			$this->fileService->remove($output);
+		} finally {
+			mkdir($output, 0777, true);
+		}
 		$this->container->injectOn($generator = new RpcHandlerGenerator());
 		$generator
 			->withOutput($output)

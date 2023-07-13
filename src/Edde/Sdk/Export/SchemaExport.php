@@ -20,6 +20,9 @@ class SchemaExport extends AbstractExport {
 	}
 
 	function export(): ?string {
+		if (!$this->schema) {
+			return null;
+		}
 		return 'schema';
 	}
 }

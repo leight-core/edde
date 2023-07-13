@@ -29,7 +29,7 @@ class SchemaGenerator extends AbstractGenerator {
 		$this->container->injectOn($schemaExport = new SchemaExport());
 		if ($export = $schemaExport->withSchema($schema = $this->handler->getRequestSchema())->export()) {
 			$schema = $this->schemaLoader->load($schema);
-			printf("\t\t\t- Generating schema [%s]\n", $file = sprintf('%s/%s', $this->output, $schema->getName()));
+			printf("\t\t\t- Generating schema [%s]\n", $file = sprintf('%s/%s.ts', $this->output, $schema->getMeta('module', 'request')));
 			file_put_contents($file, $export);
 		}
 		return null;

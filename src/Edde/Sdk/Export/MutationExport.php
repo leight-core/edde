@@ -6,13 +6,14 @@ namespace Edde\Sdk\Export;
 class MutationExport extends AbstractRpcExport {
 	public function export(): ?string {
 		$import = [
-			'import {withMutation}  from "@leight/rpc-client";',
+			'import {withMutation} from "@leight/rpc-client";',
+			'import {z}			   from "@leight/utils";',
 		];
 
 		$rpcName = $this->handler->getName();
 		$schemaExport = new SchemaExport();
-		$requestSchema = 'undefined';
-		$responseSchema = 'undefined';
+		$requestSchema = 'z.any()';
+		$responseSchema = 'z.any()';
 
 		if (($name = $this->handler->getRequestSchema()) && $schema = $this->schemaLoader->load($name)) {
 			$import[] = sprintf('import {%s} from "../schema/%s";', $requestSchema = $schemaExport->getSchemaName($schema) . 'Schema', $requestSchema);

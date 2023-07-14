@@ -6,7 +6,7 @@ namespace Edde\Sdk\Export;
 class QueryExport extends AbstractRpcExport {
 	public function export(): ?string {
 		$import = [
-			'import {withQuery} from "@leight/rpc-client";',
+			'import {withQuery} from "@leight/rpc";',
 			'import {z}         from "@leight/utils";',
 		];
 

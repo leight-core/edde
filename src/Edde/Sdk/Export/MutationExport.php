@@ -7,13 +7,13 @@ class MutationExport extends AbstractRpcExport {
 	public function export(): ?string {
 		$import = [
 			'import {withMutation} from "@leight/rpc-client";',
-			'import {z}			   from "@leight/utils";',
+			'import {z}            from "@leight/utils";',
 		];
 
 		$rpcName = $this->handler->getName();
 		$schemaExport = new SchemaExport();
-		$requestSchema = 'z.any()';
-		$responseSchema = 'z.any()';
+		$requestSchema = 'z.never()';
+		$responseSchema = 'z.never()';
 
 		if (($name = $this->handler->getRequestSchema()) && $schema = $this->schemaLoader->load($name)) {
 			$import[] = sprintf('import {%s} from "../schema/%s";', $requestSchema = $schemaExport->getSchemaName($schema) . 'Schema', $requestSchema);

@@ -41,14 +41,16 @@ class RpcService {
 			try {
 				$service = $this->resolve($name);
 				$requestName = $service->getRequestSchema();
-				$response[$id] = $service->handle(
+				$result = $service->handle(
 					$requestName ? $this->smartService->from((object)$bulk->get('data')->get(), $requestName) : SmartDto::ofDummy()
 				);
+				$result && $response[$id] = iterator_to_array($result->getValues());
 			} catch (NotFoundException $exception) {
 				$this->logger->error($exception);
 				$response[$id] = (object)[
 					'error' => (object)[
 						'message' => sprintf('Unknown RPC service [%s].', $name),
+						'code' => $exception->getCode(),
 					],
 				];
 			} catch (RpcException $exception) {
@@ -56,6 +58,7 @@ class RpcService {
 				$response[$id] = (object)[
 					'error' => (object)[
 						'message' => $exception->getMessage(),
+						'code' => $exception->getCode(),
 					],
 				];
 			} catch (Throwable $exception) {
@@ -63,6 +66,7 @@ class RpcService {
 				$response[$id] = (object)[
 					'error' => (object)[
 						'message' => 'General (unhandled) RPC error',
+						'code' => 500,
 					],
 				];
 			}

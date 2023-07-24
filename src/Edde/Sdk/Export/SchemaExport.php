@@ -28,6 +28,7 @@ class SchemaExport extends AbstractExport {
 			switch ($attribute->getType()) {
 				case 'string':
 					$type = "z.string()";
+					$attribute->isRequired() && ($type .= ".nonempty({message: 'Non-empty'})");
 					break;
 				case 'int':
 					$type = "z.number()";

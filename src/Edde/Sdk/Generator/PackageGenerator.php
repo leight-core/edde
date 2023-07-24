@@ -20,13 +20,13 @@ class PackageGenerator extends AbstractGenerator {
 			'module'          => 'src/index.ts',
 			'types'           => 'src/index.ts',
 			'dependencies'    => [
-				'@leight/rpc'   => '^0.5.0',
-				'@leight/utils' => '^0.5.0',
+				'@leight/rpc'   => '^0.6.0',
+				'@leight/utils' => '^0.6.0',
 			],
 			'devDependencies' => [
-				'@leight/eslint-config-eslint' => '^0.5.0',
-				'@leight/tsconfig'             => '^0.5.0',
-				'typescript'                   => '^5.1.3',
+				'@leight/eslint-config-eslint' => '^0.6.0',
+				'@leight/tsconfig'             => '^0.6.0',
+				'typescript'                   => '^5.1.6',
 			],
 		], JSON_PRETTY_PRINT)));
 	}

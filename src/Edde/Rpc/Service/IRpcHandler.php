@@ -26,12 +26,16 @@ interface IRpcHandler {
 	 */
 	public function getRequestSchema(): ?string;
 
+	public function isRequestSchemaOptional(): bool;
+
 	/**
 	 * Schema used to validate response from the handler.
 	 *
 	 * @return string
 	 */
 	public function getResponseSchema(): ?string;
+
+	public function isResponseSchemaOptional(): bool;
 
 	/**
 	 * Handle incoming request; handler should be responsible for

@@ -26,15 +26,22 @@ class QueryExport extends AbstractRpcExport {
 			$this->toExport($import, "\n"),
 		];
 
-		$export[] = sprintf('
+		$export[] = vsprintf('
 export const with%s = withQuery({
 	service: "%s",
 	schema:  {
-		request:  %s,
-		response: %s,
+		request:  %s%s,
+		response: %s%s,
 	},
 });
-		', $rpcName, $this->escapeHandlerName(get_class($this->handler)), $requestSchema, $responseSchema);
+		', [
+			$rpcName,
+			$this->escapeHandlerName(get_class($this->handler)),
+			$requestSchema,
+			$this->handler->isRequestSchemaOptional() ? '.optional()' : '',
+			$responseSchema,
+			$this->handler->isResponseSchemaOptional() ? '.optional()' : '',
+		]);
 
 		return $this->toExport($export);
 	}

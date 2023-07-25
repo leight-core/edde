@@ -45,7 +45,7 @@ class CurrentUserService {
 	 * @return string|null
 	 */
 	public function optionalId(): ?string {
-		return $this->user ? $this->user->id : null;
+		return $this->user ? (string)$this->user->id : null;
 	}
 
 	/**

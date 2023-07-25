@@ -44,9 +44,9 @@ class RpcService {
 				$result = $service->handle(
 					$requestName ? $this->smartService->from((object)$bulk->get('data')->get(), $requestName) : SmartDto::ofDummy()
 				);
-				$response[$id] = $result ? (object)[
-					'data' => iterator_to_array($result->getValues()),
-				] : null;
+				$response[$id] = (object)[
+					'data' => $result ? iterator_to_array($result->getValues()) : null,
+				];
 			} catch (NotFoundException $exception) {
 				$this->logger->error($exception);
 				$response[$id] = (object)[

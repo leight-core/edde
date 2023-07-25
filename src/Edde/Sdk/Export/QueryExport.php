@@ -12,8 +12,8 @@ class QueryExport extends AbstractRpcExport {
 
 		$rpcName = $this->handler->getName();
 		$schemaExport = new SchemaExport();
-		$requestSchema = 'z.undefined()';
-		$responseSchema = 'z.undefined()';
+		$requestSchema = 'z.nullable()';
+		$responseSchema = 'z.nullable()';
 
 		if (($name = $this->handler->getRequestSchema()) && $schema = $this->schemaLoader->load($name)) {
 			$import[] = sprintf('import {%s} from "../schema/%s";', $requestSchema = $schemaExport->getSchemaName($schema) . 'Schema', $requestSchema);

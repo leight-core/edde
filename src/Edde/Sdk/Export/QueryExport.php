@@ -38,9 +38,9 @@ export const with%s = withQuery({
 			$rpcName,
 			$this->escapeHandlerName(get_class($this->handler)),
 			$requestSchema,
-			$this->handler->isRequestSchemaOptional() ? '.optional()' : '',
+			$this->handler->isRequestSchemaOptional() ? '.nullish()' : '',
 			$responseSchema,
-			$this->handler->isResponseSchemaOptional() ? '.optional()' : '',
+			$this->handler->isResponseSchemaOptional() ? '.nullish()' : '',
 		]);
 
 		return $this->toExport($export);

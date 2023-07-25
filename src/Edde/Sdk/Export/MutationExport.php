@@ -26,15 +26,22 @@ class MutationExport extends AbstractRpcExport {
 			$this->toExport($import, "\n"),
 		];
 
-		$export[] = sprintf('
+		$export[] = vsprintf('
 export const with%s = withMutation({
 	service: "%s",
 	schema:  {
-		request:  %s,
-		response: %s,
+		request:  %s%s,
+		response: %s%s,
 	},
 });
-		', $rpcName, $this->escapeHandlerName(get_class($this->handler)), $requestSchema, $responseSchema);
+		', [
+			$rpcName,
+			$this->escapeHandlerName(get_class($this->handler)),
+			$requestSchema,
+			$this->handler->isRequestSchemaOptional() ? '.nullish()' : '',
+			$responseSchema,
+			$this->handler->isResponseSchemaOptional() ? '.nullish()' : '',
+		]);
 
 		return $this->toExport($export);
 	}

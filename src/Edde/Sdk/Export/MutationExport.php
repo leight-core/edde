@@ -23,6 +23,7 @@ class MutationExport extends AbstractRpcExport {
 		}
 
 		$export = [
+			'"use client";',
 			$this->toExport($import, "\n"),
 		];
 

@@ -23,6 +23,7 @@ class QueryExport extends AbstractRpcExport {
 		}
 
 		$export = [
+			'"use client";',
 			$this->toExport($import, "\n"),
 		];
 

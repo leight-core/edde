@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Api\Shared\User\Endpoint;
 
+use Edde\Auth\Mapper\SessionMapperTrait;
 use Edde\Dto\Common\LoginRequest;
 use Edde\Mapper\Exception\ItemException;
 use Edde\Mapper\Exception\SkipException;
@@ -10,7 +11,6 @@ use Edde\Password\PasswordServiceTrait;
 use Edde\Rest\Endpoint\AbstractMutationEndpoint;
 use Edde\Rest\Exception\ClientException;
 use Edde\Session\Dto\SessionDto;
-use Edde\Session\SessionMapperTrait;
 use Edde\Session\SessionTrait;
 use Edde\User\Mapper\CurrentUserMapperTrait;
 use Edde\User\Repository\UserRepositoryTrait;

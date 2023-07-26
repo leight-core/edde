@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Edde\Api\Shared\User\Endpoint;
 
+use Edde\Auth\Mapper\SessionMapperTrait;
 use Edde\Mapper\Exception\ItemException;
 use Edde\Mapper\Exception\SkipException;
 use Edde\Rest\Endpoint\AbstractFetchEndpoint;
 use Edde\Session\Dto\SessionDto;
-use Edde\Session\SessionMapperTrait;
 use Edde\User\CurrentUserServiceTrait;
 use Edde\User\Exception\UserNotSelectedException;
 use Edde\User\Repository\UserRepositoryTrait;

@@ -106,7 +106,7 @@
   </component>
   <component name="PhpInterpreters">
     <interpreters>
-      <interpreter id="bf2d5546-49c2-4024-bb6c-2a60861120a1" name="docker" home="sshConfig://DATA" false="false" auto="false" debugger_id="php.debugger.XDebug">
+      <interpreter id="bf2d5546-49c2-4024-bb6c-2a60861120a1" name="docker" home="sshConfig://DATA" auto="false" false="false" debugger_id="php.debugger.XDebug">
         <remote_data INTERPRETER_PATH="/usr/local/bin/php" HELPERS_PATH="/root/.phpstorm_helpers" INITIALIZED="false" VALID="true" RUN_AS_ROOT_VIA_SUDO="false" SSH_CONFIG_ID="a45b13f5-c4a7-46e1-be1e-b32848c65edf" SSH_CONFIG_NAME="docker" SSH_CREDENTIALS_ID="sshConfig://docker" />
       </interpreter>
     </interpreters>
@@ -184,7 +184,7 @@
       </interpreter>
     </phpInfoCache>
   </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="7.3">
+  <component name="PhpProjectSharedConfiguration" php_language_level="7.2">
     <option name="suggestChangeDefaultLanguageLevel" value="false" />
   </component>
   <component name="PhpUnit">

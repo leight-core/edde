@@ -23,13 +23,13 @@ class LanguageService {
 	/**
 	 * Resolve a language for the given user. NULL as a result means translations are off.
 	 *
-	 * @param CurrentUser $user
+	 * @param mixed $user
 	 * @param string|null $default
 	 *
 	 * @return string|null
 	 */
-	public function resolve(CurrentUser $user, string $default = null): ?string {
-		return $user->settings ? $user->settings->language : $default;
+	public function resolve($user, string $default = null): ?string {
+		return $user->settings ? json_decode($user->settings)['language'] : $default;
 	}
 
 	/**

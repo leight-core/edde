@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Edde\Translation;
 
-use Edde\Bridge\User\CurrentUser;
 use Edde\Dto\Common\SelectItemDto;
 use Edde\Dto\DtoServiceTrait;
 use Edde\Log\LoggerTrait;
@@ -29,7 +28,7 @@ class LanguageService {
 	 * @return string|null
 	 */
 	public function resolve($user, string $default = null): ?string {
-		return $user->settings ? json_decode($user->settings)['language'] : $default;
+		return $user->settings ? json_decode($user->settings)->language : $default;
 	}
 
 	/**

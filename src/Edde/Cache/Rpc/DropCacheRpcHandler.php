@@ -10,6 +10,10 @@ use Edde\Rpc\AbstractRpcHandler;
 class DropCacheRpcHandler extends AbstractRpcHandler {
 	use CacheTrait;
 
+	protected $isMutator = true;
+	protected $requestSchemaOptional = true;
+	protected $responseSchemaOptional = true;
+
 	public function handle(SmartDto $request): ?SmartDto {
 		$this->cache->clear();
 		return null;

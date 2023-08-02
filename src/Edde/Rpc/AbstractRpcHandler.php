@@ -3,9 +3,13 @@ declare(strict_types=1);
 
 namespace Edde\Rpc;
 
+use Edde\Dto\SmartDto;
+use Edde\Dto\SmartServiceTrait;
 use Edde\Rpc\Service\IRpcHandler;
 
 abstract class AbstractRpcHandler implements IRpcHandler {
+	use SmartServiceTrait;
+
 	protected $requestSchema = null;
 	protected $requestSchemaOptional = false;
 	protected $responseSchema = null;
@@ -19,7 +23,6 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 	public function isMutator(): bool {
 		return $this->isMutator;
 	}
-
 
 	public function getRequestSchema(): ?string {
 		return $this->requestSchema;
@@ -35,5 +38,12 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 
 	public function isResponseSchemaOptional(): bool {
 		return $this->responseSchemaOptional;
+	}
+
+	public function toDto($response): ?SmartDto {
+		if (!$response || !$this->responseSchema) {
+			return null;
+		}
+		return $this->smartService->from((object)$response, $this->responseSchema);
 	}
 }

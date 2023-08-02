@@ -1,29 +1,25 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\Api\Shared\Endpoint;
+namespace Edde\Translation\Rpc;
 
 use Doctrine\ORM\Query;
 use Edde\Cache\CacheTrait;
 use Edde\Doctrine\EntityManagerTrait;
-use Edde\Dto\DtoServiceTrait;
-use Edde\Rest\Endpoint\AbstractFetchEndpoint;
-use Edde\Translation\Dto\TranslationsDto;
+use Edde\Dto\SmartDto;
+use Edde\Rpc\AbstractRpcHandler;
 use Edde\Translation\Repository\TranslationRepositoryTrait;
+use Edde\Translation\Schema\TranslationBundlesSchema;
 
-/**
- * @description Get all the translations available in the application.
- */
-class TranslationEndpoint extends AbstractFetchEndpoint {
+class TranslationRpcHandler extends AbstractRpcHandler {
 	use EntityManagerTrait;
 	use TranslationRepositoryTrait;
-	use DtoServiceTrait;
 	use CacheTrait;
 
-	/**
-	 * @return TranslationsDto
-	 */
-	public function get() {
+	protected $requestSchemaOptional = true;
+	protected $responseSchema = TranslationBundlesSchema::class;
+
+	public function handle(SmartDto $request): ?SmartDto {
 		return $this->cache->get('translations', function (string $key) {
 			$bundles = [];
 			$languages = $this->entityManager
@@ -55,7 +51,7 @@ class TranslationEndpoint extends AbstractFetchEndpoint {
 				'bundles' => $bundles,
 			];
 			$this->cache->set($key, $bundles);
-			return $bundles;
+			return $this->toDto($bundles);
 		});
 	}
 }

@@ -33,7 +33,6 @@ use function ltrim;
 use function microtime;
 use function rawurlencode;
 use function rtrim;
-use function sleep;
 use function sprintf;
 use function str_replace;
 use function touch;
@@ -279,17 +278,6 @@ class FileService implements IFileService {
 	}
 
 	public function remove(string $path) {
-		for ($i = 0; $i < 5; $i++) {
-			try {
-				$this->directory->deleteDir($path);
-				return;
-			} catch (Throwable $throwable) {
-				$e = $throwable;
-				sleep(1);
-			}
-		}
-		if (isset($e)) {
-			throw $e;
-		}
+		rmrdir($path);
 	}
 }

@@ -13,12 +13,7 @@ class Sdk {
 
 	public function generate(?string $output = null) {
 		printf("Output: [%s]\n", $output = $output ?? sprintf('%s/client/packages/@edde/sdk', getcwd()));
-//		try {
-//			$this->fileService->remove($output);
-//		} catch (Throwable $throwable) {
-//			// swallow
-//		} finally {
-//		}
+		$this->fileService->remove($output);
 		@mkdir($output, 0777, true);
 		$this->container->injectOn($generator = new PackageGenerator());
 		$generator

@@ -34,6 +34,9 @@ class SchemaExport extends AbstractExport {
 					$type = "z.number()";
 					break;
 			}
+			if ($attribute->hasSchema()) {
+				$type = $this->getSchemaName($attribute->getSchema()) . 'Schema';
+			}
 			$zod[] = sprintf(
 				'%s: %s,',
 				$attribute->getName(),

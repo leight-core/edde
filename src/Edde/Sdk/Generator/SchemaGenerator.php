@@ -35,6 +35,11 @@ class SchemaGenerator extends AbstractGenerator {
 				"",
 			]), FILE_APPEND);
 		}
+		foreach ($schema->getAttributes() as $attribute) {
+			if ($attribute->hasSchema()) {
+				$this->generateSchema($attribute->getSchema(), $schemaExport, $schemaOutput, $exportOutput);
+			}
+		}
 	}
 
 	public function generate(): ?string {

@@ -64,8 +64,17 @@ E;
 	}
 
 	public function export(): ?string {
-		return $this->toExport([
+		$imports = [
 			'import {z} from "@leight/utils";',
+		];
+		foreach ($this->schema->getAttributes() as $attribute) {
+			if ($attribute->hasSchema()) {
+				$schema = $this->getSchemaName($attribute->getSchema()) . 'Schema';
+				$imports[] = sprintf('import {%s} from "./%s";', $schema, $schema);
+			}
+		}
+		return $this->toExport([
+			$this->toExport($imports, "\n"),
 			$this->toZodSchema($this->schema),
 		]);
 	}

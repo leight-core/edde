@@ -13,7 +13,7 @@ use Edde\Translation\Rpc\TranslationRpcHandler;
 class BootstrapDefaultRpcIndex extends AbstractBootstrap {
 	use RpcHandlerIndexTrait;
 
-	function bootstrap() {
+	public function bootstrap() {
 		$this->rpcHandlerIndex->indexOf([
 			LoginRpcHandler::class,
 			LogoutRpcHandler::class,

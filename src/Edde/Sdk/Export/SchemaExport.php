@@ -46,7 +46,7 @@ class SchemaExport extends AbstractExport {
 		return <<<E
 z.object({
 	$zod
-});
+})
 E;
 
 	}

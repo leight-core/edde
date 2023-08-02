@@ -8,7 +8,7 @@ use Edde\Auth\Rpc\LogoutRpcHandler;
 use Edde\Auth\Rpc\TicketRpcHandler;
 use Edde\Cache\Rpc\DropCacheRpcHandler;
 use Edde\Rpc\Service\RpcHandlerIndexTrait;
-use Edde\Translation\Rpc\TranslationRpcHandler;
+use Edde\Translation\Rpc\TranslationBundlesRpcHandler;
 
 class BootstrapDefaultRpcIndex extends AbstractBootstrap {
 	use RpcHandlerIndexTrait;
@@ -19,7 +19,7 @@ class BootstrapDefaultRpcIndex extends AbstractBootstrap {
 			LogoutRpcHandler::class,
 			TicketRpcHandler::class,
 			DropCacheRpcHandler::class,
-			TranslationRpcHandler::class,
+			TranslationBundlesRpcHandler::class,
 		]);
 	}
 }

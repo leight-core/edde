@@ -11,7 +11,7 @@ use Edde\Rpc\AbstractRpcHandler;
 use Edde\Translation\Repository\TranslationRepositoryTrait;
 use Edde\Translation\Schema\TranslationBundlesSchema;
 
-class TranslationRpcHandler extends AbstractRpcHandler {
+class TranslationBundlesRpcHandler extends AbstractRpcHandler {
 	use EntityManagerTrait;
 	use TranslationRepositoryTrait;
 	use CacheTrait;

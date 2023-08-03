@@ -245,7 +245,17 @@ class SmartDto implements IDto, IteratorAggregate {
 	 */
 	public function getValues() {
 		foreach ($this->values as $k => $value) {
-			!$value->isUndefined() && yield $k => $value->get();
+			if ($value->isUndefined()) {
+				continue;
+			}
+			$attribute = $value->getAttribute();
+			$v = $value->get();
+			if ($attribute->isArray()) {
+				$v = array_map(function ($item) {
+					return $item instanceof SmartDto ? iterator_to_array($item->getValues()) : $item;
+				}, $v);
+			}
+			yield $k => $v;
 		}
 	}
 

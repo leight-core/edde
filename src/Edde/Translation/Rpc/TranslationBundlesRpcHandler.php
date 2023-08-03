@@ -31,7 +31,9 @@ class TranslationBundlesRpcHandler extends AbstractRpcHandler {
 			foreach ($languages->toIterable() as ['locale' => $locale]) {
 				$bundles[] = (object)[
 					'language'     => $locale,
-					'translations' => (object)$this->entityManager
+					'translations' => array_map(function ($item) {
+						return (object)$item;
+					}, $this->entityManager
 						->createQuery('
 							SELECT
 								t.key,
@@ -44,7 +46,7 @@ class TranslationBundlesRpcHandler extends AbstractRpcHandler {
 						->enableResultCache()
 						->setHint(Query::HINT_READ_ONLY, true)
 						->setParameter('locale', $locale)
-						->getArrayResult(),
+						->getArrayResult()),
 				];
 			}
 			$bundles = [

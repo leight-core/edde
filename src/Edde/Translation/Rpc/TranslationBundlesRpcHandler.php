@@ -50,8 +50,7 @@ class TranslationBundlesRpcHandler extends AbstractRpcHandler {
 			$bundles = [
 				'bundles' => $bundles,
 			];
-			$this->cache->set($key, $bundles);
-			return $this->toDto($bundles);
+			return $this->cache->set($key, $this->toDto($bundles));
 		});
 	}
 }

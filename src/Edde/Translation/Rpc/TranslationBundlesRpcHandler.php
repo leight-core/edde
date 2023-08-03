@@ -29,7 +29,7 @@ class TranslationBundlesRpcHandler extends AbstractRpcHandler {
 				->enableResultCache();
 			$languages->setHint(Query::HINT_READ_ONLY, true);
 			foreach ($languages->toIterable() as ['locale' => $locale]) {
-				$bundles[] = [
+				$bundles[] = (object)[
 					'language'     => $locale,
 					'translations' => $this->entityManager
 						->createQuery('

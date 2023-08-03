@@ -51,7 +51,6 @@ z.object({
 	$zod
 })
 E;
-
 	}
 
 	protected function toZodSchema(ISchema $schema): string {

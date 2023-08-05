@@ -16,6 +16,7 @@ class SdkCommand extends Command {
 	protected function configure() {
 		$this->setName('sdk');
 		$this->setDescription('Generates client-side SDK.');
+		$this->addOption('package', 'p', InputOption::VALUE_REQUIRED, 'Exported package name');
 		$this->addOption('output', 'o', InputOption::VALUE_OPTIONAL, 'Sets output directory for SDK');
 	}
 
@@ -23,7 +24,7 @@ class SdkCommand extends Command {
 		$output->writeln('SDK Generator started');
 		$output->write("Found RPC handlers:\n\t- ");
 		$output->writeln(implode("\n\t- ", $this->rpcHandlerIndex->getHandlers()));
-		$this->sdk->generate($input->getOption('output'));
+		$this->sdk->generate($input->getOption('output'), $input->getOption('package'));
 		$output->writeln('SDK Generator finished');
 		return 0;
 	}

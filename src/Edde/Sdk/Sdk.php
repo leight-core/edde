@@ -11,13 +11,14 @@ class Sdk {
 	use ContainerTrait;
 	use FileServiceTrait;
 
-	public function generate(?string $output = null) {
-		printf("Output: [%s]\n", $output = $output ?? sprintf('%s/client/packages/@edde/sdk', getcwd()));
+	public function generate(?string $output = null, ?string $package = '@edde/sdk') {
+		printf("Output: [%s]\n", $output = $output ?? sprintf('%s/client/packages/%s', getcwd(), $package));
 		$this->fileService->remove($output);
 		@mkdir($output, 0777, true);
 		$this->container->injectOn($generator = new PackageGenerator());
 		$generator
 			->withOutput($output)
+			->withPackage($package)
 			->generate();
 	}
 }

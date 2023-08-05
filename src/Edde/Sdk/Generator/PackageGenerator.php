@@ -9,10 +9,12 @@ use Edde\Sdk\AbstractGenerator;
 class PackageGenerator extends AbstractGenerator {
 	use ContainerTrait;
 
+	protected $package;
+
 	protected function generatePackageJson() {
 		file_put_contents("$this->output/package.json", str_replace('\/', '/', json_encode([
 			'version'         => '0.5.0',
-			'name'            => '@edde/sdk',
+			'name' => $this->package,
 			'description'     => 'Generated SDK',
 			'sideEffects'     => false,
 			'type'            => 'module',
@@ -80,6 +82,11 @@ dist
 	]
 }
 ');
+	}
+
+	public function withPackage(string $package): self {
+		$this->package = $package;
+		return $this;
 	}
 
 	public function generate(): ?string {

@@ -278,6 +278,10 @@ class FileService implements IFileService {
 	}
 
 	public function remove(string $path) {
-		rmrdir($path);
+		try {
+			rmrdir($path);
+		} catch (Throwable $exception) {
+			$this->logger->error($exception);
+		}
 	}
 }

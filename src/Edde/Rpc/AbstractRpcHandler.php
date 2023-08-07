@@ -14,6 +14,7 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 	protected $requestSchemaOptional = false;
 	protected $responseSchema = null;
 	protected $responseSchemaOptional = false;
+	protected $responseSchemaArray = false;
 	protected $isMutator = false;
 
 	public function getName(): string {
@@ -24,20 +25,20 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 		return $this->isMutator;
 	}
 
-	public function getRequestSchema(): ?string {
-		return $this->requestSchema;
+	public function getRequestMeta(): RpcHandlerMeta {
+		return new RpcHandlerMeta(
+			$this->requestSchema,
+			$this->requestSchemaOptional,
+			false
+		);
 	}
 
-	public function getResponseSchema(): ?string {
-		return $this->responseSchema;
-	}
-
-	public function isRequestSchemaOptional(): bool {
-		return $this->requestSchemaOptional;
-	}
-
-	public function isResponseSchemaOptional(): bool {
-		return $this->responseSchemaOptional;
+	public function getResponseMeta(): RpcHandlerMeta {
+		return new RpcHandlerMeta(
+			$this->responseSchema,
+			$this->responseSchemaOptional,
+			$this->responseSchemaArray
+		);
 	}
 
 	public function toDto($response): ?SmartDto {

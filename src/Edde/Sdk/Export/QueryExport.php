@@ -15,10 +15,13 @@ class QueryExport extends AbstractRpcExport {
 		$requestSchema = 'z.undefined().nullish()';
 		$responseSchema = 'z.undefined().nullish()';
 
-		if (($name = $this->handler->getRequestSchema()) && $schema = $this->schemaLoader->load($name)) {
+		$requestMeta = $this->handler->getRequestMeta();
+		$responseMeta = $this->handler->getResponseMeta();
+
+		if (($name = $requestMeta->getSchema()) && $schema = $this->schemaLoader->load($name)) {
 			$import[] = sprintf('import {%s} from "../schema/%s";', $requestSchema = $schemaExport->getSchemaName($schema) . 'Schema', $requestSchema);
 		}
-		if (($name = $this->handler->getResponseSchema()) && $schema = $this->schemaLoader->load($name)) {
+		if (($name = $responseMeta->getSchema()) && $schema = $this->schemaLoader->load($name)) {
 			$import[] = sprintf('import {%s} from "../schema/%s";', $responseSchema = $schemaExport->getSchemaName($schema) . 'Schema', $responseSchema);
 		}
 
@@ -27,21 +30,21 @@ class QueryExport extends AbstractRpcExport {
 			$this->toExport($import, "\n"),
 		];
 
+		$responseType = sprintf('%s%s', $responseSchema, $responseMeta->isOptional() ? '.nullish()' : '');
 		$export[] = vsprintf('
 export const with%s = withQuery({
 	service: "%s",
 	schema:  {
 		request:  %s%s,
-		response: %s%s,
+		response: %s,
 	},
 });
 		', [
 			$rpcName,
 			$this->escapeHandlerName(get_class($this->handler)),
 			$requestSchema,
-			$this->handler->isRequestSchemaOptional() ? '.nullish()' : '',
-			$responseSchema,
-			$this->handler->isResponseSchemaOptional() ? '.nullish()' : '',
+			$requestMeta->isOptional() ? '.nullish()' : '',
+			$responseMeta->isArray() ? sprintf('z.array(%s)', $responseType) : $responseType,
 		]);
 
 		return $this->toExport($export);

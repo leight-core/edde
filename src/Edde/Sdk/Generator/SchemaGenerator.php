@@ -53,10 +53,10 @@ class SchemaGenerator extends AbstractGenerator {
 		foreach ($this->rpcHandlerIndex->getHandlers() as $name) {
 			$handler = $this->rpcService->resolve($name);
 
-			if (($name = $handler->getRequestSchema()) && $schema = $this->schemaLoader->load($name)) {
+			if (($name = $handler->getRequestMeta()->getSchema()) && $schema = $this->schemaLoader->load($name)) {
 				$this->generateSchema($schema, $schemaExport, $schemaOutput, $exportOutput);
 			}
-			if (($name = $handler->getResponseSchema()) && $schema = $this->schemaLoader->load($name)) {
+			if (($name = $handler->getResponseMeta()->getSchema()) && $schema = $this->schemaLoader->load($name)) {
 				$this->generateSchema($schema, $schemaExport, $schemaOutput, $exportOutput);
 			}
 		}

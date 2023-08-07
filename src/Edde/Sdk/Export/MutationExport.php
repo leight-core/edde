@@ -15,10 +15,13 @@ class MutationExport extends AbstractRpcExport {
 		$requestSchema = 'z.undefined().nullish()';
 		$responseSchema = 'z.undefined().nullish()';
 
-		if (($name = $this->handler->getRequestSchema()) && $schema = $this->schemaLoader->load($name)) {
+		$requestMeta = $this->handler->getRequestMeta();
+		$responseMeta = $this->handler->getResponseMeta();
+
+		if (($name = $requestMeta->getSchema()) && $schema = $this->schemaLoader->load($name)) {
 			$import[] = sprintf('import {%s} from "../schema/%s";', $requestSchema = $schemaExport->getSchemaName($schema) . 'Schema', $requestSchema);
 		}
-		if (($name = $this->handler->getResponseSchema()) && $schema = $this->schemaLoader->load($name)) {
+		if (($name = $responseMeta->getSchema()) && $schema = $this->schemaLoader->load($name)) {
 			$import[] = sprintf('import {%s} from "../schema/%s";', $responseSchema = $schemaExport->getSchemaName($schema) . 'Schema', $responseSchema);
 		}
 
@@ -39,9 +42,9 @@ export const with%s = withMutation({
 			$rpcName,
 			$this->escapeHandlerName(get_class($this->handler)),
 			$requestSchema,
-			$this->handler->isRequestSchemaOptional() ? '.nullish()' : '',
+			$requestMeta->isOptional() ? '.nullish()' : '',
 			$responseSchema,
-			$this->handler->isResponseSchemaOptional() ? '.nullish()' : '',
+			$responseMeta->isOptional() ? '.nullish()' : '',
 		]);
 
 		return $this->toExport($export);

@@ -250,7 +250,9 @@ class SmartDto implements IDto, IteratorAggregate {
 			}
 			$attribute = $value->getAttribute();
 			$v = $value->get();
-			if ($attribute->isArray()) {
+			if ($k instanceof SmartDto) {
+				$v = iterator_to_array($k->getValues());
+			} else if ($attribute->isArray()) {
 				$v = array_map(function ($item) {
 					return $item instanceof SmartDto ? iterator_to_array($item->getValues()) : $item;
 				}, $v);

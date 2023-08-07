@@ -8,6 +8,7 @@ use Doctrine\ORM\QueryBuilder;
 use Edde\Doctrine\Exception\RepositoryException;
 use Edde\Doctrine\Exception\RequiredResultException;
 use Edde\Dto\SmartDto;
+use Edde\Dto\SmartServiceTrait;
 use Edde\Math\RandomServiceTrait;
 use Edde\Query\Dto\Query;
 use ReflectionClass;
@@ -22,6 +23,7 @@ use ReflectionException;
 abstract class AbstractRepository implements IRepository {
 	use EntityManagerTrait;
 	use RandomServiceTrait;
+	use SmartServiceTrait;
 
 	/**
 	 * @var ReflectionClass
@@ -94,6 +96,10 @@ abstract class AbstractRepository implements IRepository {
 			$queryBuilder->addOrderBy($this->field($name, $alias), $order ? "ASC" : "DESC");
 		}
 		return $queryBuilder;
+	}
+
+	public function withQuery(string $alias, SmartDto $query): QueryBuilder {
+//		$this->smartService->
 	}
 
 	public function query(string $alias, Query $query): array {

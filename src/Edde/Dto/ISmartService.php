@@ -34,4 +34,16 @@ interface ISmartService {
 	public function from(object $object, string $schema): SmartDto;
 
 	public function fromSchema(object $object, ISchema $schema): SmartDto;
+
+	/**
+	 * Check if the given SmartDto satisfies the given schema; exception is thrown or the same object is returned
+	 *
+	 * You can see this method as kind of deep "type-check" PHP does not have (in runtime).
+	 *
+	 * @param SmartDto $dto
+	 * @param string   $schema
+	 *
+	 * @return SmartDto
+	 */
+	public function check(SmartDto $dto, string $schema): SmartDto;
 }

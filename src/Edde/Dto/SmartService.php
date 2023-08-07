@@ -49,4 +49,13 @@ class SmartService implements ISmartService {
 	public function fromSchema(object $object, ISchema $schema): SmartDto {
 		return $this->createFromSchema($schema)->from($object);
 	}
+
+	public function check(SmartDto $dto, string $schema): SmartDto {
+		/**
+		 * The trick is simple: export DTO and import it using the given schema; if there is something
+		 * wrong, proper schema exception is thrown, thus it's not necessary to try-catch here.
+		 */
+		$this->from($dto->getValues(), $schema);
+		return $dto;
+	}
 }

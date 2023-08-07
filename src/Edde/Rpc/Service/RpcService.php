@@ -36,8 +36,8 @@ class RpcService {
 	public function execute(SmartDto $dto) {
 		$response = [];
 		/** @var $bulk SmartDto */
-		foreach ($dto->get('bulk')->get() as $id => $bulk) {
-			$name = $bulk->get('service')->get();
+		foreach ($dto->getSafeValue('bulk', []) as $id => $bulk) {
+			$name = $bulk->getValue('service');
 			try {
 				$service = $this->resolve($name);
 				$result = $service->handle(

@@ -16,8 +16,6 @@ class AttributeBuilder implements IAttributeBuilder {
 			'name'       => $name,
 			'required'   => false,
 			'default'    => null,
-			'filter'     => null,
-			'validator'  => null,
 			'array'      => false,
 			'load'       => false,
 			'schema'     => null,
@@ -34,18 +32,6 @@ class AttributeBuilder implements IAttributeBuilder {
 	/** @inheritdoc */
 	public function required(bool $required = true): IAttributeBuilder {
 		$this->source->required = $required;
-		return $this;
-	}
-
-	/** @inheritdoc */
-	public function filter(string $type, string $filter): IAttributeBuilder {
-		$this->source->filters[$type] = $filter;
-		return $this;
-	}
-
-	/** @inheritdoc */
-	public function validator(string $validator): IAttributeBuilder {
-		$this->source->validator = $validator;
 		return $this;
 	}
 

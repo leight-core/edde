@@ -23,23 +23,6 @@ interface IAttributeBuilder {
 	public function required(bool $required = true): IAttributeBuilder;
 
 	/**
-	 * @param string $type
-	 * @param string $filter
-	 *
-	 * @return IAttributeBuilder
-	 */
-	public function filter(string $type, string $filter): IAttributeBuilder;
-
-	/**
-	 * set a validator for this attribute
-	 *
-	 * @param string $validator
-	 *
-	 * @return IAttributeBuilder
-	 */
-	public function validator(string $validator): IAttributeBuilder;
-
-	/**
 	 * set a default value for this attribute
 	 *
 	 * @param mixed $default

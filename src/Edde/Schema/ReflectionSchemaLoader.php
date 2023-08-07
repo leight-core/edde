@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Edde\Schema;
 
-use DateTime;
 use ReflectionClass;
 use ReflectionException;
 use Throwable;
@@ -68,26 +67,6 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 				}
 				foreach ($reflectionMethod->getParameters() as $parameter) {
 					switch ($parameterName = $parameter->getName()) {
-						case 'filter':
-							try {
-								if (is_string($filter = $parameter->getDefaultValue()) === false) {
-									throw new ReflectionException('Filter name is not a string value.');
-								}
-							} catch (ReflectionException $exception) {
-								throw new SchemaException(sprintf('Parameter [%s::%s($filter)] must have a default string value as a filter name.', $schema, $attributeName), 0, $exception);
-							}
-							$attributeBuilder->filter($parameterName, $filter);
-							break;
-						case 'validator':
-							try {
-								if (is_string($validator = $parameter->getDefaultValue()) === false) {
-									throw new ReflectionException('Validator name is not a string value.');
-								}
-							} catch (ReflectionException $exception) {
-								throw new SchemaException(sprintf('Parameter [%s::%s($validator)] must have a default string value as a validator name.', $schema, $attributeName), 0, $exception);
-							}
-							$attributeBuilder->validator($validator);
-							break;
 						case 'type':
 							try {
 								if (is_string($type = $parameter->getDefaultValue()) === false) {
@@ -97,7 +76,7 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 								throw new SchemaException(sprintf('Parameter [%s::%s($type)] must have a default string value as a type name.', $schema, $attributeName), 0, $exception);
 							}
 							$attributeBuilder->type($type);
-							$attributeBuilder->required($parameter->isOptional());
+							$attributeBuilder->required(!$parameter->isOptional());
 							$propertyType = $type;
 							break;
 						case 'default':
@@ -115,6 +94,7 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 							$attributeBuilder->schema($this->load($parameter->getDefaultValue()));
 							break;
 						case 'array':
+						case 'isArray':
 							$attributeBuilder->array($parameter->getDefaultValue());
 							break;
 						case 'instanceOf':
@@ -123,20 +103,6 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 						default:
 							throw new SchemaException(sprintf('Unknown schema [%s::%s] directive [%s].', $schema, $attributeName, $parameterName));
 					}
-				}
-				switch ($propertyType) {
-					case 'float':
-					case 'int':
-					case 'bool':
-					case 'string':
-					case 'uuid':
-					case 'datetime':
-					case 'json':
-					case 'binary':
-					case DateTime::class:
-						$attributeBuilder->filter('type', $propertyType);
-						$attributeBuilder->validator($propertyType);
-						break;
 				}
 			}
 

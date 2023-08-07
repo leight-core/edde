@@ -28,25 +28,9 @@ interface IAttribute {
 	public function isRequired(): bool;
 
 	/**
-	 * return name of the validator for this property, if any
-	 *
-	 * @return null|string
-	 */
-	public function getValidator(): ?string;
-
-	/**
 	 * @return mixed
 	 */
 	public function getDefault();
-
-	/**
-	 * get a filter with the given name
-	 *
-	 * @param string $name
-	 *
-	 * @return string|null
-	 */
-	public function getFilter(string $name): ?string;
 
 	/**
 	 * @return bool

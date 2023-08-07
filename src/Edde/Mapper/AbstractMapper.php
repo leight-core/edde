@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Edde\Mapper;
 
 use Edde\Dto\DtoServiceTrait;
+use Edde\Dto\SmartServiceTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Mapper\Exception\SkipException;
 use Generator;
@@ -13,6 +14,7 @@ abstract class AbstractMapper implements IMapper {
 	use MapperUtilsTrait;
 	use LoggerTrait;
 	use DtoServiceTrait;
+	use SmartServiceTrait;
 
 	/**
 	 * Empty constructor is here to enable children implement parent::__construct without worrying if

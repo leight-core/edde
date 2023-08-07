@@ -94,7 +94,15 @@ abstract class AbstractRepository implements IRepository {
 			->setMaxResults($query->size);
 		$this->applyQuery($alias, $query->filter, $queryBuilder);
 		foreach ($this->orderBy as $name => $order) {
-			$queryBuilder->addOrderBy($this->field($name, $alias), $order ? "ASC" : "DESC");
+			if (is_string($order) && !in_array($order = strtoupper($order), [
+					'ASC',
+					'DESC',
+				])) {
+				$order = 'ASC';
+			} else if (!is_bool($order)) {
+				$order = 'ASC';
+			}
+			$queryBuilder->addOrderBy($this->field($name, $alias), $order);
 		}
 		return $queryBuilder;
 	}

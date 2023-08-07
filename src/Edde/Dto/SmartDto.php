@@ -218,6 +218,10 @@ class SmartDto implements IDto, IteratorAggregate {
 		return $object;
 	}
 
+	public function export(): object {
+		return (object)iterator_to_array($this->getValues());
+	}
+
 	/**
 	 * Creates the given instance and fill all non-undefined values; same as mergeTo(new $instanceOf).
 	 *

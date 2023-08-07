@@ -42,10 +42,10 @@ class RpcService {
 				$service = $this->resolve($name);
 				$requestName = $service->getRequestSchema();
 				$result = $service->handle(
-					$requestName ? $this->smartService->from((object)$bulk->get('data')->get(), $requestName) : SmartDto::ofDummy()
+					$requestName ? $this->smartService->from((object)$bulk->getValue('data'), $requestName) : SmartDto::ofDummy()
 				);
 				$response[$id] = (object)[
-					'data' => $result ? iterator_to_array($result->getValues()) : null,
+					'data' => $result ? $result->export() : null,
 				];
 			} catch (NotFoundException $exception) {
 				$this->logger->error($exception);

@@ -55,7 +55,7 @@ class SmartService implements ISmartService {
 		 * The trick is simple: export DTO and import it using the given schema; if there is something
 		 * wrong, proper schema exception is thrown, thus it's not necessary to try-catch here.
 		 */
-		$this->from($dto->getValues(), $schema);
+		$this->from($dto->export(), $schema);
 		return $dto;
 	}
 }

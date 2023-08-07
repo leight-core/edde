@@ -107,7 +107,7 @@ abstract class AbstractRepository implements IRepository {
 		return $queryBuilder;
 	}
 
-	public function withQuery(string $alias, SmartDto $query): QueryBuilder {
+	public function withQueryDto(string $alias, SmartDto $query): QueryBuilder {
 		$this->smartService->check($query, QuerySchema::class);
 		$cursor = $query->getSmartDto('cursor');
 		$filter = $query->getSmartDto('filter');
@@ -118,6 +118,14 @@ abstract class AbstractRepository implements IRepository {
 			$cursor ? $cursor->getSafeValue('page', null) : null,
 			$cursor ? $cursor->getSafeValue('size', null) : null
 		));
+	}
+
+	public function withQuery(string $alias, SmartDto $query): array {
+		return $this->toHydrate(
+			$this->withQueryDto($alias, $query)
+				->getQuery()
+				->getResult()
+		);
 	}
 
 	public function query(string $alias, Query $query): array {

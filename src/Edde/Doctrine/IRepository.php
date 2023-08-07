@@ -64,7 +64,9 @@ interface IRepository {
 	/**
 	 * Query using SmartDto
 	 */
-	public function withQuery(string $alias, SmartDto $query): QueryBuilder;
+	public function withQueryDto(string $alias, SmartDto $query): QueryBuilder;
+
+	public function withQuery(string $alias, SmartDto $query): array;
 
 	/**
 	 * @param Query $query

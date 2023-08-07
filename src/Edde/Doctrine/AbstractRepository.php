@@ -12,7 +12,6 @@ use Edde\Dto\SmartServiceTrait;
 use Edde\Math\RandomServiceTrait;
 use Edde\Query\Dto\Query;
 use Edde\Query\Schema\QuerySchema;
-use Exception;
 use ReflectionClass;
 use ReflectionException;
 
@@ -102,7 +101,15 @@ abstract class AbstractRepository implements IRepository {
 
 	public function withQuery(string $alias, SmartDto $query): QueryBuilder {
 		$this->smartService->check($query, QuerySchema::class);
-		throw new Exception('Not yet');
+		$cursor = $query->getSmartDto('cursor');
+		$filter = $query->getSmartDto('filter');
+		$orderBy = $query->getSmartDto('orderBy');
+		return $this->toQuery($alias, new Query(
+			$filter ? $filter->export() : null,
+			$orderBy ? $orderBy->export() : null,
+			$cursor ? $cursor->getSafeValue('page', null) : null,
+			$cursor ? $cursor->getSafeValue('size', null) : null
+		));
 	}
 
 	public function query(string $alias, Query $query): array {

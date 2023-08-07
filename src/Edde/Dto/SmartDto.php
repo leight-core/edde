@@ -81,8 +81,22 @@ class SmartDto implements IDto, IteratorAggregate {
 		return $this->values[$name];
 	}
 
+	/**
+	 * @param string $name
+	 *
+	 * @return mixed
+	 * @throws SmartDtoException
+	 */
 	public function getValue(string $name) {
 		return $this->get($name)->get();
+	}
+
+	public function getSafeValue(string $name, $default) {
+		try {
+			return $this->getValue($name);
+		} catch (SmartDtoException $exception) {
+			return $default;
+		}
 	}
 
 	public function getValueOrThrow(string $name) {
@@ -95,19 +109,22 @@ class SmartDto implements IDto, IteratorAggregate {
 	/**
 	 * If you expect SmartDto value, this methods ensures you'll get it. Or an Exception
 	 *
-	 * @param $name
+	 * @param string $name
 	 *
-	 * @return SmartDto
-	 * @throws SmartDtoException
+	 * @return SmartDto|null
 	 */
-	public function getSmartDto($name): SmartDto {
-		if (!($dto = $this->getValue($name)) instanceof SmartDto) {
-			throw new SmartDtoException(sprintf('Requested value [%s::%s] is not SmartDto object.', $this->schema->getName(), $name));
+	public function getSmartDto(string $name): ?SmartDto {
+		try {
+			if (!$this->known($name)) {
+				return null;
+			}
+			return $this->getSmartDtoOrThrow($name);
+		} catch (SmartDtoException $exception) {
+			return null;
 		}
-		return $dto;
 	}
 
-	public function getSmartDtoOrThrow($name): SmartDto {
+	public function getSmartDtoOrThrow(string $name): SmartDto {
 		if (!($dto = $this->getValueOrThrow($name)) instanceof SmartDto) {
 			throw new SmartDtoException(sprintf('Requested value [%s::%s] is not SmartDto object.', $this->schema->getName(), $name));
 		}

@@ -99,7 +99,9 @@ abstract class AbstractRepository implements IRepository {
 					'DESC',
 				])) {
 				$order = 'ASC';
-			} else if (!is_bool($order)) {
+			} else if (is_bool($order)) {
+				$order = $order ? 'ASC' : 'DESC';
+			} else {
 				$order = 'ASC';
 			}
 			$queryBuilder->addOrderBy($this->field($name, $alias), $order);

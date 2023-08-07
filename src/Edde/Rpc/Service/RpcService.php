@@ -44,7 +44,7 @@ class RpcService {
 					($requestSchema = $service->getRequestMeta()->getSchema()) ? $this->smartService->from((object)$bulk->getValue('data'), $requestSchema) : SmartDto::ofDummy()
 				);
 				$response[$id] = (object)[
-					'data' => $result ? $result->export() : null,
+					'data' => $result ? ($result instanceof SmartDto ? $result->export() : $result) : null,
 				];
 			} catch (NotFoundException $exception) {
 				$this->logger->error($exception);

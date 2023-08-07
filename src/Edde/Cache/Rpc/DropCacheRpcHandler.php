@@ -14,8 +14,7 @@ class DropCacheRpcHandler extends AbstractRpcHandler {
 	protected $requestSchemaOptional = true;
 	protected $responseSchemaOptional = true;
 
-	public function handle(SmartDto $request): ?SmartDto {
+	public function handle(SmartDto $request) {
 		$this->cache->clear();
-		return null;
 	}
 }

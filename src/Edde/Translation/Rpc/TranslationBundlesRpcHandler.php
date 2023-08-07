@@ -19,7 +19,7 @@ class TranslationBundlesRpcHandler extends AbstractRpcHandler {
 	protected $requestSchemaOptional = true;
 	protected $responseSchema = TranslationBundlesSchema::class;
 
-	public function handle(SmartDto $request): ?SmartDto {
+	public function handle(SmartDto $request) {
 		return $this->cache->get('translations', function (string $key) {
 			$bundles = [];
 			$languages = $this->entityManager

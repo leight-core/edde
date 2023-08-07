@@ -21,10 +21,9 @@ class TicketRpcHandler extends AbstractRpcHandler {
 	protected $responseSchema = SessionSchema::class;
 	protected $responseSchemaOptional = true;
 
-	public function handle(SmartDto $request): ?SmartDto {
+	public function handle(SmartDto $request) {
 		if ($this->currentUserService->isSelected()) {
 			return $this->sessionMapper->item($this->currentUserService->requireUser());
 		}
-		return null;
 	}
 }

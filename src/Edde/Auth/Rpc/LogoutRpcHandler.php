@@ -12,8 +12,7 @@ class LogoutRpcHandler extends AbstractRpcHandler {
 
 	protected $isMutator = true;
 
-	public function handle(SmartDto $request): ?SmartDto {
+	public function handle(SmartDto $request) {
 		$this->session->remove('user');
-		return null;
 	}
 }

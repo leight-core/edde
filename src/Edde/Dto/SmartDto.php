@@ -6,11 +6,13 @@ namespace Edde\Dto;
 use Edde\Dto\Exception\SmartDtoException;
 use Edde\Schema\IAttribute;
 use Edde\Schema\ISchema;
+use Edde\Schema\Schema;
 use Edde\Schema\SchemaException;
 use Generator;
 use IteratorAggregate;
 use ReflectionClass;
 use ReflectionException;
+use stdClass;
 use Traversable;
 
 class SmartDto implements IDto, IteratorAggregate {
@@ -243,7 +245,17 @@ class SmartDto implements IDto, IteratorAggregate {
 	 */
 	public function getValues() {
 		foreach ($this->values as $k => $value) {
-			!$value->isUndefined() && yield $k => $value->get();
+			if ($value->isUndefined()) {
+				continue;
+			}
+			$attribute = $value->getAttribute();
+			$v = $value->get();
+			if ($attribute->isArray()) {
+				$v = array_map(function ($item) {
+					return $item instanceof SmartDto ? iterator_to_array($item->getValues()) : $item;
+				}, $v);
+			}
+			yield $k => $v;
 		}
 	}
 
@@ -266,5 +278,9 @@ class SmartDto implements IDto, IteratorAggregate {
 				$schema->getAttributes()
 			)
 		);
+	}
+
+	static public function ofDummy(): self {
+		return new self(new Schema(new stdClass(), []), []);
 	}
 }

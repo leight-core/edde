@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Edde\Job\Dto;
 
-use Edde\Bridge\User\UserDto;
 use Edde\Dto\AbstractDto;
 
 /**
@@ -89,9 +88,9 @@ class JobDto extends AbstractDto {
 	 */
 	public $commit;
 	/**
-	 * @var UserDto|void
+	 * @var string|void
 	 */
-	public $user;
+	public $userId;
 	/**
 	 * @var string
 	 */

@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+
 namespace Edde\User;
 
 use Edde\Dto\AbstractDto;

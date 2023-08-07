@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Edde\Auth\Rpc;
 
+use Edde\Auth\Mapper\SessionMapperTrait;
+use Edde\Auth\Schema\SessionSchema;
 use Edde\Dto\SmartDto;
 use Edde\Rpc\AbstractRpcHandler;
-use Edde\Session\SessionMapperTrait;
 use Edde\User\CurrentUserServiceTrait;
 use Edde\User\Repository\UserRepositoryTrait;
 
@@ -17,7 +18,10 @@ class TicketRpcHandler extends AbstractRpcHandler {
 	use UserRepositoryTrait;
 	use SessionMapperTrait;
 
-	function handle(SmartDto $request): ?SmartDto {
+	protected $responseSchema = SessionSchema::class;
+	protected $responseSchemaOptional = true;
+
+	public function handle(SmartDto $request): ?SmartDto {
 		if ($this->currentUserService->isSelected()) {
 			return $this->sessionMapper->item($this->currentUserService->requireUser());
 		}

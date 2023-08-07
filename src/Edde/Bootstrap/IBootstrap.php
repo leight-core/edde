@@ -7,5 +7,5 @@ namespace Edde\Bootstrap;
  * General service use to bootstrap custom things in the app.
  */
 interface IBootstrap {
-	function bootstrap();
+	public function bootstrap();
 }

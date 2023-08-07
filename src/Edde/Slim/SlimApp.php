@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
 use Edde\Api\ApiRouter;
+use Edde\Auth\Mapper\ISessionMapper;
 use Edde\Bootstrap\IBootstrap;
 use Edde\Cache\Cache;
 use Edde\Cache\ICache;
@@ -52,7 +53,7 @@ use Edde\Schema\ISchemaLoader;
 use Edde\Schema\ISchemaManager;
 use Edde\Schema\ReflectionSchemaLoader;
 use Edde\Schema\SchemaManager;
-use Edde\Session\ISessionMapper;
+use Edde\Sdk\SdkCommand;
 use Edde\Session\ISessionResolver;
 use Edde\Session\SessionMiddleware;
 use Edde\Session\SessionResolver;
@@ -191,6 +192,7 @@ class SlimApp {
 					$application->add($container->get($cli));
 				}
 				$application->add($container->get(JobExecutorCommand::class));
+				$application->add($container->get(SdkCommand::class));
 				return $application;
 			},
 			IUserMapper::class            => function () {
@@ -215,7 +217,7 @@ class SlimApp {
 			ISchemaManager::class         => function (ContainerInterface $container) {
 				return $container->get(SchemaManager::class);
 			},
-			IRpcHandlerIndex::class => function (ContainerInterface $container) {
+			IRpcHandlerIndex::class       => function (ContainerInterface $container) {
 				return $container->get(RpcHandlerIndex::class);
 			},
 			Manager::class                => function (ContainerInterface $container) {

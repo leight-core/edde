@@ -7,13 +7,8 @@ use Edde\File\Dto\FileDto;
 use Edde\Mapper\AbstractMapper;
 use Edde\Mapper\Exception\ItemException;
 use Edde\Mapper\Exception\SkipException;
-use Edde\User\Mapper\UserMapperTrait;
-use Edde\User\Repository\UserRepositoryTrait;
 
 class FileMapper extends AbstractMapper {
-	use UserRepositoryTrait;
-	use UserMapperTrait;
-
 	/**
 	 * @param       $item
 	 * @param null  $params
@@ -31,7 +26,7 @@ class FileMapper extends AbstractMapper {
 			'mime'    => $item->mime,
 			'native'  => $item->native,
 			'size'    => $item->size,
-			'user'    => $item->user_id ? $this->userMapper->item($this->userRepository->find($item->user_id), $params) : null,
+			'userId' => $item->user_id,
 			'created' => $this->isoDateNull($item->created),
 			'updated' => $this->isoDateNull($item->updated),
 			'ttl'     => $item->ttl,

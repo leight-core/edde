@@ -11,20 +11,19 @@ use Edde\Password\PasswordServiceTrait;
 use Edde\Rpc\AbstractRpcHandler;
 use Edde\Rpc\Exception\RpcException;
 use Edde\Session\SessionTrait;
-use Edde\User\Mapper\CurrentUserMapperTrait;
 use Edde\User\Repository\UserRepositoryTrait;
 
 class LoginRpcHandler extends AbstractRpcHandler {
 	use SessionTrait;
-	use CurrentUserMapperTrait;
 	use UserRepositoryTrait;
 	use PasswordServiceTrait;
 	use SessionMapperTrait;
 
 	protected $requestSchema = LoginSchema::class;
 	protected $responseSchema = SessionSchema::class;
+	protected $isMutator = true;
 
-	function handle(SmartDto $request): ?SmartDto {
+	public function handle(SmartDto $request): ?SmartDto {
 		if (!($user = $this->userRepository->findByLogin($request->getValue('login')))) {
 			throw new RpcException('Unknown login', 400);
 		}

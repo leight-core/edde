@@ -11,7 +11,7 @@ interface SessionSchema {
 	/**
 	 * User id
 	 */
-	function id(): string;
+	function id(): int;
 
 	/**
 	 * Display name of the user
@@ -22,4 +22,6 @@ interface SessionSchema {
 	 * Default site of the user
 	 */
 	function site(): ?string;
+
+	function tokens($array = true): string;
 }

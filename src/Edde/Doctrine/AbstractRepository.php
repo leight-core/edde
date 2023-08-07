@@ -129,7 +129,7 @@ abstract class AbstractRepository implements IRepository {
 		$this->entityManager->persist(
 			$entity = $dto->exportTo(
 				$this->find($dto->getValueOrThrow('id'))
-			),
+			)
 		);
 		return $entity;
 	}

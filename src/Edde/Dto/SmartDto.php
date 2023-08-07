@@ -93,6 +93,28 @@ class SmartDto implements IDto, IteratorAggregate {
 	}
 
 	/**
+	 * If you expect SmartDto value, this methods ensures you'll get it. Or an Exception
+	 *
+	 * @param $name
+	 *
+	 * @return SmartDto
+	 * @throws SmartDtoException
+	 */
+	public function getSmartDto($name): SmartDto {
+		if (!($dto = $this->getValue($name)) instanceof SmartDto) {
+			throw new SmartDtoException(sprintf('Requested value [%s::%s] is not SmartDto object.', $this->schema->getName(), $name));
+		}
+		return $dto;
+	}
+
+	public function getSmartDtoOrThrow($name): SmartDto {
+		if (!($dto = $this->getValueOrThrow($name)) instanceof SmartDto) {
+			throw new SmartDtoException(sprintf('Requested value [%s::%s] is not SmartDto object.', $this->schema->getName(), $name));
+		}
+		return $dto;
+	}
+
+	/**
 	 * @param string $name
 	 * @param        $value
 	 *

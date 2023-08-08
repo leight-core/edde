@@ -26,7 +26,7 @@ class FetchExport extends AbstractExport {
 			'"use client";',
 			$this->toExport($import, "\n"),
 			vsprintf(
-				"export const %sFetch = withFetch({withQuery: with%s});",
+				"export const %s = withFetch({withQuery: with%s});",
 				[
 					$this->handler->getName(),
 					$this->handler->getName(),

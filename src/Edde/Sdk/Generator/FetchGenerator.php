@@ -31,6 +31,14 @@ class FetchGenerator extends AbstractGenerator {
 				sprintf('src/$export/%s.ts', $handler->getName()),
 				sprintf('export {%s} from "../ui/%s";', $handler->getName(), $handler->getName())
 			);
+			$this->writeTo(
+				'src/$export/$export.ts',
+				implode("\n", [
+					sprintf('export * from "./%s";', $handler->getName()),
+					"",
+				]),
+				FILE_APPEND
+			);
 		}
 	}
 }

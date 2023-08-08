@@ -10,7 +10,7 @@ abstract class TagSchema {
 
 	abstract function tag(): string;
 
-	abstract function group(): ?string;
+	abstract function group(): string;
 
 	abstract function sort(): ?int;
 }

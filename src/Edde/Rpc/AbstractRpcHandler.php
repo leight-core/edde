@@ -20,7 +20,11 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 	protected $meta;
 
 	public function getName(): string {
-		return substr(strrchr(get_class($this), '\\'), 1);
+		return str_replace(
+			['RpcHandler'],
+			'',
+			substr(strrchr(get_class($this), '\\'), 1)
+		);
 	}
 
 	public function isMutator(): bool {

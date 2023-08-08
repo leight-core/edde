@@ -9,5 +9,5 @@ interface IGenerator {
 	 *
 	 * @return string|null
 	 */
-	public function generate(): ?string;
+	public function generate(): void;
 }

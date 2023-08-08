@@ -3,16 +3,13 @@ declare(strict_types=1);
 
 namespace Edde\Sdk\Generator;
 
-use Edde\Container\ContainerTrait;
 use Edde\Sdk\AbstractGenerator;
 
 class PackageGenerator extends AbstractGenerator {
-	use ContainerTrait;
-
 	protected $package;
 
 	protected function generatePackageJson() {
-		file_put_contents("$this->output/package.json", str_replace('\/', '/', json_encode([
+		$this->writeTo("package.json", str_replace('\/', '/', json_encode([
 			'version'         => '0.5.0',
 			'name' => $this->package,
 			'description'     => 'Generated SDK',
@@ -34,17 +31,17 @@ class PackageGenerator extends AbstractGenerator {
 	}
 
 	protected function generateIndexTs() {
-		file_put_contents("$this->output/src/index.ts", 'export * from "./$export/$export"');
+		$this->writeTo("src/index.ts", 'export * from "./$export/$export"');
 	}
 
 	protected function generateEslintIgnore() {
-		file_put_contents("$this->output/.eslintignore", "node_modules
+		$this->writeTo(".eslintignore", "node_modules
 dist
 ");
 	}
 
 	protected function generateEslintRc() {
-		file_put_contents("$this->output/.eslintrc", '{
+		$this->writeTo(".eslintrc", '{
 	"root": true,
 	"extends": [
 		"@leight/eslint"
@@ -67,7 +64,7 @@ dist
 	}
 
 	protected function generateTsConfig() {
-		file_put_contents("$this->output/tsconfig.json", '{
+		$this->writeTo('tsconfig.json', '{
 	"extends": "@leight/tsconfig/esbuild.json",
 	"compilerOptions": {
 		"rootDir": "src",
@@ -89,9 +86,7 @@ dist
 		return $this;
 	}
 
-	public function generate(): ?string {
-		@mkdir("$this->output/src", 0777, true);
-
+	public function generate(): void {
 		$this->generatePackageJson();
 		$this->generateIndexTs();
 		$this->generateEslintIgnore();
@@ -108,6 +103,9 @@ dist
 			->withOutput($this->output)
 			->generate();
 
-		return null;
+		$this->container
+			->injectOn(new FetchGenerator())
+			->withOutput($this->output)
+			->generate();
 	}
 }

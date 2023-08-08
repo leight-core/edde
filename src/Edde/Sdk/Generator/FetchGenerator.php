@@ -4,25 +4,33 @@ declare(strict_types=1);
 namespace Edde\Sdk\Generator;
 
 use Edde\Sdk\AbstractGenerator;
+use Edde\Sdk\Export\FetchExport;
 
 class FetchGenerator extends AbstractGenerator {
 	public function generate(): void {
-		$schemaOutput = sprintf('%s/src/schema', $this->output);
-		$exportOutput = sprintf('%s/src/$export', $this->output);
-		@mkdir($schemaOutput, 0777, true);
-		@mkdir($exportOutput, 0777, true);
+		$fetchExport = $this->container->injectOn(new FetchExport());
 
 		foreach ($this->rpcHandlerIndex->getHandlers() as $name) {
-			$meta = $this->rpcService->resolve($name)->getMeta();
-			$requestMeta = $meta->getRequestMeta();
-			$responseMeta = $meta->getResponseMeta();
+			$handler = $this->rpcService->resolve($name);
+			$meta = $handler->getMeta();
+			if (!$meta->isFetch()) {
+				continue;
+			}
+			$export = $fetchExport
+				->withHandler($handler)
+				->export();
+			if (!$export) {
+				continue;
+			}
 
-			if (($name = $requestMeta->getSchema()) && $schema = $this->schemaLoader->load($name)) {
-				$this->generateSchema($schema, $schemaExport, $schemaOutput, $exportOutput);
-			}
-			if (($name = $responseMeta->getSchema()) && $schema = $this->schemaLoader->load($name)) {
-				$this->generateSchema($schema, $schemaExport, $schemaOutput, $exportOutput);
-			}
+			$this->writeTo(
+				sprintf('src/ui/%sFetch.ts', $handler->getName()),
+				$export
+			);
+			$this->writeTo(
+				sprintf('src/$export/%sFetch.ts', $handler->getName()),
+				sprintf('export {%sFetch} from "../ui/%sFetch";', $handler->getName(), $handler->getName())
+			);
 		}
 	}
 }

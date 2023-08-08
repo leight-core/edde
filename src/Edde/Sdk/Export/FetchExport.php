@@ -19,6 +19,7 @@ class FetchExport extends AbstractExport {
 
 	public function export(): ?string {
 		$import = [
+			'import {withFetch} from "@leight/source";',
 			sprintf('import {with%s} from "../rpc/with%s";', $this->handler->getName(), $this->handler->getName()),
 		];
 		$export = [

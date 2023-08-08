@@ -31,8 +31,7 @@ class SchemaExport extends AbstractExport {
 					$attribute->isRequired() && ($type .= ".nonempty({message: 'Non-empty'})");
 					break;
 				case 'bool':
-					$type = "z.bool()";
-					$attribute->isRequired() && ($type .= ".nonempty({message: 'Non-empty'})");
+					$type = "z.boolean()";
 					break;
 				case 'int':
 					$type = "z.number()";

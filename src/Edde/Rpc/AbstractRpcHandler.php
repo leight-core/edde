@@ -16,6 +16,8 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 	protected $responseSchemaOptional = false;
 	protected $responseSchemaArray = false;
 	protected $isMutator = false;
+	protected $isFetch = false;
+	protected $meta;
 
 	public function getName(): string {
 		return substr(strrchr(get_class($this), '\\'), 1);
@@ -25,16 +27,26 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 		return $this->isMutator;
 	}
 
-	public function getRequestMeta(): RpcHandlerMeta {
-		return new RpcHandlerMeta(
+	public function getMeta(): RpcHandlerMeta {
+		return $this->meta ?: $this->meta = (new RpcHandlerMeta(
+			$this->getRequestMeta(),
+			$this->getResponseMeta()
+		))
+			->withMutator($this->isMutator)
+			->withFetch($this->isFetch);
+	}
+
+
+	public function getRequestMeta(): RpcWireMeta {
+		return new RpcWireMeta(
 			$this->requestSchema,
 			$this->requestSchemaOptional,
 			false
 		);
 	}
 
-	public function getResponseMeta(): RpcHandlerMeta {
-		return new RpcHandlerMeta(
+	public function getResponseMeta(): RpcWireMeta {
+		return new RpcWireMeta(
 			$this->responseSchema,
 			$this->responseSchemaOptional,
 			$this->responseSchemaArray

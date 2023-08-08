@@ -15,8 +15,9 @@ class MutationExport extends AbstractRpcExport {
 		$requestSchema = 'z.undefined().nullish()';
 		$responseSchema = 'z.undefined().nullish()';
 
-		$requestMeta = $this->handler->getRequestMeta();
-		$responseMeta = $this->handler->getResponseMeta();
+		$meta = $this->handler->getMeta();
+		$requestMeta = $meta->getRequestMeta();
+		$responseMeta = $meta->getResponseMeta();
 
 		if (($name = $requestMeta->getSchema()) && $schema = $this->schemaLoader->load($name)) {
 			$import[] = sprintf('import {%s} from "../schema/%s";', $requestSchema = $schemaExport->getSchemaName($schema) . 'Schema', $requestSchema);

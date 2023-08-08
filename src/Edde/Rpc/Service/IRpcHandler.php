@@ -20,9 +20,7 @@ interface IRpcHandler {
 
 	public function isMutator(): bool;
 
-	public function getRequestMeta(): RpcHandlerMeta;
-
-	public function getResponseMeta(): RpcHandlerMeta;
+	public function getMeta(): RpcHandlerMeta;
 
 	/**
 	 * Handle incoming request; handler should be responsible for

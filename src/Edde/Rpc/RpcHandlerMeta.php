@@ -3,40 +3,58 @@ declare(strict_types=1);
 
 namespace Edde\Rpc;
 
+/**
+ * Meta information about a Handler.
+ */
 class RpcHandlerMeta {
 	/**
-	 * @var string|null
+	 * @var RpcWireMeta
 	 */
-	protected $schema;
+	protected $requestMeta;
 	/**
-	 * @var bool
+	 * @var RpcWireMeta
 	 */
-	protected $isOptional;
-	/**
-	 * @var bool
-	 */
-	protected $isArray;
+	protected $responseMeta;
+	protected $features = [];
 
 	/**
-	 * @param string|null $schema
-	 * @param bool        $isOptional
-	 * @param bool        $isArray
+	 * @param RpcWireMeta $requestMeta
+	 * @param RpcWireMeta $responseMeta
 	 */
-	public function __construct(?string $schema, bool $isOptional, bool $isArray) {
-		$this->schema = $schema;
-		$this->isOptional = $isOptional;
-		$this->isArray = $isArray;
+	public function __construct(RpcWireMeta $requestMeta, RpcWireMeta $responseMeta) {
+		$this->requestMeta = $requestMeta;
+		$this->responseMeta = $responseMeta;
 	}
 
-	public function getSchema(): ?string {
-		return $this->schema;
+	public function getRequestMeta(): RpcWireMeta {
+		return $this->requestMeta;
 	}
 
-	public function isOptional(): bool {
-		return $this->isOptional;
+	public function getResponseMeta(): RpcWireMeta {
+		return $this->responseMeta;
 	}
 
-	public function isArray(): bool {
-		return $this->isArray;
+	public function withMutator(bool $enable): self {
+		if (!$enable) {
+			return $this;
+		}
+		$this->features[] = 'mutator';
+		return $this;
+	}
+
+	public function isMutator(): bool {
+		return in_array('mutator', $this->features);
+	}
+
+	public function withFetch(bool $enable): self {
+		if (!$enable) {
+			return $this;
+		}
+		$this->features[] = 'fetch';
+		return $this;
+	}
+
+	public function isFetch(): bool {
+		return in_array('fetch', $this->features);
 	}
 }

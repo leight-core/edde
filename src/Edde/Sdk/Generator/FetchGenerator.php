@@ -24,7 +24,7 @@ class FetchGenerator extends AbstractGenerator {
 			}
 
 			$this->writeTo(
-				sprintf('src/ui/%.ts', $handler->getName()),
+				sprintf('src/ui/%s.ts', $handler->getName()),
 				$export
 			);
 			$this->writeTo(

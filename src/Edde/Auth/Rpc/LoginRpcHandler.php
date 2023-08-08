@@ -10,6 +10,7 @@ use Edde\Dto\SmartDto;
 use Edde\Password\PasswordServiceTrait;
 use Edde\Rpc\AbstractRpcHandler;
 use Edde\Rpc\Exception\RpcException;
+use Edde\Rpc\Utils\WithMutator;
 use Edde\Session\SessionTrait;
 use Edde\User\Repository\UserRepositoryTrait;
 
@@ -19,9 +20,10 @@ class LoginRpcHandler extends AbstractRpcHandler {
 	use PasswordServiceTrait;
 	use SessionMapperTrait;
 
+	use WithMutator;
+
 	protected $requestSchema = LoginSchema::class;
 	protected $responseSchema = SessionSchema::class;
-	protected $isMutator = true;
 
 	public function handle(SmartDto $request) {
 		if (!($user = $this->userRepository->findByLogin($request->getValue('login')))) {

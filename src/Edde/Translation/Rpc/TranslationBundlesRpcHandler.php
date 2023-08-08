@@ -8,6 +8,7 @@ use Edde\Cache\CacheTrait;
 use Edde\Doctrine\EntityManagerTrait;
 use Edde\Dto\SmartDto;
 use Edde\Rpc\AbstractRpcHandler;
+use Edde\Rpc\Utils\WithOptionalRequestSchema;
 use Edde\Translation\Repository\TranslationRepositoryTrait;
 use Edde\Translation\Schema\TranslationBundlesSchema;
 
@@ -16,7 +17,8 @@ class TranslationBundlesRpcHandler extends AbstractRpcHandler {
 	use TranslationRepositoryTrait;
 	use CacheTrait;
 
-	protected $requestSchemaOptional = true;
+	use WithOptionalRequestSchema;
+
 	protected $responseSchema = TranslationBundlesSchema::class;
 
 	public function handle(SmartDto $request) {

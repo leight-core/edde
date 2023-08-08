@@ -7,7 +7,6 @@ use Edde\Auth\Mapper\SessionMapperTrait;
 use Edde\Auth\Schema\SessionSchema;
 use Edde\Dto\SmartDto;
 use Edde\Rpc\AbstractRpcHandler;
-use Edde\Rpc\Utils\WithOptionalResponseSchema;
 use Edde\User\CurrentUserServiceTrait;
 use Edde\User\Repository\UserRepositoryTrait;
 
@@ -19,9 +18,8 @@ class TicketRpcHandler extends AbstractRpcHandler {
 	use UserRepositoryTrait;
 	use SessionMapperTrait;
 
-	use WithOptionalResponseSchema;
-
 	protected $responseSchema = SessionSchema::class;
+	protected $responseSchemaOptional = true;
 
 	public function handle(SmartDto $request) {
 		if ($this->currentUserService->isSelected()) {

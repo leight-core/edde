@@ -21,7 +21,7 @@ class FormExport extends AbstractExport {
 		$rpcName = sprintf('with%s', $this->handler->getName());
 		$import = [
 			'import {withForm} from "@leight/form";',
-			sprintf('import {with%s} from "../rpc/with%s";', $rpcName, $rpcName),
+			sprintf('import {%s} from "../rpc/%s";', $rpcName, $rpcName),
 		];
 		$export = [
 			'"use client";',

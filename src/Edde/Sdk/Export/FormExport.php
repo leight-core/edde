@@ -27,7 +27,7 @@ class FormExport extends AbstractExport {
 			'"use client";',
 			$this->toExport($import, "\n"),
 			vsprintf(
-				"const %sFormContext = withForm({
+				"export const %sFormContext = withForm({
 	schema: {
 		ValueSchema:    %s.schema.request,
 		RequestSchema:  %s.schema.request,

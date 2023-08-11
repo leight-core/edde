@@ -117,7 +117,7 @@ abstract class AbstractEndpoint implements IEndpoint {
 			return Response::withJson($response, $e->getMessage(), 409);
 		} catch (Throwable $e) {
 			$this->logger->error($e);
-			return Response::withJson($response, 'Uncatched server error. This is just a bug. Sorry.', 500);
+			return Response::withJson($response, 'Uncatched server error.', 500);
 		}
 	}
 

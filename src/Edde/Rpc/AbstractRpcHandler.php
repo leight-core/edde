@@ -17,6 +17,7 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 	protected $responseSchemaArray = false;
 	protected $isMutator = false;
 	protected $isFetch = false;
+	protected $withForm = false;
 	protected $meta;
 
 	public function getName(): string {
@@ -37,9 +38,9 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 			$this->getResponseMeta()
 		))
 			->withMutator($this->isMutator)
-			->withFetch($this->isFetch);
+			->withFetch($this->isFetch)
+			->withForm($this->withForm);
 	}
-
 
 	public function getRequestMeta(): RpcWireMeta {
 		return new RpcWireMeta(

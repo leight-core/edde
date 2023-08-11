@@ -57,4 +57,16 @@ class RpcHandlerMeta {
 	public function isFetch(): bool {
 		return in_array('fetch', $this->features);
 	}
+
+	public function withForm(bool $enable): self {
+		if (!$enable) {
+			return $this;
+		}
+		$this->features[] = 'with-form';
+		return $this;
+	}
+
+	public function isWithForm(): bool {
+		return in_array('with-form', $this->features);
+	}
 }

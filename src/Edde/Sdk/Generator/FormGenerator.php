@@ -13,7 +13,7 @@ class FormGenerator extends AbstractGenerator {
 		foreach ($this->rpcHandlerIndex->getHandlers() as $name) {
 			$handler = $this->rpcService->resolve($name);
 			$meta = $handler->getMeta();
-			if (!$meta->isMutator()) {
+			if (!$meta->isWithForm()) {
 				continue;
 			}
 			$export = $formExport

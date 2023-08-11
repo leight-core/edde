@@ -23,7 +23,7 @@ class FormGenerator extends AbstractGenerator {
 				continue;
 			}
 
-			$name = sprintf('%ssFormContext', $handler->getName());
+			$name = sprintf('%sFormContext', $handler->getName());
 			$this->writeTo(
 				sprintf('src/form/%s.ts', $name),
 				$export

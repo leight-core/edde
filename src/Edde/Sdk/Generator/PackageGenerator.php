@@ -107,5 +107,10 @@ dist
 			->injectOn(new FetchGenerator())
 			->withOutput($this->output)
 			->generate();
+
+		$this->container
+			->injectOn(new FormGenerator())
+			->withOutput($this->output)
+			->generate();
 	}
 }

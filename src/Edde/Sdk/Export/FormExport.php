@@ -20,24 +20,22 @@ class FormExport extends AbstractExport {
 	public function export(): ?string {
 		$rpcName = sprintf('with%s', $this->handler->getName());
 		$import = [
-			'import {withForm} from "@leight/form";',
+			'import {withRpcForm} from "@leight/form";',
 			sprintf('import {%s} from "../rpc/%s";', $rpcName, $rpcName),
 		];
 		$export = [
 			'"use client";',
 			$this->toExport($import, "\n"),
 			vsprintf(
-				"export const %sFormContext = withForm({
+				"export const %sFormContext = withRpcForm({
 	schema: {
 		ValueSchema:    %s.schema.request,
-		RequestSchema:  %s.schema.request,
-		ResponseSchema: %s.schema.response,
 	},
+	withMutation: %s,
 	name:   %s.service,
 });",
 				[
 					$this->handler->getName(),
-					$rpcName,
 					$rpcName,
 					$rpcName,
 					$rpcName,

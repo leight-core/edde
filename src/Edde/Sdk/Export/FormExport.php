@@ -35,7 +35,7 @@ class FormExport extends AbstractExport {
 	name:   %s.service,
 });
 
-export type I%sFormSchema = typeof %sFormContext['schema'];
+export type I%sFormSchema = typeof %sFormContext[\"schema\"];
 export type I%sFormContext = IFormSchema.RpcForm<I%sFormSchema>;
 ",
 				[

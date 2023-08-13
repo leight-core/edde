@@ -681,16 +681,16 @@
 		},
 		{
 			"name": "dibi/dibi",
-			"version": "v4.2.7",
+			"version": "v4.2.8",
 			"source": {
 				"type": "git",
 				"url": "https://github.com/dg/dibi.git",
-				"reference": "7fa05f381b23fdc59af98caeb03b1ae8ed1e03ed"
+				"reference": "cb0cf4ba2face22d809c8f863a5a0465b46a6ca9"
 			},
 			"dist": {
 				"type": "zip",
-				"url": "https://api.github.com/repos/dg/dibi/zipball/7fa05f381b23fdc59af98caeb03b1ae8ed1e03ed",
-				"reference": "7fa05f381b23fdc59af98caeb03b1ae8ed1e03ed",
+				"url": "https://api.github.com/repos/dg/dibi/zipball/cb0cf4ba2face22d809c8f863a5a0465b46a6ca9",
+				"reference": "cb0cf4ba2face22d809c8f863a5a0465b46a6ca9",
 				"shasum": ""
 			},
 			"require": {
@@ -745,9 +745,9 @@
 			],
 			"support": {
 				"issues": "https://github.com/dg/dibi/issues",
-				"source": "https://github.com/dg/dibi/tree/v4.2.7"
+				"source": "https://github.com/dg/dibi/tree/v4.2.8"
 			},
-			"time": "2022-11-18T03:40:51+00:00"
+			"time": "2023-08-09T14:15:07+00:00"
 		},
 		{
 			"name": "diff/diff",
@@ -1635,16 +1635,16 @@
 		},
 		{
 			"name": "doctrine/orm",
-			"version": "2.16.0",
+			"version": "2.16.1",
 			"source": {
 				"type": "git",
 				"url": "https://github.com/doctrine/orm.git",
-				"reference": "495cd06b9a630f9c38a21ceb249ed008edbe8414"
+				"reference": "597a63a86ca8c5f9d1ec2dc74fe3d1269d43434a"
 			},
 			"dist": {
 				"type": "zip",
-				"url": "https://api.github.com/repos/doctrine/orm/zipball/495cd06b9a630f9c38a21ceb249ed008edbe8414",
-				"reference": "495cd06b9a630f9c38a21ceb249ed008edbe8414",
+				"url": "https://api.github.com/repos/doctrine/orm/zipball/597a63a86ca8c5f9d1ec2dc74fe3d1269d43434a",
+				"reference": "597a63a86ca8c5f9d1ec2dc74fe3d1269d43434a",
 				"shasum": ""
 			},
 			"require": {
@@ -1673,14 +1673,14 @@
 				"doctrine/annotations": "^1.13 || ^2",
 				"doctrine/coding-standard": "^9.0.2 || ^12.0",
 				"phpbench/phpbench": "^0.16.10 || ^1.0",
-				"phpstan/phpstan": "~1.4.10 || 1.10.25",
+				"phpstan/phpstan": "~1.4.10 || 1.10.28",
 				"phpunit/phpunit": "^7.5 || ^8.5 || ^9.6",
 				"psr/log": "^1 || ^2 || ^3",
 				"squizlabs/php_codesniffer": "3.7.2",
 				"symfony/cache": "^4.4 || ^5.4 || ^6.0",
 				"symfony/var-exporter": "^4.4 || ^5.4 || ^6.2",
 				"symfony/yaml": "^3.4 || ^4.0 || ^5.0 || ^6.0",
-				"vimeo/psalm": "4.30.0 || 5.13.1"
+				"vimeo/psalm": "4.30.0 || 5.14.1"
 			},
 			"suggest": {
 				"ext-dom": "Provides support for XSD validation for XML mapping files",
@@ -1730,9 +1730,9 @@
 			],
 			"support": {
 				"issues": "https://github.com/doctrine/orm/issues",
-				"source": "https://github.com/doctrine/orm/tree/2.16.0"
+				"source": "https://github.com/doctrine/orm/tree/2.16.1"
 			},
-			"time": "2023-08-01T12:07:04+00:00"
+			"time": "2023-08-09T13:05:08+00:00"
 		},
 		{
 			"name": "doctrine/persistence",
@@ -2037,16 +2037,16 @@
 		},
 		{
 			"name": "league/mime-type-detection",
-			"version": "1.11.0",
+			"version": "1.12.0",
 			"source": {
 				"type": "git",
 				"url": "https://github.com/thephpleague/mime-type-detection.git",
-				"reference": "ff6248ea87a9f116e78edd6002e39e5128a0d4dd"
+				"reference": "c7f2872fb273bf493811473dafc88d60ae829f48"
 			},
 			"dist": {
 				"type": "zip",
-				"url": "https://api.github.com/repos/thephpleague/mime-type-detection/zipball/ff6248ea87a9f116e78edd6002e39e5128a0d4dd",
-				"reference": "ff6248ea87a9f116e78edd6002e39e5128a0d4dd",
+				"url": "https://api.github.com/repos/thephpleague/mime-type-detection/zipball/c7f2872fb273bf493811473dafc88d60ae829f48",
+				"reference": "c7f2872fb273bf493811473dafc88d60ae829f48",
 				"shasum": ""
 			},
 			"require": {
@@ -2077,7 +2077,7 @@
 			"description": "Mime-type detection for Flysystem",
 			"support": {
 				"issues": "https://github.com/thephpleague/mime-type-detection/issues",
-				"source": "https://github.com/thephpleague/mime-type-detection/tree/1.11.0"
+				"source": "https://github.com/thephpleague/mime-type-detection/tree/1.12.0"
 			},
 			"funding": [
 				{
@@ -2089,7 +2089,7 @@
 					"type": "tidelift"
 				}
 			],
-			"time": "2022-04-17T13:12:02+00:00"
+			"time": "2023-08-03T07:14:11+00:00"
 		},
 		{
 			"name": "league/uri",

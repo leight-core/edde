@@ -35,13 +35,16 @@ class FormExport extends AbstractExport {
 	name:   %s.service,
 });
 
-export type I%sFormSchema = IFormSchema.RpcForm<typeof %sFormContext['schema']>;
+export type I%sFormSchema = typeof %sFormContext['schema'];
+export type I%sFormContext = IFormSchema.RpcForm<I%sFormSchema>;
 ",
 				[
 					$this->handler->getName(),
 					$rpcName,
 					$rpcName,
 					$rpcName,
+					$this->handler->getName(),
+					$this->handler->getName(),
 					$this->handler->getName(),
 					$this->handler->getName(),
 				]

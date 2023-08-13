@@ -20,7 +20,7 @@ class FormExport extends AbstractExport {
 	public function export(): ?string {
 		$rpcName = sprintf('with%s', $this->handler->getName());
 		$import = [
-			'import {withRpcForm} from "@leight/form";',
+			'import {withRpcForm, type IFormSchema} from "@leight/form";',
 			sprintf('import {%s} from "../rpc/%s";', $rpcName, $rpcName),
 		];
 		$export = [
@@ -33,12 +33,17 @@ class FormExport extends AbstractExport {
 	},
 	withMutation: %s,
 	name:   %s.service,
-});",
+});
+
+export type I%sFormSchema = IFormSchema.RpcForm<typeof %sFormContext['schema']>;
+",
 				[
 					$this->handler->getName(),
 					$rpcName,
 					$rpcName,
 					$rpcName,
+					$this->handler->getName(),
+					$this->handler->getName(),
 				]
 			),
 		];

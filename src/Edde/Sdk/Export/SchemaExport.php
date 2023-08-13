@@ -72,7 +72,7 @@ E;
 		foreach ($this->schema->getAttributes() as $attribute) {
 			if ($attribute->hasSchema()) {
 				$schema = $this->getSchemaName($attribute->getSchema()) . 'Schema';
-				$imports[] = sprintf('import {%s} from "./%s";', $schema, $schema);
+				$imports[$schema] = sprintf('import {%s} from "./%s";', $schema, $schema);
 			}
 		}
 		return $this->toExport([

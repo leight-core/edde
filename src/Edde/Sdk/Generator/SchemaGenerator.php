@@ -45,12 +45,11 @@ class SchemaGenerator extends AbstractGenerator {
 			if (!$meta->isQuery() && ($name = $requestMeta->getSchema()) && $schema = $this->schemaLoader->load($name)) {
 				$this->generateSchema($schema, $schemaExport);
 			} else if ($meta->isQuery()) {
-				($name = $meta->getFilterSchema()) && $schema = $this->schemaLoader->load($name) && $this->generateSchema($schema, $schemaExport);
-				($name = $meta->getOrderBySchema()) && $schema = $this->schemaLoader->load($name) && $this->generateSchema($schema, $schemaExport);
+				($name = $meta->getFilterSchema()) && ($schema = $this->schemaLoader->load($name)) && $this->generateSchema($schema, $schemaExport);
+				($name = $meta->getOrderBySchema()) && ($schema = $this->schemaLoader->load($name)) && $this->generateSchema($schema, $schemaExport);
 			}
-			if (($name = $responseMeta->getSchema()) && $schema = $this->schemaLoader->load($name)) {
-				$this->generateSchema($schema, $schemaExport);
-			}
+
+			($name = $responseMeta->getSchema()) && ($schema = $this->schemaLoader->load($name)) && $this->generateSchema($schema, $schemaExport);
 		}
 	}
 }

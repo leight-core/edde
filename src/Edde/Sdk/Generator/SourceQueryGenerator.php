@@ -29,7 +29,7 @@ class SourceQueryGenerator extends AbstractGenerator {
 			);
 			$this->writeTo(
 				sprintf('src/$export/with%s.ts', $handler->getName()),
-				sprintf('export {%s} from "../rpc/with%s";', $handler->getName(), $handler->getName())
+				sprintf('export {with%s} from "../rpc/with%s";', $handler->getName(), $handler->getName())
 			);
 			$this->writeTo(
 				'src/$export/$export.ts',

@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Edde\Sdk\Export;
 
-class QueryExport extends AbstractRpcExport {
+use Edde\Sdk\AbstractExport;
+
+class SourceQueryExport extends AbstractExport {
 	public function export(): ?string {
 		$import = [
-			'import {withQuery} from "@leight/rpc";',
+			'import {withSourceQuery} from "@leight/source";',
 			'import {z} from "@leight/utils";',
 		];
 
@@ -33,12 +35,12 @@ class QueryExport extends AbstractRpcExport {
 
 		$responseType = sprintf('%s%s', $responseSchema, $responseMeta->isOptional() ? '.nullish()' : '');
 		$export[] = vsprintf('
-export const with%s = withQuery({
+export const with%s = withSourceQuery({
 	service: "%s",
-	schema:  {
-		request:  %s%s,
-		response: %s,
-	},
+	schema:  withSourceQuery({
+		filter:  %s%s,
+		orderBy: %s,
+	}),
 });
 		', [
 			$rpcName,

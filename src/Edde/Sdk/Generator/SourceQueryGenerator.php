@@ -4,19 +4,19 @@ declare(strict_types=1);
 namespace Edde\Sdk\Generator;
 
 use Edde\Sdk\AbstractGenerator;
-use Edde\Sdk\Export\FetchExport;
+use Edde\Sdk\Export\SourceQueryExport;
 
-class FetchGenerator extends AbstractGenerator {
+class SourceQueryGenerator extends AbstractGenerator {
 	public function generate(): void {
-		$fetchExport = $this->container->injectOn(new FetchExport());
+		$sourceQueryExport = $this->container->injectOn(new SourceQueryExport());
 
 		foreach ($this->rpcHandlerIndex->getHandlers() as $name) {
 			$handler = $this->rpcService->resolve($name);
 			$meta = $handler->getMeta();
-			if (!$meta->isFetch() || $meta->isQuery()) {
+			if (!$meta->isQuery()) {
 				continue;
 			}
-			$export = $fetchExport
+			$export = $sourceQueryExport
 				->withHandler($handler)
 				->export();
 			if (!$export) {
@@ -24,12 +24,12 @@ class FetchGenerator extends AbstractGenerator {
 			}
 
 			$this->writeTo(
-				sprintf('src/ui/%s.ts', $handler->getName()),
+				sprintf('src/rpc/%s.ts', $handler->getName()),
 				$export
 			);
 			$this->writeTo(
 				sprintf('src/$export/%s.ts', $handler->getName()),
-				sprintf('export {%s} from "../ui/%s";', $handler->getName(), $handler->getName())
+				sprintf('export {%s} from "../rpc/%s";', $handler->getName(), $handler->getName())
 			);
 			$this->writeTo(
 				'src/$export/$export.ts',

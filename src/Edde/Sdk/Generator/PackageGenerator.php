@@ -111,6 +111,11 @@ dist
 			->generate();
 
 		$this->container
+			->injectOn(new SourceQueryGenerator())
+			->withOutput($this->output)
+			->generate();
+
+		$this->container
 			->injectOn(new FormGenerator())
 			->withOutput($this->output)
 			->generate();

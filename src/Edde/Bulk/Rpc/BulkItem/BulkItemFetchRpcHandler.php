@@ -1,15 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\Bulk\Rpc;
+namespace Edde\Bulk\Rpc\BulkItem;
 
-use Edde\Bulk\Schema\BulkItemSchema;
+use Edde\Bulk\Schema\BulkItem\BulkItemSchema;
 use Edde\Dto\SmartDto;
 use Edde\Rpc\AbstractRpcHandler;
 
-class BulkItemQueryRpcHandler extends AbstractRpcHandler {
+class BulkItemFetchRpcHandler extends AbstractRpcHandler {
 	protected $responseSchema = BulkItemSchema::class;
-	protected $responseSchemaArray = true;
 
 	public function handle(SmartDto $request) {
 	}

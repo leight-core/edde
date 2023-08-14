@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Edde\Bulk\Schema;
 
 abstract class BulkSchema {
-	public $meta = [
+	const meta = [
 		'import' => [
 			'BulkSchema' => '@leight/bulk',
 		],

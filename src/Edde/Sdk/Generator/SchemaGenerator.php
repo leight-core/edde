@@ -42,9 +42,9 @@ class SchemaGenerator extends AbstractGenerator {
 			$requestMeta = $meta->getRequestMeta();
 			$responseMeta = $meta->getResponseMeta();
 
-			if (!$meta->isQuery() && ($name = $requestMeta->getSchema()) && $schema = $this->schemaLoader->load($name)) {
-				$this->generateSchema($schema, $schemaExport);
-			} else if ($meta->isQuery()) {
+			if (!$meta->isQuery()) {
+				($name = $requestMeta->getSchema()) && ($schema = $this->schemaLoader->load($name)) && $this->generateSchema($schema, $schemaExport);
+			} else {
 				($name = $meta->getFilterSchema()) && ($schema = $this->schemaLoader->load($name)) && $this->generateSchema($schema, $schemaExport);
 				($name = $meta->getOrderBySchema()) && ($schema = $this->schemaLoader->load($name)) && $this->generateSchema($schema, $schemaExport);
 			}

@@ -27,7 +27,7 @@ class SourceQueryExport extends AbstractRpcExport {
 			$import[] = sprintf('import {%s, type I%s} from "../schema/%s";', $filterSchema = $schemaExport->getSchemaName($schema) . 'Schema', $filterSchema, $filterSchema);
 		}
 		if (($name = $meta->getOrderBySchema()) && $schema = $this->schemaLoader->load($name)) {
-			$import[] = sprintf('import {%s, type I%S} from "../schema/%s";', $orderBySchema = $schemaExport->getSchemaName($schema) . 'Schema', $orderBySchema, $orderBySchema);
+			$import[] = sprintf('import {%s, type I%s} from "../schema/%s";', $orderBySchema = $schemaExport->getSchemaName($schema) . 'Schema', $orderBySchema, $orderBySchema);
 		}
 
 		$export = [

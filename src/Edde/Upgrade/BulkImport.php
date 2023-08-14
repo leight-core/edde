@@ -12,6 +12,7 @@ class BulkImport extends CommonMigration {
 				'comment' => 'Common bulk "header" for bulk items.',
 			])
 			->addColumn('created', 'datetime', ['comment' => 'Timestamp when a job was scheduled (basically also started).'])
+			->addStringColumn('name', 512, ['comment' => 'Human readable name of this bulk import.'])
 			->addColumn('status', 'integer', [
 				'comment' => 'Overall bulk status',
 				'default' => 0,

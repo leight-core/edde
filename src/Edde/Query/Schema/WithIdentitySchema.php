@@ -6,7 +6,9 @@ namespace Edde\Query\Schema;
 abstract class WithIdentitySchema {
 	const meta = [
 		'import' => [
-			'WithIdentitySchema' => '@leight/query',
+			'type IWithIdentity'       => '@leight/query',
+			'type IWithIdentitySchema' => '@leight/query',
+			'WithIdentitySchema'       => '@leight/query',
 		],
 	];
 

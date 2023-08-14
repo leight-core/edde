@@ -328,4 +328,17 @@ class SmartDto implements IDto, IteratorAggregate {
 	static public function ofDummy(): self {
 		return new self(new Schema(new stdClass(), []), []);
 	}
+
+	static public function exportOf($export) {
+		if (!$export) {
+			return null;
+		} else if (!$export instanceof SmartDto && !is_array($export)) {
+			throw new SmartDtoException(sprintf('Exporting an unknown value of type [%s].', gettype($export)));
+		} else if ($export instanceof SmartDto) {
+			return $export->export();
+		}
+		return array_map(function ($item) {
+			return $item instanceof SmartDto ? self::exportOf($item) : $item;
+		}, $export);
+	}
 }

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Schema;
 
-abstract class BulkCreateSchema {
+interface BulkCreateSchema {
 	const meta = [
 		'import' => [
 			'type IBulkCreate'       => '@leight/bulk',
@@ -12,7 +12,7 @@ abstract class BulkCreateSchema {
 		],
 	];
 
-	abstract function name(): string;
+	function name(): string;
 
-	abstract function service(): string;
+	function service(): string;
 }

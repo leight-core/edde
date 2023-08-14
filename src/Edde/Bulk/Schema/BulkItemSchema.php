@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Schema;
 
-abstract class BulkItemSchema {
+interface BulkItemSchema {
 	const meta = [
 		'import' => [
 			'type IBulkItem'       => '@leight/bulk',
@@ -12,17 +12,17 @@ abstract class BulkItemSchema {
 		],
 	];
 
-	abstract function id(): string;
+	function id(): string;
 
-	abstract function bulkId(): string;
+	function bulkId(): string;
 
-	abstract function bulk($load = true): BulkSchema;
+	function bulk($load = true): BulkSchema;
 
-	abstract function status(): int;
+	function status(): int;
 
-	abstract function request(): ?string;
+	function request(): ?string;
 
-	abstract function response(): ?string;
+	function response(): ?string;
 
-	abstract function userId(): string;
+	function userId(): string;
 }

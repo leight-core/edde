@@ -14,13 +14,15 @@ abstract class BulkSchema {
 
 	abstract function id(): string;
 
-	abstract function created(): string;
-
 	abstract function name(): string;
+
+	abstract function service(): string;
 
 	abstract function status(): int;
 
 	abstract function commit(): bool;
+
+	abstract function created(): string;
 
 	abstract function userId(): string;
 }

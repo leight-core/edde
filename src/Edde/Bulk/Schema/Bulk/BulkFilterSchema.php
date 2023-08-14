@@ -6,5 +6,5 @@ namespace Edde\Bulk\Schema\Bulk;
 use Edde\Query\Schema\FilterSchema;
 
 interface BulkFilterSchema extends FilterSchema {
-	function withCommit(): bool;
+	function withCommit(): ?bool;
 }

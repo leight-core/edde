@@ -48,8 +48,8 @@ export const with%s = withSourceQuery({
 		filter: %s,
 		orderBy: %s,
 	},
-	query:   createQueryStore<IBulkFilterSchema, IBulkOrderBySchema>({
-		name: "BulkQueryRpcHandler",
+	query:   createQueryStore<I%s, I%s>({
+		name: "%s",
 	}),
 });
 		', [
@@ -60,6 +60,9 @@ export const with%s = withSourceQuery({
 			$responseMeta->isArray() ? sprintf('z.array(%s)', $responseType) : $responseType,
 			$filterSchema,
 			$orderBySchema,
+			$filterSchema,
+			$orderBySchema,
+			$this->escapeHandlerName(get_class($this->handler)),
 		]);
 
 		return $this->toExport($export);

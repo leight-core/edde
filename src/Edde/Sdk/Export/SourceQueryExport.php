@@ -44,7 +44,7 @@ export const with%s = withSourceQuery({
 			filterSchema:  %s,
 			orderBySchema: %s,
 		}),
-		request: %s,
+		response: %s,
 	},
 });
 		', [

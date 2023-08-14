@@ -41,8 +41,8 @@ export const with%s = withSourceQuery({
 	service: "%s",
 	schema:  {
 		request: withQuerySchema({
-			filterSchema:  %s,
-			orderBySchema: %s,
+			filter: %s,
+			orderBy: %s,
 		}),
 		response: %s,
 		filter: %s,

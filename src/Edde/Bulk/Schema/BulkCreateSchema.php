@@ -6,7 +6,9 @@ namespace Edde\Bulk\Schema;
 abstract class BulkCreateSchema {
 	const meta = [
 		'import' => [
-			'BulkCreateSchema' => '@leight/bulk',
+			'type IBulkCreate'       => '@leight/bulk',
+			'type IBulkCreateSchema' => '@leight/bulk',
+			'BulkCreateSchema'       => '@leight/bulk',
 		],
 	];
 

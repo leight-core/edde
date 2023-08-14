@@ -6,7 +6,7 @@ namespace Edde\Sdk\Export;
 class SourceQueryExport extends AbstractRpcExport {
 	public function export(): ?string {
 		$import = [
-			'import {withSourceQuery} from "@leight/source";',
+			'import {withSourceQuery} from "@leight/rpc";',
 			'import {withQuerySchema, createQueryStore} from "@leight/query";',
 			'import {z} from "@leight/utils";',
 		];

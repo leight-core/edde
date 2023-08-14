@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Query\Schema;
 
-abstract class WithIdentitySchema {
+interface WithIdentitySchema {
 	const meta = [
 		'import' => [
 			'type IWithIdentity'       => '@leight/query',
@@ -12,5 +12,5 @@ abstract class WithIdentitySchema {
 		],
 	];
 
-	abstract public function id(): string;
+	function id(): string;
 }

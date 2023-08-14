@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Edde\Query\Schema;
 
-abstract class QuerySchema {
-	abstract public function cursor($load = true): ?CursorSchema;
+interface QuerySchema {
+	function cursor($load = true): ?CursorSchema;
 
-	abstract public function filter($type = FilterSchema::class, $load = true);
+	function filter($type = FilterSchema::class, $load = true);
 }

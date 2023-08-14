@@ -58,11 +58,11 @@ E;
 
 	protected function toZodSchema(ISchema $schema): string {
 		if ($import = $schema->getMeta('import')) {
-			return implode("\n", array_map(function ($import) {
+			return implode("\n", array_map(function ($export) {
 				[
 					$import,
 					$package,
-				] = $import;
+				] = $export;
 				return sprintf("export {%s} from \"%s\";", $import, $package);
 			}, $import));
 		}

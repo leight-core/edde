@@ -7,7 +7,7 @@ class SourceQueryExport extends AbstractRpcExport {
 	public function export(): ?string {
 		$import = [
 			'import {withSourceQuery} from "@leight/source";',
-			'import {withQuerySchema} from "@leight/query";',
+			'import {withQuerySchema, createQueryStore} from "@leight/query";',
 			'import {z} from "@leight/utils";',
 		];
 
@@ -24,10 +24,10 @@ class SourceQueryExport extends AbstractRpcExport {
 			$import[] = sprintf('import {%s} from "../schema/%s";', $responseSchema = $schemaExport->getSchemaName($schema) . 'Schema', $responseSchema);
 		}
 		if (($name = $meta->getFilterSchema()) && $schema = $this->schemaLoader->load($name)) {
-			$import[] = sprintf('import {%s} from "../schema/%s";', $filterSchema = $schemaExport->getSchemaName($schema) . 'Schema', $filterSchema);
+			$import[] = sprintf('import {%s, type I%s} from "../schema/%s";', $filterSchema = $schemaExport->getSchemaName($schema) . 'Schema', $filterSchema, $filterSchema);
 		}
 		if (($name = $meta->getOrderBySchema()) && $schema = $this->schemaLoader->load($name)) {
-			$import[] = sprintf('import {%s} from "../schema/%s";', $orderBySchema = $schemaExport->getSchemaName($schema) . 'Schema', $orderBySchema);
+			$import[] = sprintf('import {%s, type I%S} from "../schema/%s";', $orderBySchema = $schemaExport->getSchemaName($schema) . 'Schema', $orderBySchema, $orderBySchema);
 		}
 
 		$export = [
@@ -48,6 +48,9 @@ export const with%s = withSourceQuery({
 		filter: %s,
 		orderBy: %s,
 	},
+	query:   createQueryStore<IBulkFilterSchema, IBulkOrderBySchema>({
+		name: "BulkQueryRpcHandler",
+	}),
 });
 		', [
 			$rpcName,

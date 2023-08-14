@@ -23,7 +23,7 @@ class SchemaExport extends AbstractExport {
 
 	protected function toZod(ISchema $schema): string {
 		if ($orderBy = $schema->getMeta('orderBy')) {
-			return sprintf('z.record(z.enum(z.enum([%s], ["asc", "desc"])))', implode(', ', array_map(function ($item) {
+			return sprintf('z.record(z.enum([%s]), z.enum(["asc", "desc"]))', implode(', ', array_map(function ($item) {
 				return sprintf('"%s"', $item);
 			}, $orderBy)));
 		}

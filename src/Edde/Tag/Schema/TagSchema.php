@@ -3,14 +3,20 @@ declare(strict_types=1);
 
 namespace Edde\Tag\Schema;
 
-abstract class TagSchema {
-	abstract function id(): string;
+interface TagSchema {
+	const meta = [
+		'import' => [
+			'TagSchema' => '@leight/utils',
+		],
+	];
 
-	abstract function code(): string;
+	function id(): string;
 
-	abstract function tag(): string;
+	function code(): string;
 
-	abstract function group(): string;
+	function tag(): string;
 
-	abstract function sort(): ?int;
+	function group(): string;
+
+	function sort(): ?int;
 }

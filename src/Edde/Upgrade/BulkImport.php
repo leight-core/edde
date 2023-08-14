@@ -5,7 +5,7 @@ namespace Edde\Upgrade;
 
 use Edde\Phinx\CommonMigration;
 
-final class BulkImport extends CommonMigration {
+class BulkImport extends CommonMigration {
 	public function change(): void {
 		$this
 			->createUuidTable('z_bulk', [

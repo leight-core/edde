@@ -18,8 +18,6 @@ interface IRpcHandler {
 	 */
 	public function getName(): string;
 
-	public function isMutator(): bool;
-
 	public function getMeta(): RpcHandlerMeta;
 
 	/**

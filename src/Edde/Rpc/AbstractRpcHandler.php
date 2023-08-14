@@ -15,8 +15,11 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 	protected $responseSchema = null;
 	protected $responseSchemaOptional = false;
 	protected $responseSchemaArray = false;
+	protected $filterSchema = null;
+	protected $orderBySchema = null;
 	protected $isMutator = false;
 	protected $isFetch = false;
+	protected $isQuery = false;
 	protected $withForm = false;
 	protected $meta;
 
@@ -28,17 +31,16 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 		);
 	}
 
-	public function isMutator(): bool {
-		return $this->isMutator;
-	}
-
 	public function getMeta(): RpcHandlerMeta {
 		return $this->meta ?: $this->meta = (new RpcHandlerMeta(
 			$this->getRequestMeta(),
 			$this->getResponseMeta()
 		))
+			->withFilterSchema($this->filterSchema)
+			->withOrderBySchema($this->orderBySchema)
 			->withMutator($this->isMutator)
 			->withFetch($this->isFetch)
+			->withQuery($this->isQuery && ($this->filterSchema || $this->orderBySchema))
 			->withForm($this->withForm);
 	}
 

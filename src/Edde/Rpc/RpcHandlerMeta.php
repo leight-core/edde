@@ -15,6 +15,14 @@ class RpcHandlerMeta {
 	 * @var RpcWireMeta
 	 */
 	protected $responseMeta;
+	/**
+	 * @var string|null
+	 */
+	protected $filterSchema;
+	/**
+	 * @var string|null
+	 */
+	protected $orderBySchema;
 	protected $features = [];
 
 	/**
@@ -32,6 +40,24 @@ class RpcHandlerMeta {
 
 	public function getResponseMeta(): RpcWireMeta {
 		return $this->responseMeta;
+	}
+
+	public function withFilterSchema(?string $filterSchema): self {
+		$this->filterSchema = $filterSchema;
+		return $this;
+	}
+
+	public function getFilterSchema(): ?string {
+		return $this->filterSchema;
+	}
+
+	public function withOrderBySchema(?string $orderBySchema): self {
+		$this->orderBySchema = $orderBySchema;
+		return $this;
+	}
+
+	public function getOrderBySchema(): ?string {
+		return $this->orderBySchema;
 	}
 
 	public function withMutator(bool $enable): self {
@@ -56,6 +82,18 @@ class RpcHandlerMeta {
 
 	public function isFetch(): bool {
 		return in_array('fetch', $this->features);
+	}
+
+	public function withQuery(bool $enable): self {
+		if (!$enable) {
+			return $this;
+		}
+		$this->features[] = 'query';
+		return $this;
+	}
+
+	public function isQuery(): bool {
+		return in_array('query', $this->features);
 	}
 
 	public function withForm(bool $enable): self {

@@ -21,7 +21,7 @@ class BulkImport extends CommonMigration {
 				'comment' => 'When a human checks the bulk, commit means "it\'s done.".',
 				'default' => false,
 			])
-			->addIdForeignColumn('user', 'main_user')
+			->addStringColumn('user_id', 36)
 			->save();
 
 		$this
@@ -41,7 +41,7 @@ class BulkImport extends CommonMigration {
 				'comment' => 'JSON encoded response (including error).',
 				'null'    => true,
 			])
-			->addIdForeignColumn('user', 'main_user')
+			->addStringColumn('user_id', 36)
 			->save();
 	}
 }

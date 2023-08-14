@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Rpc;
 
-use Edde\Bulk\Schema\BulkSchema;
+use Edde\Bulk\Schema\BulkItemSchema;
 use Edde\Dto\SmartDto;
 use Edde\Rpc\AbstractRpcHandler;
 
-class BulkQueryRpcHandler extends AbstractRpcHandler {
-	protected $responseSchema = BulkSchema::class;
+class BulkItemQueryRpcHandler extends AbstractRpcHandler {
+	protected $responseSchema = BulkItemSchema::class;
 	protected $responseSchemaArray = true;
 
 	public function handle(SmartDto $request) {

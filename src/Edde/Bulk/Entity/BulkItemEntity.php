@@ -6,6 +6,10 @@ namespace Edde\Bulk\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Edde\Doctrine\AbstractUuidEntity;
 
+/**
+ * @ORM\Entity()
+ * @ORM\Table(name="z_bulk_item")
+ */
 class BulkItemEntity extends AbstractUuidEntity {
 	/**
 	 * @ORM\Column(type="integer")

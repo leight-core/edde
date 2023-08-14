@@ -7,8 +7,11 @@ use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Edde\Doctrine\AbstractUuidEntity;
-use Marsh\Client\Entity\ClientFavouriteEntity;
 
+/**
+ * @ORM\Entity()
+ * @ORM\Table(name="z_bulk")
+ */
 class BulkEntity extends AbstractUuidEntity {
 	/**
 	 * @ORM\Column(type="string", length=512)

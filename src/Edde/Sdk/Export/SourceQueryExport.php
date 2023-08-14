@@ -62,7 +62,7 @@ export const with%s = withSourceQuery({
 			$orderBySchema,
 			$filterSchema,
 			$orderBySchema,
-			$this->escapeHandlerName(get_class($this->handler)),
+			$this->handler->getName(),
 		]);
 
 		return $this->toExport($export);

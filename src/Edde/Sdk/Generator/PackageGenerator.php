@@ -11,7 +11,7 @@ class PackageGenerator extends AbstractGenerator {
 	protected function generatePackageJson() {
 		$this->writeTo("package.json", str_replace('\/', '/', json_encode([
 			'version'         => '0.5.0',
-			'name' => $this->package,
+			'name'            => $this->package,
 			'description'     => 'Generated SDK',
 			'sideEffects'     => false,
 			'type'            => 'module',
@@ -19,6 +19,8 @@ class PackageGenerator extends AbstractGenerator {
 			'module'          => 'src/index.ts',
 			'types'           => 'src/index.ts',
 			'dependencies'    => [
+				'@leight/auth' => '^0.6.0',
+				'@leight/bulk' => '^0.6.0',
 				'@leight/rpc'   => '^0.6.0',
 				'@leight/utils' => '^0.6.0',
 			],

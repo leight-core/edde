@@ -4,9 +4,8 @@ declare(strict_types=1);
 namespace Edde\Sdk\Export;
 
 use Edde\Rpc\Service\IRpcHandler;
-use Edde\Sdk\AbstractExport;
 
-class SourceQueryExport extends AbstractExport {
+class SourceQueryExport extends AbstractRpcExport {
 	/**
 	 * @var IRpcHandler
 	 */

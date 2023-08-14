@@ -40,11 +40,13 @@ class SourceQueryExport extends AbstractRpcExport {
 export const with%s = withSourceQuery({
 	service: "%s",
 	schema:  {
-		...withQuerySchema({
+		request: withQuerySchema({
 			filterSchema:  %s,
 			orderBySchema: %s,
 		}),
 		response: %s,
+		filter: %s,
+		orderBy: %s,
 	},
 });
 		', [
@@ -53,6 +55,8 @@ export const with%s = withSourceQuery({
 			$filterSchema,
 			$orderBySchema,
 			$responseMeta->isArray() ? sprintf('z.array(%s)', $responseType) : $responseType,
+			$filterSchema,
+			$orderBySchema,
 		]);
 
 		return $this->toExport($export);

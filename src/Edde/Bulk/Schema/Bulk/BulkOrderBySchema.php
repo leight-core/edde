@@ -6,8 +6,8 @@ namespace Edde\Bulk\Schema\Bulk;
 interface BulkOrderBySchema {
 	const meta = [
 		'orderBy' => [
-			'field',
-			'field2',
+			'created',
+			'name',
 		],
 	];
 }

@@ -8,6 +8,12 @@ namespace Edde\Auth\Schema;
  * necessary data on the wire.
  */
 interface SessionSchema {
+	const meta = [
+		'import' => [
+			'SessionSchema' => '@leight/auth',
+		],
+	];
+
 	/**
 	 * User id
 	 */

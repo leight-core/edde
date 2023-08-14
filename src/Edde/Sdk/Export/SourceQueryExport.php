@@ -3,9 +3,20 @@ declare(strict_types=1);
 
 namespace Edde\Sdk\Export;
 
+use Edde\Rpc\Service\IRpcHandler;
 use Edde\Sdk\AbstractExport;
 
 class SourceQueryExport extends AbstractExport {
+	/**
+	 * @var IRpcHandler
+	 */
+	protected $handler;
+
+	public function withHandler(IRpcHandler $handler): self {
+		$this->handler = $handler;
+		return $this;
+	}
+
 	public function export(): ?string {
 		$import = [
 			'import {withSourceQuery} from "@leight/source";',

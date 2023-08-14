@@ -14,10 +14,11 @@ class RpcHandlerGenerator extends AbstractGenerator {
 
 		foreach ($this->rpcHandlerIndex->getHandlers() as $name) {
 			$handler = $this->rpcService->resolve($name);
+			$meta = $handler->getMeta();
 
 			$this->writeTo(
 				sprintf('src/rpc/with%s.ts', $handler->getName()),
-				$handler->isMutator() ? $mutationExport->withHandler($handler)->export() : $queryExport->withHandler($handler)->export()
+				$meta->isMutator() ? $mutationExport->withHandler($handler)->export() : $queryExport->withHandler($handler)->export()
 			);
 			$this->writeTo(
 				sprintf('src/$export/with%s.ts', $handler->getName()),

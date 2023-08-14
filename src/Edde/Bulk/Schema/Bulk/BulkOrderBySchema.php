@@ -4,5 +4,10 @@ declare(strict_types=1);
 namespace Edde\Bulk\Schema\Bulk;
 
 interface BulkOrderBySchema {
-	function created($meta = ['ts-type' => '"asc" | "desc"']): ?string;
+	const meta = [
+		'orderBy' => [
+			'field',
+			'field2',
+		],
+	];
 }

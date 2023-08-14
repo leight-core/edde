@@ -22,6 +22,12 @@ class SchemaExport extends AbstractExport {
 	}
 
 	protected function toZod(ISchema $schema): string {
+		if ($orderBy = $schema->getMeta('orderBy')) {
+			return sprintf('z.record(z.enum(["asc", "desc"], z.enum([%s])));', implode(', ', array_map(function ($item) {
+				return sprintf('"%s"', $item);
+			}, $orderBy)));
+		}
+
 		$zod = [];
 		foreach ($schema->getAttributes() as $attribute) {
 			$type = "z.any()";
@@ -62,7 +68,6 @@ E;
 				return sprintf("export {%s} from \"%s\";", $import, $package);
 			}, array_keys($import), $import));
 		}
-
 		$schemaName = $this->getSchemaName($schema);
 		return <<<E
 export const ${schemaName}Schema = {$this->toZod($schema)};

@@ -39,7 +39,7 @@ class BulkEntity extends AbstractUuidEntity {
 	 */
 	public $created;
 	/**
-	 * @ORM\Column(type="string", length=36)
+	 * @ORM\Column(type="string", name="user_id", length=36)
 	 * @var string
 	 */
 	public $userId;

@@ -13,4 +13,6 @@ abstract class BulkCreateSchema {
 	];
 
 	abstract function name(): string;
+
+	abstract function service(): string;
 }

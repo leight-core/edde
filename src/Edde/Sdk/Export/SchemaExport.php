@@ -57,6 +57,16 @@ E;
 	}
 
 	protected function toZodSchema(ISchema $schema): string {
+		if ($import = $schema->getMeta('import')) {
+			return implode("\n", array_map(function ($import) {
+				[
+					$import,
+					$package,
+				] = $import;
+				return sprintf("export {%s} from \"%s\";", $import, $package);
+			}, $import));
+		}
+
 		$schemaName = $this->getSchemaName($schema);
 		return <<<E
 export const ${schemaName}Schema = {$this->toZod($schema)};

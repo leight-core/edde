@@ -4,6 +4,12 @@ declare(strict_types=1);
 namespace Edde\Bulk\Schema;
 
 abstract class BulkSchema {
+	public $meta = [
+		'import' => [
+			'BulkSchema' => '@leight/bulk',
+		],
+	];
+
 	abstract function id(): string;
 
 	abstract function created(): string;

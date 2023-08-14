@@ -69,4 +69,8 @@ class Attribute implements IAttribute {
 		}
 		return $this->source->schema;
 	}
+
+	public function getMeta(): array {
+		return $this->source->meta;
+	}
 }

@@ -66,4 +66,11 @@ interface IAttribute {
 	 * @throws SchemaException
 	 */
 	public function getSchema(): ISchema;
+
+	/**
+	 * Return attribute's attached meta array if any
+	 *
+	 * @return array
+	 */
+	public function getMeta(): array;
 }

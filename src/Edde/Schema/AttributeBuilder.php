@@ -20,6 +20,7 @@ class AttributeBuilder implements IAttributeBuilder {
 			'load'       => false,
 			'schema'     => null,
 			'instanceOf' => null,
+			'meta' => [],
 		];
 	}
 
@@ -58,6 +59,11 @@ class AttributeBuilder implements IAttributeBuilder {
 
 	public function instanceOf(string $class): IAttributeBuilder {
 		$this->source->instanceOf = $class;
+		return $this;
+	}
+
+	public function meta(array $meta): IAttributeBuilder {
+		$this->source->meta = $meta;
 		return $this;
 	}
 

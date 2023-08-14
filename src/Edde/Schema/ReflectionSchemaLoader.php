@@ -100,6 +100,9 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 						case 'instanceOf':
 							$attributeBuilder->instanceOf($parameter->getDefaultValue());
 							break;
+						case 'meta':
+							$attributeBuilder->meta($parameter->getDefaultValue());
+							break;
 						default:
 							throw new SchemaException(sprintf('Unknown schema [%s::%s] directive [%s].', $schema, $attributeName, $parameterName));
 					}

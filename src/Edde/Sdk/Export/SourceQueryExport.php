@@ -59,7 +59,7 @@ export const with%s = withSourceQuery({
 			$this->escapeHandlerName(get_class($this->handler)),
 			$filterSchema,
 			$orderBySchema,
-			$responseMeta->isArray() ? sprintf('z.array(%s)', $responseType) : $responseType,
+			$responseType,
 			$this->handler->getName(),
 			$filterSchema,
 			$orderBySchema,

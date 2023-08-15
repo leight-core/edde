@@ -53,6 +53,8 @@ interface IRepository {
 	 */
 	public function all(string $alias): array;
 
+	public function deleteBy(SmartDto $request);
+
 	/**
 	 * @param string $alias
 	 * @param Query  $query

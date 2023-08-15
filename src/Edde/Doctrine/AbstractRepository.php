@@ -75,6 +75,12 @@ abstract class AbstractRepository implements IRepository {
 			->getResult());
 	}
 
+	public function deleteBy(SmartDto $request) {
+		$entity = $this->find($request->getValue('id'));
+		$this->entityManager->remove($entity);
+		return $entity;
+	}
+
 	public function total(Query $query): int {
 		/**
 		 * Here we have to create empty query builder and setup it manually as the one from Repository

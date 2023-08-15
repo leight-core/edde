@@ -17,7 +17,7 @@ class BulkService {
 	use BulkDtoMapperTrait;
 	use SmartServiceTrait;
 
-	public function create(SmartDto $request) {
+	public function create(SmartDto $request): SmartDto {
 		return $this->bulkDtoMapper->item(
 			$this->bulkRepository->save(
 				$this->smartService->cloneTo($request, BulkSchema::class, [
@@ -28,5 +28,9 @@ class BulkService {
 				])
 			)
 		);
+	}
+
+	public function delete(SmartDto $request): SmartDto {
+		return $this->bulkDtoMapper->item($this->bulkRepository->deleteBy($request));
 	}
 }

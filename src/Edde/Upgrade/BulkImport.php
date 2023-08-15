@@ -11,7 +11,7 @@ class BulkImport extends CommonMigration {
 			->createUuidTable('z_bulk', [
 				'comment' => 'Common bulk "header" for bulk items.',
 			])
-			->addColumn('created', 'datetime', ['comment' => 'Timestamp when a job was scheduled (basically also started).'])
+			->addColumn('created', 'datetime')
 			->addStringColumn('name', 512, ['comment' => 'Human readable name of this bulk import.'])
 			->addStringColumn('service', 512, ['comment' => 'Service being called.'])
 			->addColumn('status', 'integer', [
@@ -42,6 +42,7 @@ class BulkImport extends CommonMigration {
 				'comment' => 'JSON encoded response (including error).',
 				'null'    => true,
 			])
+			->addColumn('created', 'datetime')
 			->addStringColumn('user_id', 36)
 			->save();
 	}

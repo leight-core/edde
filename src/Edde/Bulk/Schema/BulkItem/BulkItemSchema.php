@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Edde\Bulk\Schema\BulkItem;
 
 use Edde\Bulk\Schema\Bulk\BulkSchema;
+use Edde\Date\Mapper\IsoDateMapper;
 
 interface BulkItemSchema {
 	const meta = [
@@ -19,6 +20,8 @@ interface BulkItemSchema {
 	function bulkId(): string;
 
 	function bulk($load = true): BulkSchema;
+
+	function created($output = IsoDateMapper::class): string;
 
 	function status(): int;
 

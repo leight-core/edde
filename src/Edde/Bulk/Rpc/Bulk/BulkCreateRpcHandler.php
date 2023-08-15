@@ -12,8 +12,8 @@ use Edde\Rpc\AbstractRpcHandler;
 class BulkCreateRpcHandler extends AbstractRpcHandler {
 	use BulkServiceTrait;
 
-	protected $responseSchema = BulkSchema::class;
 	protected $requestSchema = BulkCreateSchema::class;
+	protected $responseSchema = BulkSchema::class;
 	protected $isMutator = true;
 	protected $withForm = true;
 	protected $invalidators = [

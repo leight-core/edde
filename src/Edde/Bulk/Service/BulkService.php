@@ -43,4 +43,8 @@ class BulkService {
 			'commit' => true,
 		]));
 	}
+
+	public function query(SmartDto $request): array {
+		return $this->bulkDtoMapper->map($this->bulkRepository->withQuery('b', $request));
+	}
 }

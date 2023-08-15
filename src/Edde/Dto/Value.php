@@ -21,11 +21,11 @@ class Value {
 	 */
 	protected $attribute;
 	/**
-	 * @var IMapper|null
+	 * @var IMapper
 	 */
 	protected $input;
 	/**
-	 * @var IMapper|null
+	 * @var IMapper
 	 */
 	protected $output;
 	/**
@@ -46,7 +46,7 @@ class Value {
 	 * @param ISchema    $schema
 	 * @param IAttribute $attribute
 	 */
-	public function __construct(ISchema $schema, IAttribute $attribute, ?IMapper $input, ?IMapper $output) {
+	public function __construct(ISchema $schema, IAttribute $attribute, IMapper $input, IMapper $output) {
 		$this->schema = $schema;
 		$this->attribute = $attribute;
 		$this->input = $input;
@@ -75,6 +75,10 @@ class Value {
 	}
 
 	public function get() {
+		return $this->output->item($this->getRaw());
+	}
+
+	public function getRaw() {
 		return $this->isUndefined ? $this->attribute->getDefault() : $this->value;
 	}
 

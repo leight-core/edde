@@ -52,7 +52,7 @@ export const with%s = withMutation({
 			$responseSchema,
 			$responseMeta->isOptional() ? '.nullish()' : '',
 			implode(', ', array_map(function ($item) {
-				return sprintf('"%s"', $item);
+				return sprintf('"%s"', $this->escapeHandlerName($item));
 			}, $meta->getInvalidators())),
 		]);
 

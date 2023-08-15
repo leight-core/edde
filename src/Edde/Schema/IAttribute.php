@@ -73,4 +73,8 @@ interface IAttribute {
 	 * @return array
 	 */
 	public function getMeta(): array;
+
+	public function getInput(): ?string;
+
+	public function getOutput(): ?string;
 }

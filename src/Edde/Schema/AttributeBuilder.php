@@ -67,6 +67,16 @@ class AttributeBuilder implements IAttributeBuilder {
 		return $this;
 	}
 
+	public function input(array $input): IAttributeBuilder {
+		$this->source->input = $input;
+		return $this;
+	}
+
+	public function output(array $output): IAttributeBuilder {
+		$this->source->output = $output;
+		return $this;
+	}
+
 	/** @inheritdoc */
 	public function getAttribute(): IAttribute {
 		return $this->attribute ?: $this->attribute = new Attribute($this->source);

@@ -3,12 +3,16 @@ declare(strict_types=1);
 
 namespace Edde\Dto;
 
+use Edde\Container\ContainerTrait;
+use Edde\Mapper\MapperServiceTrait;
 use Edde\Schema\ISchema;
 use Edde\Schema\SchemaException;
 use Edde\Schema\SchemaManagerTrait;
 
 class SmartService implements ISmartService {
 	use SchemaManagerTrait;
+	use ContainerTrait;
+	use MapperServiceTrait;
 
 	/**
 	 * @param string $schema
@@ -22,7 +26,7 @@ class SmartService implements ISmartService {
 	}
 
 	public function createFromSchema(ISchema $schema): SmartDto {
-		return SmartDto::ofSchema($schema);
+		return $this->container->injectOn(SmartDto::ofSchema($schema, $this->mapperService));
 	}
 
 	/**

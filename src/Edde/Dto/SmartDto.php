@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Edde\Dto;
 
 use Edde\Dto\Exception\SmartDtoException;
+use Edde\Mapper\MapperService;
+use Edde\Mapper\MapperServiceTrait;
 use Edde\Schema\IAttribute;
 use Edde\Schema\ISchema;
 use Edde\Schema\Schema;
@@ -16,6 +18,8 @@ use stdClass;
 use Traversable;
 
 class SmartDto implements IDto, IteratorAggregate {
+	use MapperServiceTrait;
+
 	/**
 	 * @var ISchema
 	 */
@@ -212,11 +216,11 @@ class SmartDto implements IDto, IteratorAggregate {
 				if ($attribute->isArray()) {
 					$array = [];
 					foreach ($v as $_k => $_v) {
-						$array[$_k] = self::ofSchema($schema)->from($_v);
+						$array[$_k] = self::ofSchema($schema, $this->mapperService)->from($_v);
 					}
 					$v = $array;
 				} else {
-					$v = self::ofSchema($schema)->from($v);
+					$v = self::ofSchema($schema, $this->mapperService)->from($v);
 				}
 			}
 			$this->set($k, $v);
@@ -313,12 +317,17 @@ class SmartDto implements IDto, IteratorAggregate {
 		}
 	}
 
-	static public function ofSchema(ISchema $schema): self {
+	static public function ofSchema(ISchema $schema, MapperService $mapperService): self {
 		return new self(
 			$schema,
 			array_map(
-				function (IAttribute $attribute) use ($schema) {
-					return new Value($schema, $attribute);
+				function (IAttribute $attribute) use ($schema, $mapperService) {
+					return new Value(
+						$schema,
+						$attribute,
+						$mapperService->getMapper($attribute->getInput()),
+						$mapperService->getMapper($attribute->getOutput())
+					);
 				},
 				$schema->getAttributes()
 			)

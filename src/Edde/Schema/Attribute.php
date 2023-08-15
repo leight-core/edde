@@ -28,18 +28,8 @@ class Attribute implements IAttribute {
 	}
 
 	/** @inheritdoc */
-	public function getValidator(): ?string {
-		return $this->source->validator ?? null;
-	}
-
-	/** @inheritdoc */
 	public function getDefault() {
 		return $this->source->default ?? null;
-	}
-
-	/** @inheritdoc */
-	public function getFilter(string $name): ?string {
-		return $this->source->filters[$name] ?? null;
 	}
 
 	public function isArray(): bool {
@@ -72,5 +62,13 @@ class Attribute implements IAttribute {
 
 	public function getMeta(): array {
 		return $this->source->meta;
+	}
+
+	public function getInput(): ?string {
+		return $this->source->input;
+	}
+
+	public function getOutput(): ?string {
+		return $this->source->output;
 	}
 }

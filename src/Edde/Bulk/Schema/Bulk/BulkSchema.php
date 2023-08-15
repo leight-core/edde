@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Schema\Bulk;
 
+use Edde\Date\Mapper\IsoDateMapper;
+
 interface BulkSchema {
 	const meta = [
 		'import' => [
@@ -22,7 +24,7 @@ interface BulkSchema {
 
 	function commit(): bool;
 
-	function created(): string;
+	function created($output = IsoDateMapper::class): string;
 
 	function userId(): string;
 }

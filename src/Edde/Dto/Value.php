@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Edde\Dto;
 
 use Edde\Dto\Exception\SmartDtoException;
+use Edde\Mapper\IMapper;
 use Edde\Schema\IAttribute;
 use Edde\Schema\ISchema;
 
@@ -19,6 +20,14 @@ class Value {
 	 * @var IAttribute
 	 */
 	protected $attribute;
+	/**
+	 * @var IMapper|null
+	 */
+	protected $input;
+	/**
+	 * @var IMapper|null
+	 */
+	protected $output;
 	/**
 	 * Undefined state changes in the moment, when any value (including false, null and so on) is
 	 * set. If you need to mark value as undefined, use explicit method for it.
@@ -37,9 +46,11 @@ class Value {
 	 * @param ISchema    $schema
 	 * @param IAttribute $attribute
 	 */
-	public function __construct(ISchema $schema, IAttribute $attribute) {
+	public function __construct(ISchema $schema, IAttribute $attribute, ?IMapper $input, ?IMapper $output) {
 		$this->schema = $schema;
 		$this->attribute = $attribute;
+		$this->input = $input;
+		$this->output = $output;
 	}
 
 	/**

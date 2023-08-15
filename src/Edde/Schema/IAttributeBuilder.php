@@ -58,6 +58,14 @@ interface IAttributeBuilder {
 	 */
 	public function schema(ISchema $schema): IAttributeBuilder;
 
+	public function instanceOf(string $class): IAttributeBuilder;
+
+	public function meta(array $meta): IAttributeBuilder;
+
+	public function input(array $input): IAttributeBuilder;
+
+	public function output(array $output): IAttributeBuilder;
+
 	/**
 	 * creates and return a attribute
 	 *

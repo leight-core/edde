@@ -15,6 +15,10 @@ class BulkDeleteRpcHandler extends AbstractRpcHandler {
 	protected $requestSchema = WithIdentitySchema::class;
 	protected $responseSchema = BulkSchema::class;
 	protected $isMutator = true;
+	protected $invalidators = [
+		BulkQueryRpcHandler::class,
+		BulkFetchRpcHandler::class,
+	];
 
 	public function handle(SmartDto $request) {
 		return $this->bulkService->delete($request);

@@ -46,4 +46,6 @@ interface ISmartService {
 	 * @return SmartDto
 	 */
 	public function check(SmartDto $dto, string $schema): SmartDto;
+
+	public function cloneTo(SmartDto $dto, string $schema, ?object $merge = null): SmartDto;
 }

@@ -62,4 +62,14 @@ class SmartService implements ISmartService {
 		$this->from($dto->export(), $schema);
 		return $dto;
 	}
+
+	public function cloneTo(SmartDto $dto, string $schema, ?object $merge = null): SmartDto {
+		return $this->from(
+			array_merge(
+				(array)$dto->export(),
+				(array)$merge ?? []
+			),
+			$schema
+		);
+	}
 }

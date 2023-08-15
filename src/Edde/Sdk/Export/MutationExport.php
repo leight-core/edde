@@ -39,7 +39,7 @@ export const with%s = withMutation({
 		response: %s%s,
 	},
 	invalidator: ({queryClient}) => {
-	%s
+		%s
 	}
 });
 		', [

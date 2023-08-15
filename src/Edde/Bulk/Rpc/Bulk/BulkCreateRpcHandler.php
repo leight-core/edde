@@ -18,6 +18,7 @@ class BulkCreateRpcHandler extends AbstractRpcHandler {
 	protected $withForm = true;
 	protected $invalidators = [
 		BulkQueryRpcHandler::class,
+		BulkFetchRpcHandler::class,
 	];
 
 	public function handle(SmartDto $request) {

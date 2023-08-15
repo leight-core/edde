@@ -39,7 +39,7 @@ export const with%s = withMutation({
 		response: %s%s,
 	},
 	invalidator: ({queryClient}) => {
-		%s
+	%s
 	}
 });
 		', [
@@ -50,7 +50,7 @@ export const with%s = withMutation({
 			$responseSchema,
 			$responseMeta->isOptional() ? '.nullish()' : '',
 			implode(
-				"\n\t",
+				"\n\t\t",
 				array_map(
 					function ($item) {
 						return sprintf("queryClient.invalidateQueries({

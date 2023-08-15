@@ -341,7 +341,7 @@ class SmartDto implements IDto, IteratorAggregate {
 	}
 
 	static public function exportOf($export) {
-		if (!$export) {
+		if ($export === null) {
 			return null;
 		} else if (!$export instanceof SmartDto && !is_array($export)) {
 			throw new SmartDtoException(sprintf('Exporting an unknown value of type [%s].', gettype($export)));

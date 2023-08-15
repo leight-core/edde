@@ -82,11 +82,12 @@ E;
 		];
 		if ($this->schema->getMeta('import')) {
 			$imports = [];
-		}
-		foreach ($this->schema->getAttributes() as $attribute) {
-			if ($attribute->hasSchema()) {
-				$schema = $this->getSchemaName($attribute->getSchema()) . 'Schema';
-				$imports[$schema] = sprintf('import {%s} from "./%s";', $schema, $schema);
+		} else {
+			foreach ($this->schema->getAttributes() as $attribute) {
+				if ($attribute->hasSchema()) {
+					$schema = $this->getSchemaName($attribute->getSchema()) . 'Schema';
+					$imports[$schema] = sprintf('import {%s} from "./%s";', $schema, $schema);
+				}
 			}
 		}
 		return $this->toExport([

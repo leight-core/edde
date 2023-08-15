@@ -6,6 +6,7 @@ namespace Edde\Bootstrap;
 use Edde\Auth\Rpc\LoginRpcHandler;
 use Edde\Auth\Rpc\LogoutRpcHandler;
 use Edde\Auth\Rpc\TicketRpcHandler;
+use Edde\Bulk\Rpc\Bulk\BulkCommitRpcHandler;
 use Edde\Bulk\Rpc\Bulk\BulkCreateRpcHandler;
 use Edde\Bulk\Rpc\Bulk\BulkDeleteRpcHandler;
 use Edde\Bulk\Rpc\Bulk\BulkFetchRpcHandler;
@@ -29,6 +30,7 @@ class BootstrapDefaultRpcIndex extends AbstractBootstrap {
 			BulkCreateRpcHandler::class,
 			BulkQueryRpcHandler::class,
 			BulkFetchRpcHandler::class,
+			BulkCommitRpcHandler::class,
 			BulkDeleteRpcHandler::class,
 			BulkItemQueryRpcHandler::class,
 			BulkItemFetchRpcHandler::class,

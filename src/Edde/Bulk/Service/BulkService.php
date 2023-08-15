@@ -33,4 +33,10 @@ class BulkService {
 	public function delete(SmartDto $request): SmartDto {
 		return $this->bulkDtoMapper->item($this->bulkRepository->deleteBy($request));
 	}
+
+	public function commit(SmartDto $request) {
+		$this->bulkRepository->patch($this->smartService->cloneTo($request, BulkSchema::class, [
+			'commit' => true,
+		]));
+	}
 }

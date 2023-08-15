@@ -62,9 +62,9 @@ interface IAttributeBuilder {
 
 	public function meta(array $meta): IAttributeBuilder;
 
-	public function input(array $input): IAttributeBuilder;
+	public function input(string $input): IAttributeBuilder;
 
-	public function output(array $output): IAttributeBuilder;
+	public function output(string $output): IAttributeBuilder;
 
 	/**
 	 * creates and return a attribute

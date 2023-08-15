@@ -67,12 +67,12 @@ class AttributeBuilder implements IAttributeBuilder {
 		return $this;
 	}
 
-	public function input(array $input): IAttributeBuilder {
+	public function input(string $input): IAttributeBuilder {
 		$this->source->input = $input;
 		return $this;
 	}
 
-	public function output(array $output): IAttributeBuilder {
+	public function output(string $output): IAttributeBuilder {
 		$this->source->output = $output;
 		return $this;
 	}

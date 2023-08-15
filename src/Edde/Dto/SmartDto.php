@@ -318,7 +318,7 @@ class SmartDto implements IDto, IteratorAggregate {
 	}
 
 	static public function ofSchema(ISchema $schema, MapperService $mapperService): self {
-		return new self(
+		$dto = new self(
 			$schema,
 			array_map(
 				function (IAttribute $attribute) use ($schema, $mapperService) {
@@ -332,6 +332,8 @@ class SmartDto implements IDto, IteratorAggregate {
 				$schema->getAttributes()
 			)
 		);
+		$dto->setMapperService($mapperService);
+		return $dto;
 	}
 
 	static public function ofDummy(): self {

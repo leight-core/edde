@@ -26,7 +26,7 @@ class SmartService implements ISmartService {
 	}
 
 	public function createFromSchema(ISchema $schema): SmartDto {
-		return $this->container->injectOn(SmartDto::ofSchema($schema, $this->mapperService));
+		return SmartDto::ofSchema($schema, $this->mapperService);
 	}
 
 	/**

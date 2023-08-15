@@ -261,8 +261,8 @@ class SmartDto implements IDto, IteratorAggregate {
 		return $object;
 	}
 
-	public function export(): object {
-		return (object)iterator_to_array($this->getValues());
+	public function export(bool $raw = false): object {
+		return (object)iterator_to_array($this->getValues($raw));
 	}
 
 	/**
@@ -290,13 +290,13 @@ class SmartDto implements IDto, IteratorAggregate {
 	 *
 	 * @return Value[]|Generator|Traversable
 	 */
-	public function getValues() {
+	public function getValues(bool $raw = false) {
 		foreach ($this->values as $k => $value) {
 			if ($value->isUndefined()) {
 				continue;
 			}
 			$attribute = $value->getAttribute();
-			$v = $value->get();
+			$v = $raw ? $value->getRaw() : $value->get();
 			if ($v instanceof SmartDto) {
 				$v = $v->export();
 			} else if ($attribute->isArray()) {

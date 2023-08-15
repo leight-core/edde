@@ -80,6 +80,9 @@ E;
 		$imports = [
 			'import {z} from "@leight/utils";',
 		];
+		if ($this->schema->getMeta('import')) {
+			$imports = [];
+		}
 		foreach ($this->schema->getAttributes() as $attribute) {
 			if ($attribute->hasSchema()) {
 				$schema = $this->getSchemaName($attribute->getSchema()) . 'Schema';

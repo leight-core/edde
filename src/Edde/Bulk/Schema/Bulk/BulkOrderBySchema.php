@@ -5,6 +5,11 @@ namespace Edde\Bulk\Schema\Bulk;
 
 interface BulkOrderBySchema {
 	const meta = [
+		'import' => [
+			'type IBulkOrderBy'       => '@leight/bulk',
+			'type IBulkOrderBySchema' => '@leight/bulk',
+			'BulkOrderBySchema'       => '@leight/bulk',
+		],
 		'orderBy' => [
 			'created',
 			'name',

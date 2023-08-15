@@ -13,4 +13,5 @@ class BulkRepository extends AbstractRepository {
 			'$.created' => 'ASC',
 		];
 	}
+
 }

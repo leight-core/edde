@@ -8,7 +8,6 @@ class SourceQueryExport extends AbstractRpcExport {
 		$import = [
 			'import {withSourceQuery} from "@leight/rpc";',
 			'import {withQuerySchema, createQueryStore} from "@leight/query";',
-			'import {z} from "@leight/utils";',
 		];
 
 		$rpcName = $this->handler->getName();

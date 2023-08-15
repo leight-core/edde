@@ -41,7 +41,7 @@ class RpcService {
 			try {
 				$service = $this->resolve($name);
 				$result = $service->handle(
-					($requestSchema = $service->getMeta()->getRequestMeta()->getSchema()) ? $this->smartService->from((object)$bulk->getValue('data'), $requestSchema) : SmartDto::ofDummy()
+					($requestSchema = $service->getMeta()->getRequestMeta()->getSchema()) ? $this->smartService->from((object)$bulk->getValue('data'), $requestSchema) : $this->container->injectOn(SmartDto::ofDummy())
 				);
 				$response[$id] = (object)[
 					'data' => SmartDto::exportOf($result),

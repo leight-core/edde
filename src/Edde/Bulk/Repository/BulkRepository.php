@@ -10,7 +10,7 @@ class BulkRepository extends AbstractRepository {
 	public function __construct() {
 		parent::__construct(BulkEntity::class);
 		$this->orderBy = [
-			'created' => 'ASC',
+			'$.created' => 'ASC',
 		];
 	}
 }

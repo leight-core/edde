@@ -16,6 +16,9 @@ class BulkCreateRpcHandler extends AbstractRpcHandler {
 	protected $requestSchema = BulkCreateSchema::class;
 	protected $isMutator = true;
 	protected $withForm = true;
+	protected $invalidators = [
+		BulkQueryRpcHandler::class,
+	];
 
 	public function handle(SmartDto $request) {
 		return $this->bulkService->create($request);

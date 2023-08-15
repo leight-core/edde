@@ -11,4 +11,8 @@ interface BulkItemCreateSchema {
 			'BulkItemCreateSchema'       => '@leight/bulk',
 		],
 	];
+
+	function bulkId(): string;
+
+	function request(): string;
 }

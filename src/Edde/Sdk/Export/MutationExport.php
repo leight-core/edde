@@ -40,7 +40,7 @@ export const with%s = withMutation({
 	},
 	invalidator: ({queryClient}) => {
 		%s
-	}
+	},
 });
 		', [
 			$rpcName,

@@ -64,6 +64,6 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 		if (!$response || !$this->responseSchema) {
 			return null;
 		}
-		return $this->smartService->from((object)$response, $this->responseSchema);
+		return $this->smartService->from($response, $this->responseSchema);
 	}
 }

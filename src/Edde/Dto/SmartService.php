@@ -6,7 +6,6 @@ namespace Edde\Dto;
 use Edde\Container\ContainerTrait;
 use Edde\Mapper\MapperServiceTrait;
 use Edde\Schema\ISchema;
-use Edde\Schema\SchemaException;
 use Edde\Schema\SchemaManagerTrait;
 
 class SmartService implements ISmartService {
@@ -14,13 +13,6 @@ class SmartService implements ISmartService {
 	use ContainerTrait;
 	use MapperServiceTrait;
 
-	/**
-	 * @param string $schema
-	 *
-	 * @return SmartDto
-	 *
-	 * @throws SchemaException
-	 */
 	public function create(string $schema): SmartDto {
 		return $this->createFromSchema($this->schemaManager->load($schema));
 	}
@@ -29,28 +21,11 @@ class SmartService implements ISmartService {
 		return SmartDto::ofSchema($schema, $this->mapperService);
 	}
 
-	/**
-	 * @param object $object
-	 * @param string $schema
-	 *
-	 * @return SmartDto
-	 * @throws Exception\SmartDtoException
-	 * @throws SchemaException
-	 */
-	public function from(object $object, string $schema): SmartDto {
+	public function from($object, string $schema): SmartDto {
 		return $this->fromSchema($object, $this->schemaManager->load($schema));
 	}
 
-	/**
-	 * @param object  $object
-	 * @param ISchema $schema
-	 *
-	 * @return SmartDto
-	 *
-	 * @throws Exception\SmartDtoException
-	 * @throws SchemaException
-	 */
-	public function fromSchema(object $object, ISchema $schema): SmartDto {
+	public function fromSchema($object, ISchema $schema): SmartDto {
 		return $this->createFromSchema($schema)->from($object);
 	}
 
@@ -63,7 +38,7 @@ class SmartService implements ISmartService {
 		return $dto;
 	}
 
-	public function cloneTo(SmartDto $dto, string $schema, ?object $merge = null): SmartDto {
+	public function cloneTo(SmartDto $dto, string $schema, $merge = null): SmartDto {
 		return $this->from(
 			array_merge(
 				(array)$dto->export(),

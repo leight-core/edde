@@ -193,7 +193,7 @@ class SmartDto implements IDto, IteratorAggregate {
 	 * This method does recursive parsing, so when there is a property having a Schema,
 	 * new SmartDTO will be created & populated.
 	 *
-	 * @param object $object
+	 * @param object|array $object
 	 *
 	 * @return $this
 	 * @throws SmartDtoException
@@ -240,7 +240,7 @@ class SmartDto implements IDto, IteratorAggregate {
 	 * @throws ReflectionException
 	 * @throws SmartDtoException
 	 */
-	public function exportTo($object): object {
+	public function exportTo(object $object): object {
 		$reflection = new ReflectionClass($object);
 		foreach ($this->values as $k => $value) {
 			if ($value->isUndefined() || !$reflection->hasProperty($k)) {

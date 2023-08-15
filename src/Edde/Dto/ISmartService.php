@@ -26,14 +26,14 @@ interface ISmartService {
 	 * Creates smart dto from the given object using provided shape; the shape
 	 * controls properties and other stuff an $object must provide/fulfill.
 	 *
-	 * @param object $object
-	 * @param string $schema
+	 * @param object|array $object
+	 * @param string       $schema
 	 *
 	 * @return SmartDto
 	 */
-	public function from(object $object, string $schema): SmartDto;
+	public function from($object, string $schema): SmartDto;
 
-	public function fromSchema(object $object, ISchema $schema): SmartDto;
+	public function fromSchema($object, ISchema $schema): SmartDto;
 
 	/**
 	 * Check if the given SmartDto satisfies the given schema; exception is thrown or the same object is returned
@@ -47,5 +47,5 @@ interface ISmartService {
 	 */
 	public function check(SmartDto $dto, string $schema): SmartDto;
 
-	public function cloneTo(SmartDto $dto, string $schema, ?object $merge = null): SmartDto;
+	public function cloneTo(SmartDto $dto, string $schema, $merge = null): SmartDto;
 }

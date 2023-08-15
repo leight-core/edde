@@ -20,7 +20,7 @@ class BulkService {
 	public function create(SmartDto $request) {
 		return $this->bulkDtoMapper->item(
 			$this->bulkRepository->save(
-				$this->smartService->cloneTo($request, BulkSchema::class, (object)[
+				$this->smartService->cloneTo($request, BulkSchema::class, [
 					'created' => new DateTime(),
 					'userId'  => $this->currentUserService->requiredId(),
 				])

@@ -35,7 +35,7 @@ class SmartDto implements IDto, IteratorAggregate {
 	 * @param ISchema $schema
 	 * @param Value[] $values
 	 */
-	public function __construct(ISchema $schema, array $values) {
+	protected function __construct(ISchema $schema, array $values) {
 		$this->schema = $schema;
 		$this->values = $values;
 	}

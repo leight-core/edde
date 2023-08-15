@@ -6,6 +6,7 @@ namespace Edde\Rpc\Service;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Edde\Container\ContainerTrait;
+use Edde\Doctrine\EntityManagerTrait;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\Log\LoggerTrait;
@@ -16,6 +17,7 @@ class RpcService {
 	use ContainerTrait;
 	use LoggerTrait;
 	use SmartServiceTrait;
+	use EntityManagerTrait;
 
 	/**
 	 * @param string $name
@@ -43,6 +45,7 @@ class RpcService {
 				$result = $service->handle(
 					($requestSchema = $service->getMeta()->getRequestMeta()->getSchema()) ? $this->smartService->from($bulk->getValue('data'), $requestSchema) : SmartDto::ofDummy()
 				);
+				$this->entityManager->flush();
 				$response[$id] = (object)[
 					'data' => SmartDto::exportOf($result),
 				];

@@ -117,8 +117,7 @@ class Value {
 			foreach ($this->value as $value) {
 				$value instanceof SmartDto && $value->validate();
 			}
-		}
-		if ($this->value instanceof SmartDto) {
+		} else if ($this->value instanceof SmartDto) {
 			$this->value->validate();
 		}
 		return $this;

@@ -113,6 +113,11 @@ class Value {
 		if ($this->value !== null && $this->attribute->isArray() && !is_array($this->value)) {
 			throw new SmartDtoException(sprintf("Value [%s::%s] is present, but is not an array.", $this->schema->getName(), $this->attribute->getName()));
 		}
+		if (is_array($this->value)) {
+			foreach ($this->value as $value) {
+				$value instanceof SmartDto && $value->validate();
+			}
+		}
 		if ($this->value instanceof SmartDto) {
 			$this->value->validate();
 		}

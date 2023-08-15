@@ -37,8 +37,7 @@ export const with%s = withMutation({
 	schema:  {
 		request:  %s%s,
 		response: %s%s,
-	},
-	%s
+	},%s
 });
 		', [
 			$rpcName,
@@ -47,7 +46,8 @@ export const with%s = withMutation({
 			$requestMeta->isOptional() ? '.nullish()' : '',
 			$responseSchema,
 			$responseMeta->isOptional() ? '.nullish()' : '',
-			$meta->hasInvalidators() ? sprintf('invalidator: ({queryClient}) => {
+			$meta->hasInvalidators() ? sprintf('
+	invalidator: ({queryClient}) => {
 		%s
 	},', implode(
 				"\n\t\t",

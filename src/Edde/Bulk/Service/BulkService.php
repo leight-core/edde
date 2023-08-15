@@ -30,6 +30,10 @@ class BulkService {
 		);
 	}
 
+	public function fetch(SmartDto $request): SmartDto {
+		return $this->bulkDtoMapper->item($this->bulkRepository->find($request->getValue('id')));
+	}
+
 	public function delete(SmartDto $request): SmartDto {
 		return $this->bulkDtoMapper->item($this->bulkRepository->deleteBy($request));
 	}

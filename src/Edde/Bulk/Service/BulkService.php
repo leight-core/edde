@@ -22,6 +22,8 @@ class BulkService {
 			$this->bulkRepository->save(
 				$this->smartService->cloneTo($request, BulkSchema::class, [
 					'created' => new DateTime(),
+					'status' => 0,
+					'commit' => false,
 					'userId'  => $this->currentUserService->requiredId(),
 				])
 			)

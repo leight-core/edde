@@ -12,6 +12,7 @@ class BulkCommitRpcHandler extends AbstractRpcHandler {
 	use BulkServiceTrait;
 
 	protected $requestSchema = WithIdentitySchema::class;
+	protected $isMutator = true;
 
 	public function handle(SmartDto $request) {
 		$this->bulkService->commit($request);

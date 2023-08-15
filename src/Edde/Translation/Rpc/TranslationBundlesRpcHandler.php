@@ -20,21 +20,20 @@ class TranslationBundlesRpcHandler extends AbstractRpcHandler {
 	protected $requestSchemaOptional = true;
 
 	public function handle(SmartDto $request) {
-		return $this->cache->get('translations', function (string $key) {
-			$bundles = [];
-			$languages = $this->entityManager
-				->createQuery("
+		$bundles = [];
+		$languages = $this->entityManager
+			->createQuery("
 					SELECT DISTINCT t.locale FROM \Edde\Translation\Entity\TranslationEntity t
 				")
-				->enableResultCache();
-			$languages->setHint(Query::HINT_READ_ONLY, true);
-			foreach ($languages->toIterable() as ['locale' => $locale]) {
-				$bundles[] = (object)[
-					'language'     => $locale,
-					'translations' => array_map(function ($item) {
-						return (object)$item;
-					}, $this->entityManager
-						->createQuery('
+			->enableResultCache();
+		$languages->setHint(Query::HINT_READ_ONLY, true);
+		foreach ($languages->toIterable() as ['locale' => $locale]) {
+			$bundles[] = (object)[
+				'language'     => $locale,
+				'translations' => array_map(function ($item) {
+					return (object)$item;
+				}, $this->entityManager
+					->createQuery('
 							SELECT
 								t.key,
 								t.translation as value 
@@ -43,16 +42,15 @@ class TranslationBundlesRpcHandler extends AbstractRpcHandler {
 							WHERE
 								t.locale = :locale
 						')
-						->enableResultCache()
-						->setHint(Query::HINT_READ_ONLY, true)
-						->setParameter('locale', $locale)
-						->getArrayResult()),
-				];
-			}
-			$bundles = [
-				'bundles' => $bundles,
+					->enableResultCache()
+					->setHint(Query::HINT_READ_ONLY, true)
+					->setParameter('locale', $locale)
+					->getArrayResult()),
 			];
-			return $this->cache->set($key, $this->toDto($bundles));
-		});
+		}
+		$bundles = [
+			'bundles' => $bundles,
+		];
+		return $this->toDto($bundles);
 	}
 }

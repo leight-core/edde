@@ -17,6 +17,7 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 	protected $responseSchemaArray = false;
 	protected $filterSchema = null;
 	protected $orderBySchema = null;
+	protected $invalidators = [];
 	protected $isMutator = false;
 	protected $isFetch = false;
 	protected $isQuery = false;
@@ -40,6 +41,7 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 			->withOrderBySchema($this->orderBySchema)
 			->withMutator($this->isMutator)
 			->withFetch($this->isFetch)
+			->withInvalidators($this->invalidators)
 			->withQuery($this->isQuery && ($this->filterSchema || $this->orderBySchema))
 			->withForm($this->withForm);
 	}

@@ -24,6 +24,7 @@ class RpcHandlerMeta {
 	 */
 	protected $orderBySchema;
 	protected $features = [];
+	protected $invalidators = [];
 
 	/**
 	 * @param RpcWireMeta $requestMeta
@@ -106,5 +107,18 @@ class RpcHandlerMeta {
 
 	public function isWithForm(): bool {
 		return in_array('with-form', $this->features);
+	}
+
+	public function withInvalidators(array $invalidators): self {
+		$this->invalidators = $invalidators;
+		return $this;
+	}
+
+	public function hasInvalidators(): bool {
+		return !empty($this->invalidators);
+	}
+
+	public function getInvalidators(): array {
+		return $this->invalidators;
 	}
 }

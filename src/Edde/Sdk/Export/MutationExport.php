@@ -38,6 +38,11 @@ export const with%s = withMutation({
 		request:  %s%s,
 		response: %s%s,
 	},
+	invalidator: ({queryClient}) => {
+		queryClient.invalidateQueries({
+			queryKey: [%s],
+		});
+	}
 });
 		', [
 			$rpcName,
@@ -46,6 +51,9 @@ export const with%s = withMutation({
 			$requestMeta->isOptional() ? '.nullish()' : '',
 			$responseSchema,
 			$responseMeta->isOptional() ? '.nullish()' : '',
+			implode(', ', array_map(function ($item) {
+				return sprintf('"%s"', $item);
+			}, $meta->getInvalidators())),
 		]);
 
 		return $this->toExport($export);

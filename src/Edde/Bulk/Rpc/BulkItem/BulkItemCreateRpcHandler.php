@@ -15,7 +15,6 @@ class BulkItemCreateRpcHandler extends AbstractRpcHandler {
 	protected $requestSchema = BulkItemCreateSchema::class;
 	protected $responseSchema = BulkItemSchema::class;
 	protected $isMutator = true;
-	protected $withForm = true;
 	protected $invalidators = [
 		BulkItemQueryRpcHandler::class,
 		BulkItemFetchRpcHandler::class,

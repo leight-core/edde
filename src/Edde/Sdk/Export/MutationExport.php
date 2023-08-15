@@ -39,9 +39,7 @@ export const with%s = withMutation({
 		response: %s%s,
 	},
 	invalidator: ({queryClient}) => {
-		queryClient.invalidateQueries({
-			queryKey: [%s],
-		});
+		%s
 	}
 });
 		', [
@@ -51,9 +49,17 @@ export const with%s = withMutation({
 			$requestMeta->isOptional() ? '.nullish()' : '',
 			$responseSchema,
 			$responseMeta->isOptional() ? '.nullish()' : '',
-			implode(', ', array_map(function ($item) {
-				return sprintf('"%s"', $this->escapeHandlerName($item));
-			}, $meta->getInvalidators())),
+			implode(
+				"\n\t",
+				array_map(
+					function ($item) {
+						return sprintf("queryClient.invalidateQueries({
+			queryKey: [%s],
+		});", sprintf('"%s"', $this->escapeHandlerName($item)));
+					},
+					$meta->getInvalidators()
+				)
+			),
 		]);
 
 		return $this->toExport($export);

@@ -3,22 +3,20 @@ declare(strict_types=1);
 
 namespace Edde\Mapper;
 
-use DI\Annotation\Inject;
-
 trait MapperServiceTrait {
 	/**
-	 * @var MapperService
+	 * @var IMapperService
 	 */
 	protected $mapperService;
 
 	/**
 	 * @Inject
 	 *
-	 * @param MapperService $mapperService
+	 * @param IMapperService $mapperService
 	 *
 	 * @return void
 	 */
-	public function setMapperService(MapperService $mapperService): void {
+	public function setMapperService(IMapperService $mapperService): void {
 		$this->mapperService = $mapperService;
 	}
 }

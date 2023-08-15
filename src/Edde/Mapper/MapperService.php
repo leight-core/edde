@@ -6,7 +6,7 @@ namespace Edde\Mapper;
 use Edde\Container\ContainerTrait;
 use Edde\Mapper\Exception\MapperException;
 
-class MapperService {
+class MapperService implements IMapperService {
 	use ContainerTrait;
 
 	/**

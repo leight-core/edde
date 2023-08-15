@@ -38,6 +38,8 @@ use Edde\Job\CliJobExecutor;
 use Edde\Job\Command\JobExecutorCommand;
 use Edde\Job\IJobExecutor;
 use Edde\Log\DatabaseLogger;
+use Edde\Mapper\IMapperService;
+use Edde\Mapper\MapperService;
 use Edde\Password\IPasswordService;
 use Edde\Password\PasswordService;
 use Edde\Php\IPhpBinaryService;
@@ -182,6 +184,9 @@ class SlimApp {
 			},
 			ISourceService::class         => function (ContainerInterface $container) {
 				return $container->get(SourceService::class);
+			},
+			IMapperService::class => function (ContainerInterface $container) {
+				return $container->get(MapperService::class);
 			},
 			StorageConfig::class          => function (ContainerInterface $container) {
 				return new StorageConfig($container->get(StorageConfig::CONFIG_STORAGE));

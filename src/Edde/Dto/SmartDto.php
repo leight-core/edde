@@ -4,8 +4,10 @@ declare(strict_types=1);
 namespace Edde\Dto;
 
 use Edde\Dto\Exception\SmartDtoException;
-use Edde\Mapper\MapperService;
+use Edde\Mapper\IMapper;
+use Edde\Mapper\IMapperService;
 use Edde\Mapper\MapperServiceTrait;
+use Edde\Mapper\NoopMapper;
 use Edde\Schema\IAttribute;
 use Edde\Schema\ISchema;
 use Edde\Schema\Schema;
@@ -317,7 +319,7 @@ class SmartDto implements IDto, IteratorAggregate {
 		}
 	}
 
-	static public function ofSchema(ISchema $schema, MapperService $mapperService): self {
+	static public function ofSchema(ISchema $schema, IMapperService $mapperService): self {
 		$dto = new self(
 			$schema,
 			array_map(
@@ -337,7 +339,22 @@ class SmartDto implements IDto, IteratorAggregate {
 	}
 
 	static public function ofDummy(): self {
-		return new self(new Schema(new stdClass(), []), []);
+		$dto = new self(new Schema(new stdClass(), []), []);
+		$dto->setMapperService(new class implements IMapperService {
+			/**
+			 * @var IMapper
+			 */
+			protected $noop;
+
+			public function __construct() {
+				$this->noop = new NoopMapper();
+			}
+
+			public function getMapper(?string $class): IMapper {
+				return $this->noop;
+			}
+		});
+		return $dto;
 	}
 
 	static public function exportOf($export) {

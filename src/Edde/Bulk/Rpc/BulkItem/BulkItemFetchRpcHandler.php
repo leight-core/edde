@@ -14,6 +14,7 @@ class BulkItemFetchRpcHandler extends AbstractRpcHandler {
 
 	protected $requestSchema = WithIdentitySchema::class;
 	protected $responseSchema = BulkItemSchema::class;
+	protected $isFetch = true;
 
 	public function handle(SmartDto $request) {
 		return $this->bulkItemService->fetch($request);

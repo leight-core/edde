@@ -7,7 +7,6 @@ class MutationExport extends AbstractRpcExport {
 	public function export(): ?string {
 		$import = [
 			'import {withMutation} from "@leight/rpc";',
-			'import {z}            from "@leight/utils";',
 		];
 
 		$rpcName = $this->handler->getName();

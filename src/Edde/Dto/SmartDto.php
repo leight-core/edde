@@ -199,7 +199,7 @@ class SmartDto implements IDto, IteratorAggregate {
 	 * @throws SmartDtoException
 	 * @throws SchemaException
 	 */
-	public function from(object $object): self {
+	public function from($object): self {
 		/**
 		 * Running on an object side instead of "values" side is because
 		 * $object could be partial, thus rendering some of the "values" as "undefined".

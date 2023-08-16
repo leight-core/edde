@@ -8,10 +8,10 @@ use Doctrine\ORM\QueryBuilder;
 use Edde\Doctrine\Exception\RepositoryException;
 use Edde\Doctrine\Exception\RequiredResultException;
 use Edde\Doctrine\Schema\PatchSchema;
+use Edde\Dto\Exception\SmartDtoException;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\Math\RandomServiceTrait;
-use Edde\Query\Dto\Query;
 use Edde\Query\Schema\QuerySchema;
 use ReflectionClass;
 use ReflectionException;
@@ -50,101 +50,23 @@ abstract class AbstractRepository implements IRepository {
 		$this->className = $className;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function createEntity() {
 		return $this->reflectionClass->newInstance();
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function getRepository(): EntityRepository {
 		return $this->entityManager->getRepository($this->className);
 	}
 
-	public function select(string $alias): QueryBuilder {
-		return $this->getRepository()
-			->createQueryBuilder($alias);
-	}
-
-	public function find(string $id, string $message = null) {
-		if (!($entity = $this->getRepository()->find($id))) {
-			throw new RequiredResultException($message || sprintf('Cannot find [%s] by [%s]!', $this->className, $id), 500);
-		}
-		return $this->hydrate($entity);
-	}
-
-	public function all(string $alias): array {
-		return $this->toHydrate($this->select($alias)
-			->getQuery()
-			->getResult());
-	}
-
-	public function deleteBy(SmartDto $request) {
-		$entity = $this->find($request->getValue('id'));
-		$this->entityManager->remove($entity);
-		return $entity;
-	}
-
-	public function total(Query $query): int {
-		/**
-		 * Here we have to create empty query builder and setup it manually as the one from Repository
-		 * creates default SELECT / FROM parts in the query.
-		 */
-		$queryBuilder = $this->entityManager->createQueryBuilder();
-		$queryBuilder
-			->select("COUNT(c)")
-			->from($this->className, "c");
-		$this->applyWhere("c", $query->filter, $queryBuilder);
-		return (int)$queryBuilder->getQuery()->getSingleScalarResult();
-	}
-
-	public function toQuery(string $alias, Query $query): QueryBuilder {
-		$queryBuilder = $this->select($alias)
-			->setFirstResult($query->page)
-			->setMaxResults($query->size);
-		$this->applyQuery($alias, $query->filter, $queryBuilder);
-		foreach ($this->orderBy as $name => $order) {
-			if (is_string($order) && !in_array($order = strtoupper($order), [
-					'ASC',
-					'DESC',
-				])) {
-				$order = 'ASC';
-			} else if (is_bool($order)) {
-				$order = $order ? 'ASC' : 'DESC';
-			} else if (!is_string($order)) {
-				$order = 'ASC';
-			}
-			$queryBuilder->addOrderBy($this->field($name, $alias), $order);
-		}
-		return $queryBuilder;
-	}
-
-	public function withQueryDto(string $alias, SmartDto $query): QueryBuilder {
-		$this->smartService->check($query, QuerySchema::class);
-		$cursor = $query->getSmartDto('cursor');
-		$filter = $query->getSmartDto('filter');
-		$orderBy = $query->getSmartDto('orderBy');
-		return $this->toQuery($alias, new Query(
-			$filter ? $filter->export() : null,
-			$orderBy ? $orderBy->export() : null,
-			$cursor ? $cursor->getSafeValue('page') : null,
-			$cursor ? $cursor->getSafeValue('size') : null
-		));
-	}
-
-	public function withQuery(string $alias, SmartDto $query): array {
-		return $this->toHydrate(
-			$this->withQueryDto($alias, $query)
-				->getQuery()
-				->getResult()
-		);
-	}
-
-	public function query(string $alias, Query $query): array {
-		return $this->toHydrate(
-			$this->toQuery($alias, $query)
-				->getQuery()
-				->getResult()
-		);
-	}
-
+	/**
+	 * @inheritDoc
+	 */
 	public function save(SmartDto $dto) {
 		$this->entityManager->persist(
 			$entity = $dto->instanceOf($this->className, true)
@@ -152,22 +74,9 @@ abstract class AbstractRepository implements IRepository {
 		return $entity;
 	}
 
-	public function patch(SmartDto $dto) {
-		$dto->ensure([
-			'filter',
-			'patch',
-		]);
-		$this->entityManager->persist(
-			$entity = $dto
-				->getSmartDto('patch', true)
-				->exportTo(
-					$this->resolveEntityOrThrow($dto),
-					true
-				)
-		);
-		return $entity;
-	}
-
+	/**
+	 * @inheritDoc
+	 */
 	public function upsert(SmartDto $dto) {
 		try {
 			/**
@@ -185,31 +94,177 @@ abstract class AbstractRepository implements IRepository {
 		}
 	}
 
-	public function resolveEntity(SmartDto $dto) {
-		if ($id = $dto->getSmartDto('filter', true)->getSafeValue('id')) {
-			return $this->find($id);
-		}
-		return null;
+	/**
+	 * @inheritDoc
+	 */
+	public function patch(SmartDto $dto) {
+		$dto->ensure([
+			'filter',
+			'patch',
+		]);
+		$this->entityManager->persist(
+			$entity = $dto
+				->getSmartDto('patch', true)
+				->exportTo(
+					$this->resolveEntityOrThrow($dto),
+					true
+				)
+		);
+		return $entity;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
+	public function select(string $alias): QueryBuilder {
+		return $this->getRepository()
+			->createQueryBuilder($alias);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function find(string $id, string $message = null) {
+		if (!($entity = $this->getRepository()->find($id))) {
+			throw new RequiredResultException($message || sprintf('Cannot find [%s] by [%s]!', $this->className, $id), 500);
+		}
+		return $this->hydrate($entity);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function all(string $alias): array {
+		return $this->toHydrate($this->select($alias)
+			->getQuery()
+			->getResult());
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function total(SmartDto $query): int {
+		/**
+		 * Here we have to create empty query builder and setup it manually as the one from Repository
+		 * creates default SELECT / FROM parts in the query.
+		 */
+		$queryBuilder = $this->entityManager->createQueryBuilder();
+		$queryBuilder
+			->select("COUNT(c)")
+			->from($this->className, "c");
+		$this->applyWhere("c", $query, $queryBuilder);
+		return (int)$queryBuilder->getQuery()->getSingleScalarResult();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function toQuery(string $alias, SmartDto $query): QueryBuilder {
+		$this->smartService->check($query, QuerySchema::class);
+		$cursor = $query->getSmartDto('cursor', true);
+		$queryBuilder = $this->select($alias)
+			->setFirstResult($cursor->getSafeValue('page'))
+			->setMaxResults($cursor->getSafeValue('size'));
+		$this->applyQuery($alias, $query, $queryBuilder);
+		return $queryBuilder;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function query(string $alias, SmartDto $query): array {
+		return $this->toHydrate(
+			$this->toQuery($alias, $query)
+				->getQuery()
+				->getResult()
+		);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function deleteBy(SmartDto $query) {
+		$entity = $this->find($query->getValue('id'));
+		$this->entityManager->remove($entity);
+		return $entity;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function resolveEntity(SmartDto $dto) {
+		try {
+			if ($id = $dto->getSmartDto('filter', true)->getSafeValue('id')) {
+				return $this->find($id);
+			}
+			return null;
+		} catch (RequiredResultException $exception) {
+			return null;
+		}
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function resolveEntityOrThrow(SmartDto $dto) {
 		if (!($entity = $this->resolveEntity($dto))) {
-			throw new RepositoryException(sprintf('Cannot resolve entity from DTO [%s].', $dto->getName()));
+			throw new RequiredResultException(sprintf('Cannot resolve entity from DTO [%s].', $dto->getName()));
 		}
 		return $entity;
 	}
 
-	public function applyQuery(string $alias, ?object $filter, QueryBuilder $queryBuilder): void {
-		$this->applyWhere($alias, $filter, $queryBuilder);
+	/**
+	 * Overall QueryBuilder mutator for this repository
+	 *
+	 * @param string       $alias
+	 * @param SmartDto     $query
+	 * @param QueryBuilder $queryBuilder
+	 *
+	 * @return void
+	 * @throws SmartDtoException
+	 */
+	protected function applyQuery(string $alias, SmartDto $query, QueryBuilder $queryBuilder): void {
+		$this->applyWhere($alias, $query, $queryBuilder);
+		$this->applyOrderBy($alias, $query, $queryBuilder);
 	}
 
-	public function applyWhere(string $alias, ?object $filter, QueryBuilder $queryBuilder): void {
-		foreach ($this->fulltextOf as $field => $value) {
-			isset($filter->$value) && $this->fulltextOf($queryBuilder, $alias, $field, $filter->$value);
+	/**
+	 * @param string       $alias
+	 * @param SmartDto     $query
+	 * @param QueryBuilder $queryBuilder
+	 *
+	 * @return void
+	 * @throws SmartDtoException
+	 */
+	protected function applyWhere(string $alias, SmartDto $query, QueryBuilder $queryBuilder): void {
+		$filter = $query->getSmartDto('filter');
+		if (!$filter) {
+			return;
 		}
-		isset($filter->fulltext) && !empty($this->searchOf) && $this->searchOf($queryBuilder, $alias, $filter->fulltext, $this->searchOf);
+		foreach ($this->fulltextOf as $field => $value) {
+			if ($filter->knownWithValue($field)) {
+				$this->fulltextOf($queryBuilder, $alias, $field, $filter->getValue($field));
+			}
+		}
+		$filter->knownWithValue('fulltext') && !empty($this->searchOf) && $this->searchOf($queryBuilder, $alias, $filter->getValue('fulltext'), $this->searchOf);
 		foreach ($this->matchOf as $field => $value) {
-			isset($filter->$value) && $this->matchOf($queryBuilder, $alias, $field, $filter->$value);
+			$filter->knownWithValue($field) && $this->matchOf($queryBuilder, $alias, $field, $filter->getValue($field));
+		}
+	}
+
+	protected function applyOrderBy(string $alias, SmartDto $query, QueryBuilder $queryBuilder): void {
+		foreach ($this->orderBy as $name => $order) {
+			if (is_string($order) && !in_array($order = strtoupper($order), [
+					'ASC',
+					'DESC',
+				])) {
+				$order = 'ASC';
+			} else if (is_bool($order)) {
+				$order = $order ? 'ASC' : 'DESC';
+			} else if (!is_string($order)) {
+				$order = 'ASC';
+			}
+			$queryBuilder->addOrderBy($this->field($name, $alias), $order);
 		}
 	}
 
@@ -230,20 +285,48 @@ abstract class AbstractRepository implements IRepository {
 		return $param;
 	}
 
+	/**
+	 * Helper function to generate "fulltext" where condition using LIKE
+	 *
+	 * @param QueryBuilder $queryBuilder
+	 * @param string       $alias
+	 * @param string       $field
+	 * @param string       $value
+	 *
+	 * @return void
+	 */
 	protected function fulltextOf(QueryBuilder $queryBuilder, string $alias, string $field, string $value) {
 		$queryBuilder->where($this->field($field, $alias) . " LIKE :" . $this->paramOf($queryBuilder, "%$value%"));
 	}
 
+	/**
+	 * Helper method to generate exact match where condition
+	 *
+	 * @param QueryBuilder $queryBuilder
+	 * @param string       $alias
+	 * @param string       $field
+	 * @param string       $value
+	 *
+	 * @return void
+	 */
 	protected function matchOf(QueryBuilder $queryBuilder, string $alias, string $field, string $value) {
 		$queryBuilder->where($this->field($field, $alias) . " = :" . $this->paramOf($queryBuilder, $value));
 	}
 
-	protected function searchOf(QueryBuilder $queryBuilder, string $alias, string $value, $fields) {
+	protected function searchOf(QueryBuilder $queryBuilder, string $alias, string $value, array $fields) {
 		$queryBuilder->where($queryBuilder->expr()->orX(...array_map(function (string $field) use ($queryBuilder, $value, $alias) {
 			return $queryBuilder->expr()->like($this->field($field, $alias), ':' . $this->paramOf($queryBuilder, "%$value%"));
 		}, $fields)));
 	}
 
+	/**
+	 * Translate the given field with the given alias
+	 *
+	 * @param string $field
+	 * @param string $alias
+	 *
+	 * @return string
+	 */
 	protected function field(string $field, string $alias): string {
 		return str_replace('$', $alias, $field);
 	}

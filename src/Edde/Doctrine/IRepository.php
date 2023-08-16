@@ -11,7 +11,6 @@ use Edde\Doctrine\Exception\RepositoryException;
 use Edde\Doctrine\Exception\RequiredResultException;
 use Edde\Dto\Exception\SmartDtoException;
 use Edde\Dto\SmartDto;
-use Edde\Query\Dto\Query;
 use ReflectionException;
 
 /**
@@ -30,6 +29,43 @@ interface IRepository {
 	 * @return EntityRepository
 	 */
 	public function getRepository(): EntityRepository;
+
+	/**
+	 * Saves a new entity.
+	 *
+	 * @param SmartDto $dto
+	 *
+	 * @return TEntity
+	 *
+	 * @throws ReflectionException
+	 * @throws SmartDtoException
+	 */
+	public function save(SmartDto $dto);
+
+	/**
+	 * Smart create/update.
+	 *
+	 * @param SmartDto $dto
+	 *
+	 * @return TEntity
+	 * @throws SmartDtoException
+	 * @throws ReflectionException
+	 */
+	public function upsert(SmartDto $dto);
+
+	/**
+	 * Updates an existing entity, requires ID property present.
+	 *
+	 * @param SmartDto $dto
+	 *
+	 * @return TEntity
+	 *
+	 * @throws ReflectionException
+	 * @throws RepositoryException
+	 * @throws RequiredResultException
+	 * @throws SmartDtoException
+	 */
+	public function patch(SmartDto $dto);
 
 	/**
 	 * @param string $alias
@@ -53,68 +89,41 @@ interface IRepository {
 	 */
 	public function all(string $alias): array;
 
-	public function deleteBy(SmartDto $request);
-
 	/**
-	 * @param string $alias
-	 * @param Query  $query
-	 *
-	 * @return QueryBuilder
-	 */
-	public function toQuery(string $alias, Query $query): QueryBuilder;
-
-	/**
-	 * Query using SmartDto
-	 */
-	public function withQueryDto(string $alias, SmartDto $query): QueryBuilder;
-
-	public function withQuery(string $alias, SmartDto $query): array;
-
-	/**
-	 * @param Query $query
+	 * @param SmartDto $query
 	 *
 	 * @return int
 	 *
 	 * @throws NoResultException
 	 * @throws NonUniqueResultException
-	 */
-	public function total(Query $query): int;
-
-	/**
-	 * @param string $alias
-	 * @param Query  $query
-	 *
-	 * @return TEntity
-	 */
-	public function query(string $alias, Query $query): array;
-
-	/**
-	 * Saves a new entity.
-	 *
-	 * @param SmartDto $dto
-	 *
-	 * @return TEntity
-	 *
-	 * @throws ReflectionException
 	 * @throws SmartDtoException
 	 */
-	public function save(SmartDto $dto);
+	public function total(SmartDto $query): int;
 
 	/**
-	 * Updates an existing entity, requires ID property present.
+	 * Query using SmartDto
 	 *
-	 * @param SmartDto $dto
+	 * @throws SmartDtoException
+	 */
+	public function toQuery(string $alias, SmartDto $query): QueryBuilder;
+
+	/**
+	 * @param string   $alias
+	 * @param SmartDto $query
+	 *
+	 * @return TEntity[]
+	 * @throws SmartDtoException
+	 */
+	public function query(string $alias, SmartDto $query): array;
+
+	/**
+	 * @param SmartDto $query
 	 *
 	 * @return TEntity
-	 *
-	 * @throws ReflectionException
-	 * @throws RepositoryException
 	 * @throws RequiredResultException
 	 * @throws SmartDtoException
 	 */
-	public function patch(SmartDto $dto);
-
-	public function upsert(SmartDto $dto);
+	public function deleteBy(SmartDto $query);
 
 	/**
 	 * Original use case is to resolve an entity for "upsert" (called before any action) to ensure
@@ -127,33 +136,15 @@ interface IRepository {
 	 *
 	 * @param SmartDto $dto
 	 *
-	 * @return mixed
+	 * @return TEntity
 	 */
 	public function resolveEntity(SmartDto $dto);
 
+	/**
+	 * @param SmartDto $dto
+	 *
+	 * @return TEntity
+	 * @throws RequiredResultException
+	 */
 	public function resolveEntityOrThrow(SmartDto $dto);
-
-	/**
-	 * This method enables heavy query modifications; it's not intended to use with adding simple filter and so on. It's more like
-	 * adding joins, another selects and so on.
-	 *
-	 * @param string       $alias
-	 * @param object|null  $filter
-	 * @param QueryBuilder $queryBuilder
-	 *
-	 * @return void
-	 */
-	public function applyQuery(string $alias, ?object $filter, QueryBuilder $queryBuilder): void;
-
-	/**
-	 * Here you should really only apply filters; you could eventually append some data, if they're related to the filter only, but
-	 * main idea is to just put "simple" `where foo = bar`.
-	 *
-	 * @param string       $alias
-	 * @param object|null  $filter
-	 * @param QueryBuilder $queryBuilder
-	 *
-	 * @return void
-	 */
-	public function applyWhere(string $alias, ?object $filter, QueryBuilder $queryBuilder): void;
 }

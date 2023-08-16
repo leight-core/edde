@@ -74,6 +74,10 @@ class SmartDto implements IDto, IteratorAggregate {
 		return $this->get($name)->isUndefined();
 	}
 
+	public function knownWithValue(string $name): bool {
+		return $this->known($name) && !$this->isUndefined($name);
+	}
+
 	/**
 	 * @param string $name
 	 *

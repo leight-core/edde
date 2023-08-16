@@ -440,7 +440,7 @@ class SmartDto implements IDto, IteratorAggregate {
 	}
 
 	static public function ofDummy(): self {
-		$dto = new self(new Schema((object)['name' => 'DummyDto cv'], []), []);
+		$dto = new self(new Schema((object)['name' => 'DummyDto'], []), []);
 		$dto->setMapperService(new class implements IMapperService {
 			/**
 			 * @var IMapper

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Edde\Doctrine\AbstractUuidEntity;
 
@@ -31,6 +32,11 @@ class BulkItemEntity extends AbstractUuidEntity {
 	 * @var string
 	 */
 	public $bulkId;
+	/**
+	 * @ORM\Column(type="datetime")
+	 * @var DateTime
+	 */
+	public $created;
 	/**
 	 * @ORM\Column(type="string", name="user_id", length=36)
 	 * @var string

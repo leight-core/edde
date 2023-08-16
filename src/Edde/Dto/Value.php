@@ -72,6 +72,7 @@ class Value {
 	 * @return $this
 	 */
 	public function set($value): self {
+		$this->outputCache = null;
 		$this->value = $this->input->item($value, $this->inputParams);
 		$this->isUndefined = false;
 		return $this;

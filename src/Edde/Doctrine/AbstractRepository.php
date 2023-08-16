@@ -126,7 +126,7 @@ abstract class AbstractRepository implements IRepository {
 	 */
 	public function find(string $id, string $message = null) {
 		if (!($entity = $this->getRepository()->find($id))) {
-			throw new RequiredResultException($message || sprintf('Cannot find [%s] by [%s]!', $this->className, $id), 500);
+			throw new RequiredResultException($message ?? sprintf('Cannot find [%s] by [%s]!', $this->className, $id), 500);
 		}
 		return $this->hydrate($entity);
 	}

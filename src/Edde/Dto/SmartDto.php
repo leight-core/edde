@@ -155,12 +155,10 @@ class SmartDto implements IDto, IteratorAggregate {
 		$_value = $this->get($name);
 		$attribute = $_value->getAttribute();
 		if (is_array($value) && $attribute->hasSchema()) {
-			if ($attribute->isArray()) {
-				throw new SmartDtoException('Not implemented yet :(');
-			} else {
+			if (!$attribute->isArray()) {
 				$this->getSmartDto($name)->merge($value);
+				return $this;
 			}
-			return $this;
 		}
 		$_value->set($value);
 		return $this;

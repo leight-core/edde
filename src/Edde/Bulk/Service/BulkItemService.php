@@ -6,6 +6,7 @@ namespace Edde\Bulk\Service;
 use DateTime;
 use Edde\Bulk\Mapper\BulkItemDtoMapperTrait;
 use Edde\Bulk\Repository\BulkItemRepositoryTrait;
+use Edde\Bulk\Schema\BulkItem\Internal\BulkItemUpsertSchema;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\User\CurrentUserServiceTrait;
@@ -43,6 +44,7 @@ class BulkItemService {
 		return $this->bulkItemDtoMapper->item(
 			$this->bulkItemRepository->upsert(
 				$request
+					->convertTo(BulkItemUpsertSchema::class)
 					->merge([
 						'create' => $create,
 						'update' => $create,

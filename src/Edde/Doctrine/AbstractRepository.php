@@ -237,8 +237,7 @@ abstract class AbstractRepository implements IRepository {
 	 * @throws SmartDtoException
 	 */
 	protected function applyWhere(string $alias, SmartDto $query, QueryBuilder $queryBuilder): void {
-		$filter = $query->getSmartDto('filter');
-		if (!$filter) {
+		if (!$filter = $query->getSmartDto('filter')) {
 			return;
 		}
 		foreach ($this->fulltextOf as $field => $value) {

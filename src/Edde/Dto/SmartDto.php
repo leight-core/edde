@@ -319,6 +319,7 @@ class SmartDto implements IDto, IteratorAggregate {
 	public function exportTo(object $object, bool $raw = false): object {
 		$reflection = new ReflectionClass($object);
 		foreach ($this->values as $k => $value) {
+			$value->resolve();
 			if ($value->isUndefined() || !$reflection->hasProperty($k)) {
 				continue;
 			}
@@ -368,6 +369,7 @@ class SmartDto implements IDto, IteratorAggregate {
 	 */
 	public function getValues(bool $raw = false) {
 		foreach ($this->values as $k => $value) {
+			$value->resolve();
 			if ($value->isUndefined()) {
 				continue;
 			}
@@ -389,7 +391,7 @@ class SmartDto implements IDto, IteratorAggregate {
 	 */
 	public function getIterator() {
 		foreach ($this->values as $value) {
-			yield $value;
+			yield $value->resolve();
 		}
 	}
 

@@ -84,6 +84,13 @@ class Value {
 		return $this->outputCache ?? $this->outputCache = $this->output->item($this->getRaw(), $this->outputParams);
 	}
 
+	public function resolve(): self {
+		if ($this->value !== ($get = $this->get())) {
+			$this->set($get);
+		}
+		return $this;
+	}
+
 	public function getRaw() {
 		return $this->isUndefined ? $this->attribute->getDefault() : $this->value;
 	}

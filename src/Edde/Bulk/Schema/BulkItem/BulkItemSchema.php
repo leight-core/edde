@@ -5,8 +5,9 @@ namespace Edde\Bulk\Schema\BulkItem;
 
 use Edde\Bulk\Schema\Bulk\BulkSchema;
 use Edde\Date\Mapper\IsoDateMapper;
+use Edde\Doctrine\Schema\UuidSchema;
 
-interface BulkItemSchema {
+interface BulkItemSchema extends UuidSchema {
 	const meta = [
 		'import' => [
 			'type IBulkItem'       => '@leight/bulk',
@@ -14,8 +15,6 @@ interface BulkItemSchema {
 			'BulkItemSchema'       => '@leight/bulk',
 		],
 	];
-
-	function id(): string;
 
 	function bulkId(): string;
 

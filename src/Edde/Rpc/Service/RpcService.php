@@ -46,29 +46,29 @@ class RpcService {
 					($requestSchema = $service->getMeta()->getRequestMeta()->getSchema()) ? $this->smartService->from($bulk->getValue('data'), $requestSchema) : SmartDto::ofDummy()
 				);
 				$this->entityManager->flush();
-				$response[$id] = (object)[
+				$response[$id] = [
 					'data' => SmartDto::exportOf($result),
 				];
 			} catch (NotFoundException $exception) {
 				$this->logger->error($exception);
-				$response[$id] = (object)[
-					'error' => (object)[
+				$response[$id] = [
+					'error' => [
 						'message' => sprintf('Unknown RPC service [%s].', $name),
 						'code' => $exception->getCode(),
 					],
 				];
 			} catch (RpcException $exception) {
 				$this->logger->error($exception);
-				$response[$id] = (object)[
-					'error' => (object)[
+				$response[$id] = [
+					'error' => [
 						'message' => $exception->getMessage(),
 						'code' => $exception->getCode(),
 					],
 				];
 			} catch (Throwable $exception) {
 				$this->logger->error($exception);
-				$response[$id] = (object)[
-					'error' => (object)[
+				$response[$id] = [
+					'error' => [
 						'message' => 'General (unhandled) RPC error',
 						'code' => 500,
 					],

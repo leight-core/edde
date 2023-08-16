@@ -152,7 +152,7 @@ abstract class AbstractRepository implements IRepository {
 		$queryBuilder
 			->select("COUNT(c)")
 			->from($this->className, "c");
-		$this->applyWhere("c", $query, $queryBuilder);
+		$query->knownWithValue('filter') && $this->applyWhere("c", $query->getSmartDto('filter'), $query, $queryBuilder);
 		return (int)$queryBuilder->getQuery()->getSingleScalarResult();
 	}
 
@@ -224,22 +224,20 @@ abstract class AbstractRepository implements IRepository {
 	 * @throws SmartDtoException
 	 */
 	protected function applyQuery(string $alias, SmartDto $query, QueryBuilder $queryBuilder): void {
-		$this->applyWhere($alias, $query, $queryBuilder);
-		$this->applyOrderBy($alias, $query, $queryBuilder);
+		$this->applyWhere($alias, $query->getSmartDto('filter', true), $query, $queryBuilder);
+		$this->applyOrderBy($alias, $query->getSmartDto('orderBy', true), $query, $queryBuilder);
 	}
 
 	/**
 	 * @param string       $alias
+	 * @param SmartDto     $filter
 	 * @param SmartDto     $query
 	 * @param QueryBuilder $queryBuilder
 	 *
 	 * @return void
 	 * @throws SmartDtoException
 	 */
-	protected function applyWhere(string $alias, SmartDto $query, QueryBuilder $queryBuilder): void {
-		if (!$filter = $query->getSmartDto('filter')) {
-			return;
-		}
+	protected function applyWhere(string $alias, SmartDto $filter, SmartDto $query, QueryBuilder $queryBuilder): void {
 		foreach ($this->fulltextOf as $field => $value) {
 			if ($filter->knownWithValue($field)) {
 				$this->fulltextOf($queryBuilder, $alias, $field, $filter->getValue($field));
@@ -251,7 +249,7 @@ abstract class AbstractRepository implements IRepository {
 		}
 	}
 
-	protected function applyOrderBy(string $alias, SmartDto $query, QueryBuilder $queryBuilder): void {
+	protected function applyOrderBy(string $alias, SmartDto $orderBy, SmartDto $query, QueryBuilder $queryBuilder): void {
 		foreach ($this->orderBy as $name => $order) {
 			if (is_string($order) && !in_array($order = strtoupper($order), [
 					'ASC',

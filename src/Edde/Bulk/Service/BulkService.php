@@ -93,7 +93,7 @@ class BulkService {
 					'filter' => [
 						'id' => $request->getValue('id'),
 					],
-				])
+				], true)
 		);
 	}
 

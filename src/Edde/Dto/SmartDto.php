@@ -136,9 +136,9 @@ class SmartDto implements IDto, IteratorAggregate {
 				return null;
 			}
 			if (($attribute = $this->get($name)->getAttribute())->hasSchema()) {
-				return $this->toDto($attribute->getSchema()->getName());
+				return $this->put($name, $this->toDto($attribute->getSchema()->getName()));
 			}
-			return self::ofDummy();
+			return $this->put($name, self::ofDummy());
 		}
 	}
 
@@ -167,6 +167,11 @@ class SmartDto implements IDto, IteratorAggregate {
 		}
 		$_value->set($value);
 		return $this;
+	}
+
+	public function put(string $name, $value, bool $withFallback = false) {
+		$this->set($name, $value, $withFallback);
+		return $value;
 	}
 
 	/**

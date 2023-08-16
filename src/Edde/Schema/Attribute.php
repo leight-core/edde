@@ -60,8 +60,15 @@ class Attribute implements IAttribute {
 		return $this->source->schema;
 	}
 
-	public function getMeta(): array {
-		return $this->source->meta;
+	public function getMeta(string $name, $default = null) {
+		return $this->source->meta[$name] ?? $default;
+	}
+
+	public function getMetaOrThrow(string $name) {
+		if (!($meta = $this->getMeta($name))) {
+			throw new SchemaException(sprintf('Missing meta [%s] in attribute [%s].', $name, $this->getName()));
+		}
+		return $meta;
 	}
 
 	public function getInput(): ?string {

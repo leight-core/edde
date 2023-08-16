@@ -70,9 +70,11 @@ interface IAttribute {
 	/**
 	 * Return attribute's attached meta array if any
 	 *
-	 * @return array
+	 * @return mixed
 	 */
-	public function getMeta(): array;
+	public function getMeta(string $name, $default = null);
+
+	public function getMetaOrThrow(string $name);
 
 	public function getInput(): ?string;
 

@@ -25,6 +25,10 @@ class BulkService {
 	use BulkDtoMapperTrait;
 	use SmartServiceTrait;
 
+	public function get(string $id): SmartDto {
+		return $this->bulkDtoMapper->item($this->bulkRepository->find($id));
+	}
+
 	/**
 	 * @param SmartDto $request
 	 *

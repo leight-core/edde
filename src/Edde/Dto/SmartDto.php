@@ -17,7 +17,6 @@ use Generator;
 use IteratorAggregate;
 use ReflectionClass;
 use ReflectionException;
-use stdClass;
 use Traversable;
 
 class SmartDto implements IDto, IteratorAggregate {
@@ -415,7 +414,7 @@ class SmartDto implements IDto, IteratorAggregate {
 	}
 
 	static public function ofDummy(): self {
-		$dto = new self(new Schema(new stdClass(), []), []);
+		$dto = new self(new Schema((object)['name' => 'DummyDto cv'], []), []);
 		$dto->setMapperService(new class implements IMapperService {
 			/**
 			 * @var IMapper

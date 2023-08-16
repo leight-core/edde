@@ -163,7 +163,7 @@ abstract class AbstractRepository implements IRepository {
 			throw new RepositoryException(sprintf('Smart DTO [%s::patch] is undefined.', $dto->getName()));
 		}
 		$this->entityManager->persist(
-			$entity = $dto->exportTo(
+			$entity = $dto->getSmartDto('patch')->exportTo(
 				$this->resolveEntityOrThrow($dto)
 			)
 		);

@@ -7,9 +7,15 @@ use DateTime;
 use Edde\Bulk\Mapper\BulkItemDtoMapperTrait;
 use Edde\Bulk\Repository\BulkItemRepositoryTrait;
 use Edde\Bulk\Schema\BulkItem\Internal\BulkItemUpsertRequestSchema;
+use Edde\Doctrine\Exception\RequiredResultException;
+use Edde\Dto\Exception\SmartDtoException;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
+use Edde\Mapper\Exception\ItemException;
+use Edde\Mapper\Exception\SkipException;
 use Edde\User\CurrentUserServiceTrait;
+use Edde\User\Exception\UserNotSelectedException;
+use ReflectionException;
 
 class BulkItemService {
 	use SmartServiceTrait;
@@ -17,25 +23,59 @@ class BulkItemService {
 	use BulkItemDtoMapperTrait;
 	use CurrentUserServiceTrait;
 
-	public function fetch(SmartDto $request): SmartDto {
+	/**
+	 * @param SmartDto $query
+	 *
+	 * @return SmartDto
+	 * @throws RequiredResultException
+	 * @throws SmartDtoException
+	 * @throws ItemException
+	 * @throws SkipException
+	 */
+	public function fetch(SmartDto $query): SmartDto {
 		return $this->bulkItemDtoMapper->item(
-			$this->bulkItemRepository->find($request->getValue('id'))
+			$this->bulkItemRepository->find($query->getValue('id'))
 		);
 	}
 
-	public function query(SmartDto $request): array {
+	/**
+	 * @param SmartDto $query
+	 *
+	 * @return array
+	 * @throws SmartDtoException
+	 */
+	public function query(SmartDto $query): array {
 		return $this->bulkItemDtoMapper->map(
-			$this->bulkItemRepository->withQuery('b', $request)
+			$this->bulkItemRepository->query('b', $query)
 		);
 	}
 
-	public function delete(SmartDto $request): SmartDto {
+	/**
+	 * @param SmartDto $query
+	 *
+	 * @return SmartDto
+	 * @throws ItemException
+	 * @throws RequiredResultException
+	 * @throws SkipException
+	 * @throws SmartDtoException
+	 */
+	public function delete(SmartDto $query): SmartDto {
 		return $this->bulkItemDtoMapper->item(
-			$this->bulkItemRepository->deleteBy($request)
+			$this->bulkItemRepository->deleteBy($query)
 		);
 	}
 
-	public function upsert(SmartDto $request): SmartDto {
+	/**
+	 * @param SmartDto $query
+	 *
+	 * @return SmartDto
+	 * @throws ItemException
+	 * @throws SkipException
+	 * @throws SmartDtoException
+	 * @throws UserNotSelectedException
+	 * @throws ReflectionException
+	 */
+	public function upsert(SmartDto $query): SmartDto {
 		$create = [
 			'status'  => 0,
 			'created' => new DateTime(),
@@ -43,7 +83,7 @@ class BulkItemService {
 		];
 		return $this->bulkItemDtoMapper->item(
 			$this->bulkItemRepository->upsert(
-				$request
+				$query
 					->convertTo(BulkItemUpsertRequestSchema::class)
 					->merge([
 						'create' => $create,

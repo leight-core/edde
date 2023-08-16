@@ -67,7 +67,9 @@ class BulkService {
 	 *
 	 * @return SmartDto
 	 * @throws ItemException
+	 * @throws RequiredResultException
 	 * @throws SkipException
+	 * @throws SmartDtoException
 	 */
 	public function delete(SmartDto $request): SmartDto {
 		return $this->bulkDtoMapper->item($this->bulkRepository->deleteBy($request));
@@ -97,7 +99,13 @@ class BulkService {
 		);
 	}
 
+	/**
+	 * @param SmartDto $request
+	 *
+	 * @return array
+	 * @throws SmartDtoException
+	 */
 	public function query(SmartDto $request): array {
-		return $this->bulkDtoMapper->map($this->bulkRepository->withQuery('b', $request));
+		return $this->bulkDtoMapper->map($this->bulkRepository->query('b', $request));
 	}
 }

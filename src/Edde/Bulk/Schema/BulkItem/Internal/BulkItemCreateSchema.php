@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Schema\BulkItem\Internal;
 
-use Edde\Date\Mapper\IsoDateMapper;
+use DateTime;
 
 interface BulkItemCreateSchema {
 	function bulkId(): string;
 
-	function created($output = IsoDateMapper::class): string;
+	function created(): DateTime;
 
 	function status(): int;
 

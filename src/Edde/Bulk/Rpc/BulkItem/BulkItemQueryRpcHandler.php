@@ -5,6 +5,7 @@ namespace Edde\Bulk\Rpc\BulkItem;
 
 use Edde\Bulk\Schema\BulkItem\BulkItemFilterSchema;
 use Edde\Bulk\Schema\BulkItem\BulkItemOrderBySchema;
+use Edde\Bulk\Schema\BulkItem\BulkItemQuerySchema;
 use Edde\Bulk\Schema\BulkItem\BulkItemSchema;
 use Edde\Bulk\Service\BulkItemServiceTrait;
 use Edde\Dto\SmartDto;
@@ -15,6 +16,7 @@ class BulkItemQueryRpcHandler extends AbstractRpcHandler {
 
 	protected $filterSchema = BulkItemFilterSchema::class;
 	protected $orderBySchema = BulkItemOrderBySchema::class;
+	protected $requestSchema = BulkItemQuerySchema::class;
 	protected $responseSchema = BulkItemSchema::class;
 	protected $responseSchemaArray = true;
 	protected $isQuery = true;

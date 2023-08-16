@@ -88,6 +88,7 @@ class Value {
 	public function resolve(): self {
 		if ($this->value !== ($get = $this->get())) {
 			$this->set($get);
+			$this->outputCache = $get;
 		}
 		return $this;
 	}

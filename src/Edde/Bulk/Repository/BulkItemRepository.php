@@ -18,6 +18,6 @@ class BulkItemRepository extends AbstractRepository {
 
 	protected function applyWhere(string $alias, SmartDto $filter, SmartDto $query, QueryBuilder $queryBuilder): void {
 		parent::applyWhere($alias, $filter, $query, $queryBuilder);
-		$filter->knownWithValue('bulkId') && $this->matchOf($queryBuilder, $alias, 'bulk_id', $filter->getValue('bulkId'));
+		$filter->knownWithValue('bulkId') && $this->matchOf($queryBuilder, $alias, 'bulkId', $filter->getValue('bulkId'));
 	}
 }

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Rpc\BulkItem;
 
-use Edde\Bulk\Schema\BulkItem\BulkItemQuerySchema;
 use Edde\Bulk\Schema\BulkItem\BulkItemSchema;
 use Edde\Bulk\Schema\BulkItem\BulkItemUpsertSchema;
 use Edde\Bulk\Service\BulkItemServiceTrait;
@@ -18,7 +17,7 @@ class BulkItemUpsertRpcHandler extends AbstractRpcHandler {
 	protected $isMutator = true;
 
 	protected $invalidators = [
-		BulkItemQuerySchema::class,
+		BulkItemQueryRpcHandler::class,
 		BulkItemFetchRpcHandler::class,
 	];
 

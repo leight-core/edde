@@ -61,7 +61,7 @@ interface IAttribute {
 	/**
 	 * return target schema or thrown an exception if not available
 	 *
-	 * @return string
+	 * @return ISchema
 	 *
 	 * @throws SchemaException
 	 */

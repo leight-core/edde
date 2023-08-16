@@ -132,6 +132,10 @@ class SmartDto implements IDto, IteratorAggregate {
 			}
 			return $this->getSmartDtoOrThrow($name);
 		} catch (SmartDtoException $exception) {
+			$attribute = $this->get($name)->getAttribute();
+			if ($attribute->hasSchema()) {
+				return $this->toDto($attribute->getSchema()->getName());
+			}
 			return self::ofDummy();
 		}
 	}
@@ -372,7 +376,11 @@ class SmartDto implements IDto, IteratorAggregate {
 	}
 
 	public function convertTo(string $schema): self {
-		return $this->mapperService->getMapper(SmartDtoMapper::class)->item($this->export(true), $schema);
+		return $this->toDto($schema, $this->export(true));
+	}
+
+	protected function toDto(string $schema, $values = null): self {
+		return $this->mapperService->getMapper(SmartDtoMapper::class)->item($values, $schema);
 	}
 
 	public function withTemplate(array $template): self {

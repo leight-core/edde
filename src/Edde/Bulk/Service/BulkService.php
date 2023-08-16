@@ -87,8 +87,11 @@ class BulkService {
 			$request
 				->convertTo(BulkPatchRequestSchema::class)
 				->merge([
-					'patch' => [
+					'patch'  => [
 						'commit' => true,
+					],
+					'filter' => [
+						'id' => $request->getValue('id'),
 					],
 				])
 		);

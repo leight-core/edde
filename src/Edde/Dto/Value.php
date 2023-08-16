@@ -78,6 +78,9 @@ class Value {
 	}
 
 	public function get() {
+		/**
+		 * Mapper can return object, so keep the same instance (and in general, prevent overcomputing here).
+		 */
 		return $this->outputCache ?? $this->outputCache = $this->output->item($this->getRaw());
 	}
 

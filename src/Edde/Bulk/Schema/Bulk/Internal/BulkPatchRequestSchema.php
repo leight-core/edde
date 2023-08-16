@@ -6,7 +6,7 @@ namespace Edde\Bulk\Schema\Bulk\Internal;
 use Edde\Bulk\Schema\Bulk\BulkFilterSchema;
 
 interface BulkPatchRequestSchema {
-	function patch(): BulkPatchSchema;
+	function patch($load = true): BulkPatchSchema;
 
-	function filter(): BulkFilterSchema;
+	function filter($load = true): BulkFilterSchema;
 }

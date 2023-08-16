@@ -161,7 +161,9 @@ abstract class AbstractRepository implements IRepository {
 			$entity = $dto
 				->getSmartDto('patch')
 				->exportTo(
-					$this->resolveEntityOrThrow($dto)
+					$this->resolveEntityOrThrow(
+						$dto->getSmartDto('filter')
+					)
 				)
 		);
 		return $entity;

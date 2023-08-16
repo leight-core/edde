@@ -8,5 +8,5 @@ interface BulkItemUpsertSchema {
 
 	function update($load = true): ?BulkItemCreateSchema;
 
-	function filter($load = true): BulkItemFilterSchema;
+	function filter($load = true): ?BulkItemFilterSchema;
 }

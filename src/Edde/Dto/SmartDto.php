@@ -78,6 +78,10 @@ class SmartDto implements IDto, IteratorAggregate {
 		return $this->known($name) && !$this->isUndefined($name);
 	}
 
+	public function isSmartDto(string $name): bool {
+		return $this->knownWithValue($name) && $this->get($name)->getAttribute()->hasSchema();
+	}
+
 	/**
 	 * @param string $name
 	 *

@@ -34,7 +34,7 @@ class FormExport extends AbstractExport {
 
 		if ($values = $meta->getValuesSchema()) {
 			$schema = $this->schemaLoader->load($values);
-			$import[] = sprintf('import {%s} from "../schema/%s";', $schemaName = $schemaExport->getSchemaName($schema), $schemaName);
+			$import[] = sprintf('import {%s} from "../schema/%s";', $schemaName = $schemaExport->getSchemaName($schema) . 'Schema', $schemaName);
 			$valuesSchema = $schemaName;
 		}
 

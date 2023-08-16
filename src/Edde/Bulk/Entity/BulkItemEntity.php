@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Edde\Doctrine\AbstractUuidEntity;
 
 /**
@@ -27,7 +26,7 @@ class BulkItemEntity extends AbstractUuidEntity {
 	 */
 	public $response;
 	/**
-	 * @ORM\Column(type="string", length=36)
+	 * @ORM\Column(type="string", name="bulk_id", length=36)
 	 * @var string
 	 */
 	public $bulkId;

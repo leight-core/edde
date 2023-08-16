@@ -30,6 +30,7 @@ class Value {
 	 */
 	protected $output;
 	protected $outputParams;
+	protected $outputCache;
 	/**
 	 * Undefined state changes in the moment, when any value (including false, null and so on) is
 	 * set. If you need to mark value as undefined, use explicit method for it.
@@ -77,7 +78,7 @@ class Value {
 	}
 
 	public function get() {
-		return $this->output->item($this->getRaw());
+		return $this->outputCache ?? $this->outputCache = $this->output->item($this->getRaw());
 	}
 
 	public function getRaw() {

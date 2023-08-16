@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Edde\Doctrine\Exception\RepositoryException;
 use Edde\Doctrine\Exception\RequiredResultException;
+use Edde\Doctrine\Schema\PatchSchema;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\Math\RandomServiceTrait;
@@ -123,8 +124,8 @@ abstract class AbstractRepository implements IRepository {
 		return $this->toQuery($alias, new Query(
 			$filter ? $filter->export() : null,
 			$orderBy ? $orderBy->export() : null,
-			$cursor ? $cursor->getSafeValue('page', null) : null,
-			$cursor ? $cursor->getSafeValue('size', null) : null
+			$cursor ? $cursor->getSafeValue('page') : null,
+			$cursor ? $cursor->getSafeValue('size') : null
 		));
 	}
 
@@ -152,16 +153,47 @@ abstract class AbstractRepository implements IRepository {
 	}
 
 	public function patch(SmartDto $dto) {
-		if (!$dto->known('id')) {
-			throw new RepositoryException(sprintf('Smart DTO [%s] does not have ID attribute in the schema.', $dto->getName()));
-		} else if ($dto->isUndefined('id')) {
-			throw new RepositoryException(sprintf('Smart DTO [%s::id] is undefined.', $dto->getName()));
+		if (!$dto->known('filter')) {
+			throw new RepositoryException(sprintf('Smart DTO [%s] does not have filter attribute in the schema.', $dto->getName()));
+		} else if ($dto->isUndefined('filter')) {
+			throw new RepositoryException(sprintf('Smart DTO [%s::filter] is undefined.', $dto->getName()));
 		}
 		$this->entityManager->persist(
 			$entity = $dto->exportTo(
-				$this->find($dto->getValueOrThrow('id'))
+				$this->resolveEntityOrThrow($dto)
 			)
 		);
+		return $entity;
+	}
+
+	public function upsert(SmartDto $dto) {
+		try {
+			/**
+			 * Patch contains entity resolution, so if it fails,
+			 * we can try create a new entity.
+			 */
+			return $this->patch(
+				$this->smartService->from([
+					'patch'  => $dto->getSmartDto('update'),
+					'filter' => $dto->getSmartDto('filter'),
+				], PatchSchema::class)
+			);
+		} catch (RepositoryException $exception) {
+			return $this->save($dto->getSmartDto('create'));
+		}
+	}
+
+	public function resolveEntity(SmartDto $dto) {
+		if ($id = $dto->getSmartDto('filter')->getSafeValue('id')) {
+			return $this->find($id);
+		}
+		return null;
+	}
+
+	public function resolveEntityOrThrow(SmartDto $dto) {
+		if (!($entity = $this->resolveEntity($dto))) {
+			throw new RepositoryException(sprintf('Cannot resolve entity from DTO [%s].', $dto->getName()));
+		}
 		return $entity;
 	}
 

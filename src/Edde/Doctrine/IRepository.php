@@ -114,6 +114,25 @@ interface IRepository {
 	 */
 	public function patch(SmartDto $dto);
 
+	public function upsert(SmartDto $dto);
+
+	/**
+	 * Original use case is to resolve an entity for "upsert" (called before any action) to ensure
+	 * consistent result for both create/update.
+	 *
+	 * If create fails (primarily for unique constraint), you have to be sure the right Entity is patched,
+	 * so this method resolves the entity *before* create (so if found, patch is used instead).
+	 *
+	 * By default it uses "filter.id" to run patch.
+	 *
+	 * @param SmartDto $dto
+	 *
+	 * @return mixed
+	 */
+	public function resolveEntity(SmartDto $dto);
+
+	public function resolveEntityOrThrow(SmartDto $dto);
+
 	/**
 	 * This method enables heavy query modifications; it's not intended to use with adding simple filter and so on. It's more like
 	 * adding joins, another selects and so on.

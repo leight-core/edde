@@ -97,7 +97,7 @@ class SmartDto implements IDto, IteratorAggregate {
 		return $this->get($name)->get();
 	}
 
-	public function getSafeValue(string $name, $default) {
+	public function getSafeValue(string $name, $default = null) {
 		try {
 			return $this->getValue($name);
 		} catch (SmartDtoException $exception) {
@@ -105,6 +105,12 @@ class SmartDto implements IDto, IteratorAggregate {
 		}
 	}
 
+	/**
+	 * @param string $name
+	 *
+	 * @return mixed
+	 * @throws SmartDtoException
+	 */
 	public function getValueOrThrow(string $name) {
 		if (($value = $this->getValue($name)) === null) {
 			throw new SmartDtoException(sprintf("Requested value [%s::%s] is not set (=== null).", $this->schema->getName(), $name));
@@ -119,14 +125,14 @@ class SmartDto implements IDto, IteratorAggregate {
 	 *
 	 * @return SmartDto|null
 	 */
-	public function getSmartDto(string $name): ?SmartDto {
+	public function getSmartDto(string $name): SmartDto {
 		try {
 			if (!$this->known($name)) {
-				return null;
+				return self::ofDummy();
 			}
 			return $this->getSmartDtoOrThrow($name);
 		} catch (SmartDtoException $exception) {
-			return null;
+			return self::ofDummy();
 		}
 	}
 

@@ -39,9 +39,11 @@ class BulkService {
 	}
 
 	public function commit(SmartDto $request) {
-		$this->bulkRepository->patch($this->smartService->cloneTo($request, BulkSchema::class, [
-			'commit' => true,
-		]));
+		$this->bulkRepository->patch(
+			$this->smartService->cloneTo($request, BulkSchema::class, [
+				'commit' => true,
+			])
+		);
 	}
 
 	public function query(SmartDto $request): array {

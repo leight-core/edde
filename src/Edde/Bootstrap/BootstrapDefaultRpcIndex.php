@@ -15,6 +15,7 @@ use Edde\Bulk\Rpc\BulkItem\BulkItemCreateRpcHandler;
 use Edde\Bulk\Rpc\BulkItem\BulkItemDeleteRpcHandler;
 use Edde\Bulk\Rpc\BulkItem\BulkItemFetchRpcHandler;
 use Edde\Bulk\Rpc\BulkItem\BulkItemQueryRpcHandler;
+use Edde\Bulk\Rpc\BulkItem\BulkItemUpsertRpcHandler;
 use Edde\Cache\Rpc\DropCacheRpcHandler;
 use Edde\Rpc\Service\RpcHandlerIndexTrait;
 use Edde\Translation\Rpc\TranslationBundlesRpcHandler;
@@ -37,6 +38,7 @@ class BootstrapDefaultRpcIndex extends AbstractBootstrap {
 			BulkItemQueryRpcHandler::class,
 			BulkItemCreateRpcHandler::class,
 			BulkItemDeleteRpcHandler::class,
+			BulkItemUpsertRpcHandler::class,
 			BulkItemFetchRpcHandler::class,
 		]);
 	}

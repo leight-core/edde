@@ -41,4 +41,8 @@ class BulkItemService {
 	public function delete(SmartDto $request): SmartDto {
 		return $this->bulkItemDtoMapper->item($this->bulkItemRepository->deleteBy($request));
 	}
+
+	public function upsert(SmartDto $request): SmartDto {
+		return $this->bulkItemDtoMapper->item($this->bulkItemRepository->upsert($request));
+	}
 }

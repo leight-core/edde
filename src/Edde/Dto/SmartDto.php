@@ -153,10 +153,7 @@ class SmartDto implements IDto, IteratorAggregate {
 	 */
 	public function set(string $name, $value): self {
 		$_value = $this->get($name);
-		if (is_array($value)) {
-			if (!$_value->getAttribute()->hasSchema()) {
-				throw new SmartDtoException(sprintf('Cannot set array value [%s::%s]; value is not SmartDto', $this->getName(), $name));
-			}
+		if (is_array($value) && $_value->getAttribute()->hasSchema()) {
 			$this->getSmartDto($name)->merge($value);
 			return $this;
 		}

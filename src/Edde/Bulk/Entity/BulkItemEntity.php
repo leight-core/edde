@@ -36,9 +36,4 @@ class BulkItemEntity extends AbstractUuidEntity {
 	 * @var string
 	 */
 	public $userId;
-	/**
-	 * @ORM\ManyToOne(targetEntity="Edde\Bulk\Entity\BulkEntity", inversedBy="bulkItems")
-	 * @var BulkEntity
-	 */
-	public $bulk;
 }

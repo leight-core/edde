@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Entity;
 
+use Doctrine\ORM\Mapping\Entity as ORM;
 use Edde\Doctrine\AbstractUuidEntity;
 
 /**

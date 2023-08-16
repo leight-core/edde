@@ -13,7 +13,7 @@ class ProxyDtoMapper extends AbstractMapper {
 	use ContainerTrait;
 
 	public function item($item, $params = null) {
-		if (!is_array($params) || !in_array('dto', $params) || !in_array('value', $params)) {
+		if (!is_array($params) || !array_key_exists('dto', $params) || !array_key_exists('value', $params)) {
 			throw new SmartDtoException(sprintf('Cannot proxy value; $params is not an array with [dto, value] keys (defaults from SmartDto).'));
 		} else if (!($params['value'] instanceof Value)) {
 			throw new SmartDtoException(sprintf('Cannot proxy value; [value] in $params is not instance of [%s].', Value::class));

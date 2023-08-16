@@ -86,9 +86,11 @@ class BulkService {
 	public function commit(SmartDto $request) {
 		$this->bulkRepository->patch(
 			$this->smartService->from([
-				'patch'  => $request->merge([
-					'commit' => true,
-				]),
+				'patch' => $request
+					->convertTo(BulkSchema::class)
+					->merge([
+						'commit' => true,
+					]),
 				'filter' => $request,
 			], PatchSchema::class, [
 				'patch'  => BulkSchema::class,

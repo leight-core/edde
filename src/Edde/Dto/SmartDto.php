@@ -345,6 +345,10 @@ class SmartDto implements IDto, IteratorAggregate {
 		}
 	}
 
+	public function convertTo(string $schema): self {
+		return $this->mapperService->getMapper(SmartDtoMapper::class)->item($this->export(true), $schema);
+	}
+
 	public function withTemplate(array $template): self {
 		foreach ($template as $name => $schema) {
 			$value = $this->get($name);

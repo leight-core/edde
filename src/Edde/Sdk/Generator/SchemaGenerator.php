@@ -42,14 +42,11 @@ class SchemaGenerator extends AbstractGenerator {
 			$requestMeta = $meta->getRequestMeta();
 			$responseMeta = $meta->getResponseMeta();
 
-			if (!$meta->isQuery()) {
-				($name = $requestMeta->getSchema()) && ($schema = $this->schemaLoader->load($name)) && $this->generateSchema($schema, $schemaExport);
-			} else {
-				($name = $meta->getFilterSchema()) && ($schema = $this->schemaLoader->load($name)) && $this->generateSchema($schema, $schemaExport);
-				($name = $meta->getOrderBySchema()) && ($schema = $this->schemaLoader->load($name)) && $this->generateSchema($schema, $schemaExport);
-			}
-
+			($name = $requestMeta->getSchema()) && ($schema = $this->schemaLoader->load($name)) && $this->generateSchema($schema, $schemaExport);
 			($name = $responseMeta->getSchema()) && ($schema = $this->schemaLoader->load($name)) && $this->generateSchema($schema, $schemaExport);
+			($name = $meta->getValuesSchema()) && ($schema = $this->schemaLoader->load($name)) && $this->generateSchema($schema, $schemaExport);
+			($name = $meta->getFilterSchema()) && ($schema = $this->schemaLoader->load($name)) && $this->generateSchema($schema, $schemaExport);
+			($name = $meta->getOrderBySchema()) && ($schema = $this->schemaLoader->load($name)) && $this->generateSchema($schema, $schemaExport);
 		}
 	}
 }

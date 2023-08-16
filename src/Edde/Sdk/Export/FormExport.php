@@ -4,9 +4,12 @@ declare(strict_types=1);
 namespace Edde\Sdk\Export;
 
 use Edde\Rpc\Service\IRpcHandler;
+use Edde\Schema\SchemaLoaderTrait;
 use Edde\Sdk\AbstractExport;
 
 class FormExport extends AbstractExport {
+	use SchemaLoaderTrait;
+
 	/**
 	 * @var IRpcHandler
 	 */
@@ -18,18 +21,30 @@ class FormExport extends AbstractExport {
 	}
 
 	public function export(): ?string {
+		$schemaExport = new SchemaExport();
+
 		$rpcName = sprintf('with%s', $this->handler->getName());
+		$meta = $this->handler->getMeta();
 		$import = [
 			'import {withRpcForm, type IFormSchema} from "@leight/form";',
 			sprintf('import {%s} from "../rpc/%s";', $rpcName, $rpcName),
 		];
+
+		$valuesSchema = sprintf('%s.schema.request', $rpcName);
+
+		if ($values = $meta->getValuesSchema()) {
+			$schema = $this->schemaLoader->load($values);
+			$import[] = sprintf('import {%s} from "../schema/%s";', $schemaName = $schemaExport->getSchemaName($schema), $schemaName);
+			$valuesSchema = $schemaName;
+		}
+
 		$export = [
 			'"use client";',
 			$this->toExport($import, "\n"),
 			vsprintf(
 				"export const %sFormContext = withRpcForm({
 	schema: {
-		ValueSchema:    %s.schema.request,
+		ValuesSchema:    %s,
 	},
 	withMutation: %s,
 	name:   %s.service,
@@ -40,7 +55,7 @@ export type I%sFormContext = IFormSchema.RpcForm<I%sFormSchema>;
 ",
 				[
 					$this->handler->getName(),
-					$rpcName,
+					$valuesSchema,
 					$rpcName,
 					$rpcName,
 					$this->handler->getName(),

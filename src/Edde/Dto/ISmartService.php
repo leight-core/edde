@@ -3,24 +3,8 @@ declare(strict_types=1);
 
 namespace Edde\Dto;
 
-use Edde\Schema\ISchema;
-
 interface ISmartService {
-	/**
-	 * Creates an empty SmartDto
-	 *
-	 * @param string $schema
-	 *
-	 * @return SmartDto
-	 */
-	public function create(string $schema): SmartDto;
-
-	/**
-	 * @param ISchema $schema
-	 *
-	 * @return SmartDto
-	 */
-	public function createFromSchema(ISchema $schema): SmartDto;
+	public function create(string $schema, array $template = []): SmartDto;
 
 	/**
 	 * Creates smart dto from the given object using provided shape; the shape
@@ -31,9 +15,7 @@ interface ISmartService {
 	 *
 	 * @return SmartDto
 	 */
-	public function from($object, string $schema): SmartDto;
-
-	public function fromSchema($object, ISchema $schema): SmartDto;
+	public function from($object, string $schema, array $template = []): SmartDto;
 
 	/**
 	 * Check if the given SmartDto satisfies the given schema; exception is thrown or the same object is returned
@@ -45,7 +27,5 @@ interface ISmartService {
 	 *
 	 * @return SmartDto
 	 */
-	public function check(SmartDto $dto, string $schema): SmartDto;
-
-	public function cloneTo(SmartDto $dto, string $schema, $merge = null): SmartDto;
+	public function check(SmartDto $dto, string $schema, array $template = []): SmartDto;
 }

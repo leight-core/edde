@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Edde\Doctrine\Schema;
 
 interface PatchSchema {
-	function patch($type = 'mixed');
+	function patch();
 
-	function filter($type = 'mixed');
+	function filter();
 }

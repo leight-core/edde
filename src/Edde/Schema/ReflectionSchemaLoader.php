@@ -60,7 +60,7 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 				/**
 				 * set default property type to a string
 				 */
-				$attributeBuilder->type($propertyType = 'string');
+				$attributeBuilder->type($propertyType = 'mixed');
 				if (($type = $reflectionMethod->getReturnType()) !== null) {
 					$attributeBuilder->type($propertyType = $type->getName());
 					$attributeBuilder->required($type->allowsNull() === false);

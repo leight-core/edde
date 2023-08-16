@@ -24,10 +24,12 @@ class Value {
 	 * @var IMapper
 	 */
 	protected $input;
+	protected $inputParams;
 	/**
 	 * @var IMapper
 	 */
 	protected $output;
+	protected $outputParams;
 	/**
 	 * Undefined state changes in the moment, when any value (including false, null and so on) is
 	 * set. If you need to mark value as undefined, use explicit method for it.
@@ -133,6 +135,26 @@ class Value {
 	public function undefined(): self {
 		$this->isUndefined = true;
 		$this->value = null;
+		return $this;
+	}
+
+	public function withInput(IMapper $input): self {
+		$this->input = $input;
+		return $this;
+	}
+
+	public function withInputParams($params): self {
+		$this->inputParams = $params;
+		return $this;
+	}
+
+	public function withOutput(IMapper $output): self {
+		$this->output = $output;
+		return $this;
+	}
+
+	public function withOutputParams($params): self {
+		$this->outputParams = $params;
 		return $this;
 	}
 }

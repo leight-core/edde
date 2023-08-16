@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Edde\Dto;
 
 use Edde\Dto\Exception\SmartDtoException;
+use Edde\Dto\Mapper\SmartDtoMapper;
 use Edde\Mapper\IMapper;
 use Edde\Mapper\IMapperService;
 use Edde\Mapper\MapperServiceTrait;
@@ -166,10 +167,29 @@ class SmartDto implements IDto, IteratorAggregate {
 	 * @throws SmartDtoException
 	 */
 	public function merge($values): self {
+		if (!$values) {
+			return $this;
+		}
 		foreach ($values as $k => $v) {
 			$this->set($k, $v);
 		}
 		return $this;
+	}
+
+	/**
+	 * Merge the given dto into current one and apply $merge if provided.
+	 *
+	 * @param SmartDto     $dto
+	 * @param object|array $merge
+	 *
+	 * @return $this
+	 * @throws SmartDtoException
+	 */
+	public function mergeWith(SmartDto $dto, $merge = null): self {
+		foreach ($dto->export(true) as $k => $v) {
+			$this->set($k, $v);
+		}
+		return $this->merge($merge);
 	}
 
 	public function isValid(): bool {
@@ -215,7 +235,7 @@ class SmartDto implements IDto, IteratorAggregate {
 		 * If it would be from the other side, all "values" would be set to a value or null,
 		 * effectively removing meaning of "undefined".
 		 */
-		foreach ($object as $k => $v) {
+		foreach ($object instanceof SmartDto ? $object->export(true) : $object as $k => $v) {
 			if (!$this->known($k)) {
 				continue;
 			}
@@ -323,6 +343,25 @@ class SmartDto implements IDto, IteratorAggregate {
 		foreach ($this->values as $value) {
 			yield $value;
 		}
+	}
+
+	public function withTemplate(array $template): self {
+		foreach ($template as $name => $schema) {
+			$value = $this->get($name);
+			if (is_array($schema)) {
+				if (!$value->getAttribute()->hasSchema()) {
+					throw new SmartDtoException(sprintf('Setting template to a property [%s::%s] which is not SmartDto.', $this->getName(), $name));
+				}
+				$this->getSmartDto($name)->withTemplate($schema);
+				continue;
+			}
+			$value
+				->withOutput(
+					$this->mapperService->getMapper(SmartDtoMapper::class)
+				)
+				->withOutputParams($schema);
+		}
+		return $this;
 	}
 
 	static public function ofSchema(ISchema $schema, IMapperService $mapperService): self {

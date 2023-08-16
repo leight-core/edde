@@ -214,6 +214,25 @@ class SmartDto implements IDto, IteratorAggregate {
 	}
 
 	/**
+	 * Ensure the given values are known and not undefined.
+	 *
+	 * @param array $values
+	 *
+	 * @return self
+	 * @throws SmartDtoException
+	 */
+	public function ensure(array $values): self {
+		foreach ($values as $v) {
+			if (!$this->known($v)) {
+				throw new SmartDtoException(sprintf('SmartDto [%s] is missing property [%s].', $this->getName(), $v));
+			} else if ($this->isUndefined($v)) {
+				throw new SmartDtoException(sprintf('SmartDto [%s] has property [%s], but it is undefined.', $this->getName(), $v));
+			}
+		}
+		return $this;
+	}
+
+	/**
 	 * Merge known properties into the object; there is no validation running
 	 * in this method, so it's up to the developer to ensure here are data he
 	 * expects.

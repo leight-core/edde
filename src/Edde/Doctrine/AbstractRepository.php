@@ -153,15 +153,10 @@ abstract class AbstractRepository implements IRepository {
 	}
 
 	public function patch(SmartDto $dto) {
-		if (!$dto->known('filter')) {
-			throw new RepositoryException(sprintf('Smart DTO [%s] does not have filter attribute in the schema.', $dto->getName()));
-		} else if ($dto->isUndefined('filter')) {
-			throw new RepositoryException(sprintf('Smart DTO [%s::filter] is undefined.', $dto->getName()));
-		} else if (!$dto->known('patch')) {
-			throw new RepositoryException(sprintf('Smart DTO [%s] does not have patch attribute in the schema.', $dto->getName()));
-		} else if ($dto->isUndefined('patch')) {
-			throw new RepositoryException(sprintf('Smart DTO [%s::patch] is undefined.', $dto->getName()));
-		}
+		$dto->ensure([
+			'filter',
+			'patch',
+		]);
 		$this->entityManager->persist(
 			$entity = $dto
 				->getSmartDto('patch')

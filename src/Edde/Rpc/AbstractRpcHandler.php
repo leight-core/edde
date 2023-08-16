@@ -39,7 +39,7 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 		))
 			->withFilterSchema($this->filterSchema)
 			->withOrderBySchema($this->orderBySchema)
-			->withMutator($this->isMutator)
+			->withMutator($this->isMutator || $this->withForm)
 			->withFetch($this->isFetch)
 			->withInvalidators($this->invalidators)
 			->withQuery($this->isQuery && ($this->filterSchema || $this->orderBySchema))

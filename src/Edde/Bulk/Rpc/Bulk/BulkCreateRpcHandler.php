@@ -5,6 +5,7 @@ namespace Edde\Bulk\Rpc\Bulk;
 
 use Edde\Bulk\Schema\Bulk\BulkCreateSchema;
 use Edde\Bulk\Schema\Bulk\BulkSchema;
+use Edde\Bulk\Schema\Bulk\BulkValuesSchema;
 use Edde\Bulk\Service\BulkServiceTrait;
 use Edde\Dto\SmartDto;
 use Edde\Rpc\AbstractRpcHandler;
@@ -14,7 +15,7 @@ class BulkCreateRpcHandler extends AbstractRpcHandler {
 
 	protected $requestSchema = BulkCreateSchema::class;
 	protected $responseSchema = BulkSchema::class;
-	protected $isMutator = true;
+	protected $valuesSchema = BulkValuesSchema::class;
 	protected $withForm = true;
 	protected $invalidators = [
 		BulkQueryRpcHandler::class,

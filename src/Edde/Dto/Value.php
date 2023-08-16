@@ -72,7 +72,7 @@ class Value {
 	 * @return $this
 	 */
 	public function set($value): self {
-		$this->value = $value;
+		$this->value = $this->input->item($value, $this->inputParams);
 		$this->isUndefined = false;
 		return $this;
 	}
@@ -81,7 +81,7 @@ class Value {
 		/**
 		 * Mapper can return object, so keep the same instance (and in general, prevent overcomputing here).
 		 */
-		return $this->outputCache ?? $this->outputCache = $this->output->item($this->getRaw());
+		return $this->outputCache ?? $this->outputCache = $this->output->item($this->getRaw(), $this->outputParams);
 	}
 
 	public function getRaw() {

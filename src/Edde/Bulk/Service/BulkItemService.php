@@ -6,9 +6,6 @@ namespace Edde\Bulk\Service;
 use DateTime;
 use Edde\Bulk\Mapper\BulkItemDtoMapperTrait;
 use Edde\Bulk\Repository\BulkItemRepositoryTrait;
-use Edde\Bulk\Schema\Bulk\BulkFilterSchema;
-use Edde\Bulk\Schema\BulkItem\BulkItemSchema;
-use Edde\Doctrine\Schema\UpsertSchema;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\User\CurrentUserServiceTrait;
@@ -38,28 +35,18 @@ class BulkItemService {
 	}
 
 	public function upsert(SmartDto $request): SmartDto {
-		$create = $request
-			->convertTo(BulkItemSchema::class)
-			->merge([
-				'status'  => 0,
-				'created' => new DateTime(),
-				'userId'  => $this->currentUserService->requiredId(),
-			]);
+		$create = [
+			'status'  => 0,
+			'created' => new DateTime(),
+			'userId'  => $this->currentUserService->requiredId(),
+		];
 		return $this->bulkItemDtoMapper->item(
 			$this->bulkItemRepository->upsert(
-				$this->smartService->from(
-					[
+				$request
+					->merge([
 						'create' => $create,
 						'update' => $create,
-						'filter' => $request->getSmartDto('filter'),
-					],
-					UpsertSchema::class,
-					[
-						'create' => BulkItemSchema::class,
-						'update' => BulkItemSchema::class,
-						'filter' => BulkFilterSchema::class,
-					]
-				)
+					])
 			)
 		);
 	}

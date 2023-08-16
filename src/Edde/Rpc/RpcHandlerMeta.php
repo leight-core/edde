@@ -22,6 +22,10 @@ class RpcHandlerMeta {
 	/**
 	 * @var string|null
 	 */
+	protected $valuesSchema;
+	/**
+	 * @var string|null
+	 */
 	protected $orderBySchema;
 	protected $features = [];
 	protected $invalidators = [];
@@ -120,5 +124,14 @@ class RpcHandlerMeta {
 
 	public function getInvalidators(): array {
 		return $this->invalidators;
+	}
+
+	public function withValuesSchema(?string $valuesSchema): self {
+		$this->valuesSchema = $valuesSchema;
+		return $this;
+	}
+
+	public function getValuesSchema(): ?string {
+		return $this->valuesSchema;
 	}
 }

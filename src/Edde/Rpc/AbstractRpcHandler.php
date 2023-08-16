@@ -10,11 +10,42 @@ use Edde\Rpc\Service\IRpcHandler;
 abstract class AbstractRpcHandler implements IRpcHandler {
 	use SmartServiceTrait;
 
+	/**
+	 * Request schema used to call this handler
+	 *
+	 * @var string|null
+	 */
 	protected $requestSchema = null;
+	/**
+	 * Flag used for SDK generator to tell if request schema is optional
+	 *
+	 * @var bool
+	 */
 	protected $requestSchemaOptional = false;
+	/**
+	 * Response schema used by this handler
+	 *
+	 * @var string|null
+	 */
 	protected $responseSchema = null;
+	/**
+	 * Flag used for SDK generator to tell if the response schema is optional
+	 *
+	 * @var bool
+	 */
 	protected $responseSchemaOptional = false;
 	protected $responseSchemaArray = false;
+	/**
+	 * If Handler is using a form, this schema is used as ValuesSchema for the form
+	 *
+	 * @var string|null
+	 */
+	protected $valuesSchema = null;
+	/**
+	 * If Handler is as a Query, this schema specifies schema used for filtering
+	 *
+	 * @var string|null
+	 */
 	protected $filterSchema = null;
 	protected $orderBySchema = null;
 	protected $invalidators = [];
@@ -40,6 +71,7 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 			->withFilterSchema($this->filterSchema)
 			->withOrderBySchema($this->orderBySchema)
 			->withMutator($this->isMutator || $this->withForm)
+			->withValuesSchema($this->withForm ? ($this->valuesSchema ?? $this->requestSchema) : null)
 			->withFetch($this->isFetch)
 			->withInvalidators($this->invalidators)
 			->withQuery($this->isQuery && ($this->filterSchema || $this->orderBySchema))

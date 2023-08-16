@@ -7,15 +7,14 @@ use DateTime;
 use Edde\Bulk\Mapper\BulkDtoMapperTrait;
 use Edde\Bulk\Repository\BulkRepositoryTrait;
 use Edde\Bulk\Schema\Bulk\BulkSchema;
+use Edde\Bulk\Schema\Bulk\Internal\BulkPatchRequestSchema;
 use Edde\Doctrine\Exception\RepositoryException;
 use Edde\Doctrine\Exception\RequiredResultException;
-use Edde\Doctrine\Schema\PatchSchema;
 use Edde\Dto\Exception\SmartDtoException;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\Mapper\Exception\ItemException;
 use Edde\Mapper\Exception\SkipException;
-use Edde\Query\Schema\WithIdentitySchema;
 use Edde\User\CurrentUserServiceTrait;
 use Edde\User\Exception\UserNotSelectedException;
 use ReflectionException;
@@ -85,21 +84,13 @@ class BulkService {
 	 */
 	public function commit(SmartDto $request) {
 		$this->bulkRepository->patch(
-			$this->smartService->from(
-				[
-					'patch'  => $request
-						->convertTo(BulkSchema::class)
-						->merge([
-							'commit' => true,
-						]),
-					'filter' => $request,
-				],
-				PatchSchema::class,
-				[
-					'patch'  => BulkSchema::class,
-					'filter' => WithIdentitySchema::class,
-				]
-			)
+			$request
+				->convertTo(BulkPatchRequestSchema::class)
+				->merge([
+					'patch' => [
+						'commit' => true,
+					],
+				])
 		);
 	}
 

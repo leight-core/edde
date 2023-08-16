@@ -395,7 +395,7 @@ class SmartDto implements IDto, IteratorAggregate {
 				if (!$value->getAttribute()->hasSchema()) {
 					throw new SmartDtoException(sprintf('Setting template to a property [%s::%s] which is not SmartDto.', $this->getName(), $name));
 				}
-				$this->getSmartDto($name)->withTemplate($schema);
+				($dto = $this->getSmartDto($name)) && $dto->withTemplate($schema);
 				continue;
 			}
 			$value

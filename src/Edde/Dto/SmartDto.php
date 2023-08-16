@@ -125,18 +125,14 @@ class SmartDto implements IDto, IteratorAggregate {
 	 *
 	 * @return SmartDto|null
 	 */
-	public function getSmartDto(string $name): SmartDto {
+	public function getSmartDto(string $name): ?SmartDto {
 		try {
 			if (!$this->known($name)) {
-				return self::ofDummy();
+				return null;
 			}
 			return $this->getSmartDtoOrThrow($name);
 		} catch (SmartDtoException $exception) {
-			$attribute = $this->get($name)->getAttribute();
-			if ($attribute->hasSchema()) {
-				return $this->toDto($attribute->getSchema()->getName());
-			}
-			return self::ofDummy();
+			return null;
 		}
 	}
 

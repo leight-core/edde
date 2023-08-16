@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Rpc\BulkItem;
 
+use Edde\Bulk\Schema\BulkItem\BulkItemQuerySchema;
 use Edde\Bulk\Schema\BulkItem\BulkItemSchema;
 use Edde\Bulk\Schema\BulkItem\BulkItemUpsertSchema;
 use Edde\Bulk\Service\BulkItemServiceTrait;
@@ -15,6 +16,11 @@ class BulkItemUpsertRpcHandler extends AbstractRpcHandler {
 	protected $requestSchema = BulkItemUpsertSchema::class;
 	protected $responseSchema = BulkItemSchema::class;
 	protected $isMutator = true;
+
+	protected $invalidators = [
+		BulkItemQuerySchema::class,
+		BulkItemFetchRpcHandler::class,
+	];
 
 	public function handle(SmartDto $request) {
 		return $this->bulkItemService->upsert($request);

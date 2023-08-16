@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Edde\Doctrine\Schema;
 
 interface UpdateSchema {
-	function update($type = 'mixed');
+	function update();
 
-	function filter($type = 'mixed', $required = false);
+	function filter($required = false);
 
 	function force(): ?bool;
 }

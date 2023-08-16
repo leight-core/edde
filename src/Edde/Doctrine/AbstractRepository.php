@@ -182,12 +182,12 @@ abstract class AbstractRepository implements IRepository {
 				], PatchSchema::class)
 			);
 		} catch (RepositoryException $exception) {
-			return $this->save($dto->getSmartDto('create'));
+			return $this->save($dto->getSmartDto('create', true));
 		}
 	}
 
 	public function resolveEntity(SmartDto $dto) {
-		if ($id = $dto->getSmartDto('filter')->getSafeValue('id')) {
+		if ($id = $dto->getSmartDto('filter', true)->getSafeValue('id')) {
 			return $this->find($id);
 		}
 		return null;

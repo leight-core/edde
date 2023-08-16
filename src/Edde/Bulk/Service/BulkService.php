@@ -6,7 +6,7 @@ namespace Edde\Bulk\Service;
 use DateTime;
 use Edde\Bulk\Mapper\BulkDtoMapperTrait;
 use Edde\Bulk\Repository\BulkRepositoryTrait;
-use Edde\Bulk\Schema\Bulk\BulkSchema;
+use Edde\Bulk\Schema\Bulk\Internal\BulkCreateSchema;
 use Edde\Bulk\Schema\Bulk\Internal\BulkPatchRequestSchema;
 use Edde\Doctrine\Exception\RepositoryException;
 use Edde\Doctrine\Exception\RequiredResultException;
@@ -42,8 +42,9 @@ class BulkService {
 	public function create(SmartDto $request): SmartDto {
 		return $this->bulkDtoMapper->item(
 			$this->bulkRepository->save(
-				$this->smartService->create(BulkSchema::class)
-					->mergeWith($request, [
+				$request
+					->convertTo(BulkCreateSchema::class)
+					->merge([
 						'created' => new DateTime(),
 						'status'  => 0,
 						'commit'  => false,

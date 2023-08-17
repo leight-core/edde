@@ -47,15 +47,15 @@ export const with%s = withMutation({
 			$responseSchema,
 			$responseMeta->isOptional() ? '.nullish()' : '',
 			$meta->hasInvalidators() ? sprintf('
-	invalidator: ({queryClient}) => {
+	invalidator: async ({queryClient}) => Promise.any([
 		%s
-	},', implode(
+	]),', implode(
 				"\n\t\t",
 				array_map(
 					function ($item) {
 						return sprintf("queryClient.invalidateQueries({
 			queryKey: [%s],
-		});", sprintf('"%s"', $this->escapeHandlerName($item)));
+		}),", sprintf('"%s"', $this->escapeHandlerName($item)));
 					},
 					$meta->getInvalidators()
 				)

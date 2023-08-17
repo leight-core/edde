@@ -305,7 +305,7 @@ abstract class AbstractRepository implements IRepository {
 	 * @return void
 	 */
 	protected function fulltextOf(QueryBuilder $queryBuilder, string $alias, string $field, string $value) {
-		$queryBuilder->where($this->field($field, $alias) . " LIKE :" . $this->paramOf($queryBuilder, "%$value%"));
+		$queryBuilder->andWhere($this->field($field, $alias) . " LIKE :" . $this->paramOf($queryBuilder, "%$value%"));
 	}
 
 	/**
@@ -319,11 +319,11 @@ abstract class AbstractRepository implements IRepository {
 	 * @return void
 	 */
 	protected function matchOf(QueryBuilder $queryBuilder, string $alias, string $field, $value) {
-		$queryBuilder->where($this->field($field, $alias) . " = :" . $this->paramOf($queryBuilder, $value));
+		$queryBuilder->andWhere($this->field($field, $alias) . " = :" . $this->paramOf($queryBuilder, $value));
 	}
 
 	protected function searchOf(QueryBuilder $queryBuilder, string $alias, string $value, array $fields) {
-		$queryBuilder->where($queryBuilder->expr()->orX(...array_map(function (string $field) use ($queryBuilder, $value, $alias) {
+		$queryBuilder->andWhere($queryBuilder->expr()->orX(...array_map(function (string $field) use ($queryBuilder, $value, $alias) {
 			return $queryBuilder->expr()->like($this->field($field, $alias), ':' . $this->paramOf($queryBuilder, "%$value%"));
 		}, $fields)));
 	}

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Edde\Image;
 
 use Edde\Dto\DtoServiceTrait;
+use Edde\Dto\SmartDto;
 use Edde\File\Dto\FileDto;
 use Edde\File\FileGcAsyncServiceTrait;
 use Edde\File\FileServiceTrait;
@@ -12,17 +13,14 @@ use Edde\File\Repository\FileRepositoryTrait;
 use Edde\Image\Dto\CreateDto;
 use Edde\Image\Repository\ImageRepositoryTrait;
 use Edde\Job\Async\AbstractAsyncService;
-use Edde\Job\IJob;
 use Edde\Query\Dto\Query;
-use Edde\Repository\Exception\DuplicateEntryException;
-use Edde\Repository\Exception\RepositoryException;
 use Edde\Stream\FileStream;
 use Throwable;
 use function microtime;
 use function sprintf;
 use function str_replace;
 
-class ImageJobService extends AbstractAsyncService {
+class ImageAsyncService extends AbstractAsyncService {
 	use FileGcAsyncServiceTrait;
 	use FileRepositoryTrait;
 	use FileMapperTrait;
@@ -31,14 +29,7 @@ class ImageJobService extends AbstractAsyncService {
 	use ImageRepositoryTrait;
 	use DtoServiceTrait;
 
-	/**
-	 * @param IJob $job
-	 *
-	 * @throws DuplicateEntryException
-	 * @throws RepositoryException
-	 * @throws Throwable
-	 */
-	protected function handle(IJob $job) {
+	protected function handle(SmartDto $job) {
 		$this->logger->debug('Starting image service.', ['tags' => [static::class]]);
 
 		$query = (new Query())->withFilter(['pathEndLike' => '/image.raw']);

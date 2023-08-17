@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace Edde\File;
 
+use Edde\Dto\SmartDto;
 use Edde\Job\Async\AbstractAsyncService;
-use Edde\Job\IJob;
 
 class FileGcAsyncService extends AbstractAsyncService {
 	use FileServiceTrait;
 
-	protected function handle(IJob $job) {
+	protected function handle(SmartDto $job) {
 		$progress = $job->getProgress();
 		$progress->onStart();
 		$result = $this->fileService->gc(true);

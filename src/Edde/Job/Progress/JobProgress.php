@@ -4,10 +4,14 @@ declare(strict_types=1);
 namespace Edde\Job\Progress;
 
 use DateTime;
+use Edde\Dto\SmartDto;
+use Edde\Dto\SmartServiceTrait;
 use Edde\Job\Exception\JobInterruptedException;
 use Edde\Job\Repository\JobLogRepositoryTrait;
 use Edde\Job\Repository\JobRepositoryTrait;
+use Edde\Job\Schema\Job\JobPatchRequestSchema;
 use Edde\Job\Schema\JobStatus;
+use Edde\Job\Service\JobServiceTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Mapper\Exception\ItemException;
 use Edde\Progress\AbstractProgress;
@@ -15,6 +19,8 @@ use Edde\Progress\IProgress;
 use Throwable;
 
 class JobProgress extends AbstractProgress {
+	use JobServiceTrait;
+	use SmartServiceTrait;
 	use JobRepositoryTrait;
 	use JobLogRepositoryTrait;
 	use LoggerTrait;
@@ -31,11 +37,21 @@ class JobProgress extends AbstractProgress {
 	public function onStart(int $total = 1): void {
 		$this->start = microtime(true);
 		$this->check();
-		$this->jobRepository->change([
-			'id'     => $this->jobId,
-			'total'  => $this->total = $total,
-			'status' => JobStatus::JOB_RUNNING,
-		]);
+		$this->jobService->patch(
+			$this->smartService->from(
+				[
+					'patch'  => [
+						'started' => new DateTime(),
+						'total'   => $this->total = $total,
+						'status'  => JobStatus::JOB_RUNNING,
+					],
+					'filter' => [
+						'id' => $this->jobId,
+					],
+				],
+				JobPatchRequestSchema::class
+			)
+		);
 		$this->check();
 	}
 
@@ -44,28 +60,41 @@ class JobProgress extends AbstractProgress {
 	 */
 	public function onProgress(): void {
 		$this->check();
-		$this->jobRepository->change([
-			'id'       => $this->jobId,
-			'success'  => ++$this->success,
-			'runtime'  => microtime(true) - $this->start,
-			'progress' => $this->progress(),
-		]);
+		$this->jobService->patch(
+			$this->smartService->from(
+				[
+					'patch'  => [
+						'successCount' => ++$this->success,
+						'progress'     => $this->progress(),
+					],
+					'filter' => [
+						'id' => $this->jobId,
+					],
+				],
+				JobPatchRequestSchema::class
+			)
+		);
 	}
 
-	public function onDone($result): void {
-		$job = $this->jobRepository->find($this->jobId);
-		$this->jobRepository->change([
-			'id'          => $this->jobId,
-			/**
-			 * If there are some errors, one has to do a check jobs.
-			 */
-			'status'      => ($job->error > 0 || $this->jobLogRepository->hasLog($job->id)) ? JobStatus::JOB_CHECK : JobStatus::JOB_SUCCESS,
-			'done'        => new DateTime(),
-			'result'      => json_encode($result),
-			'runtime'     => ($runtime = microtime(true) - $this->start),
-			'performance' => $runtime / max($job->success + $job->error, 1),
-			'progress'    => 100,
-		]);
+	public function onSettled(SmartDto $response = null): void {
+		$job = $this->jobService->find($this->jobId);
+		$this->jobService->patch(
+			$this->smartService->from(
+				[
+					'patch'  => [
+						'status'         => $job->getSafeValue('errorCount', 0) > 0 ? JobStatus::JOB_CHECK : JobStatus::JOB_SUCCESS,
+						'response'       => $response ? $response->export() : null,
+						'responseSchema' => $response ? $response->getSchema()->getName() : null,
+						'progress'       => 100,
+						'finished'       => new DateTime(),
+					],
+					'filter' => [
+						'id' => $this->jobId,
+					],
+				],
+				JobPatchRequestSchema::class
+			)
+		);
 	}
 
 	/**
@@ -74,11 +103,20 @@ class JobProgress extends AbstractProgress {
 	public function onError(Throwable $throwable, string $reference = null): void {
 		parent::onError($throwable, $reference);
 		$this->check();
-		$this->jobRepository->change([
-			'id'       => $this->jobId,
-			'error'    => $this->error,
-			'progress' => $this->progress(),
-		]);
+		$this->jobService->patch(
+			$this->smartService->from(
+				[
+					'patch'  => [
+						'errorCount' => $this->error,
+						'progress'   => $this->progress(),
+					],
+					'filter' => [
+						'id' => $this->jobId,
+					],
+				],
+				JobPatchRequestSchema::class
+			)
+		);
 		try {
 			throw $throwable;
 		} catch (ItemException $itemException) {
@@ -88,23 +126,51 @@ class JobProgress extends AbstractProgress {
 			$type = null;
 		}
 		$this->logger->error($throwable);
-		$this->jobLogRepository->log($this->jobId, IProgress::LOG_ERROR, $throwable->getMessage(), $this->context, $type, $reference);
+		$this->jobLogRepository->log(
+			$this->jobId,
+			IProgress::LOG_ERROR,
+			$throwable->getMessage(),
+			$this->context,
+			$type,
+			$reference
+		);
 	}
 
 	public function onFailure(Throwable $throwable): void {
-		$this->jobRepository->change([
-			'id'     => $this->jobId,
-			'status' => JobStatus::JOB_ERROR,
-		]);
+		$this->jobService->patch(
+			$this->smartService->from(
+				[
+					'patch'  => [
+						'status' => JobStatus::JOB_ERROR,
+					],
+					'filter' => [
+						'id' => $this->jobId,
+					],
+				],
+				JobPatchRequestSchema::class
+			)
+		);
 		$this->logger->error($throwable);
 		$this->log(self::LOG_ERROR, $throwable->getMessage(), null, 'job.failure');
 	}
 
 	public function check(): void {
 		parent::check();
-		$job = $this->jobRepository->find($this->jobId);
-		if ($job->status === JobStatus::JOB_INTERRUPTED) {
-			$this->jobRepository->update($this->jobId, ['done' => new DateTime()]);
+		$job = $this->jobService->find($this->jobId);
+		if ($job->getValue('status') === JobStatus::JOB_INTERRUPTED) {
+			$this->jobService->patch(
+				$this->smartService->from(
+					[
+						'patch'  => [
+							'finished' => new DateTime(),
+						],
+						'filter' => [
+							'id' => $this->jobId,
+						],
+					],
+					JobPatchRequestSchema::class
+				)
+			);
 			throw new JobInterruptedException(sprintf('Job [%s] has been interrupted.', $this->jobId));
 		}
 	}

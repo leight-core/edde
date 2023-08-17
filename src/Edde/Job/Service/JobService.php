@@ -38,6 +38,12 @@ class JobService implements IJobService {
 		);
 	}
 
+	public function patch(SmartDto $patch): SmartDto {
+		return $this->jobMapper->item(
+			$this->jobRepository->patch($patch)
+		);
+	}
+
 	public function find(string $jobId): SmartDto {
 		return $this->jobMapper->item(
 			$this->jobRepository->find($jobId)

@@ -26,6 +26,8 @@ interface IJobService {
 	 */
 	public function create(IAsyncService $asyncService, ?SmartDto $request): SmartDto;
 
+	public function patch(SmartDto $patch): SmartDto;
+
 	/**
 	 * @param string $jobId
 	 *

@@ -79,7 +79,7 @@ abstract class AbstractJobExecutor implements IJobExecutor {
 			);
 			$progress->log(IProgress::LOG_INFO, 'Job successfully finished.');
 			$this->logger->info('Job successfully finished, setting job done.', ['tags' => ['job']]);
-			$progress->onDone($result);
+			$progress->onSettled($result);
 			return $result;
 		} catch (JobInterruptedException $exception) {
 			$progress->log(IProgress::LOG_INFO, sprintf('Job [%s] has been interrupted.', $jobId));

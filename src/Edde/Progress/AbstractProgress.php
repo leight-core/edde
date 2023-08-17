@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Progress;
 
+use Edde\Dto\SmartDto;
 use Edde\Log\LoggerTrait;
 use Edde\Php\Exception\MemoryLimitException;
 use Edde\Php\MemoryServiceTrait;
@@ -41,8 +42,8 @@ abstract class AbstractProgress implements IProgress {
 		$this->progress = $this->progress();
 	}
 
-	public function onDone($result): void {
-		$this->result = $result;
+	public function onSettled(SmartDto $response = null): void {
+		$this->result = $response;
 		$this->progress = $this->progress();
 	}
 

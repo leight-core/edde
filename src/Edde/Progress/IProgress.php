@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Progress;
 
+use Edde\Dto\SmartDto;
 use Edde\Php\Exception\MemoryLimitException;
 use Throwable;
 
@@ -42,7 +43,7 @@ interface IProgress {
 	/**
 	 * When a job is done and returned to JobManager this method is called.
 	 */
-	public function onDone($result): void;
+	public function onSettled(SmartDto $response = null): void;
 
 	/**
 	 * Called when an item cannot be processed (but job is still running).

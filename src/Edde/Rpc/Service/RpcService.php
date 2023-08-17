@@ -36,11 +36,6 @@ class RpcService {
 	}
 
 	public function execute(SmartDto $dto) {
-
-
-		usleep(rand(50, 200) * 1000);
-
-
 		$response = [];
 		/** @var $bulk SmartDto */
 		foreach ($dto->getSafeValue('bulk', []) as $id => $bulk) {

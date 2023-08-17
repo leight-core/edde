@@ -11,7 +11,6 @@ use Edde\Dto\SmartServiceTrait;
 use Edde\Job\Async\IAsyncService;
 use Edde\Job\Exception\JobException;
 use Edde\Job\Exception\JobInterruptedException;
-use Edde\Job\Progress\JobProgressFactoryTrait;
 use Edde\Job\Repository\JobLogRepositoryTrait;
 use Edde\Job\Repository\JobRepositoryTrait;
 use Edde\Job\Service\JobServiceTrait;
@@ -33,7 +32,6 @@ abstract class AbstractJobExecutor implements IJobExecutor {
 	use SmartServiceTrait;
 	use LoggerTrait;
 	use JobServiceTrait;
-	use JobProgressFactoryTrait;
 	use LanguageServiceTrait;
 
 	/**
@@ -65,7 +63,7 @@ abstract class AbstractJobExecutor implements IJobExecutor {
 		$this->logger->info(sprintf('Running job [%s]', $jobId), ['tags' => ['job']]);
 		$job = $this->jobService->find($jobId);
 		$this->logger->info(sprintf('Executing job service [%s], user id [%s].', $job->getValue('service'), $job->getValue('userId')), ['tags' => ['job']]);
-		$progress = $this->jobProgressFactory->create($jobId);
+		$progress = $job->getValue('withProgress');
 		$progress->log(IProgress::LOG_INFO, sprintf('Executing job service [%s], user id [%s], language [%s].', $job->getValue('service'), $job->getValue('userId'), $this->languageService->forCurrentUser()));
 		try {
 			if (!($service = $this->container->get($job->getValue('service'))) instanceof IAsyncService) {

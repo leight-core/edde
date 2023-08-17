@@ -49,12 +49,12 @@ class CliJobExecutor extends AbstractJobExecutor {
 		return $this->profilerService->profile(static::class, function () use ($asyncService, $params) {
 			$this->logger->info(sprintf('Executing background job for [%s] in [%s].', get_class($asyncService), static::class), ['tags' => ['job']]);
 			$job = $this->createJob($asyncService, $params);
-			/** @var $jobProgress IProgress */
-			$jobProgress = $job->getValue('withProgress');
-			$jobProgress->log(IProgress::LOG_INFO, sprintf('New job [%s].', $job->getValue('id')));
+			/** @var $progress IProgress */
+			$progress = $job->getValue('withProgress');
+			$progress->log(IProgress::LOG_INFO, sprintf('New job [%s].', $job->getValue('id')));
 			$this->logger->info(sprintf('New job [%s].', $job->getValue('id')), ['tags' => ['job']]);
 			$php = $this->configService->get('php-cli') ?? $this->phpBinaryService->find();
-			$jobProgress->log(IProgress::LOG_INFO, sprintf('PHP executable [%s].', $php));
+			$progress->log(IProgress::LOG_INFO, sprintf('PHP executable [%s].', $php));
 			$this->logger->info(sprintf('PHP executable [%s].', $php), ['tags' => ['job']]);
 			$process = new Process([
 				$php,
@@ -67,7 +67,7 @@ class CliJobExecutor extends AbstractJobExecutor {
 			$process->setOptions(['create_new_console' => true]);
 			$process->disableOutput();
 			$process->start();
-			$jobProgress->log(IProgress::LOG_INFO, vsprintf('Job (probably) running [%s] [pid: %d]. Executor finished [%s].', [
+			$progress->log(IProgress::LOG_INFO, vsprintf('Job (probably) running [%s] [pid: %d]. Executor finished [%s].', [
 				$process->isRunning() ? 'yes' : 'no',
 				$process->getPid(),
 				$process->getCommandLine(),
@@ -81,7 +81,7 @@ class CliJobExecutor extends AbstractJobExecutor {
 				['tags' => ['job']]
 			);
 			if (!$process->isRunning()) {
-				$jobProgress->onFailure($throwable = new JobException(sprintf('Job is not running; check the PHP binary (%s).', $php)));
+				$progress->onFailure($throwable = new JobException(sprintf('Job is not running; check the PHP binary (%s).', $php)));
 				throw $throwable;
 			}
 			$this->logger->info(sprintf('Executed [%s] in [%s].', get_class($asyncService), static::class), ['tags' => ['job']]);

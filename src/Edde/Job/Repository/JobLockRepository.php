@@ -18,6 +18,7 @@ class JobLockRepository extends AbstractRepository {
 
 	protected function applyWhere(string $alias, SmartDto $filter, SmartDto $query, QueryBuilder $queryBuilder): void {
 		parent::applyWhere($alias, $filter, $query, $queryBuilder);
+		$filter->knownWithValue('jobId') && $this->matchOf($queryBuilder, $alias, '$.jobId', $filter->getValue('jobId'));
 		$filter->knownWithValue('name') && $this->matchOf($queryBuilder, $alias, '$.name', $filter->getValue('name'));
 		$filter->knownWithValue('active') && $this->matchOf($queryBuilder, $alias, '$.active', $filter->getValue('active'));
 	}

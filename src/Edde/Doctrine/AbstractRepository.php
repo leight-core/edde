@@ -131,13 +131,21 @@ abstract class AbstractRepository implements IRepository {
 		return $this->hydrate($entity);
 	}
 
+	public function findByOrThrow(SmartDto $query) {
+		return $this->hydrate(
+			$this->toQuery('q', $query)->getQuery()->getSingleResult()
+		);
+	}
+
 	/**
 	 * @inheritDoc
 	 */
 	public function all(string $alias): array {
-		return $this->toHydrate($this->select($alias)
-			->getQuery()
-			->getResult());
+		return $this->toHydrate(
+			$this->select($alias)
+				->getQuery()
+				->getResult()
+		);
 	}
 
 	/**
@@ -187,6 +195,10 @@ abstract class AbstractRepository implements IRepository {
 		$entity = $this->find($query->getValue('id'));
 		$this->entityManager->remove($entity);
 		return $entity;
+	}
+
+	public function deleteWith(SmartDto $query): void {
+		$this->toQuery('d', $query)->delete();
 	}
 
 	/**

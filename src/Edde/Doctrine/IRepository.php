@@ -85,6 +85,13 @@ interface IRepository {
 	public function find(string $id, string $message = null);
 
 	/**
+	 * @param SmartDto $query
+	 *
+	 * @return TEntity
+	 */
+	public function findByOrThrow(SmartDto $query);
+
+	/**
 	 * @return TEntity[]
 	 */
 	public function all(string $alias): array;
@@ -124,6 +131,8 @@ interface IRepository {
 	 * @throws SmartDtoException
 	 */
 	public function deleteBy(SmartDto $query);
+
+	public function deleteWith(SmartDto $query): void;
 
 	/**
 	 * Original use case is to resolve an entity for "upsert" (called before any action) to ensure

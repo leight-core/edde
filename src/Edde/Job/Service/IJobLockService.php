@@ -6,9 +6,9 @@ namespace Edde\Job\Service;
 use Edde\Dto\SmartDto;
 
 interface IJobLockService {
-	public function lock(SmartDto $job): void;
+	public function lock(SmartDto $jobLock): void;
 
-	public function isLocked(SmartDto $job): bool;
+	public function isLocked(SmartDto $job, SmartDto $query): bool;
 
-	public function unlock(SmartDto $job): void;
+	public function unlock(SmartDto $query): void;
 }

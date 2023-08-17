@@ -7,6 +7,7 @@ use DateTime;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\Job\Executor\JobExecutorTrait;
+use Edde\Job\Schema\JobLock\JobLockQuerySchema;
 use Edde\Job\Schema\JobLock\JobLockSchema;
 use Edde\Job\Service\JobLockServiceTrait;
 use Edde\Log\LoggerTrait;
@@ -39,21 +40,44 @@ abstract class AbstractAsyncService implements IAsyncService {
 
 	public function lock(SmartDto $job): void {
 		$this->jobLockService->lock(
-			$this->smartService->from([
-				'jobId'  => $job->getValue('id'),
-				'name'   => static::class,
-				'stamp'  => new DateTime(),
-				'active' => true,
-			], JobLockSchema::class)
+			$this->smartService->from(
+				[
+					'jobId'  => $job->getValue('id'),
+					'name'   => static::class,
+					'stamp'  => new DateTime(),
+					'active' => true,
+				],
+				JobLockSchema::class
+			)
 		);
 	}
 
 	public function isLocked(SmartDto $job): bool {
-		return $this->jobLockService->isLocked($job);
+		return $this->jobLockService->isLocked(
+			$job,
+			$this->smartService->from([
+				'filter' => [
+					'name'   => static::class,
+					'active' => true,
+				],
+				'cursor' => [
+					'page' => 0,
+					'size' => 1,
+				],
+			], JobLockQuerySchema::class)
+		);
 	}
 
 	public function unlock(SmartDto $job): void {
-		$this->jobLockService->unlock($job);
+		$this->jobLockService->unlock(
+			$this->smartService->from([
+				'filter' => [
+					'active' => false,
+					'jobId'  => $job->getValue('id'),
+					'name'   => static::class,
+				],
+			], JobLockQuerySchema::class)
+		);
 	}
 
 	public function async(SmartDto $request = null): SmartDto {

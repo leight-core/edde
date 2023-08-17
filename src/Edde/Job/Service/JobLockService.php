@@ -4,27 +4,22 @@ declare(strict_types=1);
 namespace Edde\Job\Service;
 
 use Edde\Dto\SmartDto;
+use Edde\Dto\SmartServiceTrait;
+use Edde\Job\Repository\JobLockRepositoryTrait;
 
 class JobLockService implements IJobLockService {
-	public function lock(SmartDto $job): void {
+	use JobLockRepositoryTrait;
+	use SmartServiceTrait;
+
+	public function lock(SmartDto $jobLock): void {
+		$this->jobLockRepository->save($jobLock);
 	}
 
-	public function isLocked(SmartDto $job): bool {
-		$lock = $this->jobLockRepository
-			->select()
-			->where('name', static::class)
-			->where('active', true)
-			->execute()
-			->fetch();
-		return $lock->job_id !== $job->getId();
+	public function isLocked(SmartDto $job, SmartDto $query): bool {
+		return $this->jobLockRepository->findByOrThrow($query)->jobId !== $job->getValue('id');
 	}
 
-	public function unlock(SmartDto $job): void {
-		$this->jobLockRepository
-			->table()
-			->update(['active' => false])
-			->where('job_id', $job->getId())
-			->where('name', static::class)
-			->execute();
+	public function unlock(SmartDto $query): void {
+		$this->jobLockRepository->deleteWith($query);
 	}
 }

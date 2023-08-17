@@ -11,6 +11,7 @@ use Edde\Job\Schema\JobLock\JobLockQuerySchema;
 use Edde\Job\Schema\JobLock\JobLockSchema;
 use Edde\Job\Service\JobLockServiceTrait;
 use Edde\Log\LoggerTrait;
+use Throwable;
 use function sleep;
 
 abstract class AbstractAsyncService implements IAsyncService {
@@ -33,6 +34,8 @@ abstract class AbstractAsyncService implements IAsyncService {
 				sleep(3);
 			}
 			return $this->handle($job);
+		} catch (Throwable $exception) {
+			$this->logger->error($exception);
 		} finally {
 			$this->unlock($job);
 		}

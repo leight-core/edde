@@ -78,7 +78,7 @@ abstract class AbstractAsyncService implements IAsyncService {
 		$this->jobLockService->unlock(
 			$this->smartService->from([
 				'filter' => [
-					'active' => false,
+					'active' => true,
 					'jobId'  => $job->getValue('id'),
 					'name'   => static::class,
 				],

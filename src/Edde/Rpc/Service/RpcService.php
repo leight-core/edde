@@ -38,7 +38,7 @@ class RpcService {
 	public function execute(SmartDto $dto) {
 
 
-		usleep(rand(100, 500) * 1000);
+		usleep(rand(50, 200) * 1000);
 
 
 		$response = [];

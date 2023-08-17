@@ -4,9 +4,8 @@ declare(strict_types=1);
 namespace Edde\Job\Schema\JobLog;
 
 use DateTime;
-use Edde\Doctrine\Schema\UuidSchema;
 
-interface JobLogSchema extends UuidSchema {
+interface JobLogCreateSchema {
 	function jobId(): string;
 
 	function level(): int;

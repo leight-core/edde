@@ -37,7 +37,9 @@ use Edde\Image\ImageService;
 use Edde\Job\Command\JobExecutorCommand;
 use Edde\Job\Executor\CliJobExecutor;
 use Edde\Job\Executor\IJobExecutor;
+use Edde\Job\Service\IJobLockService;
 use Edde\Job\Service\IJobService;
+use Edde\Job\Service\JobLockService;
 use Edde\Job\Service\JobService;
 use Edde\Log\DatabaseLogger;
 use Edde\Mapper\IMapperService;
@@ -187,7 +189,7 @@ class SlimApp {
 			ISourceService::class         => function (ContainerInterface $container) {
 				return $container->get(SourceService::class);
 			},
-			IMapperService::class => function (ContainerInterface $container) {
+			IMapperService::class  => function (ContainerInterface $container) {
 				return $container->get(MapperService::class);
 			},
 			StorageConfig::class          => function (ContainerInterface $container) {
@@ -227,7 +229,10 @@ class SlimApp {
 			IRpcHandlerIndex::class       => function (ContainerInterface $container) {
 				return $container->get(RpcHandlerIndex::class);
 			},
-			IJobService::class    => function (ContainerInterface $container) {
+			IJobLockService::class => function (ContainerInterface $container) {
+				return $container->get(JobLockService::class);
+			},
+			IJobService::class     => function (ContainerInterface $container) {
 				return $container->get(JobService::class);
 			},
 			Manager::class                => function (ContainerInterface $container) {

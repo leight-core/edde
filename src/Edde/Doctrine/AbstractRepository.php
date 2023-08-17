@@ -314,11 +314,11 @@ abstract class AbstractRepository implements IRepository {
 	 * @param QueryBuilder $queryBuilder
 	 * @param string       $alias
 	 * @param string       $field
-	 * @param string       $value
+	 * @param mixed        $value
 	 *
 	 * @return void
 	 */
-	protected function matchOf(QueryBuilder $queryBuilder, string $alias, string $field, string $value) {
+	protected function matchOf(QueryBuilder $queryBuilder, string $alias, string $field, $value) {
 		$queryBuilder->where($this->field($field, $alias) . " = :" . $this->paramOf($queryBuilder, $value));
 	}
 

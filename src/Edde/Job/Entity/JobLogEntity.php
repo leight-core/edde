@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Job\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Edde\Doctrine\AbstractUuidEntity;
 
@@ -12,7 +13,7 @@ use Edde\Doctrine\AbstractUuidEntity;
  */
 class JobLogEntity extends AbstractUuidEntity {
 	/**
-	 * @ORM\Column(type="string", length=36)
+	 * @ORM\Column(type="string", length=36, name="job_id")
 	 * @var string
 	 */
 	public $jobId;
@@ -23,7 +24,7 @@ class JobLogEntity extends AbstractUuidEntity {
 	public $type;
 	/**
 	 * @ORM\Column(type="integer")
-	 * @var string
+	 * @var int
 	 */
 	public $level;
 	/**
@@ -43,7 +44,7 @@ class JobLogEntity extends AbstractUuidEntity {
 	public $message;
 	/**
 	 * @ORM\Column(type="datetime")
-	 * @var string
+	 * @var DateTime
 	 */
 	public $stamp;
 }

@@ -63,7 +63,7 @@ class JobUpgrade extends CommonMigration {
 			->addUuidForeignColumn('job', 'z_job', ['comment' => 'Related job to which the lock belongs'])
 			->addStringColumn('name', 128, ['comment' => 'Lock name'])
 			->addColumn('active', 'boolean', ['comment' => 'Is the lock active?'])
-			->addColumn('stamp', 'double', ['comment' => 'When a lock has been created (microtime).'])
+			->addColumn('stamp', 'datetime', ['comment' => 'When a lock has been created (microtime).'])
 			->save();
 
 		$this

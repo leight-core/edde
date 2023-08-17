@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Job\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Edde\Doctrine\AbstractUuidEntity;
 
@@ -18,32 +19,32 @@ class JobEntity extends AbstractUuidEntity {
 	public $service;
 	/**
 	 * @ORM\Column(type="integer")
-	 * @var string
+	 * @var int
 	 */
 	public $status;
 	/**
 	 * @ORM\Column(type="integer")
-	 * @var string
+	 * @var int
 	 */
 	public $total;
 	/**
 	 * @ORM\Column(type="float")
-	 * @var string
+	 * @var float
 	 */
 	public $progress;
 	/**
 	 * @ORM\Column(type="integer")
-	 * @var string
+	 * @var int
 	 */
 	public $successCount;
 	/**
 	 * @ORM\Column(type="integer")
-	 * @var string
+	 * @var int
 	 */
 	public $errorCount;
 	/**
 	 * @ORM\Column(type="integer")
-	 * @var string
+	 * @var int
 	 */
 	public $skipCount;
 	/**
@@ -68,16 +69,16 @@ class JobEntity extends AbstractUuidEntity {
 	public $responseSchema;
 	/**
 	 * @ORM\Column(type="datetime")
-	 * @var string
+	 * @var DateTime
 	 */
 	public $started;
 	/**
 	 * @ORM\Column(type="datetime", nullable=true)
-	 * @var string
+	 * @var DateTime
 	 */
 	public $finished;
 	/**
-	 * @ORM\Column(type="string", length=36)
+	 * @ORM\Column(type="string", name="user_id", length=36)
 	 * @var string
 	 */
 	public $userId;

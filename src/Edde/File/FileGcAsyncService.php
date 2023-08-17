@@ -6,7 +6,7 @@ namespace Edde\File;
 use Edde\Job\Async\AbstractAsyncService;
 use Edde\Job\IJob;
 
-class FileGcService extends AbstractAsyncService {
+class FileGcAsyncService extends AbstractAsyncService {
 	use FileServiceTrait;
 
 	protected function handle(IJob $job) {

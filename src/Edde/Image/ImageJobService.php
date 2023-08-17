@@ -5,7 +5,7 @@ namespace Edde\Image;
 
 use Edde\Dto\DtoServiceTrait;
 use Edde\File\Dto\FileDto;
-use Edde\File\FileGcServiceTrait;
+use Edde\File\FileGcAsyncServiceTrait;
 use Edde\File\FileServiceTrait;
 use Edde\File\Mapper\FileMapperTrait;
 use Edde\File\Repository\FileRepositoryTrait;
@@ -23,7 +23,7 @@ use function sprintf;
 use function str_replace;
 
 class ImageJobService extends AbstractAsyncService {
-	use FileGcServiceTrait;
+	use FileGcAsyncServiceTrait;
 	use FileRepositoryTrait;
 	use FileMapperTrait;
 	use FileServiceTrait;
@@ -107,6 +107,6 @@ class ImageJobService extends AbstractAsyncService {
 			]);
 		}
 
-		$this->fileGcService->async();
+		$this->fileGcAsyncService->async();
 	}
 }

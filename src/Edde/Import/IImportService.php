@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Edde\Import;
 
+use Edde\Dto\SmartDto;
 use Edde\Job\Async\IAsyncService;
-use Edde\Job\Dto\JobDto;
 
 interface IImportService extends IAsyncService {
 	/**
@@ -12,7 +12,7 @@ interface IImportService extends IAsyncService {
 	 *
 	 * @param string $fileId
 	 *
-	 * @return JobDto
+	 * @return SmartDto
 	 */
-	public function import(string $fileId): JobDto;
+	public function import(string $fileId): SmartDto;
 }

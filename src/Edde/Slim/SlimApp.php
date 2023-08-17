@@ -38,8 +38,10 @@ use Edde\Job\Command\JobExecutorCommand;
 use Edde\Job\Executor\CliJobExecutor;
 use Edde\Job\Executor\IJobExecutor;
 use Edde\Job\Service\IJobLockService;
+use Edde\Job\Service\IJobLogService;
 use Edde\Job\Service\IJobService;
 use Edde\Job\Service\JobLockService;
+use Edde\Job\Service\JobLogService;
 use Edde\Job\Service\JobService;
 use Edde\Log\DatabaseLogger;
 use Edde\Mapper\IMapperService;
@@ -231,6 +233,9 @@ class SlimApp {
 			},
 			IJobLockService::class => function (ContainerInterface $container) {
 				return $container->get(JobLockService::class);
+			},
+			IJobLogService::class  => function (ContainerInterface $container) {
+				return $container->get(JobLogService::class);
 			},
 			IJobService::class     => function (ContainerInterface $container) {
 				return $container->get(JobService::class);

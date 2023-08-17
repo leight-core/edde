@@ -7,10 +7,10 @@ use DateTime;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\Job\Exception\JobInterruptedException;
-use Edde\Job\Repository\JobLogRepositoryTrait;
 use Edde\Job\Repository\JobRepositoryTrait;
 use Edde\Job\Schema\Job\JobPatchRequestSchema;
 use Edde\Job\Schema\JobStatus;
+use Edde\Job\Service\JobLogServiceTrait;
 use Edde\Job\Service\JobServiceTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Mapper\Exception\ItemException;
@@ -22,7 +22,7 @@ class JobProgress extends AbstractProgress {
 	use JobServiceTrait;
 	use SmartServiceTrait;
 	use JobRepositoryTrait;
-	use JobLogRepositoryTrait;
+	use JobLogServiceTrait;
 	use LoggerTrait;
 
 	/** @var string */
@@ -176,7 +176,7 @@ class JobProgress extends AbstractProgress {
 	}
 
 	public function log(int $level, string $message, string $type = null, string $reference = null) {
-		$this->jobLogRepository->log(
+		$this->jobLogService->log(
 			$this->jobId,
 			$level,
 			$message,

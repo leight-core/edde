@@ -76,9 +76,8 @@ abstract class AbstractEndpoint implements IEndpoint {
 						$this->createRequest($method),
 					];
 				}
-				$result = $this->{$this->endpoint->method->name}(...$args);
-				if ($result instanceof SmartDto) {
-					$result = $result->getValues();
+				if (($result = $this->{$this->endpoint->method->name}(...$args)) instanceof SmartDto) {
+					$result = $result->export();
 				}
 				$this->entityManager->flush();
 				return $result instanceof ResponseInterface ? $result : Response::withJson($response, $result);

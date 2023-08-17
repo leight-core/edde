@@ -63,6 +63,7 @@ abstract class AbstractJobExecutor implements IJobExecutor {
 		$this->logger->info(sprintf('Running job [%s]', $jobId), ['tags' => ['job']]);
 		$job = $this->jobService->find($jobId);
 		$this->logger->info(sprintf('Executing job service [%s], user id [%s].', $job->getValue('service'), $job->getValue('userId')), ['tags' => ['job']]);
+		/** @var $progress IProgress */
 		$progress = $job->getValue('withProgress');
 		$progress->log(IProgress::LOG_INFO, sprintf('Executing job service [%s], user id [%s], language [%s].', $job->getValue('service'), $job->getValue('userId'), $this->languageService->forCurrentUser()));
 		try {

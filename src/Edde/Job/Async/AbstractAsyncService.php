@@ -55,16 +55,19 @@ abstract class AbstractAsyncService implements IAsyncService {
 	public function isLocked(SmartDto $job): bool {
 		return $this->jobLockService->isLocked(
 			$job,
-			$this->smartService->from([
-				'filter' => [
-					'name'   => static::class,
-					'active' => true,
+			$this->smartService->from(
+				[
+					'filter' => [
+						'name'   => static::class,
+						'active' => true,
+					],
+					'cursor' => [
+						'page' => 0,
+						'size' => 1,
+					],
 				],
-				'cursor' => [
-					'page' => 0,
-					'size' => 1,
-				],
-			], JobLockQuerySchema::class)
+				JobLockQuerySchema::class
+			)
 		);
 	}
 

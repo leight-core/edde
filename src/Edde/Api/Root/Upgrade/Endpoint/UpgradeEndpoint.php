@@ -10,7 +10,7 @@ use Edde\Rest\Endpoint\AbstractMutationEndpoint;
 class UpgradeEndpoint extends AbstractMutationEndpoint {
 	use UpgradeAsyncServiceTrait;
 
-	public function post(): SmartDto {
+	public function get(): SmartDto {
 		return $this->upgradeAsyncService->async();
 	}
 }

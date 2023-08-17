@@ -4,8 +4,13 @@ declare(strict_types=1);
 namespace Edde\Job\Executor;
 
 use Dibi\Exception;
+use Edde\Dto\Exception\SmartDtoException;
 use Edde\Dto\SmartDto;
 use Edde\Job\Async\IAsyncService;
+use Edde\Mapper\Exception\ItemException;
+use Edde\Mapper\Exception\SkipException;
+use Edde\User\Exception\UserNotSelectedException;
+use ReflectionException;
 
 interface IJobExecutor {
 	/**
@@ -15,6 +20,11 @@ interface IJobExecutor {
 	 * @param mixed|null    $params     optional parameter DTO for the Job service being called
 	 *
 	 * @return SmartDto
+	 * @throws SmartDtoException
+	 * @throws ItemException
+	 * @throws SkipException
+	 * @throws UserNotSelectedException
+	 * @throws ReflectionException
 	 */
 	public function execute(IAsyncService $jobService, $params = null): SmartDto;
 

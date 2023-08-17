@@ -34,9 +34,9 @@ interface IAsyncService {
 	/**
 	 * Run the job service async.
 	 *
-	 * @param mixed|null $params
+	 * @param SmartDto|null $request
 	 *
 	 * @return SmartDto
 	 */
-	public function async($params = null): SmartDto;
+	public function async(SmartDto $request = null): SmartDto;
 }

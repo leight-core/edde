@@ -51,9 +51,9 @@ class CliJobExecutor extends AbstractJobExecutor {
 		return $this->profilerService->profile(static::class, function () use ($jobService, $params) {
 			$this->logger->info(sprintf('Executing background job for [%s] in [%s].', get_class($jobService), static::class), ['tags' => ['job']]);
 			$job = $this->createJob($jobService, $params);
-			$jobProgress = $this->jobProgressFactory->create($job->id);
-			$jobProgress->log(IProgress::LOG_INFO, sprintf('New job [%s].', $job->id));
-			$this->logger->info(sprintf('New job [%s].', $job->id), ['tags' => ['job']]);
+			$jobProgress = $this->jobProgressFactory->create($job->getValue('id'));
+			$jobProgress->log(IProgress::LOG_INFO, sprintf('New job [%s].', $job->getValue('id')));
+			$this->logger->info(sprintf('New job [%s].', $job->getValue('id')), ['tags' => ['job']]);
 			$php = $this->configService->get('php-cli') ?? $this->phpBinaryService->find();
 			$jobProgress->log(IProgress::LOG_INFO, sprintf('PHP executable [%s].', $php));
 			$this->logger->info(sprintf('PHP executable [%s].', $php), ['tags' => ['job']]);
@@ -63,7 +63,7 @@ class CliJobExecutor extends AbstractJobExecutor {
 				'job',
 				'--trace=' . $this->traceService->trace(),
 				'--user=' . $this->currentUserService->requiredId(),
-				$job->id,
+				$job->getValue('id'),
 			], null, $_SERVER, null, null);
 			$process->setOptions(['create_new_console' => true]);
 			$process->disableOutput();

@@ -56,8 +56,8 @@ abstract class AbstractAsyncService implements IAsyncService {
 		$this->jobLockService->unlock($job);
 	}
 
-	public function async($params = null): SmartDto {
-		return $this->jobExecutor->execute($this, $params);
+	public function async(SmartDto $request = null): SmartDto {
+		return $this->jobExecutor->execute($this, $request);
 	}
 
 	abstract protected function handle(SmartDto $job);

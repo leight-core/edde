@@ -207,7 +207,7 @@ abstract class AbstractRepository implements IRepository {
 	}
 
 	public function deleteWith(SmartDto $query): void {
-		$this->toQuery('d', $query)->delete();
+		$this->toQuery('d', $query)->delete()->getQuery()->execute();
 	}
 
 	/**

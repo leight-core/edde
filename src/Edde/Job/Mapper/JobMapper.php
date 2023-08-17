@@ -3,15 +3,10 @@ declare(strict_types=1);
 
 namespace Edde\Job\Mapper;
 
-use Edde\Job\Repository\JobLogRepositoryTrait;
 use Edde\Job\Schema\Job\JobSchema;
 use Edde\Mapper\AbstractMapper;
-use Edde\Process\ProcessServiceTrait;
 
 class JobMapper extends AbstractMapper {
-	use JobLogRepositoryTrait;
-	use ProcessServiceTrait;
-
 	public function item($item, $params = null) {
 		return $this->smartService->from($item, JobSchema::class);
 

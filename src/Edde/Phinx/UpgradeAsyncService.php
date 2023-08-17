@@ -13,7 +13,8 @@ class UpgradeAsyncService extends AbstractAsyncService {
 	use UpgradeManagerTrait;
 
 	protected function handle(SmartDto $job) {
-		$progress = $job->getProgress();
+		/** @var $progress IProgress */
+		$progress = $job->getValue('withProgress');
 		$progress->onStart($this->upgradeManager->getPendingCount());
 		foreach ($this->upgradeManager->getPending() as $abstractMigration) {
 			$progress->onCurrent(['index' => sprintf('%s-%s', $abstractMigration->getVersion(), $abstractMigration->getName())]);

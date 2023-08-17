@@ -12,7 +12,7 @@ class JobLockRepository extends AbstractRepository {
 	public function __construct() {
 		parent::__construct(JobLockEntity::class);
 		$this->orderBy = [
-			'stamp' => 'asc',
+			'$.stamp' => 'asc',
 		];
 	}
 

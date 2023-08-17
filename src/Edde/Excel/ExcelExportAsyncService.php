@@ -14,7 +14,7 @@ class ExcelExportAsyncService extends AbstractAsyncService {
 	protected function handle(SmartDto $job) {
 		return $this->excelExportService->export(
 			$job->getSmartDto('params'),
-			$job->getProgress()
+			$job->getValue('withProgress')
 		);
 	}
 

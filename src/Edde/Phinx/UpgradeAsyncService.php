@@ -28,7 +28,7 @@ class UpgradeAsyncService extends AbstractAsyncService {
 			/**
 			 * Take a breath for a while.
 			 */
-			usleep(500000);
+			usleep(500 * 1000);
 			$progress->onProgress();
 		}
 	}

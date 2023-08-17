@@ -5,12 +5,14 @@ namespace Edde\File;
 
 use Edde\Dto\SmartDto;
 use Edde\Job\Async\AbstractAsyncService;
+use Edde\Progress\IProgress;
 
 class FileGcAsyncService extends AbstractAsyncService {
 	use FileServiceTrait;
 
 	protected function handle(SmartDto $job) {
-		$progress = $job->getProgress();
+		/** @var $progress IProgress */
+		$progress = $job->getValue('withProgress');
 		$progress->onStart();
 		$result = $this->fileService->gc(true);
 		$progress->onProgress();

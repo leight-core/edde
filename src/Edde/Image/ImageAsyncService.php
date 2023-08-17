@@ -13,6 +13,7 @@ use Edde\File\Repository\FileRepositoryTrait;
 use Edde\Image\Dto\CreateDto;
 use Edde\Image\Repository\ImageRepositoryTrait;
 use Edde\Job\Async\AbstractAsyncService;
+use Edde\Progress\IProgress;
 use Edde\Query\Dto\Query;
 use Edde\Stream\FileStream;
 use Throwable;
@@ -34,7 +35,8 @@ class ImageAsyncService extends AbstractAsyncService {
 
 		$query = (new Query())->withFilter(['pathEndLike' => '/image.raw']);
 
-		$progress = $job->getProgress();
+		/** @var $progress IProgress */
+		$progress = $job->getValue('withProgress');
 		$progress->onStart($total = $this->fileRepository->total($query));
 
 		$this->logger->debug(sprintf('Found [%d] images to process', $total), ['tags' => [static::class]]);

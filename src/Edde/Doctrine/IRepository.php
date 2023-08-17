@@ -89,6 +89,14 @@ interface IRepository {
 	 *
 	 * @return TEntity
 	 */
+	public function findBy(SmartDto $query);
+
+	/**
+	 * @param SmartDto $query
+	 *
+	 * @return TEntity
+	 * @throws NoResultException
+	 */
 	public function findByOrThrow(SmartDto $query);
 
 	/**

@@ -19,7 +19,10 @@ class JobLockService implements IJobLockService {
 	}
 
 	public function isLocked(SmartDto $job, SmartDto $query): bool {
-		return $this->jobLockRepository->findByOrThrow($query)->jobId !== $job->getValue('id');
+		if (!($lock = $this->jobLockRepository->findBy($query))) {
+			return false;
+		}
+		return $lock->jobId !== $job->getValue('id');
 	}
 
 	public function unlock(SmartDto $query): void {

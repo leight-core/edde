@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Edde\Doctrine;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Edde\Doctrine\Exception\RepositoryException;
 use Edde\Doctrine\Exception\RequiredResultException;
@@ -129,6 +130,14 @@ abstract class AbstractRepository implements IRepository {
 			throw new RequiredResultException($message ?? sprintf('Cannot find [%s] by [%s]!', $this->className, $id), 500);
 		}
 		return $this->hydrate($entity);
+	}
+
+	public function findBy(SmartDto $query) {
+		try {
+			return $this->findByOrThrow($query);
+		} catch (NoResultException $exception) {
+			return null;
+		}
 	}
 
 	public function findByOrThrow(SmartDto $query) {

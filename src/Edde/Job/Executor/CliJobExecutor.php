@@ -7,12 +7,11 @@ use Edde\Config\ConfigServiceTrait;
 use Edde\Dto\SmartDto;
 use Edde\File\FileServiceTrait;
 use Edde\Job\Async\IAsyncService;
-use Edde\Job\Dto\JobDto;
 use Edde\Job\Exception\JobException;
 use Edde\Job\Mapper\JobMapperTrait;
 use Edde\Job\Progress\JobProgressFactoryTrait;
 use Edde\Job\Repository\JobLogRepositoryTrait;
-use Edde\Job\Repository\JobRepositoryTrait;
+use Edde\Job\Service\JobServiceTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Log\TraceServiceTrait;
 use Edde\Php\PhpBinaryServiceTrait;
@@ -20,7 +19,6 @@ use Edde\Profiler\ProfilerServiceTrait;
 use Edde\Progress\IProgress;
 use Edde\User\CurrentUserServiceTrait;
 use Symfony\Component\Process\Process;
-use Throwable;
 use function get_class;
 use function realpath;
 use function sprintf;
@@ -32,7 +30,7 @@ class CliJobExecutor extends AbstractJobExecutor {
 	use CurrentUserServiceTrait;
 	use PhpBinaryServiceTrait;
 	use ConfigServiceTrait;
-	use JobRepositoryTrait;
+	use JobServiceTrait;
 	use JobLogRepositoryTrait;
 	use JobProgressFactoryTrait;
 	use JobMapperTrait;
@@ -47,11 +45,12 @@ class CliJobExecutor extends AbstractJobExecutor {
 	/**
 	 * @inheritdoc
 	 */
-	public function execute(IAsyncService $jobService, $params = null): SmartDto {
-		return $this->profilerService->profile(static::class, function () use ($jobService, $params) {
-			$this->logger->info(sprintf('Executing background job for [%s] in [%s].', get_class($jobService), static::class), ['tags' => ['job']]);
-			$job = $this->createJob($jobService, $params);
-			$jobProgress = $this->jobProgressFactory->create($job->getValue('id'));
+	public function execute(IAsyncService $asyncService, $params = null): SmartDto {
+		return $this->profilerService->profile(static::class, function () use ($asyncService, $params) {
+			$this->logger->info(sprintf('Executing background job for [%s] in [%s].', get_class($asyncService), static::class), ['tags' => ['job']]);
+			$job = $this->createJob($asyncService, $params);
+			/** @var $jobProgress IProgress */
+			$jobProgress = $job->getValue('withProgress');
 			$jobProgress->log(IProgress::LOG_INFO, sprintf('New job [%s].', $job->getValue('id')));
 			$this->logger->info(sprintf('New job [%s].', $job->getValue('id')), ['tags' => ['job']]);
 			$php = $this->configService->get('php-cli') ?? $this->phpBinaryService->find();
@@ -85,17 +84,11 @@ class CliJobExecutor extends AbstractJobExecutor {
 				$jobProgress->onFailure($throwable = new JobException(sprintf('Job is not running; check the PHP binary (%s).', $php)));
 				throw $throwable;
 			}
-			$this->logger->info(sprintf('Executed [%s] in [%s].', get_class($jobService), static::class), ['tags' => ['job']]);
-			try {
-				$this->jobRepository->update($job->id, ['pid' => $process->getPid()]);
-			} catch (Throwable $exception) {
-				$this->logger->error($exception);
-				// if the PID column is not available, swallow the exception.
-			}
+			$this->logger->info(sprintf('Executed [%s] in [%s].', get_class($asyncService), static::class), ['tags' => ['job']]);
 			/**
 			 * Refresh job as it could get some changes during start (like job-log).
 			 */
-			return $this->jobMapper->item($this->jobRepository->find($job->id));
+			return $this->jobService->find($job->getValue('id'));
 		});
 	}
 }

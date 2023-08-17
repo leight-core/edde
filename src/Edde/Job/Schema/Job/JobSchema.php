@@ -5,6 +5,9 @@ namespace Edde\Job\Schema\Job;
 
 use DateTime;
 use Edde\Doctrine\Schema\UuidSchema;
+use Edde\Dto\Mapper\ProxyDtoMapper;
+use Edde\Job\Progress\JobProgressFactory;
+use Edde\Progress\IProgress;
 
 interface JobSchema extends UuidSchema {
 	function service(): string;
@@ -34,4 +37,15 @@ interface JobSchema extends UuidSchema {
 	function finished(): ?DateTime;
 
 	function userId(): string;
+
+	function withProgress(
+		$output = ProxyDtoMapper::class,
+		$meta = [
+			'source' => 'id',
+			'proxy'  => [
+				JobProgressFactory::class,
+				'create',
+			],
+		]
+	): IProgress;
 }

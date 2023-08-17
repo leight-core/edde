@@ -7,62 +7,55 @@ use Edde\Phinx\CommonMigration;
 
 class JobUpgrade extends CommonMigration {
 	public function change(): void {
+		$this->drop(
+			'z_job_log',
+			'z_job_lock',
+			'z_job'
+		);
+
 		$this
 			->createUuidTable('z_job', ['comment' => 'Table containing jobs running or being executed.'])
 			->addStringColumn('service', 256, ['comment' => 'Service being called; must be accessible from DI container. Also it must implement IJobService interface.'])
-			->addTextColumn('params', [
-				'comment' => 'JSON encoded parameter DTO.',
-				'null'    => true,
-			])
-			->addTextColumn('result', [
-				'comment' => 'JSON encoded result DTO.',
-				'null'    => true,
+			->addColumn('status', 'integer', [
+				'limit'   => 1,
+				'comment' => 'Status code of the job',
 			])
 			->addColumn('total', 'integer', [
 				'default' => 0,
 				'comment' => 'Number of items of the job (for example for imports).',
 			])
-			->addColumn('success', 'integer', [
-				'default' => 0,
-				'comment' => 'Number of successful items processed.',
-			])
-			->addColumn('error', 'integer', [
-				'default' => 0,
-				'comment' => 'Number of failed items.',
-			])
 			->addColumn('progress', 'double', [
 				'default' => 0,
 				'comment' => 'Percentage of progress (based on total and count).',
 			])
-			->addColumn('runtime', 'double', [
+			->addColumn('successCount', 'integer', [
 				'default' => 0,
-				'comment' => 'How log the job have been running.',
+				'comment' => 'Number of successful items processed.',
 			])
-			->addColumn('performance', 'double', [
+			->addColumn('errorCount', 'integer', [
 				'default' => 0,
-				'comment' => 'Runtime per item (computed from runtime and count).',
+				'comment' => 'Number of failed items.',
 			])
-			->addColumn('status', 'integer', [
-				'limit'   => 1,
-				'comment' => 'Status code of the job',
+			->addColumn('skipCount', 'integer', [
+				'default' => 0,
+				'comment' => 'Number of skipped items.',
 			])
-			->addColumn('pid', 'integer', [
-				'comment' => 'If a job is processed by an executable, this is a PID; or other identifier to check if a process is running.',
+			->addTextColumn('request', [
+				'comment' => 'JSON encoded parameter DTO.',
 				'null'    => true,
 			])
-			->addColumn('created', 'datetime', ['comment' => 'Timestamp when a job was scheduled (basically also started).'])
-			->addColumn('done', 'datetime', [
+			->addStringColumn('requestSchema', 256, ['null' => true])
+			->addTextColumn('response', [
+				'comment' => 'JSON encoded response DTO.',
+				'null'    => true,
+			])
+			->addStringColumn('responseSchema', 256, ['null' => true])
+			->addColumn('started', 'datetime', ['comment' => 'Timestamp when a job was scheduled (basically also started).'])
+			->addColumn('finished', 'datetime', [
 				'comment' => 'Timestamp when a job was done (finished); should **not** be used as value for job status check!',
 				'null'    => true,
 			])
-			->addUuidForeignColumn('user', 'z_user', [
-				'comment' => 'An optional user who created this job.',
-				'null'    => true,
-			])
-			->addColumn('commit', 'boolean', [
-				'comment' => 'When a Human started a job, it could be marked as committed which means a Human made a revision of job state.',
-				'default' => false,
-			])
+			->addStringColumn('user_id', 36)
 			->save();
 
 		$this
@@ -95,7 +88,7 @@ class JobUpgrade extends CommonMigration {
 			->addTextColumn('message', [
 				'comment' => 'Content of the message',
 			])
-			->addColumn('stamp', 'double', ['comment' => 'When this log item occurred (microtime).'])
+			->addColumn('stamp', 'datetime', ['comment' => 'When this log item occurred (microtime).'])
 			->save();
 	}
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Edde\Api\Root\Job\Endpoint;
 
 use Dibi\Exception;
-use Edde\Job\JobExecutorTrait;
+use Edde\Job\Executor\JobExecutorTrait;
 use Edde\Rest\Endpoint\AbstractEndpoint;
 use Edde\Rest\Exception\RestException;
 

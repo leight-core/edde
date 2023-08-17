@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Edde\Job\Command;
 
 use Dibi\Exception;
-use Edde\Job\JobExecutorTrait;
+use Edde\Job\Executor\JobExecutorTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Log\TraceServiceTrait;
 use Edde\Mapper\Exception\ItemException;

@@ -5,10 +5,10 @@ namespace Edde\Import;
 
 use Edde\Dto\DtoServiceTrait;
 use Edde\File\FileServiceTrait;
-use Edde\Job\AbstractJobService;
+use Edde\Job\Async\AbstractAsyncService;
 use Edde\Job\Dto\JobDto;
 
-abstract class AbstractImportService extends AbstractJobService implements IImportService {
+abstract class AbstractImportService extends AbstractAsyncService implements IImportService {
 	use DtoServiceTrait;
 	use FileServiceTrait;
 

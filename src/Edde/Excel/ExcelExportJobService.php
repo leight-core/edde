@@ -5,10 +5,10 @@ namespace Edde\Excel;
 
 use Edde\Dto\DtoServiceTrait;
 use Edde\Excel\Dto\Export\ExcelExportDto;
-use Edde\Job\AbstractJobService;
+use Edde\Job\Async\AbstractAsyncService;
 use Edde\Job\IJob;
 
-class ExcelExportJobService extends AbstractJobService {
+class ExcelExportJobService extends AbstractAsyncService {
 	use ExcelExportServiceTrait;
 	use DtoServiceTrait;
 

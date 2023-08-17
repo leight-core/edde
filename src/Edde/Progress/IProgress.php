@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Progress;
 
+use Edde\Php\Exception\MemoryLimitException;
 use Throwable;
 
 /**
@@ -18,6 +19,8 @@ interface IProgress {
 	 * Called on the beginning of the job (when total number of items is known).
 	 *
 	 * @param int $total
+	 *
+	 * @throws MemoryLimitException
 	 */
 	public function onStart(int $total = 1): void;
 
@@ -48,6 +51,8 @@ interface IProgress {
 	 * @param string|null $reference
 	 */
 	public function onError(Throwable $throwable, string $reference = null): void;
+
+	public function onSkip(): void;
 
 	/**
 	 * Hook called when some nasty error happens (thus whole job fails without recovery).

@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Edde\Import;
 
+use Edde\Job\Async\IAsyncService;
 use Edde\Job\Dto\JobDto;
-use Edde\Job\IJobService;
 
-interface IImportService extends IJobService {
+interface IImportService extends IAsyncService {
 	/**
 	 * Just a wrapper around "async" method for convenience.
 	 *

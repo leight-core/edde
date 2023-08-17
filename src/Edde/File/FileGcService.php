@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Edde\File;
 
-use Edde\Job\AbstractJobService;
+use Edde\Job\Async\AbstractAsyncService;
 use Edde\Job\IJob;
 
-class FileGcService extends AbstractJobService {
+class FileGcService extends AbstractAsyncService {
 	use FileServiceTrait;
 
 	protected function handle(IJob $job) {

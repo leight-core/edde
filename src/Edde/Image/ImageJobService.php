@@ -11,7 +11,7 @@ use Edde\File\Mapper\FileMapperTrait;
 use Edde\File\Repository\FileRepositoryTrait;
 use Edde\Image\Dto\CreateDto;
 use Edde\Image\Repository\ImageRepositoryTrait;
-use Edde\Job\AbstractJobService;
+use Edde\Job\Async\AbstractAsyncService;
 use Edde\Job\IJob;
 use Edde\Query\Dto\Query;
 use Edde\Repository\Exception\DuplicateEntryException;
@@ -22,7 +22,7 @@ use function microtime;
 use function sprintf;
 use function str_replace;
 
-class ImageJobService extends AbstractJobService {
+class ImageJobService extends AbstractAsyncService {
 	use FileGcServiceTrait;
 	use FileRepositoryTrait;
 	use FileMapperTrait;

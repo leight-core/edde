@@ -34,9 +34,11 @@ use Edde\Http\IHttpIndex;
 use Edde\Http\IHttpRouter;
 use Edde\Image\IImageService;
 use Edde\Image\ImageService;
-use Edde\Job\CliJobExecutor;
 use Edde\Job\Command\JobExecutorCommand;
-use Edde\Job\IJobExecutor;
+use Edde\Job\Executor\CliJobExecutor;
+use Edde\Job\Executor\IJobExecutor;
+use Edde\Job\Service\IJobService;
+use Edde\Job\Service\JobService;
 use Edde\Log\DatabaseLogger;
 use Edde\Mapper\IMapperService;
 use Edde\Mapper\MapperService;
@@ -224,6 +226,9 @@ class SlimApp {
 			},
 			IRpcHandlerIndex::class       => function (ContainerInterface $container) {
 				return $container->get(RpcHandlerIndex::class);
+			},
+			IJobService::class    => function (ContainerInterface $container) {
+				return $container->get(JobService::class);
 			},
 			Manager::class                => function (ContainerInterface $container) {
 				$manager = new Manager($container->get(ConfigInterface::class), new ArrayInput([]), new StreamOutput(fopen('php://output', 'w')));

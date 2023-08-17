@@ -23,6 +23,7 @@ abstract class AbstractProgress implements IProgress {
 	public $success = 0;
 	/** @var int */
 	public $error = 0;
+	public $skip = 0;
 	public $progress = 0;
 	public $context;
 	public $result;
@@ -49,6 +50,11 @@ abstract class AbstractProgress implements IProgress {
 		$this->error++;
 		$this->progress = $this->progress();
 		$this->logger->error($throwable, ['context' => $this->context]);
+	}
+
+	public function onSkip(): void {
+		$this->skip++;
+		$this->progress = $this->progress();
 	}
 
 	public function onFailure(Throwable $throwable): void {

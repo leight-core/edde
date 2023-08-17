@@ -113,4 +113,7 @@ class BulkService {
 	public function query(SmartDto $request): array {
 		return $this->bulkDtoMapper->map($this->bulkRepository->query('b', $request));
 	}
+
+	public function job(SmartDto $request) {
+	}
 }

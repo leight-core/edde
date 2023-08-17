@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Edde\Job\Command;
 
 use Dibi\Exception;
+use Edde\Doctrine\EntityManagerTrait;
 use Edde\Job\Executor\JobExecutorTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Log\TraceServiceTrait;
@@ -24,6 +25,7 @@ class JobExecutorCommand extends Command {
 	use LoggerTrait;
 	use TraceServiceTrait;
 	use CurrentUserServiceTrait;
+	use EntityManagerTrait;
 
 	protected function configure() {
 		$this->setName('job');
@@ -53,6 +55,7 @@ class JobExecutorCommand extends Command {
 			$this->traceService->setReference($input->getOption('trace'));
 			$this->logger->debug(sprintf('Starting [%s]; job uuid [%s]', self::class, $uuid), ['tags' => ['job']]);
 			$this->jobExecutor->run($uuid);
+			$this->entityManager->flush();
 			$this->logger->debug(sprintf('Success of [%s]', self::class), ['tags' => ['job']]);
 		} catch (Throwable $exception) {
 			$this->logger->debug(sprintf('Failure of [%s]', self::class), ['tags' => ['job']]);

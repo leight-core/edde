@@ -12,9 +12,9 @@ use Edde\Progress\IProgress;
 interface JobSchema extends UuidSchema {
 	const meta = [
 		'import' => [
-			'JobSchema'  => '@leight/job',
-			'IJobSchema' => '@leight/job',
-			'IJob'       => '@leight/job',
+			'JobSchema'       => '@leight/job',
+			'type IJobSchema' => '@leight/job',
+			'type IJob'       => '@leight/job',
 		],
 	];
 

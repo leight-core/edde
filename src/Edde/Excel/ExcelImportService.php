@@ -12,11 +12,11 @@ use Edde\Progress\IProgress;
 class ExcelImportService extends AbstractImportService implements IExcelImportService {
 	use ExcelServiceTrait;
 
-	protected function handle(SmartDto $job, ?SmartDto $request) {
+	protected function handle(SmartDto $job, IProgress $progress, ?SmartDto $request) {
 		$file = $request->getValue('file');
-		return $this->fileService->useFile($file, function (FileDto $fileDto) use ($job) {
+		return $this->fileService->useFile($file, function (FileDto $fileDto) use ($job, $progress) {
 			/** @var $progress IProgress */
-			($progress = $job->getValue('withProgress'))->check();
+			$progress->check();
 			$this->excelService->handle($this->dtoService->fromArray(HandleDto::class, [
 				'file' => $fileDto->native,
 			]), $progress);

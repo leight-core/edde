@@ -24,7 +24,7 @@ class BulkService {
 	use BulkRepositoryTrait;
 	use BulkDtoMapperTrait;
 	use SmartServiceTrait;
-	use BulkyAsyncServiceTrait;
+	use BulkAsyncServiceTrait;
 
 	public function get(string $id): SmartDto {
 		return $this->bulkDtoMapper->item($this->bulkRepository->find($id));
@@ -116,6 +116,6 @@ class BulkService {
 	}
 
 	public function import(SmartDto $bulk): SmartDto {
-		return $this->bulkyAsyncService->async($bulk);
+		return $this->bulkAsyncService->async($bulk);
 	}
 }

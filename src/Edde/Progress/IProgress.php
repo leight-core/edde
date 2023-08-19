@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Edde\Progress;
 
 use Edde\Dto\SmartDto;
+use Edde\Job\Exception\JobInterruptedException;
 use Edde\Php\Exception\MemoryLimitException;
 use Throwable;
 
@@ -64,6 +65,8 @@ interface IProgress {
 
 	/**
 	 * Do job checks, typically check for the job interruption (could be also internally called inside other methods).
+	 *
+	 * @throws JobInterruptedException
 	 */
 	public function check(): void;
 

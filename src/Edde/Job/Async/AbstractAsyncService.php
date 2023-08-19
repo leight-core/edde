@@ -6,11 +6,14 @@ namespace Edde\Job\Async;
 use DateTime;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
+use Edde\Job\Exception\JobInterruptedException;
 use Edde\Job\Executor\JobExecutorTrait;
 use Edde\Job\Schema\JobLock\JobLockQuerySchema;
 use Edde\Job\Schema\JobLock\JobLockSchema;
 use Edde\Job\Service\JobLockServiceTrait;
 use Edde\Log\LoggerTrait;
+use Edde\Php\Exception\MemoryLimitException;
+use Edde\Progress\IProgress;
 use Throwable;
 use function sleep;
 
@@ -33,7 +36,11 @@ abstract class AbstractAsyncService implements IAsyncService {
 				 */
 				sleep(3);
 			}
-			return $this->handle($job, $job->getValue('withRequest'));
+			return $this->handle(
+				$job,
+				$job->getValue('withProgress'),
+				$job->getValue('withRequest')
+			);
 		} catch (Throwable $exception) {
 			$this->logger->error($exception);
 		} finally {
@@ -90,5 +97,14 @@ abstract class AbstractAsyncService implements IAsyncService {
 		return $this->jobExecutor->execute($this, $request);
 	}
 
-	abstract protected function handle(SmartDto $job, ?SmartDto $request);
+	/**
+	 * @param SmartDto      $job
+	 * @param IProgress     $progress
+	 * @param SmartDto|null $request
+	 *
+	 * @return mixed
+	 * @throws MemoryLimitException
+	 * @throws JobInterruptedException
+	 */
+	abstract protected function handle(SmartDto $job, IProgress $progress, ?SmartDto $request);
 }

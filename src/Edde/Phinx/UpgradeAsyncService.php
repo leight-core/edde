@@ -12,9 +12,7 @@ use function usleep;
 class UpgradeAsyncService extends AbstractAsyncService {
 	use UpgradeManagerTrait;
 
-	protected function handle(SmartDto $job, ?SmartDto $request) {
-		/** @var $progress IProgress */
-		$progress = $job->getValue('withProgress');
+	protected function handle(SmartDto $job, IProgress $progress, ?SmartDto $request) {
 		$progress->onStart($this->upgradeManager->getPendingCount());
 		foreach ($this->upgradeManager->getPending() as $abstractMigration) {
 			$progress->onCurrent(['index' => sprintf('%s-%s', $abstractMigration->getVersion(), $abstractMigration->getName())]);

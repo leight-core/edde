@@ -6,15 +6,16 @@ namespace Edde\Excel;
 use Edde\Dto\DtoServiceTrait;
 use Edde\Dto\SmartDto;
 use Edde\Job\Async\AbstractAsyncService;
+use Edde\Progress\IProgress;
 
 class ExcelExportAsyncService extends AbstractAsyncService {
 	use ExcelExportServiceTrait;
 	use DtoServiceTrait;
 
-	protected function handle(SmartDto $job, ?SmartDto $request) {
+	protected function handle(SmartDto $job, IProgress $progress, ?SmartDto $request) {
 		return $this->excelExportService->export(
 			$request,
-			$job->getValue('withProgress')
+			$progress
 		);
 	}
 

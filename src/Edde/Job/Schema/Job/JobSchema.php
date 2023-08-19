@@ -35,8 +35,8 @@ interface JobSchema extends UuidSchema {
 	function skipCount(): int;
 
 	function request(
-		$input = JsonInputMapper::class,
-		$output = JsonOutputMapper::class
+		$input = JsonOutputMapper::class,
+		$output = JsonInputMapper::class
 	): ?string;
 
 	function requestSchema(): ?string;

@@ -12,7 +12,7 @@ use function usleep;
 class UpgradeAsyncService extends AbstractAsyncService {
 	use UpgradeManagerTrait;
 
-	protected function handle(SmartDto $job) {
+	protected function handle(SmartDto $job, ?SmartDto $request) {
 		/** @var $progress IProgress */
 		$progress = $job->getValue('withProgress');
 		$progress->onStart($this->upgradeManager->getPendingCount());

@@ -33,7 +33,7 @@ abstract class AbstractAsyncService implements IAsyncService {
 				 */
 				sleep(3);
 			}
-			return $this->handle($job);
+			return $this->handle($job, $job->getValue('withRequest'));
 		} catch (Throwable $exception) {
 			$this->logger->error($exception);
 		} finally {
@@ -90,5 +90,5 @@ abstract class AbstractAsyncService implements IAsyncService {
 		return $this->jobExecutor->execute($this, $request);
 	}
 
-	abstract protected function handle(SmartDto $job);
+	abstract protected function handle(SmartDto $job, ?SmartDto $request);
 }

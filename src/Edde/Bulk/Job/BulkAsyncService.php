@@ -7,6 +7,6 @@ use Edde\Dto\SmartDto;
 use Edde\Job\Async\AbstractAsyncService;
 
 class BulkAsyncService extends AbstractAsyncService {
-	protected function handle(SmartDto $job) {
+	protected function handle(SmartDto $job, ?SmartDto $request) {
 	}
 }

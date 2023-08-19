@@ -30,7 +30,7 @@ class ImageAsyncService extends AbstractAsyncService {
 	use ImageRepositoryTrait;
 	use DtoServiceTrait;
 
-	protected function handle(SmartDto $job) {
+	protected function handle(SmartDto $job, ?SmartDto $request) {
 		$this->logger->debug('Starting image service.', ['tags' => [static::class]]);
 
 		$query = (new Query())->withFilter(['pathEndLike' => '/image.raw']);

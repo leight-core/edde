@@ -10,7 +10,7 @@ use Edde\Progress\IProgress;
 class FileGcAsyncService extends AbstractAsyncService {
 	use FileServiceTrait;
 
-	protected function handle(SmartDto $job) {
+	protected function handle(SmartDto $job, ?SmartDto $request) {
 		/** @var $progress IProgress */
 		$progress = $job->getValue('withProgress');
 		$progress->onStart();

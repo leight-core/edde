@@ -7,8 +7,6 @@ use Edde\Dto\SmartDto;
 use Edde\Job\Async\AbstractAsyncService;
 
 class BulkyAsyncService extends AbstractAsyncService {
-	protected function handle(SmartDto $job) {
-		/** @var $identity SmartDto */
-		$identity = $job->getValue('withRequest');
+	protected function handle(SmartDto $job, ?SmartDto $request) {
 	}
 }

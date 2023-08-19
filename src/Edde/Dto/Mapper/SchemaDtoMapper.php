@@ -21,6 +21,6 @@ class SchemaDtoMapper extends AbstractDtoMapper {
 		return $this->smartService->from(
 			$value,
 			$attribute->getMetaOrThrow('schema')
-		);
+		)->validate();
 	}
 }

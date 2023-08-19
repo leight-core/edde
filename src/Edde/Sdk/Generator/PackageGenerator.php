@@ -21,6 +21,7 @@ class PackageGenerator extends AbstractGenerator {
 			'dependencies'    => [
 				'@leight/auth' => '^0.6.0',
 				'@leight/bulk' => '^0.6.0',
+				'@leight/job'  => '^0.6.0',
 				'@leight/rpc'   => '^0.6.0',
 				'@leight/utils' => '^0.6.0',
 			],

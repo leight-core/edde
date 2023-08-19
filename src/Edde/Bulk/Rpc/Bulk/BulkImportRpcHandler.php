@@ -9,7 +9,7 @@ use Edde\Job\Schema\Job\JobSchema;
 use Edde\Query\Schema\WithIdentitySchema;
 use Edde\Rpc\AbstractRpcHandler;
 
-class BulkJobRpcHandler extends AbstractRpcHandler {
+class BulkImportRpcHandler extends AbstractRpcHandler {
 	use BulkServiceTrait;
 
 	protected $requestSchema = WithIdentitySchema::class;

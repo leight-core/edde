@@ -3,7 +3,18 @@ declare(strict_types=1);
 
 namespace Edde\Dto;
 
+use Edde\Dto\Exception\SmartDtoException;
+use Edde\Schema\SchemaException;
+
 interface ISmartService {
+	/**
+	 * @param string $schema
+	 * @param array  $template
+	 *
+	 * @return SmartDto
+	 * @throws SmartDtoException
+	 * @throws SchemaException
+	 */
 	public function create(string $schema, array $template = []): SmartDto;
 
 	/**
@@ -12,8 +23,11 @@ interface ISmartService {
 	 *
 	 * @param object|array $object
 	 * @param string       $schema
+	 * @param array        $template
 	 *
 	 * @return SmartDto
+	 * @throws SmartDtoException
+	 * @throws SchemaException
 	 */
 	public function from($object, string $schema, array $template = []): SmartDto;
 
@@ -24,8 +38,11 @@ interface ISmartService {
 	 *
 	 * @param SmartDto $dto
 	 * @param string   $schema
+	 * @param array    $template
 	 *
 	 * @return SmartDto
+	 * @throws SmartDtoException
+	 * @throws SchemaException
 	 */
 	public function check(SmartDto $dto, string $schema, array $template = []): SmartDto;
 }

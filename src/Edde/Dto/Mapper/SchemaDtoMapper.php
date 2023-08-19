@@ -12,10 +12,14 @@ class SchemaDtoMapper extends AbstractDtoMapper {
 
 	protected function handle(Value $value, SmartDto $dto) {
 		$attribute = $value->getAttribute();
+		$value = $dto->getValue(
+			$attribute->getMetaOrThrow('source')
+		);
+		if (!$value) {
+			return null;
+		}
 		return $this->smartService->from(
-			$dto->getValue(
-				$attribute->getMetaOrThrow('source')
-			),
+			$value,
 			$attribute->getMetaOrThrow('schema')
 		);
 	}

@@ -17,7 +17,7 @@ abstract class AbstractDtoMapper extends AbstractMapper {
 		} else if (!($params['dto'] instanceof SmartDto)) {
 			throw new SmartDtoException(sprintf('Cannot proxy value; [dto] in $params is not instance of [%s].', SmartDto::class));
 		}
-		$this->handle($params['value'], $params['dto']);
+		return $this->handle($params['value'], $params['dto']);
 	}
 
 	abstract protected function handle(Value $value, SmartDto $dto);

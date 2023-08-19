@@ -10,6 +10,14 @@ use Edde\Job\Progress\JobProgressFactory;
 use Edde\Progress\IProgress;
 
 interface JobSchema extends UuidSchema {
+	const meta = [
+		'import' => [
+			'JobSchema'  => '@leight/job',
+			'IJobSchema' => '@leight/job',
+			'IJob'       => '@leight/job',
+		],
+	];
+
 	function service(): string;
 
 	function status(): int;

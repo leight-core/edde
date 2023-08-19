@@ -177,6 +177,20 @@ class SmartDto implements IDto, IteratorAggregate {
 		return $this;
 	}
 
+	/**
+	 * Push ignores input mapper
+	 *
+	 * @param string $name
+	 * @param        $value
+	 *
+	 * @return $this
+	 * @throws SmartDtoException
+	 */
+	public function push(string $name, $value): self {
+		$this->get($name)->push($value);
+		return $this;
+	}
+
 	public function put(string $name, $value, bool $withFallback = false) {
 		$this->set($name, $value, $withFallback);
 		return $value;
@@ -272,7 +286,7 @@ class SmartDto implements IDto, IteratorAggregate {
 	 * @throws SmartDtoException
 	 * @throws SchemaException
 	 */
-	public function from($object): self {
+	public function from($object, bool $raw = false): self {
 		if (!$object) {
 			return $this;
 		}
@@ -299,7 +313,7 @@ class SmartDto implements IDto, IteratorAggregate {
 					$v = self::ofSchema($schema, $this->mapperService)->from($v);
 				}
 			}
-			$this->set($k, $v);
+			$raw ? $this->setRaw($k, $v) : $this->set($k, $v);
 		}
 		return $this;
 	}

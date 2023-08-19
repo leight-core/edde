@@ -8,6 +8,8 @@ use Edde\Doctrine\Schema\UuidSchema;
 use Edde\Dto\Mapper\ProxyDtoMapper;
 use Edde\Job\Progress\JobProgressFactory;
 use Edde\Progress\IProgress;
+use Edde\Utils\Mapper\JsonInputMapper;
+use Edde\Utils\Mapper\JsonOutputMapper;
 
 interface JobSchema extends UuidSchema {
 	const meta = [
@@ -32,11 +34,17 @@ interface JobSchema extends UuidSchema {
 
 	function skipCount(): int;
 
-	function request(): ?string;
+	function request(
+		$input = JsonInputMapper::class,
+		$output = JsonOutputMapper::class
+	): ?string;
 
 	function requestSchema(): ?string;
 
-	function response(): ?string;
+	function response(
+		$input = JsonInputMapper::class,
+		$output = JsonOutputMapper::class
+	): ?string;
 
 	function responseSchema(): ?string;
 

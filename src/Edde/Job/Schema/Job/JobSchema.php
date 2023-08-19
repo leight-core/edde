@@ -8,6 +8,7 @@ use Edde\Doctrine\Schema\UuidSchema;
 use Edde\Dto\Mapper\ProxyDtoMapper;
 use Edde\Dto\Mapper\SchemaDtoMapper;
 use Edde\Dto\SmartDto;
+use Edde\Job\Mapper\JobCountMapper;
 use Edde\Job\Progress\JobProgressFactory;
 use Edde\Progress\IProgress;
 use Edde\Utils\Mapper\JsonInputMapper;
@@ -35,6 +36,10 @@ interface JobSchema extends UuidSchema {
 	function errorCount(): int;
 
 	function skipCount(): int;
+
+	function count(
+		$output = JobCountMapper::class
+	): int;
 
 	function request(
 		$input = JsonInputMapper::class,

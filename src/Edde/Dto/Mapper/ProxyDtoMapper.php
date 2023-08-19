@@ -7,21 +7,11 @@ use Edde\Container\ContainerTrait;
 use Edde\Dto\Exception\SmartDtoException;
 use Edde\Dto\SmartDto;
 use Edde\Dto\Value;
-use Edde\Mapper\AbstractMapper;
 
-class ProxyDtoMapper extends AbstractMapper {
+class ProxyDtoMapper extends AbstractDtoMapper {
 	use ContainerTrait;
 
-	public function item($item, $params = null) {
-		if (!is_array($params) || !array_key_exists('dto', $params) || !array_key_exists('value', $params)) {
-			throw new SmartDtoException(sprintf('Cannot proxy value; $params is not an array with [dto, value] keys (defaults from SmartDto).'));
-		} else if (!($params['value'] instanceof Value)) {
-			throw new SmartDtoException(sprintf('Cannot proxy value; [value] in $params is not instance of [%s].', Value::class));
-		} else if (!($params['dto'] instanceof SmartDto)) {
-			throw new SmartDtoException(sprintf('Cannot proxy value; [dto] in $params is not instance of [%s].', SmartDto::class));
-		}
-		$dto = $params['dto'];
-		$value = $params['value'];
+	protected function handle(Value $value, SmartDto $dto) {
 		$attribute = $value->getAttribute();
 		[
 			$service,

@@ -6,6 +6,8 @@ namespace Edde\Job\Schema\Job;
 use DateTime;
 use Edde\Doctrine\Schema\UuidSchema;
 use Edde\Dto\Mapper\ProxyDtoMapper;
+use Edde\Dto\Mapper\SchemaDtoMapper;
+use Edde\Dto\SmartDto;
 use Edde\Job\Progress\JobProgressFactory;
 use Edde\Progress\IProgress;
 use Edde\Utils\Mapper\JsonInputMapper;
@@ -64,4 +66,12 @@ interface JobSchema extends UuidSchema {
 			],
 		]
 	): IProgress;
+
+	function withRequest(
+		$output = SchemaDtoMapper::class,
+		$meta = [
+			'source' => 'request',
+			'schema' => 'requestSchema',
+		]
+	): ?SmartDto;
 }

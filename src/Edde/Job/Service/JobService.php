@@ -33,8 +33,7 @@ class JobService implements IJobService {
 					'requestSchema' => $request ? $request->getSchema()->getName() : null,
 					'started'       => new DateTime(),
 					'userId'        => $this->currentUserService->requiredId(),
-				], JobSchema::class),
-				false
+				], JobSchema::class)
 			)
 		);
 	}

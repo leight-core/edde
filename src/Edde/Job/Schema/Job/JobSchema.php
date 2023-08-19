@@ -42,8 +42,8 @@ interface JobSchema extends UuidSchema {
 	function requestSchema(): ?string;
 
 	function response(
-		$input = JsonInputMapper::class,
-		$output = JsonOutputMapper::class
+		$input = JsonOutputMapper::class,
+		$output = JsonInputMapper::class
 	): ?string;
 
 	function responseSchema(): ?string;

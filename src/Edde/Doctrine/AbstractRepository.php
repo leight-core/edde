@@ -68,9 +68,9 @@ abstract class AbstractRepository implements IRepository {
 	/**
 	 * @inheritDoc
 	 */
-	public function save(SmartDto $dto) {
+	public function save(SmartDto $dto, bool $raw = true) {
 		$this->entityManager->persist(
-			$entity = $dto->instanceOf($this->className, true)
+			$entity = $dto->instanceOf($this->className, $raw)
 		);
 		return $entity;
 	}

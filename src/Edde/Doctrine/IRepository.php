@@ -40,7 +40,7 @@ interface IRepository {
 	 * @throws ReflectionException
 	 * @throws SmartDtoException
 	 */
-	public function save(SmartDto $dto);
+	public function save(SmartDto $dto, bool $raw = true);
 
 	/**
 	 * Smart create/update.

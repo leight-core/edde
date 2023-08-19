@@ -14,10 +14,9 @@ class BulkJobRpcHandler extends AbstractRpcHandler {
 
 	protected $requestSchema = WithIdentitySchema::class;
 	protected $responseSchema = JobSchema::class;
-
-//	protected $responseSchema=
+	protected $isMutator = true;
 
 	public function handle(SmartDto $request) {
-		return $this->bulkService->job($request);
+		return $this->bulkService->import($request);
 	}
 }

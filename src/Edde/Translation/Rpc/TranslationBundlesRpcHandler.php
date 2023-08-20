@@ -19,7 +19,7 @@ class TranslationBundlesRpcHandler extends AbstractRpcHandler {
 		foreach ($this->translationRepository->languages() as ['locale' => $locale]) {
 			$bundles[] = [
 				'language'     => $locale,
-				'translations' => [],
+				'translations' => $this->translationRepository->translationsOf($locale),
 			];
 		}
 		$bundles = [

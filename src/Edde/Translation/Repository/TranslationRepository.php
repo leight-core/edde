@@ -92,6 +92,18 @@ class TranslationRepository extends AbstractRepository {
 		return $this->native("SELECT DISTINCT locale FROM %n", $this->table);
 	}
 
+	public function translationsOf(string $locale) {
+		return $this->native("
+SELECT
+	key,
+	translation as value
+FROM
+	%n
+WHERE
+	locale = ?
+		", $this->table, $locale);
+	}
+
 	public function toLanguages(): array {
 		return iterator_to_array($this->languages());
 	}

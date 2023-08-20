@@ -440,8 +440,8 @@ class SmartDto implements IDto, IteratorAggregate {
 		}
 	}
 
-	public function convertTo(string $schema): self {
-		return $this->toDto($schema, $this->export(true));
+	public function convertTo(string $schema, bool $raw = false): self {
+		return $this->toDto($schema, $this->export($raw));
 	}
 
 	protected function toDto(string $schema, $values = null): self {

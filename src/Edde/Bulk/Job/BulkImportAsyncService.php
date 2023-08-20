@@ -7,7 +7,7 @@ use Edde\Dto\SmartDto;
 use Edde\Job\Async\AbstractAsyncService;
 use Edde\Progress\IProgress;
 
-class BulkAsyncService extends AbstractAsyncService {
+class BulkImportAsyncService extends AbstractAsyncService {
 	protected function handle(SmartDto $job, IProgress $progress, ?SmartDto $request) {
 	}
 }

@@ -17,7 +17,7 @@ use Edde\Bulk\Rpc\BulkItem\BulkItemFetchRpcHandler;
 use Edde\Bulk\Rpc\BulkItem\BulkItemQueryRpcHandler;
 use Edde\Bulk\Rpc\BulkItem\BulkItemUpsertRpcHandler;
 use Edde\Cache\Rpc\DropCacheRpcHandler;
-use Edde\Job\Rpc\JobFetchRpcService;
+use Edde\Job\Rpc\JobFetchRpcHandler;
 use Edde\Job\Rpc\JobQueryRpcHandler;
 use Edde\Rpc\Service\RpcHandlerIndexTrait;
 use Edde\Translation\Rpc\TranslationBundlesRpcHandler;
@@ -34,7 +34,7 @@ class BootstrapDefaultRpcIndex extends AbstractBootstrap {
 			TicketRpcHandler::class,
 			DropCacheRpcHandler::class,
 			TranslationBundlesRpcHandler::class,
-			JobFetchRpcService::class,
+			JobFetchRpcHandler::class,
 			JobQueryRpcHandler::class,
 			BulkCreateRpcHandler::class,
 			BulkQueryRpcHandler::class,

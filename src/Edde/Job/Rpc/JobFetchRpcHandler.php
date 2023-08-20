@@ -9,7 +9,7 @@ use Edde\Job\Service\JobServiceTrait;
 use Edde\Query\Schema\WithIdentitySchema;
 use Edde\Rpc\AbstractRpcHandler;
 
-class JobFetchRpcService extends AbstractRpcHandler {
+class JobFetchRpcHandler extends AbstractRpcHandler {
 	use JobServiceTrait;
 
 	protected $requestSchema = WithIdentitySchema::class;

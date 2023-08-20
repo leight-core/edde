@@ -104,9 +104,9 @@ interface IRepository {
 	/**
 	 * @param Query $query
 	 *
-	 * @return object
+	 * @return object|bool
 	 */
-	public function fetch(Query $query): object;
+	public function fetch(Query $query);
 
 	/**
 	 * @param Query $query

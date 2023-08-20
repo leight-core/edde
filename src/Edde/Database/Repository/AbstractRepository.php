@@ -136,7 +136,7 @@ abstract class AbstractRepository implements IRepository {
 		return $this->queryOf()->select(array_merge([$this->field('$.*')], $fields), $override)->from($this->table);
 	}
 
-	public function fetch(Query $query): object {
+	public function fetch(Query $query) {
 		return $query->execute()->fetch(StatementInterface::FETCH_TYPE_OBJ);
 	}
 

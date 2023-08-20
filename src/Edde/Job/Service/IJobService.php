@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Job\Service;
 
-use Edde\Doctrine\Exception\RequiredResultException;
+use Edde\Database\Exception\RequiredResultException;
 use Edde\Dto\Exception\SmartDtoException;
 use Edde\Dto\SmartDto;
 use Edde\Job\Async\IAsyncService;

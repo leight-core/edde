@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Edde\Job\Repository;
 
 use Doctrine\ORM\QueryBuilder;
-use Edde\Doctrine\AbstractRepository;
+use Edde\Database\Repository\AbstractRepository;
 use Edde\Dto\SmartDto;
 use Edde\Job\Entity\JobLockEntity;
 
@@ -16,10 +16,10 @@ class JobLockRepository extends AbstractRepository {
 		];
 	}
 
-	protected function applyWhere(string $alias, SmartDto $filter, SmartDto $query, QueryBuilder $queryBuilder): void {
-		parent::applyWhere($alias, $filter, $query, $queryBuilder);
-		$filter->knownWithValue('jobId') && $this->matchOf($queryBuilder, $alias, '$.jobId', $filter->getValue('jobId'));
-		$filter->knownWithValue('name') && $this->matchOf($queryBuilder, $alias, '$.name', $filter->getValue('name'));
-		$filter->knownWithValue('active') && $this->matchOf($queryBuilder, $alias, '$.active', $filter->getValue('active'));
+	protected function applyWhere(SmartDto $filter, SmartDto $query, QueryBuilder $builder): void {
+		parent::applyWhere($filter, $query, $builder);
+		$filter->knownWithValue('jobId') && $this->matchOf($builder, '$.jobId', $filter->getValue('jobId'));
+		$filter->knownWithValue('name') && $this->matchOf($builder, '$.name', $filter->getValue('name'));
+		$filter->knownWithValue('active') && $this->matchOf($builder, '$.active', $filter->getValue('active'));
 	}
 }

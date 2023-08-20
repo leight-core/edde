@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Schema\Bulk;
 
+use Edde\Database\Schema\UuidSchema;
 use Edde\Date\Mapper\IsoDateMapper;
-use Edde\Doctrine\Schema\UuidSchema;
 
 interface BulkSchema extends UuidSchema {
 	const meta = [

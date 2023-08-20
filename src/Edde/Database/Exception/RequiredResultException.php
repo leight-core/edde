@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\Doctrine\Exception;
+namespace Edde\Database\Exception;
 
 class RequiredResultException extends RepositoryException {
 }

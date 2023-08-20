@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Edde\Job\Schema\Job;
 
 use DateTime;
-use Edde\Doctrine\Schema\UuidSchema;
+use Edde\Database\Schema\UuidSchema;
 use Edde\Dto\Mapper\ProxyDtoMapper;
 use Edde\Dto\Mapper\SchemaDtoMapper;
 use Edde\Dto\SmartDto;

@@ -20,7 +20,7 @@ class JobService implements IJobService {
 
 	public function create(IAsyncService $asyncService, ?SmartDto $request): SmartDto {
 		return $this->jobDtoMapper->item(
-			$this->jobRepository->save(
+			$this->jobRepository->create(
 				$this->smartService->from([
 					'service'       => get_class($asyncService),
 					'status'        => 0,

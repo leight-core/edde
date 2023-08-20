@@ -7,7 +7,7 @@ use DateTime;
 use Edde\Bulk\Mapper\BulkItemDtoMapperTrait;
 use Edde\Bulk\Repository\BulkItemRepositoryTrait;
 use Edde\Bulk\Schema\BulkItem\Internal\BulkItemUpsertRequestSchema;
-use Edde\Doctrine\Exception\RequiredResultException;
+use Edde\Database\Exception\RequiredResultException;
 use Edde\Dto\Exception\SmartDtoException;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
@@ -55,7 +55,7 @@ class BulkItemService {
 	 *
 	 * @return SmartDto
 	 * @throws ItemException
-	 * @throws RequiredResultException
+	 * @throws \Edde\Database\Exception\RequiredResultException
 	 * @throws SkipException
 	 * @throws SmartDtoException
 	 */

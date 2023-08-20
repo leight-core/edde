@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Edde\Tag\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Edde\Doctrine\AbstractUuidEntity;
+use Edde\Database\Entity\AbstractUuidEntity;
 
 abstract class TagEntity extends AbstractUuidEntity {
 	/**

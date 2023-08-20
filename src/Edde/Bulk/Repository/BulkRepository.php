@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Edde\Bulk\Repository;
 
 use Edde\Bulk\Entity\BulkEntity;
-use Edde\Doctrine\AbstractRepository;
+use Edde\Database\Repository\AbstractRepository;
 
 class BulkRepository extends AbstractRepository {
 	public function __construct() {

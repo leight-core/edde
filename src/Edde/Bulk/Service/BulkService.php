@@ -9,8 +9,8 @@ use Edde\Bulk\Mapper\BulkDtoMapperTrait;
 use Edde\Bulk\Repository\BulkRepositoryTrait;
 use Edde\Bulk\Schema\Bulk\Internal\BulkCreateSchema;
 use Edde\Bulk\Schema\Bulk\Internal\BulkUpdateRequestSchema;
-use Edde\Doctrine\Exception\RepositoryException;
-use Edde\Doctrine\Exception\RequiredResultException;
+use Edde\Database\Exception\RepositoryException;
+use Edde\Database\Exception\RequiredResultException;
 use Edde\Dto\Exception\SmartDtoException;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
@@ -43,7 +43,7 @@ class BulkService {
 	 */
 	public function create(SmartDto $request): SmartDto {
 		return $this->bulkDtoMapper->item(
-			$this->bulkRepository->save(
+			$this->bulkRepository->create(
 				$request
 					->convertTo(BulkCreateSchema::class)
 					->merge([
@@ -61,7 +61,7 @@ class BulkService {
 	 *
 	 * @return SmartDto
 	 * @throws ItemException
-	 * @throws RequiredResultException
+	 * @throws \Edde\Database\Exception\RequiredResultException
 	 * @throws SkipException
 	 * @throws SmartDtoException
 	 */
@@ -74,7 +74,7 @@ class BulkService {
 	 *
 	 * @return SmartDto
 	 * @throws ItemException
-	 * @throws RequiredResultException
+	 * @throws \Edde\Database\Exception\RequiredResultException
 	 * @throws SkipException
 	 * @throws SmartDtoException
 	 */
@@ -88,8 +88,8 @@ class BulkService {
 	 * @return void
 	 * @throws ReflectionException
 	 * @throws SmartDtoException
-	 * @throws RepositoryException
-	 * @throws RequiredResultException
+	 * @throws \Edde\Database\Exception\RepositoryException
+	 * @throws \Edde\Database\Exception\RequiredResultException
 	 */
 	public function commit(SmartDto $request) {
 		$this->bulkRepository->update(

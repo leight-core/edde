@@ -5,7 +5,7 @@ namespace Edde\Job\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Edde\Doctrine\AbstractUuidEntity;
+use Edde\Database\Entity\AbstractUuidEntity;
 
 /**
  * @ORM\Entity()

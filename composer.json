@@ -35,12 +35,11 @@
 	},
 	"require": {
 		"cache/void-adapter": "^1.1",
+		"cakephp/database": "4.3.11",
 		"clancats/hydrahon": "^1.1",
 		"dibi/dibi": "^4.1",
 		"diff/diff": "^3.2",
 		"doctrine/annotations": "^1.12",
-		"doctrine/dbal": "^3.3",
-		"doctrine/orm": "^2.14",
 		"ext-json": "*",
 		"ext-pdo": "*",
 		"ext-zlib": "*",

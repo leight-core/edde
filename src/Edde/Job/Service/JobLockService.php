@@ -14,7 +14,7 @@ class JobLockService implements IJobLockService {
 	use EntityManagerTrait;
 
 	public function lock(SmartDto $jobLock): void {
-		$this->jobLockRepository->save($jobLock);
+		$this->jobLockRepository->create($jobLock);
 		$this->entityManager->flush();
 	}
 

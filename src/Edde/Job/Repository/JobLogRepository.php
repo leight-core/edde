@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Job\Repository;
 
-use Edde\Doctrine\AbstractRepository;
+use Edde\Database\Repository\AbstractRepository;
 use Edde\Job\Entity\JobLogEntity;
 
 class JobLogRepository extends AbstractRepository {

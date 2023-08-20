@@ -1,17 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\Doctrine;
+namespace Edde\Database\Repository;
 
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
-use Doctrine\ORM\QueryBuilder;
-use Edde\Doctrine\Exception\RepositoryException;
-use Edde\Doctrine\Exception\RequiredResultException;
+use Cake\Database\Query;
+use Cake\Database\StatementInterface;
+use Edde\Database\Exception\RepositoryException;
+use Edde\Database\Exception\RequiredResultException;
 use Edde\Dto\Exception\SmartDtoException;
 use Edde\Dto\SmartDto;
-use ReflectionException;
 
 /**
  * @template TEntity of object
@@ -19,28 +16,16 @@ use ReflectionException;
  */
 interface IRepository {
 	/**
-	 * @return TEntity
-	 *
-	 * @throws ReflectionException
-	 */
-	public function createEntity();
-
-	/**
-	 * @return EntityRepository
-	 */
-	public function getRepository(): EntityRepository;
-
-	/**
-	 * Saves a new entity.
+	 * Insert a new entity into database
 	 *
 	 * @param SmartDto $dto
+	 * @param bool     $raw
 	 *
 	 * @return TEntity
 	 *
-	 * @throws ReflectionException
 	 * @throws SmartDtoException
 	 */
-	public function save(SmartDto $dto, bool $raw = true);
+	public function create(SmartDto $dto, bool $raw = true);
 
 	/**
 	 * Smart create/update.
@@ -49,7 +34,6 @@ interface IRepository {
 	 *
 	 * @return TEntity
 	 * @throws SmartDtoException
-	 * @throws ReflectionException
 	 */
 	public function upsert(SmartDto $dto);
 
@@ -60,19 +44,11 @@ interface IRepository {
 	 *
 	 * @return TEntity
 	 *
-	 * @throws ReflectionException
 	 * @throws RepositoryException
 	 * @throws RequiredResultException
 	 * @throws SmartDtoException
 	 */
 	public function update(SmartDto $dto);
-
-	/**
-	 * @param string $alias
-	 *
-	 * @return QueryBuilder
-	 */
-	public function select(string $alias): QueryBuilder;
 
 	/**
 	 * @param string      $id
@@ -95,32 +71,33 @@ interface IRepository {
 	 * @param SmartDto $query
 	 *
 	 * @return TEntity
-	 * @throws NoResultException
+	 * @throws SmartDtoException
+	 * @throws RequiredResultException
 	 */
 	public function findByOrThrow(SmartDto $query);
-
-	/**
-	 * @return TEntity[]
-	 */
-	public function all(string $alias): array;
 
 	/**
 	 * @param SmartDto $query
 	 *
 	 * @return int
 	 *
-	 * @throws NoResultException
-	 * @throws NonUniqueResultException
 	 * @throws SmartDtoException
 	 */
 	public function total(SmartDto $query): int;
+
+	/**
+	 * Returns pure shiny new Query for this repo.
+	 *
+	 * @return Query
+	 */
+	public function queryOf(): Query;
 
 	/**
 	 * Query using SmartDto
 	 *
 	 * @throws SmartDtoException
 	 */
-	public function toQuery(string $alias, SmartDto $query): QueryBuilder;
+	public function toQuery(SmartDto $query): Query;
 
 	/**
 	 * @param string   $alias
@@ -129,13 +106,13 @@ interface IRepository {
 	 * @return TEntity[]
 	 * @throws SmartDtoException
 	 */
-	public function query(string $alias, SmartDto $query): array;
+	public function query(string $alias, SmartDto $query): StatementInterface;
 
 	/**
 	 * @param SmartDto $query
 	 *
 	 * @return TEntity
-	 * @throws RequiredResultException
+	 * @throws \Edde\Database\Exception\RequiredResultException
 	 * @throws SmartDtoException
 	 */
 	public function deleteBy(SmartDto $query);
@@ -161,7 +138,7 @@ interface IRepository {
 	 * @param SmartDto $dto
 	 *
 	 * @return TEntity
-	 * @throws RequiredResultException
+	 * @throws \Edde\Database\Exception\RequiredResultException
 	 */
 	public function resolveEntityOrThrow(SmartDto $dto);
 }

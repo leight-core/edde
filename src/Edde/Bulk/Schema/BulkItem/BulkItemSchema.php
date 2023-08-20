@@ -5,8 +5,8 @@ namespace Edde\Bulk\Schema\BulkItem;
 
 use Edde\Bulk\Schema\Bulk\BulkSchema;
 use Edde\Bulk\Service\BulkService;
+use Edde\Database\Schema\UuidSchema;
 use Edde\Date\Mapper\IsoDateMapper;
-use Edde\Doctrine\Schema\UuidSchema;
 use Edde\Dto\Mapper\ProxyDtoMapper;
 use Edde\Utils\Mapper\JsonInputMapper;
 use Edde\Utils\Mapper\JsonOutputMapper;

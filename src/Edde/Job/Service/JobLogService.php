@@ -13,7 +13,7 @@ class JobLogService implements IJobLogService {
 	use JobLogRepositoryTrait;
 
 	public function log(string $jobId, int $level, string $message, $context = null, string $type = null, string $reference = null): void {
-		$this->jobLogRepository->save(
+		$this->jobLogRepository->create(
 			$this->smartService->from(
 				[
 					'jobId'     => $jobId,

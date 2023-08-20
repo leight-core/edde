@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Edde\Rest\Endpoint;
 
 use Edde\Cache\CacheTrait;
-use Edde\Doctrine\EntityManagerTrait;
 use Edde\Dto\DtoServiceTrait;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
@@ -31,7 +30,6 @@ use function is_string;
 
 abstract class AbstractEndpoint implements IEndpoint {
 	use SmartServiceTrait;
-	use EntityManagerTrait;
 	use LoggerTrait;
 	use DtoServiceTrait;
 	use HttpIndexTrait;
@@ -79,7 +77,6 @@ abstract class AbstractEndpoint implements IEndpoint {
 				if (($result = $this->{$this->endpoint->method->name}(...$args)) instanceof SmartDto) {
 					$result = $result->export();
 				}
-				$this->entityManager->flush();
 				return $result instanceof ResponseInterface ? $result : Response::withJson($response, $result);
 			} catch (Throwable $e) {
 				$this->logger->error('Endpoint exception, cache cleared!', ['tags' => ['request']]);

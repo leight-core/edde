@@ -25,12 +25,10 @@ class ImportMapper extends AbstractMapper {
 		$export = [];
 		foreach ($item as $k => $value) {
 			$key = $k;
-			switch ($kk = $map[$k] ?? false) {
+			switch ($map[$k] ?? false) {
 				case self::CONVERT_CAMEL:
 					$key = StringUtils::toCamelCase($key);
 					break;
-				default:
-					$key = $kk;
 			}
 			$export[$key] = $value;
 		}

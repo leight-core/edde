@@ -23,12 +23,10 @@ class ExportMapper extends AbstractMapper {
 		$export = [];
 		foreach ($item->export($params['raw'] ?? false) as $k => $value) {
 			$key = $k;
-			switch ($kk = $map[$k] ?? false) {
+			switch ($map[$k] ?? false) {
 				case self::CONVERT_SNAKE:
 					$key = StringUtils::recamel($key, '_');
 					break;
-				default:
-					$key = $kk;
 			}
 			$export[$key] = $value;
 		}

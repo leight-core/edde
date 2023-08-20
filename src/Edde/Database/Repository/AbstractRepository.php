@@ -93,7 +93,7 @@ abstract class AbstractRepository implements IRepository {
 	 * @inheritDoc
 	 */
 	public function find(string $id, string $message = null) {
-		if (!($entity = $this->queryOf()->select()->from($this->table)->where([$this->id => $id])->execute())) {
+		if (!($entity = $this->queryOf()->select([$this->field('$.*')])->from($this->table)->where([$this->id => $id])->execute())) {
 			throw new RequiredResultException($message ?? sprintf('Cannot find id [%s] in [%s]!', $id, static::class), 500);
 		}
 		return $entity;

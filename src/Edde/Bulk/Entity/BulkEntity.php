@@ -18,11 +18,6 @@ class BulkEntity extends AbstractUuidEntity {
 	 */
 	public $name;
 	/**
-	 * @ORM\Column(type="string", length=512)
-	 * @var string
-	 */
-	public $service;
-	/**
 	 * @ORM\Column(type="integer")
 	 * @var integer
 	 */

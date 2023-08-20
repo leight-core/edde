@@ -13,6 +13,11 @@ use Edde\Doctrine\AbstractUuidEntity;
  */
 class BulkItemEntity extends AbstractUuidEntity {
 	/**
+	 * @ORM\Column(type="string", length=512)
+	 * @var string
+	 */
+	public $service;
+	/**
 	 * @ORM\Column(type="integer")
 	 * @var integer
 	 */

@@ -5,14 +5,18 @@ namespace Edde\Bulk\Schema\Bulk;
 
 use Edde\Database\Schema\UuidSchema;
 use Edde\Date\Mapper\IsoDateMapper;
+use Edde\Dto\Mapper\ImportMapper;
 use Edde\Utils\Mapper\IntBoolMapper;
 
 interface BulkSchema extends UuidSchema {
 	const meta = [
-		'import' => [
+		'import'           => [
 			'type IBulk'       => '@leight/bulk',
 			'type IBulkSchema' => '@leight/bulk',
 			'BulkSchema'       => '@leight/bulk',
+		],
+		ImportMapper::META => [
+			'user_id' => ImportMapper::CONVERT_CAMEL,
 		],
 	];
 

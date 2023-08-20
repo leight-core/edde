@@ -8,6 +8,7 @@ use Edde\Bulk\Service\BulkService;
 use Edde\Database\Schema\UuidSchema;
 use Edde\Date\Mapper\IsoDateMapper;
 use Edde\Dto\Mapper\ExportMapper;
+use Edde\Dto\Mapper\ImportMapper;
 use Edde\Dto\Mapper\ProxyDtoMapper;
 use Edde\Utils\Mapper\JsonInputMapper;
 use Edde\Utils\Mapper\JsonOutputMapper;
@@ -22,6 +23,10 @@ interface BulkItemSchema extends UuidSchema {
 		ExportMapper::META => [
 			'bulkId' => ExportMapper::CONVERT_SNAKE,
 			'userId' => ExportMapper::CONVERT_SNAKE,
+		],
+		ImportMapper::META => [
+			'user_id' => ImportMapper::CONVERT_CAMEL,
+			'bulk_id' => ImportMapper::CONVERT_CAMEL,
 		],
 	];
 

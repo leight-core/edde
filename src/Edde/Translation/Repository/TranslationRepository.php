@@ -5,6 +5,7 @@ namespace Edde\Translation\Repository;
 
 use ClanCats\Hydrahon\Query\Sql\Exception;
 use ClanCats\Hydrahon\Query\Sql\SelectBase;
+use Dibi\Row;
 use Edde\Repository\AbstractRepository;
 use Edde\Repository\Exception\DuplicateEntryException;
 use Edde\Repository\IRepository;
@@ -93,7 +94,14 @@ class TranslationRepository extends AbstractRepository {
 	}
 
 	public function translationsOf(string $locale) {
-		return $this->native("
+		return array_map(
+			function (Row $row) {
+				return [
+					'key'   => $row->key,
+					'value' => $row->value,
+				];
+			},
+			$this->native("
 SELECT
 	%n,
 	translation as value
@@ -101,7 +109,8 @@ FROM
 	%n
 WHERE
 	locale = ?
-		", 'key', $this->table, $locale)->fetchAssoc();
+		", 'key', $this->table, $locale)->fetchAll()
+		);
 	}
 
 	public function toLanguages(): array {

@@ -150,13 +150,10 @@ abstract class AbstractRepository implements IRepository {
 	public function toQuery(SmartDto $query): Query {
 		$this->smartService->check($query, QuerySchema::class);
 		$cursor = $query->getSmartDto('cursor', true);
-		$queryBuilder = $this
-			->queryOf()
-			->select()
-			->from($this->table);
-		$cursor->knownWithValue('page') && $queryBuilder->page($cursor->getValue('page') + 1, $cursor->getSafeValue('size'));
-		$this->applyQuery($query, $queryBuilder);
-		return $queryBuilder;
+		$builder = $this->select();
+		$cursor->knownWithValue('page') && $builder->page($cursor->getValue('page') + 1, $cursor->getSafeValue('size'));
+		$this->applyQuery($query, $builder);
+		return $builder;
 	}
 
 	/**

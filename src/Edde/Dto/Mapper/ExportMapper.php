@@ -25,7 +25,7 @@ class ExportMapper extends AbstractMapper {
 			if (array_key_exists($k, $map)) {
 				switch ($kk = $map[$k]) {
 					case self::CONVERT_CAMEL:
-						$key = StringUtils::recamel($kk, '_');
+						$key = StringUtils::recamel($key, '_');
 						break;
 					default:
 						$key = $kk;

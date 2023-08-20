@@ -27,7 +27,7 @@ class ImportMapper extends AbstractMapper {
 			$key = $k;
 			switch ($map[$k] ?? false) {
 				case self::CONVERT_CAMEL:
-					$key = StringUtils::toCamelCase($key);
+					$key = StringUtils::toCamelHump($key);
 					break;
 			}
 			$export[$key] = $value;

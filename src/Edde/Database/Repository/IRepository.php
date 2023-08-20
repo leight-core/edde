@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Edde\Database\Repository;
 
 use Cake\Database\Query;
-use Cake\Database\StatementInterface;
 use Edde\Database\Exception\RepositoryException;
 use Edde\Database\Exception\RequiredResultException;
 use Edde\Dto\Exception\SmartDtoException;
@@ -93,6 +92,30 @@ interface IRepository {
 	public function queryOf(): Query;
 
 	/**
+	 * Return select to this repository
+	 *
+	 * @param array $fields
+	 * @param bool  $override
+	 *
+	 * @return Query
+	 */
+	public function select(array $fields = [], bool $override = false): Query;
+
+	/**
+	 * @param Query $query
+	 *
+	 * @return object
+	 */
+	public function fetch(Query $query): object;
+
+	/**
+	 * @param Query $query
+	 *
+	 * @return object[]
+	 */
+	public function list(Query $query): array;
+
+	/**
 	 * Query using SmartDto
 	 *
 	 * @throws SmartDtoException
@@ -103,10 +126,10 @@ interface IRepository {
 	 * @param string   $alias
 	 * @param SmartDto $query
 	 *
-	 * @return TEntity[]
+	 * @return object[]
 	 * @throws SmartDtoException
 	 */
-	public function query(string $alias, SmartDto $query): StatementInterface;
+	public function query(string $alias, SmartDto $query): array;
 
 	/**
 	 * @param SmartDto $query

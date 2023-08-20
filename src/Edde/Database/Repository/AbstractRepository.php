@@ -49,7 +49,8 @@ abstract class AbstractRepository implements IRepository {
 			->insert(
 				$this->table,
 				(array)$dto->export($raw)
-			);
+			)
+			->execute();
 		return $dto;
 	}
 
@@ -85,7 +86,8 @@ abstract class AbstractRepository implements IRepository {
 				[
 					$this->id => $id = $this->resolveEntityOrThrow($dto)->{$this->id},
 				]
-			);
+			)
+			->execute();
 		return $this->find($id);
 	}
 
@@ -93,7 +95,7 @@ abstract class AbstractRepository implements IRepository {
 	 * @inheritDoc
 	 */
 	public function find(string $id, string $message = null) {
-		if (!($entity = $this->queryOf()->select([$this->field('$.*')])->from($this->table)->where([$this->id => $id])->execute())) {
+		if (!($entity = $this->fetch($this->select()->where([$this->id => $id])))) {
 			throw new RequiredResultException($message ?? sprintf('Cannot find id [%s] in [%s]!', $id, static::class), 500);
 		}
 		return $entity;
@@ -108,7 +110,7 @@ abstract class AbstractRepository implements IRepository {
 	}
 
 	public function findByOrThrow(SmartDto $query) {
-		if (!($entity = $this->toQuery($query)->execute()->fetch())) {
+		if (!($entity = $this->fetch($this->toQuery($query)))) {
 			throw new RequiredResultException('Cannot find an entity by query.');
 		}
 		return $entity;
@@ -123,11 +125,23 @@ abstract class AbstractRepository implements IRepository {
 			->select(["count" => $builder->func()->count($this->id)])
 			->from($this->table);
 		$query->knownWithValue('filter') && $this->applyWhere($query->getSmartDto('filter'), $query, $builder);
-		return (int)$builder->execute()->execute();
+		return $this->fetch($builder)->count;
 	}
 
 	public function queryOf(): Query {
 		return $this->connection->getConnection()->newQuery();
+	}
+
+	public function select(array $fields = [], bool $override = false): Query {
+		return $this->queryOf()->select(array_merge([$this->field('$.*')], $fields), $override)->from($this->table);
+	}
+
+	public function fetch(Query $query): object {
+		return $query->execute()->fetch(StatementInterface::FETCH_TYPE_OBJ);
+	}
+
+	public function list(Query $query): array {
+		return $query->execute()->fetchAll(StatementInterface::FETCH_TYPE_OBJ);
 	}
 
 	/**
@@ -148,8 +162,8 @@ abstract class AbstractRepository implements IRepository {
 	/**
 	 * @inheritDoc
 	 */
-	public function query(string $alias, SmartDto $query): StatementInterface {
-		return $this->toQuery($query)->execute();
+	public function query(string $alias, SmartDto $query): array {
+		return $this->list($this->toQuery($query));
 	}
 
 	/**

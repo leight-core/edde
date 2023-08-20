@@ -24,7 +24,7 @@ interface IRepository {
 	 *
 	 * @throws SmartDtoException
 	 */
-	public function create(SmartDto $dto, bool $raw = true);
+	public function create(SmartDto $dto, bool $raw = false);
 
 	/**
 	 * Smart create/update.
@@ -34,7 +34,7 @@ interface IRepository {
 	 * @return TEntity
 	 * @throws SmartDtoException
 	 */
-	public function upsert(SmartDto $dto);
+	public function upsert(SmartDto $dto, bool $raw = false);
 
 	/**
 	 * Updates an existing entity, requires ID property present.
@@ -47,7 +47,7 @@ interface IRepository {
 	 * @throws RequiredResultException
 	 * @throws SmartDtoException
 	 */
-	public function update(SmartDto $dto);
+	public function update(SmartDto $dto, bool $raw = false);
 
 	/**
 	 * @param string      $id

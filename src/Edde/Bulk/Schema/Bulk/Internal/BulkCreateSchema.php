@@ -3,7 +3,17 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Schema\Bulk\Internal;
 
-interface BulkCreateSchema extends \Edde\Bulk\Schema\Bulk\BulkCreateSchema {
+use Edde\Dto\Mapper\ExportMapper;
+
+interface BulkCreateSchema {
+	const meta = [
+		ExportMapper::META => [
+			'userId' => '$camel',
+		],
+	];
+
+	function name(): string;
+
 	function status(): int;
 
 	function commit(): bool;

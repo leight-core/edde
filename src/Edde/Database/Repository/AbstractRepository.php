@@ -10,6 +10,7 @@ use Edde\Database\Connection\ConnectionTrait;
 use Edde\Database\Exception\RepositoryException;
 use Edde\Database\Exception\RequiredResultException;
 use Edde\Dto\Exception\SmartDtoException;
+use Edde\Dto\Mapper\ExportMapperTrait;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\Math\RandomServiceTrait;
@@ -27,6 +28,7 @@ abstract class AbstractRepository implements IRepository {
 	use ConnectionTrait;
 	use RandomServiceTrait;
 	use SmartServiceTrait;
+	use ExportMapperTrait;
 
 	protected $table;
 	protected $id = 'id';
@@ -42,13 +44,13 @@ abstract class AbstractRepository implements IRepository {
 	/**
 	 * @inheritDoc
 	 */
-	public function create(SmartDto $dto, bool $raw = true) {
+	public function create(SmartDto $dto, bool $raw = false) {
 		$this
 			->connection
 			->getConnection()
 			->insert(
 				$this->table,
-				(array)$dto->export($raw)
+				(array)$this->exportMapper->item($dto, ['raw' => $raw])
 			)
 			->execute();
 		return $dto;
@@ -57,22 +59,22 @@ abstract class AbstractRepository implements IRepository {
 	/**
 	 * @inheritDoc
 	 */
-	public function upsert(SmartDto $dto) {
+	public function upsert(SmartDto $dto, bool $raw = false) {
 		try {
 			/**
 			 * Patch contains entity resolution, so if it fails,
 			 * we can try create a new entity.
 			 */
-			return $this->update($dto);
+			return $this->update($dto, $raw);
 		} catch (RepositoryException|SmartDtoException $exception) {
-			return $this->create($dto->getSmartDto('create', true));
+			return $this->create($dto->getSmartDto('create', true), $raw);
 		}
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function update(SmartDto $dto) {
+	public function update(SmartDto $dto, bool $raw = false) {
 		$dto->ensure([
 			'filter',
 			'update',
@@ -82,7 +84,7 @@ abstract class AbstractRepository implements IRepository {
 			->getConnection()
 			->update(
 				$this->table,
-				(array)$dto->getSmartDto('update')->export(true),
+				(array)$this->exportMapper->item($dto->getSmartDto('update'), ['raw' => $raw]),
 				[
 					$this->id => $id = $this->resolveEntityOrThrow($dto)->{$this->id},
 				]

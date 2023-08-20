@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Edde\Bulk\Service;
 
 use DateTime;
-use Edde\Bulk\Mapper\BulkItemDtoMapperTrait;
 use Edde\Bulk\Repository\BulkItemRepositoryTrait;
 use Edde\Bulk\Schema\BulkItem\Internal\BulkItemUpsertRequestSchema;
 use Edde\Database\Exception\RequiredResultException;
@@ -20,7 +19,6 @@ use ReflectionException;
 class BulkItemService {
 	use SmartServiceTrait;
 	use BulkItemRepositoryTrait;
-	use BulkItemDtoMapperTrait;
 	use CurrentUserServiceTrait;
 
 	/**
@@ -33,9 +31,7 @@ class BulkItemService {
 	 * @throws SkipException
 	 */
 	public function fetch(SmartDto $query): SmartDto {
-		return $this->bulkItemDtoMapper->item(
-			$this->bulkItemRepository->find($query->getValue('id'))
-		);
+		return $this->bulkItemRepository->find($query->getValue('id'));
 	}
 
 	/**
@@ -45,9 +41,7 @@ class BulkItemService {
 	 * @throws SmartDtoException
 	 */
 	public function query(SmartDto $query): array {
-		return $this->bulkItemDtoMapper->map(
-			$this->bulkItemRepository->query($query)
-		);
+		return $this->bulkItemRepository->query($query);
 	}
 
 	/**
@@ -60,9 +54,7 @@ class BulkItemService {
 	 * @throws SmartDtoException
 	 */
 	public function delete(SmartDto $query): SmartDto {
-		return $this->bulkItemDtoMapper->item(
-			$this->bulkItemRepository->deleteBy($query)
-		);
+		return $this->bulkItemRepository->deleteBy($query);
 	}
 
 	/**
@@ -76,22 +68,20 @@ class BulkItemService {
 	 * @throws ReflectionException
 	 */
 	public function upsert(SmartDto $query): SmartDto {
-		return $this->bulkItemDtoMapper->item(
-			$this->bulkItemRepository->upsert(
-				$query
-					->convertTo(BulkItemUpsertRequestSchema::class)
-					->merge([
-						'create' => [
-							'status'  => 0,
-							'created' => new DateTime(),
-							'userId'  => $this->currentUserService->requiredId(),
-						],
-					])
-			)
+		return $this->bulkItemRepository->upsert(
+			$query
+				->convertTo(BulkItemUpsertRequestSchema::class)
+				->merge([
+					'create' => [
+						'status'  => 0,
+						'created' => new DateTime(),
+						'userId'  => $this->currentUserService->requiredId(),
+					],
+				])
 		);
 	}
 
-	public function total(SmartDto $query) {
+	public function total(SmartDto $query): int {
 		return $this->bulkItemRepository->total($query);
 	}
 }

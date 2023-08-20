@@ -7,7 +7,6 @@ use DateTime;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\Job\Async\IAsyncService;
-use Edde\Job\Mapper\JobDtoMapperTrait;
 use Edde\Job\Repository\JobRepositoryTrait;
 use Edde\Job\Schema\Job\JobSchema;
 use Edde\User\CurrentUserServiceTrait;
@@ -15,13 +14,12 @@ use Edde\User\CurrentUserServiceTrait;
 class JobService implements IJobService {
 	use SmartServiceTrait;
 	use JobRepositoryTrait;
-	use JobDtoMapperTrait;
 	use CurrentUserServiceTrait;
 
 	public function create(IAsyncService $asyncService, ?SmartDto $request): SmartDto {
-		return $this->jobDtoMapper->item(
-			$this->jobRepository->create(
-				$this->smartService->from([
+		return $this->jobRepository->create(
+			$this->smartService->from(
+				[
 					'service'       => get_class($asyncService),
 					'status'        => 0,
 					'total'         => 0,
@@ -33,26 +31,21 @@ class JobService implements IJobService {
 					'requestSchema' => $request ? $request->getSchema()->getName() : null,
 					'started'       => new DateTime(),
 					'userId'        => $this->currentUserService->requiredId(),
-				], JobSchema::class)
+				],
+				JobSchema::class
 			)
 		);
 	}
 
 	public function query(SmartDto $request): array {
-		return $this->jobDtoMapper->map(
-			$this->jobRepository->query($request)
-		);
+		return $this->jobRepository->query($request);
 	}
 
 	public function update(SmartDto $patch): SmartDto {
-		return $this->jobDtoMapper->item(
-			$this->jobRepository->update($patch)
-		);
+		return $this->jobRepository->update($patch);
 	}
 
 	public function find(string $jobId): SmartDto {
-		return $this->jobDtoMapper->item(
-			$this->jobRepository->find($jobId)
-		);
+		return $this->jobRepository->find($jobId);
 	}
 }

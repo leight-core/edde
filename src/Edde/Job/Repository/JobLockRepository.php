@@ -6,10 +6,11 @@ namespace Edde\Job\Repository;
 use Cake\Database\Query;
 use Edde\Database\Repository\AbstractRepository;
 use Edde\Dto\SmartDto;
+use Edde\Job\Schema\JobLock\JobLockSchema;
 
 class JobLockRepository extends AbstractRepository {
 	public function __construct() {
-		parent::__construct();
+		parent::__construct(JobLockSchema::class);
 		$this->orderBy = [
 			'$.stamp' => 'asc',
 		];

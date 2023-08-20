@@ -11,7 +11,7 @@ use Edde\Utils\Mapper\BoolIntMapper;
 interface BulkCreateSchema extends UuidGeneratorSchema {
 	const meta = [
 		ExportMapper::META => [
-			'userId' => ExportMapper::CONVERT_CAMEL,
+			'userId' => ExportMapper::CONVERT_SNAKE,
 		],
 	];
 

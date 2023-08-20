@@ -20,8 +20,8 @@ interface BulkItemSchema extends UuidSchema {
 			'BulkItemSchema'       => '@leight/bulk',
 		],
 		ExportMapper::META => [
-			'bulkId' => ExportMapper::CONVERT_CAMEL,
-			'userId' => ExportMapper::CONVERT_CAMEL,
+			'bulkId' => ExportMapper::CONVERT_SNAKE,
+			'userId' => ExportMapper::CONVERT_SNAKE,
 		],
 	];
 

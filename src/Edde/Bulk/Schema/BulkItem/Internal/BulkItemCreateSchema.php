@@ -12,8 +12,8 @@ use Edde\Utils\Mapper\JsonOutputMapper;
 interface BulkItemCreateSchema extends UuidGeneratorSchema {
 	const meta = [
 		ExportMapper::META => [
-			'bulkId' => ExportMapper::CONVERT_CAMEL,
-			'userId' => ExportMapper::CONVERT_CAMEL,
+			'bulkId' => ExportMapper::CONVERT_SNAKE,
+			'userId' => ExportMapper::CONVERT_SNAKE,
 		],
 	];
 

@@ -11,10 +11,14 @@ use Edde\Database\Exception\RepositoryException;
 use Edde\Database\Exception\RequiredResultException;
 use Edde\Dto\Exception\SmartDtoException;
 use Edde\Dto\Mapper\ExportMapperTrait;
+use Edde\Dto\Mapper\ImportMapperTrait;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
+use Edde\Mapper\AbstractMapper;
 use Edde\Math\RandomServiceTrait;
 use Edde\Query\Schema\QuerySchema;
+use Edde\Schema\ISchema;
+use Edde\Schema\SchemaLoaderTrait;
 use Edde\Utils\StringUtils;
 use Nette\Utils\Arrays;
 
@@ -24,12 +28,19 @@ use Nette\Utils\Arrays;
  *
  * @template-extends IRepository<TEntity, TFilter>
  */
-abstract class AbstractRepository implements IRepository {
+abstract class AbstractRepository extends AbstractMapper implements IRepository {
 	use ConnectionTrait;
 	use RandomServiceTrait;
 	use SmartServiceTrait;
+	use SchemaLoaderTrait;
+	use ImportMapperTrait;
 	use ExportMapperTrait;
 
+	/**
+	 * @var ISchema
+	 */
+	private $_schema;
+	protected $schema;
 	protected $table;
 	protected $id = 'id';
 	protected $orderBy = [];
@@ -37,14 +48,19 @@ abstract class AbstractRepository implements IRepository {
 	protected $searchOf = [];
 	protected $matchOf = [];
 
-	public function __construct() {
+	public function __construct(string $schema) {
+		$this->schema = $schema;
 		$this->table = $table ?? 'z_' . StringUtils::recamel(Arrays::last(explode('\\', str_replace('Repository', '', static::class))), '_');
+	}
+
+	public function getSchema(): ISchema {
+		return $this->_schema ?? $this->_schema = $this->schemaLoader->load($this->schema);
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function create(SmartDto $dto, bool $raw = false) {
+	public function create(SmartDto $dto, bool $raw = false): SmartDto {
 		$this
 			->connection
 			->getConnection()
@@ -52,13 +68,13 @@ abstract class AbstractRepository implements IRepository {
 				$this->table,
 				(array)$this->exportMapper->item($dto, ['raw' => $raw])
 			);
-		return $dto;
+		return $this->find($dto->getValue('id'));
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function upsert(SmartDto $dto, bool $raw = false) {
+	public function upsert(SmartDto $dto, bool $raw = false): SmartDto {
 		try {
 			/**
 			 * Patch contains entity resolution, so if it fails,
@@ -73,7 +89,7 @@ abstract class AbstractRepository implements IRepository {
 	/**
 	 * @inheritDoc
 	 */
-	public function update(SmartDto $dto, bool $raw = false) {
+	public function update(SmartDto $dto, bool $raw = false): SmartDto {
 		$dto->ensure([
 			'filter',
 			'update',
@@ -94,14 +110,14 @@ abstract class AbstractRepository implements IRepository {
 	/**
 	 * @inheritDoc
 	 */
-	public function find(string $id, string $message = null) {
+	public function find(string $id, string $message = null): SmartDto {
 		if (!($entity = $this->fetch($this->select()->where([$this->id => $id])))) {
 			throw new RequiredResultException($message ?? sprintf('Cannot find id [%s] in [%s]!', $id, static::class), 500);
 		}
-		return $entity;
+		return $this->item($entity);
 	}
 
-	public function findBy(SmartDto $query) {
+	public function findBy(SmartDto $query): ?SmartDto {
 		try {
 			return $this->findByOrThrow($query);
 		} catch (RequiredResultException $exception) {
@@ -109,11 +125,11 @@ abstract class AbstractRepository implements IRepository {
 		}
 	}
 
-	public function findByOrThrow(SmartDto $query) {
+	public function findByOrThrow(SmartDto $query): SmartDto {
 		if (!($entity = $this->fetch($this->toQuery($query)))) {
 			throw new RequiredResultException('Cannot find an entity by query.');
 		}
-		return $entity;
+		return $this->item($entity);
 	}
 
 	/**
@@ -141,7 +157,10 @@ abstract class AbstractRepository implements IRepository {
 	}
 
 	public function list(Query $query): array {
-		return $query->execute()->fetchAll(StatementInterface::FETCH_TYPE_OBJ);
+		return array_map([
+			$this,
+			'item',
+		], $query->execute()->fetchAll(StatementInterface::FETCH_TYPE_OBJ));
 	}
 
 	/**
@@ -166,7 +185,7 @@ abstract class AbstractRepository implements IRepository {
 	/**
 	 * @inheritDoc
 	 */
-	public function deleteBy(SmartDto $query) {
+	public function deleteBy(SmartDto $query): SmartDto {
 		$entity = $this->find($query->getValue('id'));
 		$this
 			->connection
@@ -191,7 +210,7 @@ abstract class AbstractRepository implements IRepository {
 	/**
 	 * @inheritDoc
 	 */
-	public function resolveEntity(SmartDto $dto) {
+	public function resolveEntity(SmartDto $dto): ?SmartDto {
 		try {
 			if ($id = $dto->getSmartDto('filter', true)->getSafeValue('id')) {
 				return $this->find($id);
@@ -205,7 +224,7 @@ abstract class AbstractRepository implements IRepository {
 	/**
 	 * @inheritDoc
 	 */
-	public function resolveEntityOrThrow(SmartDto $dto) {
+	public function resolveEntityOrThrow(SmartDto $dto): SmartDto {
 		if (!($entity = $this->resolveEntity($dto))) {
 			throw new RequiredResultException(sprintf('Cannot resolve entity from DTO [%s].', $dto->getName()));
 		}
@@ -306,5 +325,12 @@ abstract class AbstractRepository implements IRepository {
 	 */
 	protected function field(string $field, string $alias = null): string {
 		return str_replace('$', $alias ?? $this->table, $field);
+	}
+
+	public function item($item, $params = null) {
+		return $this->smartService->pushOf(
+			$this->importMapper->item($item, ['schema' => $this->getSchema()]),
+			$this->schema
+		);
 	}
 }

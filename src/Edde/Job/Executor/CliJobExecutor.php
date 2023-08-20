@@ -8,7 +8,6 @@ use Edde\Dto\SmartDto;
 use Edde\File\FileServiceTrait;
 use Edde\Job\Async\IAsyncService;
 use Edde\Job\Exception\JobException;
-use Edde\Job\Mapper\JobDtoMapperTrait;
 use Edde\Job\Progress\JobProgressFactoryTrait;
 use Edde\Job\Repository\JobLogRepositoryTrait;
 use Edde\Job\Service\JobServiceTrait;
@@ -33,7 +32,6 @@ class CliJobExecutor extends AbstractJobExecutor {
 	use JobServiceTrait;
 	use JobLogRepositoryTrait;
 	use JobProgressFactoryTrait;
-	use JobDtoMapperTrait;
 	use ProfilerServiceTrait;
 	use FileServiceTrait;
 

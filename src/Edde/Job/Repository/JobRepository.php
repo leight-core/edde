@@ -6,6 +6,7 @@ namespace Edde\Job\Repository;
 use Cake\Database\Query;
 use Edde\Database\Repository\AbstractRepository;
 use Edde\Dto\SmartDto;
+use Edde\Job\Schema\Job\JobSchema;
 use Edde\Job\Schema\Job\Query\JobQuerySchema;
 use Edde\Job\Schema\JobStatus;
 
@@ -13,7 +14,7 @@ class JobRepository extends AbstractRepository {
 	use JobLogRepositoryTrait;
 
 	public function __construct() {
-		parent::__construct();
+		parent::__construct(JobSchema::class);
 		$this->orderBy = [
 			'$.created' => 'desc',
 		];

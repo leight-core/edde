@@ -8,12 +8,16 @@ use Edde\Database\Exception\RepositoryException;
 use Edde\Database\Exception\RequiredResultException;
 use Edde\Dto\Exception\SmartDtoException;
 use Edde\Dto\SmartDto;
+use Edde\Mapper\IMapper;
+use Edde\Schema\ISchema;
 
 /**
  * @template TEntity of object
  * @template TFilter of object
  */
-interface IRepository {
+interface IRepository extends IMapper {
+	public function getSchema(): ISchema;
+
 	/**
 	 * Insert a new entity into database
 	 *
@@ -24,7 +28,7 @@ interface IRepository {
 	 *
 	 * @throws SmartDtoException
 	 */
-	public function create(SmartDto $dto, bool $raw = false);
+	public function create(SmartDto $dto, bool $raw = false): SmartDto;
 
 	/**
 	 * Smart create/update.
@@ -34,7 +38,7 @@ interface IRepository {
 	 * @return TEntity
 	 * @throws SmartDtoException
 	 */
-	public function upsert(SmartDto $dto, bool $raw = false);
+	public function upsert(SmartDto $dto, bool $raw = false): SmartDto;
 
 	/**
 	 * Updates an existing entity, requires ID property present.
@@ -47,7 +51,7 @@ interface IRepository {
 	 * @throws RequiredResultException
 	 * @throws SmartDtoException
 	 */
-	public function update(SmartDto $dto, bool $raw = false);
+	public function update(SmartDto $dto, bool $raw = false): SmartDto;
 
 	/**
 	 * @param string      $id
@@ -57,14 +61,14 @@ interface IRepository {
 	 *
 	 * @throws RequiredResultException
 	 */
-	public function find(string $id, string $message = null);
+	public function find(string $id, string $message = null): SmartDto;
 
 	/**
 	 * @param SmartDto $query
 	 *
 	 * @return TEntity
 	 */
-	public function findBy(SmartDto $query);
+	public function findBy(SmartDto $query): ?SmartDto;
 
 	/**
 	 * @param SmartDto $query
@@ -73,7 +77,7 @@ interface IRepository {
 	 * @throws SmartDtoException
 	 * @throws RequiredResultException
 	 */
-	public function findByOrThrow(SmartDto $query);
+	public function findByOrThrow(SmartDto $query): SmartDto;
 
 	/**
 	 * @param SmartDto $query
@@ -111,7 +115,7 @@ interface IRepository {
 	/**
 	 * @param Query $query
 	 *
-	 * @return object[]
+	 * @return SmartDto[]
 	 */
 	public function list(Query $query): array;
 
@@ -137,7 +141,7 @@ interface IRepository {
 	 * @throws \Edde\Database\Exception\RequiredResultException
 	 * @throws SmartDtoException
 	 */
-	public function deleteBy(SmartDto $query);
+	public function deleteBy(SmartDto $query): SmartDto;
 
 	public function deleteWith(SmartDto $query): void;
 
@@ -154,7 +158,7 @@ interface IRepository {
 	 *
 	 * @return TEntity
 	 */
-	public function resolveEntity(SmartDto $dto);
+	public function resolveEntity(SmartDto $dto): ?SmartDto;
 
 	/**
 	 * @param SmartDto $dto
@@ -162,5 +166,5 @@ interface IRepository {
 	 * @return TEntity
 	 * @throws \Edde\Database\Exception\RequiredResultException
 	 */
-	public function resolveEntityOrThrow(SmartDto $dto);
+	public function resolveEntityOrThrow(SmartDto $dto): SmartDto;
 }

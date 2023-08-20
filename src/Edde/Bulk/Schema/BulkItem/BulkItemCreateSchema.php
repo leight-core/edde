@@ -22,5 +22,5 @@ interface BulkItemCreateSchema {
 	function request(
 		$input = JsonInputMapper::class,
 		$output = JsonOutputMapper::class
-	): ?string;
+	);
 }

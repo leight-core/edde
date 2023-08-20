@@ -101,7 +101,7 @@ FROM
 	%n
 WHERE
 	locale = ?
-		", 'key', $this->table, $locale);
+		", 'key', $this->table, $locale)->fetchAssoc();
 	}
 
 	public function toLanguages(): array {

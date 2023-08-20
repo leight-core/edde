@@ -6,9 +6,9 @@ namespace Edde\Job\Schema\Job;
 use Edde\Query\Schema\CursorSchema;
 
 interface JobQuerySchema {
-	function filter(): ?JobFilterSchema;
+	function filter($load = true): ?JobFilterSchema;
 
-	function orderBy(): ?JobOrderBySchema;
+	function orderBy($load = true): ?JobOrderBySchema;
 
-	function cursor(): ?CursorSchema;
+	function cursor($load = true): ?CursorSchema;
 }

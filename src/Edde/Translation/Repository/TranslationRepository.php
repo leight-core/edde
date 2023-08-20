@@ -95,13 +95,13 @@ class TranslationRepository extends AbstractRepository {
 	public function translationsOf(string $locale) {
 		return $this->native("
 SELECT
-	key,
+	%n,
 	translation as value
 FROM
 	%n
 WHERE
 	locale = ?
-		", $this->table, $locale);
+		", 'key', $this->table, $locale);
 	}
 
 	public function toLanguages(): array {

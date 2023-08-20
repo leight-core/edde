@@ -13,6 +13,4 @@ interface BulkCreateSchema {
 	];
 
 	function name(): string;
-
-	function service(): string;
 }

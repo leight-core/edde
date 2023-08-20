@@ -14,5 +14,7 @@ interface BulkItemCreateSchema {
 
 	function bulkId(): string;
 
+	function service(): string;
+
 	function request(): string;
 }

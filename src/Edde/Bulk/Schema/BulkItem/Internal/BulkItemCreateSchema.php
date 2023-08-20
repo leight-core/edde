@@ -8,6 +8,8 @@ use DateTime;
 interface BulkItemCreateSchema {
 	function bulkId(): string;
 
+	function service(): string;
+
 	function created(): DateTime;
 
 	function status(): int;

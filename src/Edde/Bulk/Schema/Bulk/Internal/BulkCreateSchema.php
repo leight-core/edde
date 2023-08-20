@@ -6,8 +6,6 @@ namespace Edde\Bulk\Schema\Bulk\Internal;
 interface BulkCreateSchema {
 	function name(): string;
 
-	function service(): string;
-
 	function status(): int;
 
 	function commit(): bool;

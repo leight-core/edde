@@ -30,7 +30,7 @@ class SmartService implements ISmartService {
 	}
 
 	public function pushOf($object, string $schema, array $template = []): SmartDto {
-		return $this->createFromSchema($this->schemaManager->load($schema), $template)->pushOf($schema);
+		return $this->createFromSchema($this->schemaManager->load($schema), $template)->pushOf($object);
 	}
 
 	public function check(SmartDto $dto, string $schema, array $template = []): SmartDto {

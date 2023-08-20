@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Edde\Phinx\Mapper;
 
 use Edde\Mapper\AbstractMapper;
-use Edde\Phinx\Dto\UpgradeDto;
 use Edde\Phinx\UpgradeManagerTrait;
+use Edde\Upgrade\Schema\UpgradeSchema;
 use Phinx\Migration\AbstractMigration;
 
 class UpgradeMapper extends AbstractMapper {
@@ -18,11 +18,11 @@ class UpgradeMapper extends AbstractMapper {
 	 * @return mixed
 	 */
 	public function item($item, $params = null) {
-		return $this->dtoService->fromArray(UpgradeDto::class, [
+		return $this->smartService->from([
 			'id'      => $item->getVersion(),
 			'version' => $item->getVersion(),
 			'name'    => $item->getName(),
 			'active'  => $this->upgradeManager->isActive($item),
-		]);
+		], UpgradeSchema::class);
 	}
 }

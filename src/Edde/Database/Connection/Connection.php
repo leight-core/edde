@@ -15,7 +15,7 @@ class Connection {
 	protected $connection;
 
 	public function getConnection(): CoolConnection {
-		return $this->connection ?? $this->connectionConfig = new CoolConnection(
+		return $this->connection ?? $this->connection = new CoolConnection(
 			$this->connectionConfig->getConfig()
 		);
 	}

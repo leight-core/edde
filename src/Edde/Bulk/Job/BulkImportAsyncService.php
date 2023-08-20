@@ -8,6 +8,7 @@ use Edde\Bulk\Schema\BulkItem\BulkItemStatus;
 use Edde\Bulk\Schema\BulkItem\Internal\BulkItemUpdateRequestSchema;
 use Edde\Bulk\Schema\BulkItem\Query\BulkItemQuerySchema;
 use Edde\Bulk\Service\BulkItemServiceTrait;
+use Edde\Doctrine\EntityManagerTrait;
 use Edde\Dto\SmartDto;
 use Edde\Job\Async\AbstractAsyncService;
 use Edde\Progress\IProgress;
@@ -19,6 +20,7 @@ use Throwable;
 class BulkImportAsyncService extends AbstractAsyncService {
 	use BulkItemServiceTrait;
 	use RpcServiceTrait;
+	use EntityManagerTrait;
 
 	protected function handle(SmartDto $job, IProgress $progress, ?SmartDto $request) {
 		if (!$request) {
@@ -77,6 +79,7 @@ class BulkImportAsyncService extends AbstractAsyncService {
 						)
 					);
 					$progress->onProgress();
+					$this->entityManager->flush();
 				} catch (Throwable $throwable) {
 					$progress->onError($throwable);
 				}

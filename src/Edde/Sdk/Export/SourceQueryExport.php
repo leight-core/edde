@@ -7,6 +7,7 @@ class SourceQueryExport extends AbstractRpcExport {
 	public function export(): ?string {
 		$import = [
 			'import {withSourceQuery} from "@leight/rpc";',
+			'import {z} from "@leight/utils";',
 			'import {withQuerySchema, createQueryStore} from "@leight/query";',
 		];
 

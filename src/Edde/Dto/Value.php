@@ -87,9 +87,9 @@ class Value {
 	 * @return $this
 	 */
 	public function push($value) {
-		$this->outputCache = null;
+		$this->outputCache = $value;
 		$this->value = $value;
-		$this - $this->isUndefined = false;
+		$this->isUndefined = false;
 		return $this;
 	}
 

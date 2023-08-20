@@ -5,7 +5,7 @@ namespace Edde\Bulk\Job;
 
 use Edde\Bulk\Exception\BulkImportException;
 use Edde\Bulk\Schema\BulkItem\BulkItemQuerySchema;
-use Edde\Bulk\Schema\BulkItem\BulkItemSchema;
+use Edde\Bulk\Schema\BulkItem\BulkItemStatus;
 use Edde\Bulk\Schema\BulkItem\Internal\BulkItemPatchRequestSchema;
 use Edde\Bulk\Service\BulkItemServiceTrait;
 use Edde\Dto\SmartDto;
@@ -61,7 +61,7 @@ class BulkImportAsyncService extends AbstractAsyncService {
 						$this->smartService->from([
 							'patch'  => [
 								'response' => $base['data'] ?? $base['error'],
-								'status'   => isset($base['error']) ? BulkItemSchema::STATUS_ERROR : BulkItemSchema::STATUS_SUCCESS,
+								'status' => isset($base['error']) ? BulkItemStatus::ERROR : BulkItemStatus::SUCCESS,
 							],
 							'filter' => [
 								'id' => $bulkItem->getValue('id'),

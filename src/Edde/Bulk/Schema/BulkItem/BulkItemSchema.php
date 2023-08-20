@@ -12,11 +12,6 @@ use Edde\Utils\Mapper\JsonInputMapper;
 use Edde\Utils\Mapper\JsonOutputMapper;
 
 interface BulkItemSchema extends UuidSchema {
-	const STATUS_PENDING = 0;
-	const STATUS_SUCCESS = 1;
-	const STATUS_ERROR = 2;
-	const STATUS_SETTLED = 3;
-
 	const meta = [
 		'import' => [
 			'type IBulkItem'       => '@leight/bulk',

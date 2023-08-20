@@ -29,15 +29,14 @@ abstract class AbstractRepository implements IRepository {
 	use SmartServiceTrait;
 
 	protected $table;
-	protected $id;
+	protected $id = 'id';
 	protected $orderBy = [];
 	protected $fulltextOf = [];
 	protected $searchOf = [];
 	protected $matchOf = [];
 
-	public function __construct(string $table = null, string $id = 'id') {
+	public function __construct() {
 		$this->table = $table ?? 'z_' . StringUtils::recamel(Arrays::last(explode('\\', str_replace('Repository', '', static::class))), '_');
-		$this->id = $id;
 	}
 
 	/**

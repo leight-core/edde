@@ -6,6 +6,7 @@ namespace Edde\Rpc\Service;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Edde\Container\ContainerTrait;
+use Edde\Database\Exception\RequiredResultException;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\Log\LoggerTrait;
@@ -45,6 +46,14 @@ class RpcService {
 				);
 				$response[$id] = [
 					'data' => SmartDto::exportOf($result),
+				];
+			} catch (RequiredResultException $exception) {
+				$this->logger->error($exception);
+				$response[$id] = [
+					'error' => [
+						'message' => $exception->getMessage(),
+						'code'    => 404,
+					],
 				];
 			} catch (NotFoundException $exception) {
 				$this->logger->error($exception);

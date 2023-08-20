@@ -66,6 +66,8 @@ interface IAttributeBuilder {
 
 	public function output(string $output): IAttributeBuilder;
 
+	public function internal(bool $internal): IAttributeBuilder;
+
 	/**
 	 * creates and return a attribute
 	 *

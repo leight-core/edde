@@ -78,4 +78,8 @@ class Attribute implements IAttribute {
 	public function getOutput(): ?string {
 		return $this->source->output;
 	}
+
+	public function isInternal(): bool {
+		return $this->source->internal ?? false;
+	}
 }

@@ -69,7 +69,8 @@ interface JobSchema extends UuidSchema {
 				JobProgressFactory::class,
 				'create',
 			],
-		]
+		],
+		$internal = true
 	): IProgress;
 
 	function withRequest(
@@ -77,6 +78,7 @@ interface JobSchema extends UuidSchema {
 		$meta = [
 			'source' => 'request',
 			'schema' => 'requestSchema',
-		]
+		],
+		$internal = true
 	): ?SmartDto;
 }

@@ -79,4 +79,6 @@ interface IAttribute {
 	public function getInput(): ?string;
 
 	public function getOutput(): ?string;
+
+	public function isInternal(): bool;
 }

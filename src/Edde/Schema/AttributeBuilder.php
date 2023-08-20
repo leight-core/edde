@@ -77,6 +77,11 @@ class AttributeBuilder implements IAttributeBuilder {
 		return $this;
 	}
 
+	public function internal(bool $internal): IAttributeBuilder {
+		$this->source->internal = $internal;
+		return $this;
+	}
+
 	/** @inheritdoc */
 	public function getAttribute(): IAttribute {
 		return $this->attribute ?: $this->attribute = new Attribute($this->source);

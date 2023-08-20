@@ -5,28 +5,25 @@ namespace Edde\Bulk\Service;
 
 use DateTime;
 use Edde\Bulk\Job\BulkImportAsyncServiceTrait;
-use Edde\Bulk\Mapper\BulkDtoMapperTrait;
 use Edde\Bulk\Repository\BulkRepositoryTrait;
 use Edde\Bulk\Schema\Bulk\Internal\BulkCreateSchema;
 use Edde\Bulk\Schema\Bulk\Internal\BulkUpdateRequestSchema;
+use Edde\Database\Exception\RepositoryException;
+use Edde\Database\Exception\RequiredResultException;
 use Edde\Dto\Exception\SmartDtoException;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
-use Edde\Mapper\Exception\ItemException;
-use Edde\Mapper\Exception\SkipException;
 use Edde\User\CurrentUserServiceTrait;
 use Edde\User\Exception\UserNotSelectedException;
-use ReflectionException;
 
 class BulkService {
 	use CurrentUserServiceTrait;
 	use BulkRepositoryTrait;
-	use BulkDtoMapperTrait;
 	use SmartServiceTrait;
 	use BulkImportAsyncServiceTrait;
 
-	public function get(string $id): SmartDto {
-		return $this->bulkDtoMapper->item($this->bulkRepository->find($id));
+	public function find(string $id): SmartDto {
+		return $this->bulkRepository->find($id);
 	}
 
 	/**
@@ -34,23 +31,18 @@ class BulkService {
 	 *
 	 * @return SmartDto
 	 * @throws SmartDtoException
-	 * @throws ItemException
-	 * @throws SkipException
 	 * @throws UserNotSelectedException
-	 * @throws ReflectionException
 	 */
 	public function create(SmartDto $request): SmartDto {
-		return $this->bulkDtoMapper->item(
-			$this->bulkRepository->create(
-				$request
-					->convertTo(BulkCreateSchema::class)
-					->merge([
-						'created' => new DateTime(),
-						'status'  => 0,
-						'commit'  => false,
-						'userId'  => $this->currentUserService->requiredId(),
-					])
-			)
+		return $this->bulkRepository->create(
+			$request
+				->convertTo(BulkCreateSchema::class)
+				->merge([
+					'created' => new DateTime(),
+					'status'  => 0,
+					'commit'  => false,
+					'userId'  => $this->currentUserService->requiredId(),
+				])
 		);
 	}
 
@@ -58,39 +50,34 @@ class BulkService {
 	 * @param SmartDto $request
 	 *
 	 * @return SmartDto
-	 * @throws ItemException
-	 * @throws \Edde\Database\Exception\RequiredResultException
-	 * @throws SkipException
+	 * @throws RequiredResultException
 	 * @throws SmartDtoException
 	 */
 	public function fetch(SmartDto $request): SmartDto {
-		return $this->bulkDtoMapper->item($this->bulkRepository->find($request->getValue('id')));
+		return $this->bulkRepository->find($request->getValue('id'));
 	}
 
 	/**
 	 * @param SmartDto $request
 	 *
 	 * @return SmartDto
-	 * @throws ItemException
-	 * @throws \Edde\Database\Exception\RequiredResultException
-	 * @throws SkipException
+	 * @throws RequiredResultException
 	 * @throws SmartDtoException
 	 */
 	public function delete(SmartDto $request): SmartDto {
-		return $this->bulkDtoMapper->item($this->bulkRepository->deleteBy($request));
+		return $this->bulkRepository->deleteBy($request);
 	}
 
 	/**
 	 * @param SmartDto $request
 	 *
-	 * @return void
-	 * @throws ReflectionException
+	 * @return SmartDto
 	 * @throws SmartDtoException
-	 * @throws \Edde\Database\Exception\RepositoryException
-	 * @throws \Edde\Database\Exception\RequiredResultException
+	 * @throws RepositoryException
+	 * @throws RequiredResultException
 	 */
-	public function commit(SmartDto $request) {
-		$this->bulkRepository->update(
+	public function commit(SmartDto $request): SmartDto {
+		return $this->bulkRepository->update(
 			$request
 				->convertTo(BulkUpdateRequestSchema::class)
 				->merge([
@@ -107,11 +94,11 @@ class BulkService {
 	/**
 	 * @param SmartDto $request
 	 *
-	 * @return array
+	 * @return SmartDto[]
 	 * @throws SmartDtoException
 	 */
 	public function query(SmartDto $request): array {
-		return $this->bulkDtoMapper->map($this->bulkRepository->query($request));
+		return $this->bulkRepository->query($request);
 	}
 
 	public function import(SmartDto $bulk): SmartDto {

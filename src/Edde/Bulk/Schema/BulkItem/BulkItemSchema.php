@@ -34,7 +34,7 @@ interface BulkItemSchema extends UuidSchema {
 			'source' => 'bulkId',
 			'proxy'  => [
 				BulkService::class,
-				'get',
+				'find',
 			],
 		]
 	): BulkSchema;

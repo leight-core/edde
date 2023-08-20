@@ -90,4 +90,8 @@ class BulkItemService {
 			)
 		);
 	}
+
+	public function total(SmartDto $query) {
+		return $this->bulkItemRepository->total($query);
+	}
 }

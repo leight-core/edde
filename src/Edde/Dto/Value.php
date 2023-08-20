@@ -78,6 +78,20 @@ class Value {
 		return $this;
 	}
 
+	/**
+	 * Push value without executing an input mapper.
+	 *
+	 * @param $value
+	 *
+	 * @return $this
+	 */
+	public function push($value) {
+		$this->outputCache = null;
+		$this->value = $value;
+		$this - $this->isUndefined = false;
+		return $this;
+	}
+
 	public function get() {
 		/**
 		 * Mapper can return object, so keep the same instance (and in general, prevent overcomputing here).

@@ -5,7 +5,7 @@ namespace Edde\Api\Shared\Job\Endpoint;
 
 use ClanCats\Hydrahon\Query\Sql\Exception;
 use Edde\Job\Dto\JobDto;
-use Edde\Job\Mapper\JobMapperTrait;
+use Edde\Job\Mapper\JobDtoMapperTrait;
 use Edde\Job\Repository\JobRepositoryTrait;
 use Edde\Mapper\Exception\ItemException;
 use Edde\Mapper\Exception\SkipException;
@@ -19,7 +19,7 @@ use Edde\Rest\Exception\RestException;
  */
 class JobEndpoint extends AbstractFetchEndpoint {
 	use JobRepositoryTrait;
-	use JobMapperTrait;
+	use JobDtoMapperTrait;
 
 	/**
 	 * @return JobDto
@@ -31,6 +31,6 @@ class JobEndpoint extends AbstractFetchEndpoint {
 	 * @throws RepositoryException
 	 */
 	public function get(): JobDto {
-		return $this->jobMapper->item($this->jobRepository->find($this->param('jobId')));
+		return $this->jobDtoMapper->item($this->jobRepository->find($this->param('jobId')));
 	}
 }

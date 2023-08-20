@@ -29,6 +29,10 @@ class SmartService implements ISmartService {
 		);
 	}
 
+	public function pushOf($object, string $schema, array $template = []): SmartDto {
+		return $this->createFromSchema($this->schemaManager->load($schema), $template)->pushOf($schema);
+	}
+
 	public function check(SmartDto $dto, string $schema, array $template = []): SmartDto {
 		/**
 		 * The trick is simple: export DTO and import it using the given schema; if there is something

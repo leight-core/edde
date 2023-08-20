@@ -32,6 +32,20 @@ interface ISmartService {
 	public function from($object, string $schema, array $template = []): SmartDto;
 
 	/**
+	 * Pushes values into the SmartDto without executing input mappers (for example creating an object from
+	 * database).
+	 *
+	 * @param        $object
+	 * @param string $schema
+	 * @param array  $template
+	 *
+	 * @return SmartDto
+	 * @throws SmartDtoException
+	 * @throws SchemaException
+	 */
+	public function pushOf($object, string $schema, array $template = []): SmartDto;
+
+	/**
 	 * Check if the given SmartDto satisfies the given schema; exception is thrown or the same object is returned
 	 *
 	 * You can see this method as kind of deep "type-check" PHP does not have (in runtime).

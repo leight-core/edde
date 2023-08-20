@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace Edde\Bulk\Mapper;
 
 use Edde\Bulk\Schema\Bulk\BulkSchema;
-use Edde\Mapper\AbstractMapper;
+use Edde\Dto\Mapper\AbstractPushOfMapper;
 
-class BulkDtoMapper extends AbstractMapper {
-	public function item($item, $params = null) {
-		return $this->smartService->from($item, BulkSchema::class);
+class BulkDtoMapper extends AbstractPushOfMapper {
+	public function getSchema(): string {
+		return BulkSchema::class;
 	}
 }

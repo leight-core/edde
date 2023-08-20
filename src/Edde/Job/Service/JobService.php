@@ -7,7 +7,7 @@ use DateTime;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\Job\Async\IAsyncService;
-use Edde\Job\Mapper\JobMapperTrait;
+use Edde\Job\Mapper\JobDtoMapperTrait;
 use Edde\Job\Repository\JobRepositoryTrait;
 use Edde\Job\Schema\Job\JobSchema;
 use Edde\User\CurrentUserServiceTrait;
@@ -15,11 +15,11 @@ use Edde\User\CurrentUserServiceTrait;
 class JobService implements IJobService {
 	use SmartServiceTrait;
 	use JobRepositoryTrait;
-	use JobMapperTrait;
+	use JobDtoMapperTrait;
 	use CurrentUserServiceTrait;
 
 	public function create(IAsyncService $asyncService, ?SmartDto $request): SmartDto {
-		return $this->jobMapper->item(
+		return $this->jobDtoMapper->item(
 			$this->jobRepository->save(
 				$this->smartService->from([
 					'service'       => get_class($asyncService),
@@ -39,13 +39,13 @@ class JobService implements IJobService {
 	}
 
 	public function patch(SmartDto $patch): SmartDto {
-		return $this->jobMapper->item(
+		return $this->jobDtoMapper->item(
 			$this->jobRepository->patch($patch)
 		);
 	}
 
 	public function find(string $jobId): SmartDto {
-		return $this->jobMapper->item(
+		return $this->jobDtoMapper->item(
 			$this->jobRepository->find($jobId)
 		);
 	}

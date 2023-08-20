@@ -177,6 +177,11 @@ class SmartDto implements IDto, IteratorAggregate {
 		return $this;
 	}
 
+	public function put(string $name, $value, bool $withFallback = false) {
+		$this->set($name, $value, $withFallback);
+		return $value;
+	}
+
 	/**
 	 * Push ignores input mapper
 	 *
@@ -189,11 +194,6 @@ class SmartDto implements IDto, IteratorAggregate {
 	public function push(string $name, $value): self {
 		$this->get($name)->push($value);
 		return $this;
-	}
-
-	public function put(string $name, $value, bool $withFallback = false) {
-		$this->set($name, $value, $withFallback);
-		return $value;
 	}
 
 	/**
@@ -314,6 +314,31 @@ class SmartDto implements IDto, IteratorAggregate {
 				}
 			}
 			$raw ? $this->setRaw($k, $v) : $this->set($k, $v);
+		}
+		return $this;
+	}
+
+	public function pushOf($object): self {
+		if (!$object) {
+			return $this;
+		}
+		foreach ($object instanceof SmartDto ? $object->export(true) : $object as $k => $v) {
+			if (!$this->known($k)) {
+				continue;
+			}
+			$value = $this->get($k);
+			if ($v !== null && ($attribute = $value->getAttribute())->hasSchema() && ($schema = $attribute->getSchema())) {
+				if ($attribute->isArray()) {
+					$array = [];
+					foreach ($v as $_k => $_v) {
+						$array[$_k] = self::ofSchema($schema, $this->mapperService)->pushOf($_v);
+					}
+					$v = $array;
+				} else {
+					$v = self::ofSchema($schema, $this->mapperService)->pushOf($v);
+				}
+			}
+			$this->push($k, $v);
 		}
 		return $this;
 	}

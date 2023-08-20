@@ -21,6 +21,7 @@ use Edde\Job\Rpc\JobFetchRpcService;
 use Edde\Job\Rpc\JobQueryRpcHandler;
 use Edde\Rpc\Service\RpcHandlerIndexTrait;
 use Edde\Translation\Rpc\TranslationBundlesRpcHandler;
+use Edde\Upgrade\Rpc\UpgradeQueryRpcHandler;
 use Edde\Upgrade\Rpc\UpgradeRpcHandler;
 
 class BootstrapDefaultRpcIndex extends AbstractBootstrap {
@@ -46,6 +47,7 @@ class BootstrapDefaultRpcIndex extends AbstractBootstrap {
 			BulkItemUpsertRpcHandler::class,
 			BulkItemFetchRpcHandler::class,
 			UpgradeRpcHandler::class,
+			UpgradeQueryRpcHandler::class,
 		]);
 	}
 }

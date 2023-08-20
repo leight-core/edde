@@ -48,7 +48,6 @@ class BulkImportAsyncService extends AbstractAsyncService {
 					],
 				])
 			) as $bulkItem) {
-				sleep(5);
 				try {
 					$response = $this->rpcService->execute(
 						$this->smartService->from(

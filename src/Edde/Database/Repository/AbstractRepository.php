@@ -51,8 +51,7 @@ abstract class AbstractRepository implements IRepository {
 			->insert(
 				$this->table,
 				(array)$this->exportMapper->item($dto, ['raw' => $raw])
-			)
-			->execute();
+			);
 		return $dto;
 	}
 
@@ -88,8 +87,7 @@ abstract class AbstractRepository implements IRepository {
 				[
 					$this->id => $id = $this->resolveEntityOrThrow($dto)->{$this->id},
 				]
-			)
-			->execute();
+			);
 		return $this->find($id);
 	}
 

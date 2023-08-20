@@ -15,4 +15,6 @@ interface BulkItemFilterSchema extends FilterSchema {
 	];
 
 	function bulkId(): ?string;
+
+	function service(): ?string;
 }

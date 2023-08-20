@@ -5,6 +5,7 @@ namespace Edde\Bulk\Schema\Bulk\Internal;
 
 use Edde\Date\Mapper\IsoDateMapper;
 use Edde\Dto\Mapper\ExportMapper;
+use Edde\Utils\Mapper\BoolIntMapper;
 
 interface BulkCreateSchema {
 	const meta = [
@@ -17,7 +18,7 @@ interface BulkCreateSchema {
 
 	function status(): int;
 
-	function commit(): bool;
+	function commit($output = BoolIntMapper::class): bool;
 
 	function created($output = IsoDateMapper::class);
 

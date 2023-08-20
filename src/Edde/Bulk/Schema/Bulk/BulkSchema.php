@@ -5,6 +5,7 @@ namespace Edde\Bulk\Schema\Bulk;
 
 use Edde\Database\Schema\UuidSchema;
 use Edde\Date\Mapper\IsoDateMapper;
+use Edde\Utils\Mapper\IntBoolMapper;
 
 interface BulkSchema extends UuidSchema {
 	const meta = [
@@ -19,7 +20,7 @@ interface BulkSchema extends UuidSchema {
 
 	function status(): int;
 
-	function commit(): bool;
+	function commit($output = IntBoolMapper::class): bool;
 
 	function created($output = IsoDateMapper::class): string;
 

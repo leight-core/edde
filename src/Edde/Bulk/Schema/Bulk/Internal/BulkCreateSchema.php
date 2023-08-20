@@ -8,7 +8,7 @@ use Edde\Dto\Mapper\ExportMapper;
 interface BulkCreateSchema {
 	const meta = [
 		ExportMapper::META => [
-			'userId' => '$camel',
+			'userId' => ExportMapper::CONVERT_CAMEL,
 		],
 	];
 

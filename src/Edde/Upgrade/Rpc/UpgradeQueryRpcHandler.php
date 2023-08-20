@@ -29,7 +29,7 @@ class UpgradeQueryRpcHandler extends AbstractRpcHandler {
 		if ($filter->knownWithValue('active')) {
 			$active = $filter->getValue('active');
 			$upgrades = array_filter($upgrades, function (SmartDto $upgrade) use ($active) {
-				return $upgrade->active === $active;
+				return $upgrade->getValue('active') === $active;
 			});
 		}
 		usort($upgrades, function (SmartDto $a, SmartDto $b) {

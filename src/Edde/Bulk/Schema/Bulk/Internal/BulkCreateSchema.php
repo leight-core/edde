@@ -19,7 +19,7 @@ interface BulkCreateSchema {
 
 	function commit(): bool;
 
-	function created($output = IsoDateMapper::class): string;
+	function created($output = IsoDateMapper::class);
 
 	function userId(): string;
 }

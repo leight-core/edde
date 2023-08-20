@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Schema\BulkItem\Internal;
 
-use DateTime;
+use Edde\Date\Mapper\IsoDateMapper;
 use Edde\Dto\Mapper\ExportMapper;
 use Edde\Utils\Mapper\JsonInputMapper;
 use Edde\Utils\Mapper\JsonOutputMapper;
@@ -25,7 +25,7 @@ interface BulkItemCreateSchema {
 		$output = JsonOutputMapper::class
 	);
 
-	function created(): DateTime;
+	function created($output = IsoDateMapper::class);
 
 	function status(): int;
 

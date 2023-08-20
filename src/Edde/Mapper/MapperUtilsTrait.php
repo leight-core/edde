@@ -6,13 +6,12 @@ namespace Edde\Mapper;
 use DateTime;
 use DateTimeZone;
 use function is_string;
-use const DATE_ATOM;
 
 trait MapperUtilsTrait {
 	public function isoDateNull($dateTime) {
 		if (is_string($dateTime)) {
 			$dateTime = new DateTime($dateTime, new DateTimeZone('UTC'));
 		}
-		return $dateTime ? $dateTime->format(DATE_ATOM) : null;
+		return $dateTime ? $dateTime->format(DATE_RFC822) : null;
 	}
 }

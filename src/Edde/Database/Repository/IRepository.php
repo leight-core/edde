@@ -123,13 +123,12 @@ interface IRepository {
 	public function toQuery(SmartDto $query): Query;
 
 	/**
-	 * @param string   $alias
 	 * @param SmartDto $query
 	 *
 	 * @return object[]
 	 * @throws SmartDtoException
 	 */
-	public function query(string $alias, SmartDto $query): array;
+	public function query(SmartDto $query): array;
 
 	/**
 	 * @param SmartDto $query

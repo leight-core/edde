@@ -46,7 +46,7 @@ class BulkItemService {
 	 */
 	public function query(SmartDto $query): array {
 		return $this->bulkItemDtoMapper->map(
-			$this->bulkItemRepository->query('b', $query)
+			$this->bulkItemRepository->query($query)
 		);
 	}
 

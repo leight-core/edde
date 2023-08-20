@@ -40,7 +40,7 @@ class JobService implements IJobService {
 
 	public function query(SmartDto $request): array {
 		return $this->jobDtoMapper->map(
-			$this->jobRepository->query('j', $request)
+			$this->jobRepository->query($request)
 		);
 	}
 

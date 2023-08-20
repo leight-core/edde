@@ -162,7 +162,7 @@ abstract class AbstractRepository implements IRepository {
 	/**
 	 * @inheritDoc
 	 */
-	public function query(string $alias, SmartDto $query): array {
+	public function query(SmartDto $query): array {
 		return $this->list($this->toQuery($query));
 	}
 

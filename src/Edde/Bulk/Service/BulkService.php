@@ -9,8 +9,6 @@ use Edde\Bulk\Mapper\BulkDtoMapperTrait;
 use Edde\Bulk\Repository\BulkRepositoryTrait;
 use Edde\Bulk\Schema\Bulk\Internal\BulkCreateSchema;
 use Edde\Bulk\Schema\Bulk\Internal\BulkUpdateRequestSchema;
-use Edde\Database\Exception\RepositoryException;
-use Edde\Database\Exception\RequiredResultException;
 use Edde\Dto\Exception\SmartDtoException;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
@@ -113,7 +111,7 @@ class BulkService {
 	 * @throws SmartDtoException
 	 */
 	public function query(SmartDto $request): array {
-		return $this->bulkDtoMapper->map($this->bulkRepository->query('b', $request));
+		return $this->bulkDtoMapper->map($this->bulkRepository->query($request));
 	}
 
 	public function import(SmartDto $bulk): SmartDto {

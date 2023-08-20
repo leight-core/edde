@@ -4,4 +4,9 @@ declare(strict_types=1);
 namespace Edde\Upgrade\Schema;
 
 interface UpgradeOrderBySchema {
+	const meta = [
+		'orderBy' => [
+			'stamp',
+		],
+	];
 }

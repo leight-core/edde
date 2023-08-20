@@ -5,7 +5,7 @@ namespace Edde\Job\Schema\Job;
 
 use DateTime;
 
-interface JobPatchSchema extends JobCreateSchema {
+interface JobUpdateSchema extends JobCreateSchema {
 	const partial = true;
 
 	function status(): int;
@@ -27,8 +27,6 @@ interface JobPatchSchema extends JobCreateSchema {
 	function response(): string;
 
 	function responseSchema(): string;
-
-	function started(): DateTime;
 
 	function finished(): ?DateTime;
 }

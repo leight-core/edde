@@ -8,7 +8,7 @@ use Edde\Bulk\Job\BulkImportAsyncServiceTrait;
 use Edde\Bulk\Mapper\BulkDtoMapperTrait;
 use Edde\Bulk\Repository\BulkRepositoryTrait;
 use Edde\Bulk\Schema\Bulk\Internal\BulkCreateSchema;
-use Edde\Bulk\Schema\Bulk\Internal\BulkPatchRequestSchema;
+use Edde\Bulk\Schema\Bulk\Internal\BulkUpdateRequestSchema;
 use Edde\Doctrine\Exception\RepositoryException;
 use Edde\Doctrine\Exception\RequiredResultException;
 use Edde\Dto\Exception\SmartDtoException;
@@ -92,11 +92,11 @@ class BulkService {
 	 * @throws RequiredResultException
 	 */
 	public function commit(SmartDto $request) {
-		$this->bulkRepository->patch(
+		$this->bulkRepository->update(
 			$request
-				->convertTo(BulkPatchRequestSchema::class)
+				->convertTo(BulkUpdateRequestSchema::class)
 				->merge([
-					'patch'  => [
+					'update' => [
 						'commit' => true,
 					],
 					'filter' => [

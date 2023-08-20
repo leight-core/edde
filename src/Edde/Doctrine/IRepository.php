@@ -65,7 +65,7 @@ interface IRepository {
 	 * @throws RequiredResultException
 	 * @throws SmartDtoException
 	 */
-	public function patch(SmartDto $dto);
+	public function update(SmartDto $dto);
 
 	/**
 	 * @param string $alias

@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Schema\BulkItem\Internal;
 
-use Edde\Bulk\Schema\BulkItem\BulkItemFilterSchema;
+use Edde\Bulk\Schema\BulkItem\Query\BulkItemFilterSchema;
 
 interface BulkItemUpsertRequestSchema {
 	function create($load = true): ?BulkItemCreateSchema;
 
-	function update($load = true): ?BulkItemPatchSchema;
+	function update($load = true): ?BulkItemUpdateSchema;
 
 	function filter($load = true): ?BulkItemFilterSchema;
 }

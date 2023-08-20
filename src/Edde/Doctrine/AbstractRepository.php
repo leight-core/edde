@@ -8,7 +8,6 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Edde\Doctrine\Exception\RepositoryException;
 use Edde\Doctrine\Exception\RequiredResultException;
-use Edde\Doctrine\Schema\PatchSchema;
 use Edde\Dto\Exception\SmartDtoException;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
@@ -84,12 +83,7 @@ abstract class AbstractRepository implements IRepository {
 			 * Patch contains entity resolution, so if it fails,
 			 * we can try create a new entity.
 			 */
-			return $this->patch(
-				$this->smartService->from([
-					'patch'  => $dto->getSmartDto('update'),
-					'filter' => $dto->getSmartDto('filter'),
-				], PatchSchema::class)
-			);
+			return $this->update($dto);
 		} catch (RepositoryException $exception) {
 			return $this->save($dto->getSmartDto('create', true));
 		}
@@ -98,14 +92,14 @@ abstract class AbstractRepository implements IRepository {
 	/**
 	 * @inheritDoc
 	 */
-	public function patch(SmartDto $dto) {
+	public function update(SmartDto $dto) {
 		$dto->ensure([
 			'filter',
-			'patch',
+			'update',
 		]);
 		$this->entityManager->persist(
 			$entity = $dto
-				->getSmartDto('patch', true)
+				->getSmartDto('update')
 				->exportTo(
 					$this->resolveEntityOrThrow($dto),
 					true

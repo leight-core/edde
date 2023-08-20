@@ -9,7 +9,7 @@ use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\Job\Exception\JobInterruptedException;
 use Edde\Job\Repository\JobRepositoryTrait;
-use Edde\Job\Schema\Job\JobPatchRequestSchema;
+use Edde\Job\Schema\Job\JobUpdateRequestSchema;
 use Edde\Job\Schema\JobStatus;
 use Edde\Job\Service\JobLogServiceTrait;
 use Edde\Job\Service\JobServiceTrait;
@@ -39,10 +39,10 @@ class JobProgress extends AbstractProgress {
 	public function onStart(int $total = 1): void {
 		$this->start = microtime(true);
 		$this->check();
-		$this->jobService->patch(
+		$this->jobService->update(
 			$this->smartService->from(
 				[
-					'patch'  => [
+					'update' => [
 						'started' => new DateTime(),
 						'total'   => $this->total = $total,
 						'status'  => JobStatus::JOB_RUNNING,
@@ -51,7 +51,7 @@ class JobProgress extends AbstractProgress {
 						'id' => $this->jobId,
 					],
 				],
-				JobPatchRequestSchema::class
+				JobUpdateRequestSchema::class
 			)
 		);
 		$this->check();
@@ -63,10 +63,10 @@ class JobProgress extends AbstractProgress {
 	 */
 	public function onProgress(): void {
 		$this->check();
-		$this->jobService->patch(
+		$this->jobService->update(
 			$this->smartService->from(
 				[
-					'patch'  => [
+					'update' => [
 						'successCount' => ++$this->success,
 						'progress'     => $this->progress(),
 					],
@@ -74,7 +74,7 @@ class JobProgress extends AbstractProgress {
 						'id' => $this->jobId,
 					],
 				],
-				JobPatchRequestSchema::class
+				JobUpdateRequestSchema::class
 			)
 		);
 		$this->entityManager->flush();
@@ -82,10 +82,10 @@ class JobProgress extends AbstractProgress {
 
 	public function onSettled(SmartDto $response = null): void {
 		$job = $this->jobService->find($this->jobId);
-		$this->jobService->patch(
+		$this->jobService->update(
 			$this->smartService->from(
 				[
-					'patch'  => [
+					'update' => [
 						'status'         => $job->getSafeValue('errorCount', 0) > 0 ? JobStatus::JOB_CHECK : JobStatus::JOB_SUCCESS,
 						'response'       => $response ? $response->export() : null,
 						'responseSchema' => $response ? $response->getSchema()->getName() : null,
@@ -96,7 +96,7 @@ class JobProgress extends AbstractProgress {
 						'id' => $this->jobId,
 					],
 				],
-				JobPatchRequestSchema::class
+				JobUpdateRequestSchema::class
 			)
 		);
 		$this->entityManager->flush();
@@ -108,10 +108,10 @@ class JobProgress extends AbstractProgress {
 	public function onError(Throwable $throwable, string $reference = null): void {
 		parent::onError($throwable, $reference);
 		$this->check();
-		$this->jobService->patch(
+		$this->jobService->update(
 			$this->smartService->from(
 				[
-					'patch'  => [
+					'update' => [
 						'errorCount' => $this->error,
 						'progress'   => $this->progress(),
 					],
@@ -119,7 +119,7 @@ class JobProgress extends AbstractProgress {
 						'id' => $this->jobId,
 					],
 				],
-				JobPatchRequestSchema::class
+				JobUpdateRequestSchema::class
 			)
 		);
 		try {
@@ -143,17 +143,17 @@ class JobProgress extends AbstractProgress {
 	}
 
 	public function onFailure(Throwable $throwable): void {
-		$this->jobService->patch(
+		$this->jobService->update(
 			$this->smartService->from(
 				[
-					'patch'  => [
+					'update' => [
 						'status' => JobStatus::JOB_ERROR,
 					],
 					'filter' => [
 						'id' => $this->jobId,
 					],
 				],
-				JobPatchRequestSchema::class
+				JobUpdateRequestSchema::class
 			)
 		);
 		$this->logger->error($throwable);
@@ -165,17 +165,17 @@ class JobProgress extends AbstractProgress {
 		parent::check();
 		$job = $this->jobService->find($this->jobId);
 		if ($job->getValue('status') === JobStatus::JOB_INTERRUPTED) {
-			$this->jobService->patch(
+			$this->jobService->update(
 				$this->smartService->from(
 					[
-						'patch'  => [
+						'update' => [
 							'finished' => new DateTime(),
 						],
 						'filter' => [
 							'id' => $this->jobId,
 						],
 					],
-					JobPatchRequestSchema::class
+					JobUpdateRequestSchema::class
 				)
 			);
 			throw new JobInterruptedException(sprintf('Job [%s] has been interrupted.', $this->jobId));

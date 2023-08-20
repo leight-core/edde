@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Schema\Bulk\Internal;
 
-interface BulkCreateSchema {
-	function name(): string;
-
+interface BulkCreateSchema extends \Edde\Bulk\Schema\Bulk\BulkCreateSchema {
 	function status(): int;
 
 	function commit(): bool;

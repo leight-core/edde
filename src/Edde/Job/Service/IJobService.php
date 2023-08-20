@@ -28,7 +28,7 @@ interface IJobService {
 
 	public function query(SmartDto $request): array;
 
-	public function patch(SmartDto $patch): SmartDto;
+	public function update(SmartDto $patch): SmartDto;
 
 	/**
 	 * @param string $jobId

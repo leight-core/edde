@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Schema\BulkItem\Internal;
 
-use Edde\Database\Schema\UuidSchema;
+use Edde\Database\Schema\UuidGeneratorSchema;
 use Edde\Date\Mapper\IsoDateMapper;
 use Edde\Dto\Mapper\ExportMapper;
 use Edde\Utils\Mapper\JsonInputMapper;
 use Edde\Utils\Mapper\JsonOutputMapper;
 
-interface BulkItemCreateSchema extends UuidSchema {
+interface BulkItemCreateSchema extends UuidGeneratorSchema {
 	const meta = [
 		ExportMapper::META => [
 			'bulkId' => ExportMapper::CONVERT_CAMEL,

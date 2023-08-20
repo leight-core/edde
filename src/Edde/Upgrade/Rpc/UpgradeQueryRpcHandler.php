@@ -25,6 +25,7 @@ class UpgradeQueryRpcHandler extends AbstractRpcHandler {
 
 	public function handle(SmartDto $request) {
 		$filter = $request->getSmartDto('filter', true);
+		$cursor = $request->getSmartDto('cursor', true);
 		$upgrades = $this->upgradeMapper->map($this->upgradeManager->migrations());
 		if ($filter->knownWithValue('active')) {
 			$active = $filter->getValue('active');
@@ -35,6 +36,10 @@ class UpgradeQueryRpcHandler extends AbstractRpcHandler {
 		usort($upgrades, function (SmartDto $a, SmartDto $b) {
 			return strcmp($a->getValue('version'), $b->getValue('version'));
 		});
-		return array_slice($upgrades, ($query->page ?? 0) * ($query->size ?? 10), $query->size ?? 10);
+		return array_slice(
+			$upgrades,
+			$cursor->getSafeValue('page', 0) * $cursor->getSafeValue('size', 10),
+			$cursor->getSafeValue('size', 10)
+		);
 	}
 }

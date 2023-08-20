@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Edde\Bulk\Schema\BulkItem\Internal;
 
 use DateTime;
+use Edde\Utils\Mapper\JsonInputMapper;
+use Edde\Utils\Mapper\JsonOutputMapper;
 
 interface BulkItemCreateSchema {
 	function bulkId(): string;
@@ -14,9 +16,15 @@ interface BulkItemCreateSchema {
 
 	function status(): int;
 
-	function request(): ?string;
+	function request(
+		$input = JsonInputMapper::class,
+		$output = JsonOutputMapper::class
+	);
 
-	function response(): ?string;
+	function response(
+		$input = JsonInputMapper::class,
+		$output = JsonOutputMapper::class
+	);
 
 	function userId(): string;
 }

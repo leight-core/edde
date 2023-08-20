@@ -41,7 +41,7 @@ class BulkItemService {
 	/**
 	 * @param SmartDto $query
 	 *
-	 * @return array
+	 * @return SmartDto[]
 	 * @throws SmartDtoException
 	 */
 	public function query(SmartDto $query): array {

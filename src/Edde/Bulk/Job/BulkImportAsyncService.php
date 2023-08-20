@@ -37,7 +37,6 @@ class BulkImportAsyncService extends AbstractAsyncService {
 		);
 		$size = 25;
 		$pages = ceil($total / $size);
-
 		for ($page = 0; $page < $pages; $page++) {
 			foreach ($this->bulkItemService->query(
 				$query->merge([
@@ -50,11 +49,17 @@ class BulkImportAsyncService extends AbstractAsyncService {
 				sleep(5);
 				try {
 					$response = $this->rpcService->execute(
-						$this->smartService->from([
-							'bulk' => [
-								$bulkItem->getValue('id') => $bulkItem->getValue('request'),
+						$this->smartService->from(
+							[
+								'bulk' => [
+									$bulkItem->getValue('id') => [
+										'service' => $bulkItem->getValue('service'),
+										'data'    => $bulkItem->getValue('request'),
+									],
+								],
 							],
-						], RpcBulkRequestSchema::class)
+							RpcBulkRequestSchema::class
+						)
 					);
 					$base = $response['bulk'][$bulkItem->getValue('id')];
 					$this->bulkItemService->patch(

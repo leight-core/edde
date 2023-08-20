@@ -5,15 +5,18 @@ namespace Edde\Upgrade;
 
 use Edde\Phinx\CommonMigration;
 
-class BulkImport extends CommonMigration {
+class BulkImportUpgrade extends CommonMigration {
 	public function change(): void {
+		$this->drop(
+			'z_bulk_item',
+			'z_bulk'
+		);
 		$this
 			->createUuidTable('z_bulk', [
 				'comment' => 'Common bulk "header" for bulk items.',
 			])
 			->addColumn('created', 'datetime')
 			->addStringColumn('name', 512, ['comment' => 'Human readable name of this bulk import.'])
-			->addStringColumn('service', 512, ['comment' => 'Service being called.'])
 			->addColumn('status', 'integer', [
 				'comment' => 'Overall bulk status',
 				'default' => 0,
@@ -30,6 +33,7 @@ class BulkImport extends CommonMigration {
 				'comment' => 'Item used for bulk changes/imports',
 			])
 			->addUuidForeignColumn('bulk', 'z_bulk')
+			->addStringColumn('service', 512, ['comment' => 'Service being called.'])
 			->addColumn('status', 'integer', [
 				'comment' => 'Item status (one field): 0 - pending, 1 - success, 2 - error',
 				'default' => 0,

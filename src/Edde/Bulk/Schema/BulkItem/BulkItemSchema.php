@@ -34,6 +34,8 @@ interface BulkItemSchema extends UuidSchema {
 		]
 	): BulkSchema;
 
+	function service(): string;
+
 	function created($output = IsoDateMapper::class): string;
 
 	function status(): int;

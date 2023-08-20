@@ -17,8 +17,6 @@ interface BulkSchema extends UuidSchema {
 
 	function name(): string;
 
-	function service(): string;
-
 	function status(): int;
 
 	function commit(): bool;

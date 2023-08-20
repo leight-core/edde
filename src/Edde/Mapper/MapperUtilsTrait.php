@@ -12,6 +12,6 @@ trait MapperUtilsTrait {
 		if (is_string($dateTime)) {
 			$dateTime = new DateTime($dateTime, new DateTimeZone('UTC'));
 		}
-		return $dateTime ? $dateTime->format(DATE_RFC822) : null;
+		return $dateTime ? $dateTime->format('Y-m-d H:i:s') : null;
 	}
 }

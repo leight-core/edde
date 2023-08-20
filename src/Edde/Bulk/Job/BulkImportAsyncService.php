@@ -63,15 +63,18 @@ class BulkImportAsyncService extends AbstractAsyncService {
 					);
 					$base = $response['bulk'][$bulkItem->getValue('id')];
 					$this->bulkItemService->patch(
-						$this->smartService->from([
-							'patch'  => [
-								'response' => $base['data'] ?? $base['error'],
-								'status' => isset($base['error']) ? BulkItemStatus::ERROR : BulkItemStatus::SUCCESS,
+						$this->smartService->from(
+							[
+								'patch'  => [
+									'response' => $base['data'] ?? $base['error'],
+									'status'   => isset($base['error']) ? BulkItemStatus::ERROR : BulkItemStatus::SUCCESS,
+								],
+								'filter' => [
+									'id' => $bulkItem->getValue('id'),
+								],
 							],
-							'filter' => [
-								'id' => $bulkItem->getValue('id'),
-							],
-						], BulkItemPatchRequestSchema::class)
+							BulkItemPatchRequestSchema::class
+						)
 					);
 					$progress->onProgress();
 				} catch (Throwable $throwable) {

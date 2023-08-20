@@ -6,11 +6,6 @@ namespace Edde\Slim;
 use DI\Bridge\Slim\Bridge;
 use DI\Container;
 use DI\ContainerBuilder;
-use Doctrine\DBAL\DriverManager;
-use Doctrine\DBAL\Logging\SQLLogger;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\ORMSetup;
 use Edde\Api\ApiRouter;
 use Edde\Auth\Mapper\ISessionMapper;
 use Edde\Bootstrap\IBootstrap;
@@ -77,7 +72,6 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\SimpleCache\CacheInterface;
 use Slim\App;
-use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
@@ -139,65 +133,65 @@ class SlimApp {
 		$containerBuilder = new ContainerBuilder();
 		$containerBuilder->useAnnotations(true);
 		$containerBuilder->addDefinitions([
-			'doctrine.dev'                => false,
-			SessionInterface::class       => function (ContainerInterface $container) {
+			'doctrine.dev'             => false,
+			SessionInterface::class    => function (ContainerInterface $container) {
 				return $container->get(Session::class);
 			},
-			Session::class                => function (ContainerInterface $container) {
+			Session::class             => function (ContainerInterface $container) {
 				return $container->get(ISessionResolver::class)->setup();
 			},
-			ISessionResolver::class       => function (ContainerInterface $container) {
+			ISessionResolver::class    => function (ContainerInterface $container) {
 				return $container->get(SessionResolver::class);
 			},
-			IHttpRouter::class            => function (ContainerInterface $container) {
+			IHttpRouter::class         => function (ContainerInterface $container) {
 				return $container->get(ApiRouter::class);
 			},
-			IImageService::class          => function (ContainerInterface $container) {
+			IImageService::class       => function (ContainerInterface $container) {
 				return $container->get(ImageService::class);
 			},
-			IJobExecutor::class           => function (ContainerInterface $container) {
+			IJobExecutor::class        => function (ContainerInterface $container) {
 				return $container->get(CliJobExecutor::class);
 			},
-			IDtoService::class            => function (ContainerInterface $container) {
+			IDtoService::class         => function (ContainerInterface $container) {
 				return $container->get(ReflectionDtoService::class);
 			},
-			IHttpIndex::class             => function (ContainerInterface $container) {
+			IHttpIndex::class          => function (ContainerInterface $container) {
 				return $container->get(HttpIndex::class);
 			},
-			IPhpBinaryService::class      => function (ContainerInterface $container) {
+			IPhpBinaryService::class   => function (ContainerInterface $container) {
 				return $container->get(PhpBinaryService::class);
 			},
-			IEndpointInfo::class          => function (ContainerInterface $container) {
+			IEndpointInfo::class       => function (ContainerInterface $container) {
 				return $container->get(EndpointInfo::class);
 			},
-			IExcelService::class          => function (ContainerInterface $container) {
+			IExcelService::class       => function (ContainerInterface $container) {
 				return $container->get(ExcelService::class);
 			},
-			IExcelImportService::class    => function (ContainerInterface $container) {
+			IExcelImportService::class => function (ContainerInterface $container) {
 				return $container->get(ExcelImportService::class);
 			},
-			IExcelExportService::class    => function (ContainerInterface $container) {
+			IExcelExportService::class => function (ContainerInterface $container) {
 				return $container->get(ExcelExportService::class);
 			},
-			LoggerInterface::class        => function (ContainerInterface $container) {
+			LoggerInterface::class     => function (ContainerInterface $container) {
 				return $container->get(DatabaseLogger::class);
 			},
-			IPasswordService::class       => function (ContainerInterface $container) {
+			IPasswordService::class    => function (ContainerInterface $container) {
 				return $container->get(PasswordService::class);
 			},
-			IFileService::class           => function (Container $container) {
+			IFileService::class        => function (Container $container) {
 				return $container->make(FileService::class, ['root' => $container->get(FileService::CONFIG_ROOT)]);
 			},
-			ISourceService::class         => function (ContainerInterface $container) {
+			ISourceService::class      => function (ContainerInterface $container) {
 				return $container->get(SourceService::class);
 			},
-			IMapperService::class  => function (ContainerInterface $container) {
+			IMapperService::class      => function (ContainerInterface $container) {
 				return $container->get(MapperService::class);
 			},
-			StorageConfig::class          => function (ContainerInterface $container) {
+			StorageConfig::class       => function (ContainerInterface $container) {
 				return new StorageConfig($container->get(StorageConfig::CONFIG_STORAGE));
 			},
-			Application::class            => function (ContainerInterface $container) {
+			Application::class         => function (ContainerInterface $container) {
 				$application = new Application($container->get(self::CONFIG_APP_NAME));
 				foreach ($container->get(self::CONFIG_CLI) as $cli) {
 					$application->add($container->get($cli));
@@ -206,72 +200,44 @@ class SlimApp {
 				$application->add($container->get(SdkCommand::class));
 				return $application;
 			},
-			IUserMapper::class            => function () {
+			IUserMapper::class         => function () {
 				throw new EddeException(sprintf('[%s] is not implemented or registered in the container; please provide implementation of [%s].', IUserMapper::class, IUserMapper::class));
 			},
-			ISessionMapper::class         => function () {
+			ISessionMapper::class      => function () {
 				throw new EddeException(sprintf('[%s] is not implemented or registered in the container; please provide implementation of [%s].', ISessionMapper::class, ISessionMapper::class));
 			},
-			ICache::class                 => function (ContainerInterface $container) {
+			ICache::class              => function (ContainerInterface $container) {
 				return $container->get(Cache::class);
 			},
-			CacheInterface::class         => function (ContainerInterface $container) {
+			CacheInterface::class      => function (ContainerInterface $container) {
 				return $container->get(DatabaseCache::class);
 			},
-			SlimApp::CONFIG_CLI           => [],
-			ISmartService::class          => function (ContainerInterface $container) {
+			SlimApp::CONFIG_CLI        => [],
+			ISmartService::class       => function (ContainerInterface $container) {
 				return $container->get(SmartService::class);
 			},
-			ISchemaLoader::class          => function (ContainerInterface $container) {
+			ISchemaLoader::class       => function (ContainerInterface $container) {
 				return $container->get(ReflectionSchemaLoader::class);
 			},
-			ISchemaManager::class         => function (ContainerInterface $container) {
+			ISchemaManager::class      => function (ContainerInterface $container) {
 				return $container->get(SchemaManager::class);
 			},
-			IRpcHandlerIndex::class       => function (ContainerInterface $container) {
+			IRpcHandlerIndex::class    => function (ContainerInterface $container) {
 				return $container->get(RpcHandlerIndex::class);
 			},
-			IJobLockService::class => function (ContainerInterface $container) {
+			IJobLockService::class     => function (ContainerInterface $container) {
 				return $container->get(JobLockService::class);
 			},
-			IJobLogService::class  => function (ContainerInterface $container) {
+			IJobLogService::class      => function (ContainerInterface $container) {
 				return $container->get(JobLogService::class);
 			},
-			IJobService::class     => function (ContainerInterface $container) {
+			IJobService::class         => function (ContainerInterface $container) {
 				return $container->get(JobService::class);
 			},
-			Manager::class                => function (ContainerInterface $container) {
+			Manager::class             => function (ContainerInterface $container) {
 				$manager = new Manager($container->get(ConfigInterface::class), new ArrayInput([]), new StreamOutput(fopen('php://output', 'w')));
 				$manager->setContainer($container);
 				return $manager;
-			},
-			EntityManagerInterface::class => function (ContainerInterface $container) {
-				/** @var $storageConfig StorageConfig */
-				$storageConfig = $container->get(StorageConfig::class);
-				$config = ORMSetup::createAnnotationMetadataConfiguration(
-					[$container->get('source.root')],
-					$isDev = $container->get('doctrine.dev') ?? false,
-				);
-				if (!$isDev) {
-					$config->setQueryCache(new PhpFilesAdapter('doctrine.query', 3600));
-					$config->setResultCache(new PhpFilesAdapter('doctrine.result', 3600));
-					$config->setMetadataCache(new PhpFilesAdapter('doctrine.metadata', 3600));
-				}
-				$isDev && $config->setSQLLogger(new class implements SQLLogger {
-					public function startQuery($sql, ?array $params = null, ?array $types = null) {
-					}
-
-					public function stopQuery() {
-					}
-				});
-				$connection = DriverManager::getConnection(array_merge(
-					['doctrine.driver' => $driver] = $storageConfig->getConfig(),
-					[
-						'driver'  => $driver,
-						'charset' => 'UTF8',
-					]
-				), $config);
-				return new EntityManager($connection, $config);
 			},
 		]);
 		$containerBuilder->addDefinitions(...$definitions);

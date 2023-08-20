@@ -307,39 +307,14 @@ class SmartDto implements IDto, IteratorAggregate {
 				if ($attribute->isArray()) {
 					$array = [];
 					foreach ($v as $_k => $_v) {
-						$array[$_k] = self::ofSchema($schema, $this->mapperService)->from($_v);
+						$array[$_k] = self::ofSchema($schema, $this->mapperService)->from($_v, $raw);
 					}
 					$v = $array;
 				} else {
-					$v = self::ofSchema($schema, $this->mapperService)->from($v);
+					$v = self::ofSchema($schema, $this->mapperService)->from($v, $raw);
 				}
 			}
-			$raw ? $this->setRaw($k, $v) : $this->set($k, $v);
-		}
-		return $this;
-	}
-
-	public function pushOf($object): self {
-		if (!$object) {
-			return $this;
-		}
-		foreach ($object instanceof SmartDto ? $object->export(true) : $object as $k => $v) {
-			if (!$this->known($k)) {
-				continue;
-			}
-			$value = $this->get($k);
-			if ($v !== null && ($attribute = $value->getAttribute())->hasSchema() && ($schema = $attribute->getSchema())) {
-				if ($attribute->isArray()) {
-					$array = [];
-					foreach ($v as $_k => $_v) {
-						$array[$_k] = self::ofSchema($schema, $this->mapperService)->pushOf($_v);
-					}
-					$v = $array;
-				} else {
-					$v = self::ofSchema($schema, $this->mapperService)->pushOf($v);
-				}
-			}
-			$this->push($k, $v);
+			$raw ? $this->push($k, $v) : $this->set($k, $v);
 		}
 		return $this;
 	}

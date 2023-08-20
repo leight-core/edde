@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Edde\Job\Progress;
 
 use DateTime;
-use Edde\Doctrine\EntityManagerTrait;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\Job\Exception\JobInterruptedException;
@@ -24,7 +23,6 @@ class JobProgress extends AbstractProgress {
 	use SmartServiceTrait;
 	use JobRepositoryTrait;
 	use JobLogServiceTrait;
-	use EntityManagerTrait;
 	use LoggerTrait;
 
 	/** @var string */
@@ -55,7 +53,6 @@ class JobProgress extends AbstractProgress {
 			)
 		);
 		$this->check();
-		$this->entityManager->flush();
 	}
 
 	/**
@@ -77,7 +74,6 @@ class JobProgress extends AbstractProgress {
 				JobUpdateRequestSchema::class
 			)
 		);
-		$this->entityManager->flush();
 	}
 
 	public function onSettled(SmartDto $response = null): void {
@@ -99,7 +95,6 @@ class JobProgress extends AbstractProgress {
 				JobUpdateRequestSchema::class
 			)
 		);
-		$this->entityManager->flush();
 	}
 
 	/**
@@ -139,7 +134,6 @@ class JobProgress extends AbstractProgress {
 			$type,
 			$reference
 		);
-		$this->entityManager->flush();
 	}
 
 	public function onFailure(Throwable $throwable): void {
@@ -158,7 +152,6 @@ class JobProgress extends AbstractProgress {
 		);
 		$this->logger->error($throwable);
 		$this->log(self::LOG_ERROR, $throwable->getMessage(), null, 'job.failure');
-		$this->entityManager->flush();
 	}
 
 	public function check(): void {

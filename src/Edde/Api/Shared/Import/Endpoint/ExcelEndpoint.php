@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace Edde\Api\Shared\Import\Endpoint;
 
 use Dibi\Exception;
+use Edde\Dto\SmartDto;
 use Edde\Excel\ExcelImportServiceTrait;
 use Edde\Excel\IExcelImportService;
 use Edde\File\Exception\FileNotReadableException;
 use Edde\File\FileServiceTrait;
-use Edde\Job\Dto\JobDto;
 use Edde\Mapper\Exception\ItemException;
 use Edde\Mapper\Exception\SkipException;
 use Edde\Rest\Endpoint\AbstractMutationEndpoint;
@@ -31,7 +31,7 @@ class ExcelEndpoint extends AbstractMutationEndpoint {
 	 * @throws SkipException
 	 * @throws Throwable
 	 */
-	public function post(): JobDto {
+	public function post(): SmartDto {
 		return $this->excelImportService->import(
 			$this->fileService->accept(
 				'file',

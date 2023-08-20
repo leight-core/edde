@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Edde\Dto;
 
 use Edde\Dto\Exception\SmartDtoException;
+use Edde\Dto\Exception\ValidationException;
 use Edde\Mapper\IMapper;
 use Edde\Schema\IAttribute;
 use Edde\Schema\ISchema;
@@ -137,10 +138,10 @@ class Value {
 		 * so it's evaluated as "not valid".
 		 */
 		if ($this->isUndefined && $this->attribute->isRequired()) {
-			throw new SmartDtoException(sprintf("Value [%s::%s] is required, but is undefined (default value from attribute is omitted).", $this->schema->getName(), $this->attribute->getName()));
+			throw new ValidationException(sprintf("Value [%s::%s] is required, but is undefined (default value from attribute is omitted).", $this->schema->getName(), $this->attribute->getName()));
 		}
 		if ($this->value !== null && $this->attribute->isArray() && !is_array($this->value)) {
-			throw new SmartDtoException(sprintf("Value [%s::%s] is present, but is not an array.", $this->schema->getName(), $this->attribute->getName()));
+			throw new ValidationException(sprintf("Value [%s::%s] is present, but is not an array.", $this->schema->getName(), $this->attribute->getName()));
 		}
 		if (is_array($this->value)) {
 			foreach ($this->value as $value) {

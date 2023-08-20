@@ -84,7 +84,7 @@ abstract class AbstractRepository implements IRepository {
 			 * we can try create a new entity.
 			 */
 			return $this->update($dto);
-		} catch (RepositoryException $exception) {
+		} catch (RepositoryException|SmartDtoException $exception) {
 			return $this->save($dto->getSmartDto('create', true));
 		}
 	}

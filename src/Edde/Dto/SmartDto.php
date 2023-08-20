@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Edde\Dto;
 
 use Edde\Dto\Exception\SmartDtoException;
+use Edde\Dto\Exception\ValidationException;
 use Edde\Dto\Mapper\SmartDtoMapper;
 use Edde\Mapper\IMapper;
 use Edde\Mapper\IMapperService;
@@ -264,9 +265,9 @@ class SmartDto implements IDto, IteratorAggregate {
 	public function ensure(array $values): self {
 		foreach ($values as $v) {
 			if (!$this->known($v)) {
-				throw new SmartDtoException(sprintf('SmartDto [%s] is missing property [%s].', $this->getName(), $v));
+				throw new ValidationException(sprintf('SmartDto [%s] is missing property [%s].', $this->getName(), $v));
 			} else if ($this->isUndefined($v)) {
-				throw new SmartDtoException(sprintf('SmartDto [%s] has property [%s], but it is undefined.', $this->getName(), $v));
+				throw new ValidationException(sprintf('SmartDto [%s] has property [%s], but it is undefined.', $this->getName(), $v));
 			}
 		}
 		return $this;

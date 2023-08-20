@@ -328,9 +328,6 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 	}
 
 	public function item($item, $params = null) {
-		return $this->smartService->pushOf(
-			$this->importMapper->item($item, ['schema' => $this->getSchema()]),
-			$this->schema
-		);
+		return $this->importMapper->item($item, ['schema' => $this->getSchema()]);
 	}
 }

@@ -32,6 +32,6 @@ class ImportMapper extends AbstractMapper {
 			}
 			$export[$key] = $value;
 		}
-		return $this->smartService->from($export, $schema->getName());
+		return $this->smartService->pushOf($export, $schema->getName());
 	}
 }

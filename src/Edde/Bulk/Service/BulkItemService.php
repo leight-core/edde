@@ -67,19 +67,17 @@ class BulkItemService {
 	 * @throws UserNotSelectedException
 	 * @throws ReflectionException
 	 */
-	public function upsert(SmartDto $query): SmartDto {
+	public function upsert(SmartDto $query, bool $raw = false): SmartDto {
 		return $this->bulkItemRepository->upsert(
-			$query->is(BulkItemUpsertRequestSchema::class) ?
-				$query :
-				$query
-					->convertTo(BulkItemUpsertRequestSchema::class)
-					->merge([
-						'create' => [
-							'status'  => 0,
-							'created' => new DateTime(),
-							'userId'  => $this->currentUserService->requiredId(),
-						],
-					])
+			$query
+				->convertTo(BulkItemUpsertRequestSchema::class, $raw)
+				->merge([
+					'create' => [
+						'status'  => 0,
+						'created' => new DateTime(),
+						'userId'  => $this->currentUserService->requiredId(),
+					],
+				])
 		);
 	}
 

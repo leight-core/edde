@@ -80,7 +80,8 @@ class BulkImportAsyncService extends AbstractAsyncService {
 								],
 							],
 							BulkItemUpsertRequestSchema::class
-						)
+						),
+						true
 					);
 					$progress->onProgress();
 				} catch (Throwable $throwable) {
@@ -100,7 +101,8 @@ class BulkImportAsyncService extends AbstractAsyncService {
 								],
 							],
 							BulkItemUpsertRequestSchema::class
-						)
+						),
+						true
 					);
 				}
 			}

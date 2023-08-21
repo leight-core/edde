@@ -460,6 +460,10 @@ class SmartDto implements IDto, IteratorAggregate {
 		);
 		$dto->setMapperService($mapperService);
 		foreach ($dto->values as $value) {
+			$value->withInputParams([
+				'dto'   => $dto,
+				'value' => $value,
+			]);
 			$value->withOutputParams([
 				'dto'   => $dto,
 				'value' => $value,

@@ -443,6 +443,10 @@ class SmartDto implements IDto, IteratorAggregate {
 		return $this;
 	}
 
+	public function is(string $schema): bool {
+		return $this->getSchema()->getName() === $schema;
+	}
+
 	static public function ofSchema(ISchema $schema, IMapperService $mapperService): self {
 		$dto = new self(
 			$schema,

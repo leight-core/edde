@@ -49,7 +49,7 @@ class BulkItemService {
 	 *
 	 * @return SmartDto
 	 * @throws ItemException
-	 * @throws \Edde\Database\Exception\RequiredResultException
+	 * @throws RequiredResultException
 	 * @throws SkipException
 	 * @throws SmartDtoException
 	 */
@@ -69,15 +69,17 @@ class BulkItemService {
 	 */
 	public function upsert(SmartDto $query): SmartDto {
 		return $this->bulkItemRepository->upsert(
-			$query
-				->convertTo(BulkItemUpsertRequestSchema::class)
-				->merge([
-					'create' => [
-						'status'  => 0,
-						'created' => new DateTime(),
-						'userId'  => $this->currentUserService->requiredId(),
-					],
-				])
+			$query->is(BulkItemUpsertRequestSchema::class) ?
+				$query :
+				$query
+					->convertTo(BulkItemUpsertRequestSchema::class)
+					->merge([
+						'create' => [
+							'status'  => 0,
+							'created' => new DateTime(),
+							'userId'  => $this->currentUserService->requiredId(),
+						],
+					])
 		);
 	}
 

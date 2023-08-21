@@ -6,10 +6,10 @@ namespace Edde\Bulk\Schema\BulkItem;
 use Edde\Bulk\Schema\Bulk\BulkSchema;
 use Edde\Bulk\Service\BulkService;
 use Edde\Database\Schema\UuidSchema;
-use Edde\Date\Mapper\IsoDateMapper;
 use Edde\Dto\Mapper\ExportMapper;
 use Edde\Dto\Mapper\ImportMapper;
 use Edde\Dto\Mapper\ProxyDtoMapper;
+use Edde\Schema\ISchemaLoader;
 use Edde\Utils\Mapper\JsonInputMapper;
 use Edde\Utils\Mapper\JsonOutputMapper;
 
@@ -46,7 +46,7 @@ interface BulkItemSchema extends UuidSchema {
 
 	function service(): string;
 
-	function created($output = IsoDateMapper::class): string;
+	function created($type = ISchemaLoader::TYPE_ISO_DATETIME): string;
 
 	function status(): int;
 

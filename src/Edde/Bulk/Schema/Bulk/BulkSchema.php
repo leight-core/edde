@@ -4,9 +4,8 @@ declare(strict_types=1);
 namespace Edde\Bulk\Schema\Bulk;
 
 use Edde\Database\Schema\UuidSchema;
-use Edde\Date\Mapper\IsoDateMapper;
 use Edde\Dto\Mapper\ImportMapper;
-use Edde\Utils\Mapper\IntBoolMapper;
+use Edde\Schema\ISchemaLoader;
 
 interface BulkSchema extends UuidSchema {
 	const meta = [
@@ -24,9 +23,9 @@ interface BulkSchema extends UuidSchema {
 
 	function status(): int;
 
-	function commit($output = IntBoolMapper::class): bool;
+	function commit($type = ISchemaLoader::TYPE_BOOLINT): bool;
 
-	function created($output = IsoDateMapper::class): string;
+	function created($type = ISchemaLoader::TYPE_ISO_DATETIME): string;
 
 	function userId(): string;
 }

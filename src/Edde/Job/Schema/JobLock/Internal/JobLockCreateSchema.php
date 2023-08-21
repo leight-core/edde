@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Edde\Job\Schema\JobLock\Internal;
 
-use Edde\Database\Schema\UuidSchema;
+use Edde\Database\Schema\UuidGeneratorSchema;
 use Edde\Dto\Mapper\ExportMapper;
 use Edde\Dto\Mapper\ITypeMapper;
 
-interface JobLockCreateSchema extends UuidSchema {
+interface JobLockCreateSchema extends UuidGeneratorSchema {
 	const meta = [
 		ExportMapper::META => [
 			'jobId' => ExportMapper::CONVERT_SNAKE,

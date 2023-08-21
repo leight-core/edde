@@ -4,10 +4,6 @@ declare(strict_types=1);
 namespace Edde\Schema;
 
 interface ISchemaLoader {
-	const TYPE_BOOLINT = 'boolint';
-	const TYPE_ISO_DATETIME = 'iso-datetime';
-	const TYPE_JSON = 'json';
-
 	/**
 	 * try to load schema with the given name
 	 *

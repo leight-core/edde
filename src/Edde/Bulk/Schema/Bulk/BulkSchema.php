@@ -5,7 +5,7 @@ namespace Edde\Bulk\Schema\Bulk;
 
 use Edde\Database\Schema\UuidSchema;
 use Edde\Dto\Mapper\ImportMapper;
-use Edde\Schema\ISchemaLoader;
+use Edde\Dto\Mapper\ScalarMapper;
 
 interface BulkSchema extends UuidSchema {
 	const meta = [
@@ -23,9 +23,9 @@ interface BulkSchema extends UuidSchema {
 
 	function status(): int;
 
-	function commit($type = ISchemaLoader::TYPE_BOOLINT): bool;
+	function commit($type = ScalarMapper::TYPE_BOOLINT): bool;
 
-	function created($type = ISchemaLoader::TYPE_ISO_DATETIME): string;
+	function created($type = ScalarMapper::TYPE_ISO_DATETIME): string;
 
 	function userId(): string;
 }

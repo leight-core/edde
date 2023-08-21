@@ -4,10 +4,9 @@ declare(strict_types=1);
 namespace Edde\Bulk\Schema\BulkItem\Internal;
 
 use Edde\Database\Schema\UuidGeneratorSchema;
-use Edde\Date\Mapper\IsoDateMapper;
 use Edde\Dto\Mapper\ExportMapper;
+use Edde\Dto\Mapper\ScalarMapper;
 use Edde\Utils\Mapper\JsonInputMapper;
-use Edde\Utils\Mapper\JsonOutputMapper;
 
 interface BulkItemCreateSchema extends UuidGeneratorSchema {
 	const meta = [
@@ -22,11 +21,10 @@ interface BulkItemCreateSchema extends UuidGeneratorSchema {
 	function service(): string;
 
 	function request(
-		$input = JsonInputMapper::class,
-		$output = JsonOutputMapper::class
-	);
+		$input = JsonInputMapper::class
+	): string;
 
-	function created($output = IsoDateMapper::class);
+	function created($type = ScalarMapper::TYPE_ISO_DATETIME);
 
 	function status(): int;
 

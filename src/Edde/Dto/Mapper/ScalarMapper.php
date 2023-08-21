@@ -6,7 +6,6 @@ namespace Edde\Dto\Mapper;
 use Edde\Date\Mapper\IsoDateMapperTrait;
 use Edde\Dto\SmartDto;
 use Edde\Dto\Value;
-use Edde\Schema\ISchemaLoader;
 use Edde\Utils\Mapper\FloatMapperTrait;
 use Edde\Utils\Mapper\IntBoolMapperTrait;
 use Edde\Utils\Mapper\IntMapperTrait;
@@ -17,6 +16,10 @@ class ScalarMapper extends AbstractDtoMapper {
 	use IntBoolMapperTrait;
 	use IsoDateMapperTrait;
 
+	public const TYPE_JSON = 'json';
+	public const TYPE_BOOLINT = 'boolint';
+	public const TYPE_ISO_DATETIME = 'iso-datetime';
+
 	protected function handle(Value $value, SmartDto $dto) {
 		$raw = $value->getRaw();
 		switch ($value->getAttribute()->getType()) {
@@ -25,9 +28,9 @@ class ScalarMapper extends AbstractDtoMapper {
 				return $this->intMapper->item($raw);
 			case 'float':
 				return $this->floatMapper->item($raw);
-			case ISchemaLoader::TYPE_BOOLINT:
+			case self::TYPE_BOOLINT:
 				return $this->intBoolMapper->item($raw);
-			case ISchemaLoader::TYPE_ISO_DATETIME:
+			case self::TYPE_ISO_DATETIME:
 				return $this->isoDateMapper->item($raw);
 		}
 		return $raw;

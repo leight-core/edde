@@ -5,10 +5,26 @@ namespace Edde\Bulk\Schema\BulkItem;
 
 use Edde\Dto\Mapper\ITypeMapper;
 
-interface BulkItemUpdateSchema extends BulkItemCreateSchema {
+interface BulkItemUpdateSchema {
+	const meta = [
+		'import' => [
+			'type IBulkItemUpdate'       => '@leight/bulk',
+			'type IBulkItemUpdateSchema' => '@leight/bulk',
+			'BulkItemUpdateSchema'       => '@leight/bulk',
+		],
+	];
+
 	const partial = true;
 
-	function status(): ?int;
+	function bulkId(): string;
+
+	function service(): string;
+
+	function status(): int;
+
+	function request(
+		$type = ITypeMapper::TYPE_JSON
+	);
 
 	function response(
 		$type = ITypeMapper::TYPE_JSON

@@ -80,14 +80,17 @@ class BulkService {
 		return $this->bulkRepository->update(
 			$request
 				->convertTo(BulkUpdateRequestSchema::class)
-				->merge([
-					'update' => [
-						'commit' => true,
+				->merge(
+					[
+						'update' => [
+							'commit' => true,
+						],
+						'filter' => [
+							'id' => $request->getValue('id'),
+						],
 					],
-					'filter' => [
-						'id' => $request->getValue('id'),
-					],
-				], true)
+					true
+				)
 		);
 	}
 

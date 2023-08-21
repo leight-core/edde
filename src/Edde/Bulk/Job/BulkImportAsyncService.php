@@ -48,7 +48,10 @@ class BulkImportAsyncService extends AbstractAsyncService {
 			foreach ($this->bulkItemService->query(
 				$query->merge(
 					[
-						'cursor' => [
+						'orderBy' => [
+							'created' => 'desc',
+						],
+						'cursor'  => [
 							'page' => $page,
 							'size' => $size,
 						],

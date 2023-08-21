@@ -5,15 +5,18 @@ namespace Edde\Bulk\Schema\BulkItem\Query;
 
 interface BulkItemOrderBySchema {
 	const meta = [
-		'import' => [
+		'import'  => [
 			'type IBulkItemOrderBy'       => '@leight/bulk',
 			'type IBulkItemOrderBySchema' => '@leight/bulk',
 			'BulkItemOrderBySchema'       => '@leight/bulk',
 		],
 		'orderBy' => [
 			'status',
+			'created',
 		],
 	];
 
 	function status(): ?string;
+
+	function created(): ?string;
 }

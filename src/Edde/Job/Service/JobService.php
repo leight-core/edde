@@ -8,7 +8,7 @@ use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\Job\Async\IAsyncService;
 use Edde\Job\Repository\JobRepositoryTrait;
-use Edde\Job\Schema\Job\JobSchema;
+use Edde\Job\Schema\Job\Internal\JobCreateSchema;
 use Edde\User\CurrentUserServiceTrait;
 
 class JobService implements IJobService {
@@ -32,7 +32,7 @@ class JobService implements IJobService {
 					'started'       => new DateTime(),
 					'userId'        => $this->currentUserService->requiredId(),
 				],
-				JobSchema::class
+				JobCreateSchema::class
 			)
 		);
 	}

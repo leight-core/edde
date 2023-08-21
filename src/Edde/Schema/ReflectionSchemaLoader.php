@@ -3,10 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Schema;
 
-use Edde\Date\Mapper\IsoDateMapper;
-use Edde\Utils\Mapper\FloatMapper;
-use Edde\Utils\Mapper\IntBoolMapper;
-use Edde\Utils\Mapper\IntMapper;
+use Edde\Dto\Mapper\ScalarMapper;
 use ReflectionClass;
 use ReflectionException;
 use Throwable;
@@ -65,6 +62,7 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 				 * set default property type to a string
 				 */
 				$attributeBuilder->type($propertyType = 'mixed');
+				$input = null;
 				$output = null;
 				if (($type = $reflectionMethod->getReturnType()) !== null) {
 					$attributeBuilder->type($propertyType = $type->getName());
@@ -109,7 +107,7 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 							$attributeBuilder->meta($parameter->getDefaultValue());
 							break;
 						case 'input':
-							$attributeBuilder->input($parameter->getDefaultValue());
+							$input = $parameter->getDefaultValue();
 							break;
 						case 'output':
 							$output = $parameter->getDefaultValue();
@@ -121,24 +119,8 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 							throw new SchemaException(sprintf('Unknown schema [%s::%s] directive [%s].', $schema, $attributeName, $parameterName));
 					}
 				}
-				if (!$output) {
-					switch ($type) {
-						case 'int':
-						case 'integer':
-							$output = IntMapper::class;
-							break;
-						case 'float':
-							$output = FloatMapper::class;
-							break;
-						case ISchemaLoader::TYPE_BOOLINT:
-							$output = IntBoolMapper::class;
-							break;
-						case ISchemaLoader::TYPE_ISO_DATETIME:
-							$output = IsoDateMapper::class;
-							break;
-					}
-				}
-				$output && $attributeBuilder->output($output);
+				$attributeBuilder->output($output ?? ScalarMapper::class);
+				$attributeBuilder->input($input);
 			}
 
 			if ($isPartial) {

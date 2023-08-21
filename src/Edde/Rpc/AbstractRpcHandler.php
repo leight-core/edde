@@ -5,6 +5,7 @@ namespace Edde\Rpc;
 
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
+use Edde\Query\Schema\WithIdentitySchema;
 use Edde\Rpc\Service\IRpcHandler;
 
 abstract class AbstractRpcHandler implements IRpcHandler {
@@ -80,8 +81,8 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 
 	public function getRequestMeta(): RpcWireMeta {
 		return new RpcWireMeta(
-			$this->requestSchema,
-			$this->requestSchemaOptional,
+			$this->isFetch ? WithIdentitySchema::class : $this->requestSchema,
+			$this->isFetch ? false : $this->requestSchemaOptional,
 			false
 		);
 	}
@@ -89,8 +90,8 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 	public function getResponseMeta(): RpcWireMeta {
 		return new RpcWireMeta(
 			$this->responseSchema,
-			$this->responseSchemaOptional,
-			$this->responseSchemaArray
+			$this->isFetch ? false : $this->responseSchemaOptional,
+			$this->isFetch ? false : $this->responseSchemaArray
 		);
 	}
 

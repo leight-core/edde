@@ -91,7 +91,12 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 		return new RpcWireMeta(
 			$this->responseSchema,
 			$this->isFetch ? false : $this->responseSchemaOptional,
-			$this->isFetch ? false : $this->responseSchemaArray
+			$this->isFetch ?
+				false : (
+			$this->isQuery ?
+				true :
+				$this->responseSchemaArray
+			)
 		);
 	}
 

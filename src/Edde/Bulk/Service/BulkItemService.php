@@ -5,7 +5,7 @@ namespace Edde\Bulk\Service;
 
 use DateTime;
 use Edde\Bulk\Repository\BulkItemRepositoryTrait;
-use Edde\Bulk\Schema\BulkItem\Internal\BulkItemUpsertRequestSchema;
+use Edde\Bulk\Schema\BulkItem\Internal\BulkItemUpsertSchema;
 use Edde\Database\Exception\RequiredResultException;
 use Edde\Dto\Exception\SmartDtoException;
 use Edde\Dto\SmartDto;
@@ -70,7 +70,7 @@ class BulkItemService {
 	public function upsert(SmartDto $query, bool $raw = false): SmartDto {
 		return $this->bulkItemRepository->upsert(
 			$query
-				->convertTo(BulkItemUpsertRequestSchema::class, $raw)
+				->convertTo(BulkItemUpsertSchema::class, $raw)
 				->merge([
 					'create' => [
 						'status'  => 0,

@@ -5,7 +5,7 @@ namespace Edde\Bulk\Schema\BulkItem\Internal;
 
 use Edde\Bulk\Schema\BulkItem\Query\BulkItemFilterSchema;
 
-interface BulkItemUpsertRequestSchema {
+interface BulkItemUpsertSchema {
 	function create($load = true): ?BulkItemCreateSchema;
 
 	function update($load = true): ?BulkItemUpdateSchema;

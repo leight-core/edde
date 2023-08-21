@@ -6,7 +6,7 @@ namespace Edde\Bulk\Job;
 use Edde\Bulk\Exception\BulkImportException;
 use Edde\Bulk\Schema\Bulk\BulkStatus;
 use Edde\Bulk\Schema\BulkItem\BulkItemStatus;
-use Edde\Bulk\Schema\BulkItem\Internal\BulkItemUpsertRequestSchema;
+use Edde\Bulk\Schema\BulkItem\BulkItemUpsertSchema;
 use Edde\Bulk\Schema\BulkItem\Query\BulkItemQuerySchema;
 use Edde\Bulk\Service\BulkItemServiceTrait;
 use Edde\Bulk\Service\BulkServiceTrait;
@@ -79,7 +79,7 @@ class BulkImportAsyncService extends AbstractAsyncService {
 									'id' => $bulkItem->getValue('id'),
 								],
 							],
-							BulkItemUpsertRequestSchema::class
+							BulkItemUpsertSchema::class
 						),
 						true
 					);
@@ -100,7 +100,7 @@ class BulkImportAsyncService extends AbstractAsyncService {
 									'id' => $bulkItem->getValue('id'),
 								],
 							],
-							BulkItemUpsertRequestSchema::class
+							BulkItemUpsertSchema::class
 						),
 						true
 					);

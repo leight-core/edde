@@ -268,6 +268,17 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 	}
 
 	protected function applyOrderBy(SmartDto $orderBy, SmartDto $query, Query $builder): void {
+		if (!empty($export = $orderBy->export())) {
+			foreach ($export as $k => $v) {
+				$builder->order([
+					$this->field($k) => in_array($orderBy = strtoupper($v), [
+						'ASC',
+						'DESC',
+					]) ? $orderBy : 'ASC',
+				]);
+			}
+			return;
+		}
 		foreach ($this->orderBy as $name => $order) {
 			if (is_string($order) && !in_array($order = strtoupper($order), [
 					'ASC',

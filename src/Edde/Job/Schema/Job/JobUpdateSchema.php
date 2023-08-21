@@ -20,10 +20,6 @@ interface JobUpdateSchema extends JobCreateSchema {
 
 	function skipCount(): int;
 
-	function request(): string;
-
-	function requestSchema(): string;
-
 	function response(): string;
 
 	function responseSchema(): string;

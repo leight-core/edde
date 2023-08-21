@@ -8,7 +8,7 @@ use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\Job\Exception\JobInterruptedException;
 use Edde\Job\Repository\JobRepositoryTrait;
-use Edde\Job\Schema\Job\JobUpdateRequestSchema;
+use Edde\Job\Schema\Job\Internal\JobUpdateRequestSchema;
 use Edde\Job\Schema\JobStatus;
 use Edde\Job\Service\JobLogServiceTrait;
 use Edde\Job\Service\JobServiceTrait;

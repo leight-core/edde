@@ -3,13 +3,14 @@ declare(strict_types=1);
 
 namespace Edde\Job\Schema\Job;
 
-use DateTime;
 use Edde\Dto\Mapper\ITypeMapper;
 
 interface JobCreateSchema {
 	function service(): string;
 
-	function started(): DateTime;
+	function started(
+		$type = ITypeMapper::TYPE_ISO_DATETIME
+	);
 
 	function request(
 		$type = ITypeMapper::TYPE_JSON

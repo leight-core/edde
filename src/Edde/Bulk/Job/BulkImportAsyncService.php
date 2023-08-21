@@ -46,12 +46,15 @@ class BulkImportAsyncService extends AbstractAsyncService {
 		$pages = ceil($total / $size);
 		for ($page = 0; $page < $pages; $page++) {
 			foreach ($this->bulkItemService->query(
-				$query->merge([
-					'cursor' => [
-						'page' => $page,
-						'size' => $size,
+				$query->merge(
+					[
+						'cursor' => [
+							'page' => $page,
+							'size' => $size,
+						],
 					],
-				])
+					true
+				)
 			) as $bulkItem) {
 				try {
 					$response = $this->rpcService->execute(

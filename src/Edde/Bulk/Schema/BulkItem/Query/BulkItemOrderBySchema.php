@@ -14,4 +14,6 @@ interface BulkItemOrderBySchema {
 			'status',
 		],
 	];
+
+	function status(): ?string;
 }

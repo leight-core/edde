@@ -120,7 +120,7 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 					}
 				}
 				$attributeBuilder->output($output ?? ScalarMapper::class);
-				$attributeBuilder->input($input);
+				$input && $attributeBuilder->input($input);
 			}
 
 			if ($isPartial) {

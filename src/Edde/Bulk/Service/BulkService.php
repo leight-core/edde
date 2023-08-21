@@ -76,8 +76,8 @@ class BulkService {
 	 * @throws RepositoryException
 	 * @throws RequiredResultException
 	 */
-	public function commit(SmartDto $request): SmartDto {
-		return $this->bulkRepository->update(
+	public function commit(SmartDto $request): void {
+		$this->bulkRepository->update(
 			$request
 				->convertTo(BulkUpdateRequestSchema::class)
 				->merge(

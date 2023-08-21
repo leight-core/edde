@@ -347,7 +347,7 @@ class SmartDto implements IDto, IteratorAggregate {
 			}
 			$set = $raw ? $value->getRaw() : $value->get();
 			if ($attribute->hasInstanceOf() && $set instanceof SmartDto) {
-				$set->exportTo($set = empty($object->$k) ? (new ReflectionClass($attribute->getInstanceOf()))->newInstance() : $object->$k);
+				$set->exportTo($set = empty($object->$k) ? (new ReflectionClass($attribute->getInstanceOf()))->newInstance() : $object->$k, $raw);
 			}
 			$property = $reflection->getProperty($k);
 			$property->setAccessible(true);

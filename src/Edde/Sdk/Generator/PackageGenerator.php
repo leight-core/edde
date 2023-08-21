@@ -120,5 +120,10 @@ dist
 			->injectOn(new FormGenerator())
 			->withOutput($this->output)
 			->generate();
+
+		$this->container
+			->injectOn(new QueryInputGenerator())
+			->withOutput($this->output)
+			->generate();
 	}
 }

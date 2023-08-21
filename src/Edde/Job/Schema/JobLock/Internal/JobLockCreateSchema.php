@@ -1,12 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\Job\Schema\JobLock;
+namespace Edde\Job\Schema\JobLock\Internal;
 
 use Edde\Database\Schema\UuidSchema;
+use Edde\Dto\Mapper\ExportMapper;
 use Edde\Dto\Mapper\ITypeMapper;
 
-interface JobLockSchema extends UuidSchema {
+interface JobLockCreateSchema extends UuidSchema {
+	const meta = [
+		ExportMapper::META => [
+			'jobId' => ExportMapper::CONVERT_SNAKE,
+		],
+	];
+
 	function jobId(): string;
 
 	function name(): string;

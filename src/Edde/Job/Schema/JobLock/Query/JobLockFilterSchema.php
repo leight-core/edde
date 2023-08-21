@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\Job\Schema\JobLock;
+namespace Edde\Job\Schema\JobLock\Query;
 
 use Edde\Query\Schema\FilterSchema;
 

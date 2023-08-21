@@ -8,8 +8,8 @@ use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\Job\Exception\JobInterruptedException;
 use Edde\Job\Executor\JobExecutorTrait;
-use Edde\Job\Schema\JobLock\JobLockQuerySchema;
-use Edde\Job\Schema\JobLock\JobLockSchema;
+use Edde\Job\Schema\JobLock\Internal\JobLockCreateSchema;
+use Edde\Job\Schema\JobLock\Query\JobLockQuerySchema;
 use Edde\Job\Service\JobLockServiceTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Php\Exception\MemoryLimitException;
@@ -57,7 +57,7 @@ abstract class AbstractAsyncService implements IAsyncService {
 					'stamp'  => new DateTime(),
 					'active' => true,
 				],
-				JobLockSchema::class
+				JobLockCreateSchema::class
 			)
 		);
 	}

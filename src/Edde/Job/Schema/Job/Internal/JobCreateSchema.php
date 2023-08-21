@@ -3,11 +3,12 @@ declare(strict_types=1);
 
 namespace Edde\Job\Schema\Job\Internal;
 
+use Edde\Database\Schema\UuidGeneratorSchema;
 use Edde\Dto\Mapper\ExportMapper;
 use Edde\Dto\Mapper\ScalarMapper;
 use Edde\Utils\Mapper\JsonInputMapper;
 
-interface JobCreateSchema {
+interface JobCreateSchema extends UuidGeneratorSchema {
 	const meta = [
 		ExportMapper::META => [
 			'userId' => ExportMapper::CONVERT_SNAKE,

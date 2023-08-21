@@ -32,7 +32,7 @@ class QueryInputExport extends AbstractExport {
 			$this->toExport($import, "\n"),
 			vsprintf(
 				"export const %sInput = withQueryInput({
-    withQuery: %s,
+    withSourceQuery: %s,
 })",
 				[
 					$this->handler->getName(),

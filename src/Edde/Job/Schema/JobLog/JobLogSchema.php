@@ -3,18 +3,10 @@ declare(strict_types=1);
 
 namespace Edde\Job\Schema\JobLog;
 
-use DateTime;
 use Edde\Database\Schema\UuidSchema;
-use Edde\Dto\Mapper\ExportMapper;
 use Edde\Dto\Mapper\ITypeMapper;
 
 interface JobLogSchema extends UuidSchema {
-	const meta = [
-		ExportMapper::META => [
-			'jobId' => ExportMapper::CONVERT_SNAKE,
-		],
-	];
-
 	function jobId(): string;
 
 	function level(): int;
@@ -23,7 +15,7 @@ interface JobLogSchema extends UuidSchema {
 
 	function item(): ?string;
 
-	function stamp($type = ITypeMapper::TYPE_ISO_DATETIME): DateTime;
+	function stamp($type = ITypeMapper::TYPE_ISO_DATETIME);
 
 	function reference(): ?string;
 

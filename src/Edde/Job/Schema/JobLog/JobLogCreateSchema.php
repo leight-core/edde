@@ -4,8 +4,16 @@ declare(strict_types=1);
 namespace Edde\Job\Schema\JobLog;
 
 use DateTime;
+use Edde\Dto\Mapper\ExportMapper;
+use Edde\Dto\Mapper\ITypeMapper;
 
 interface JobLogCreateSchema {
+	const meta = [
+		ExportMapper::META => [
+			'jobId' => ExportMapper::CONVERT_SNAKE,
+		],
+	];
+
 	function jobId(): string;
 
 	function level(): int;
@@ -14,7 +22,7 @@ interface JobLogCreateSchema {
 
 	function item(): ?string;
 
-	function stamp(): DateTime;
+	function stamp($type = ITypeMapper::TYPE_ISO_DATETIME): DateTime;
 
 	function reference(): ?string;
 

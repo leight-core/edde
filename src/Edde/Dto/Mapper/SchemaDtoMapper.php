@@ -10,7 +10,7 @@ use Edde\Dto\Value;
 class SchemaDtoMapper extends AbstractDtoMapper {
 	use SmartServiceTrait;
 
-	protected function handle(Value $value, SmartDto $dto) {
+	protected function handle($item, Value $value, SmartDto $dto) {
 		$attribute = $value->getAttribute();
 		$value = $dto->getValue(
 			$attribute->getMetaOrThrow('source')

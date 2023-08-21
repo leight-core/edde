@@ -11,7 +11,7 @@ use Edde\Dto\Value;
 class ProxyDtoMapper extends AbstractDtoMapper {
 	use ContainerTrait;
 
-	protected function handle(Value $value, SmartDto $dto) {
+	protected function handle($item, Value $value, SmartDto $dto) {
 		$attribute = $value->getAttribute();
 		[
 			$service,

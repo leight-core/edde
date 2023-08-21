@@ -10,12 +10,11 @@ use Edde\Utils\Mapper\JsonInputMapperTrait;
 class InputTypeMapper extends AbstractDtoMapper implements ITypeMapper {
 	use JsonInputMapperTrait;
 
-	protected function handle(Value $value, SmartDto $dto) {
-		$raw = $value->getRaw();
+	protected function handle($item, Value $value, SmartDto $dto) {
 		switch ($value->getAttribute()->getType()) {
 			case self::TYPE_JSON:
-				return $this->jsonInputMapper->item($raw);
+				return $this->jsonInputMapper->item($item);
 		}
-		return $raw;
+		return $item;
 	}
 }

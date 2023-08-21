@@ -18,21 +18,20 @@ class OutputTypeMapper extends AbstractDtoMapper implements ITypeMapper {
 	use IsoDateMapperTrait;
 	use JsonOutputMapperTrait;
 
-	protected function handle(Value $value, SmartDto $dto) {
-		$raw = $value->getRaw();
+	protected function handle($item, Value $value, SmartDto $dto) {
 		switch ($value->getAttribute()->getType()) {
 			case 'int':
 			case 'integer':
-				return $this->intMapper->item($raw);
+			return $this->intMapper->item($item);
 			case 'float':
-				return $this->floatMapper->item($raw);
+				return $this->floatMapper->item($item);
 			case self::TYPE_BOOLINT:
-				return $this->intBoolMapper->item($raw);
+				return $this->intBoolMapper->item($item);
 			case self::TYPE_ISO_DATETIME:
-				return $this->isoDateMapper->item($raw);
+				return $this->isoDateMapper->item($item);
 			case self::TYPE_JSON:
-				return $this->jsonOutputMapper->item($raw);
+				return $this->jsonOutputMapper->item($item);
 		}
-		return $raw;
+		return $item;
 	}
 }

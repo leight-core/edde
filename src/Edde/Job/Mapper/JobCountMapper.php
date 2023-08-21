@@ -8,7 +8,7 @@ use Edde\Dto\SmartDto;
 use Edde\Dto\Value;
 
 class JobCountMapper extends AbstractDtoMapper {
-	protected function handle(Value $value, SmartDto $dto) {
+	protected function handle($item, Value $value, SmartDto $dto) {
 		return $dto->getValue('successCount') + $dto->getValue('errorCount') + $dto->getValue('skipCount');
 	}
 }

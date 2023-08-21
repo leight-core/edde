@@ -11,6 +11,7 @@ use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Rpc\Exception\RpcException;
+use Edde\Rpc\Exception\WithPathException;
 use Throwable;
 
 class RpcService {
@@ -61,6 +62,15 @@ class RpcService {
 					'error' => [
 						'message' => sprintf('Unknown RPC service [%s].', $name),
 						'code' => $exception->getCode(),
+					],
+				];
+			} catch (WithPathException $exception) {
+				$this->logger->error($exception);
+				$response[$id] = [
+					'error' => [
+						'message' => $exception->getMessage(),
+						'code'    => $exception->getCode(),
+						'paths'   => $exception->getPaths(),
 					],
 				];
 			} catch (RpcException $exception) {

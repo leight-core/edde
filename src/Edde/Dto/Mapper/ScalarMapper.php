@@ -28,7 +28,7 @@ class ScalarMapper extends AbstractDtoMapper {
 			case ISchemaLoader::TYPE_BOOLINT:
 				return $this->intBoolMapper->item($raw);
 			case ISchemaLoader::TYPE_ISO_DATETIME:
-				return $this->isoDateNull()->item($raw);
+				return $this->isoDateMapper->item($raw);
 		}
 		return $raw;
 	}

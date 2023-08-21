@@ -72,7 +72,7 @@ class BulkImportAsyncService extends AbstractAsyncService {
 						$this->smartService->from(
 							[
 								'update' => [
-									'response' => $base['data'] ?? $base['error'],
+									'response' => $base,
 									'status'   => isset($base['error']) ? BulkItemStatus::ERROR : BulkItemStatus::SUCCESS,
 								],
 								'filter' => [

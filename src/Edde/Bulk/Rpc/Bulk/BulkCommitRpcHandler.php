@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Rpc\Bulk;
 
-use Edde\Bulk\Schema\Bulk\BulkSchema;
 use Edde\Bulk\Service\BulkServiceTrait;
 use Edde\Dto\SmartDto;
 use Edde\Query\Schema\WithIdentitySchema;
@@ -13,14 +12,13 @@ class BulkCommitRpcHandler extends AbstractRpcHandler {
 	use BulkServiceTrait;
 
 	protected $requestSchema = WithIdentitySchema::class;
-	protected $responseSchema = BulkSchema::class;
 	protected $isMutator = true;
 	protected $invalidators = [
 		BulkQueryRpcHandler::class,
 		BulkFetchRpcHandler::class,
 	];
 
-	public function handle(SmartDto $request): SmartDto {
+	public function handle(SmartDto $request) {
 		return $this->bulkService->commit($request);
 	}
 }

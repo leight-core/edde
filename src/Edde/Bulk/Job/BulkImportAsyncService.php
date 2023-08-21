@@ -4,10 +4,12 @@ declare(strict_types=1);
 namespace Edde\Bulk\Job;
 
 use Edde\Bulk\Exception\BulkImportException;
+use Edde\Bulk\Schema\Bulk\BulkStatus;
 use Edde\Bulk\Schema\BulkItem\BulkItemStatus;
 use Edde\Bulk\Schema\BulkItem\Internal\BulkItemUpdateRequestSchema;
 use Edde\Bulk\Schema\BulkItem\Query\BulkItemQuerySchema;
 use Edde\Bulk\Service\BulkItemServiceTrait;
+use Edde\Bulk\Service\BulkServiceTrait;
 use Edde\Dto\SmartDto;
 use Edde\Job\Async\AbstractAsyncService;
 use Edde\Progress\IProgress;
@@ -17,6 +19,7 @@ use Edde\Rpc\Service\RpcServiceTrait;
 use Throwable;
 
 class BulkImportAsyncService extends AbstractAsyncService {
+	use BulkServiceTrait;
 	use BulkItemServiceTrait;
 	use RpcServiceTrait;
 
@@ -34,6 +37,10 @@ class BulkImportAsyncService extends AbstractAsyncService {
 		);
 		$progress->onStart(
 			$total = $this->bulkItemService->total($query)
+		);
+		$this->bulkService->withStatus(
+			$request->getValue('id'),
+			BulkStatus::RUNNING
 		);
 		$size = 25;
 		$pages = ceil($total / $size);
@@ -78,8 +85,29 @@ class BulkImportAsyncService extends AbstractAsyncService {
 					$progress->onProgress();
 				} catch (Throwable $throwable) {
 					$progress->onError($throwable);
+					$this->bulkItemService->upsert(
+						$this->smartService->from(
+							[
+								'update' => [
+									'response' => [
+										'message' => $throwable->getMessage(),
+										'code'    => $throwable->getCode(),
+									],
+									'status'   => BulkItemStatus::ERROR,
+								],
+								'filter' => [
+									'id' => $bulkItem->getValue('id'),
+								],
+							],
+							BulkItemUpdateRequestSchema::class
+						)
+					);
 				}
 			}
+			$this->bulkService->withStatus(
+				$request->getValue('id'),
+				BulkStatus::SETTLED
+			);
 		}
 	}
 }

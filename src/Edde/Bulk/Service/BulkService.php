@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Edde\Bulk\Service;
 
 use DateTime;
-use Edde\Bulk\Job\BulkImportAsyncServiceTrait;
 use Edde\Bulk\Repository\BulkRepositoryTrait;
 use Edde\Bulk\Schema\Bulk\Internal\BulkCreateSchema;
 use Edde\Bulk\Schema\Bulk\Internal\BulkUpdateRequestSchema;
@@ -20,7 +19,6 @@ class BulkService {
 	use CurrentUserServiceTrait;
 	use BulkRepositoryTrait;
 	use SmartServiceTrait;
-	use BulkImportAsyncServiceTrait;
 
 	public function find(string $id): SmartDto {
 		return $this->bulkRepository->find($id);
@@ -104,7 +102,22 @@ class BulkService {
 		return $this->bulkRepository->query($request);
 	}
 
-	public function import(SmartDto $bulk): SmartDto {
-		return $this->bulkImportAsyncService->async($bulk);
+	public function update(SmartDto $update): SmartDto {
+		return $this->bulkRepository->update($update);
+	}
+
+	public function withStatus(string $bulkId, int $status): SmartDto {
+		return $this->bulkRepository->update(
+			$this->smartService->from(
+				[
+					'update' => [
+						'status' => $status,
+					],
+					'filter' => [
+						'id' => $bulkId,
+					],
+				],
+				BulkUpdateRequestSchema::class)
+		);
 	}
 }

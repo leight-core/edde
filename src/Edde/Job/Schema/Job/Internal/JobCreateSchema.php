@@ -5,7 +5,7 @@ namespace Edde\Job\Schema\Job\Internal;
 
 use Edde\Database\Schema\UuidGeneratorSchema;
 use Edde\Dto\Mapper\ExportMapper;
-use Edde\Dto\Mapper\ScalarMapper;
+use Edde\Dto\Mapper\ITypeMapper;
 use Edde\Utils\Mapper\JsonInputMapper;
 
 interface JobCreateSchema extends UuidGeneratorSchema {
@@ -29,7 +29,9 @@ interface JobCreateSchema extends UuidGeneratorSchema {
 
 	function skipCount(): int;
 
-	function started($type = ScalarMapper::TYPE_ISO_DATETIME): string;
+	function started(
+		$type = ITypeMapper::TYPE_ISO_DATETIME
+	): string;
 
 	function request(
 		$input = JsonInputMapper::class

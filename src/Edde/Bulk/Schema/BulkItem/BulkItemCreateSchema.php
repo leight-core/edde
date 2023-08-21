@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Schema\BulkItem;
 
-use Edde\Utils\Mapper\JsonInputMapper;
-use Edde\Utils\Mapper\JsonOutputMapper;
+use Edde\Dto\Mapper\ITypeMapper;
 
 interface BulkItemCreateSchema {
 	const meta = [
@@ -20,7 +19,6 @@ interface BulkItemCreateSchema {
 	function service(): string;
 
 	function request(
-		$input = JsonInputMapper::class,
-		$output = JsonOutputMapper::class
+		$type = ITypeMapper::TYPE_JSON
 	);
 }

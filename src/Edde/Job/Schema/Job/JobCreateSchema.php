@@ -4,8 +4,7 @@ declare(strict_types=1);
 namespace Edde\Job\Schema\Job;
 
 use DateTime;
-use Edde\Utils\Mapper\JsonInputMapper;
-use Edde\Utils\Mapper\JsonOutputMapper;
+use Edde\Dto\Mapper\ITypeMapper;
 
 interface JobCreateSchema {
 	function service(): string;
@@ -13,8 +12,7 @@ interface JobCreateSchema {
 	function started(): DateTime;
 
 	function request(
-		$input = JsonInputMapper::class,
-		$output = JsonOutputMapper::class
+		$type = ITypeMapper::TYPE_JSON
 	);
 
 	function requestSchema(): ?string;

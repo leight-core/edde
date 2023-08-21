@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Edde\Schema;
 
-use Edde\Dto\Mapper\ScalarMapper;
+use Edde\Dto\Mapper\InputTypeMapper;
+use Edde\Dto\Mapper\OutputTypeMapper;
 use ReflectionClass;
 use ReflectionException;
 use Throwable;
@@ -119,8 +120,8 @@ class ReflectionSchemaLoader extends AbstractSchemaLoader implements ISchemaLoad
 							throw new SchemaException(sprintf('Unknown schema [%s::%s] directive [%s].', $schema, $attributeName, $parameterName));
 					}
 				}
-				$attributeBuilder->output($output ?? ScalarMapper::class);
-				$input && $attributeBuilder->input($input);
+				$attributeBuilder->output($output ?? OutputTypeMapper::class);
+				$attributeBuilder->input($input ?? InputTypeMapper::class);
 			}
 
 			if ($isPartial) {

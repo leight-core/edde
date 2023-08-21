@@ -8,10 +8,8 @@ use Edde\Bulk\Service\BulkService;
 use Edde\Database\Schema\UuidSchema;
 use Edde\Dto\Mapper\ExportMapper;
 use Edde\Dto\Mapper\ImportMapper;
+use Edde\Dto\Mapper\ITypeMapper;
 use Edde\Dto\Mapper\ProxyDtoMapper;
-use Edde\Dto\Mapper\ScalarMapper;
-use Edde\Utils\Mapper\JsonInputMapper;
-use Edde\Utils\Mapper\JsonOutputMapper;
 
 interface BulkItemSchema extends UuidSchema {
 	const meta = [
@@ -46,18 +44,18 @@ interface BulkItemSchema extends UuidSchema {
 
 	function service(): string;
 
-	function created($type = ScalarMapper::TYPE_ISO_DATETIME): string;
+	function created(
+		$type = ITypeMapper::TYPE_ISO_DATETIME
+	): string;
 
 	function status(): int;
 
 	function request(
-		$input = JsonInputMapper::class,
-		$output = JsonOutputMapper::class
+		$type = ITypeMapper::TYPE_JSON
 	): ?string;
 
 	function response(
-		$input = JsonInputMapper::class,
-		$output = JsonOutputMapper::class
+		$type = ITypeMapper::TYPE_JSON
 	): ?string;
 
 	function userId(): string;

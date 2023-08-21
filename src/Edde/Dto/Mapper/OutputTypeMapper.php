@@ -9,16 +9,14 @@ use Edde\Dto\Value;
 use Edde\Utils\Mapper\FloatMapperTrait;
 use Edde\Utils\Mapper\IntBoolMapperTrait;
 use Edde\Utils\Mapper\IntMapperTrait;
+use Edde\Utils\Mapper\JsonOutputMapperTrait;
 
-class ScalarMapper extends AbstractDtoMapper {
+class OutputTypeMapper extends AbstractDtoMapper implements ITypeMapper {
 	use IntMapperTrait;
 	use FloatMapperTrait;
 	use IntBoolMapperTrait;
 	use IsoDateMapperTrait;
-
-	public const TYPE_JSON = 'json';
-	public const TYPE_BOOLINT = 'boolint';
-	public const TYPE_ISO_DATETIME = 'iso-datetime';
+	use JsonOutputMapperTrait;
 
 	protected function handle(Value $value, SmartDto $dto) {
 		$raw = $value->getRaw();
@@ -32,6 +30,8 @@ class ScalarMapper extends AbstractDtoMapper {
 				return $this->intBoolMapper->item($raw);
 			case self::TYPE_ISO_DATETIME:
 				return $this->isoDateMapper->item($raw);
+			case self::TYPE_JSON:
+				return $this->jsonOutputMapper->item($raw);
 		}
 		return $raw;
 	}

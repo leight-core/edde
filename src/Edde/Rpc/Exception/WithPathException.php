@@ -13,6 +13,7 @@ class WithPathException extends RpcException {
 
 	public function __construct(array $paths, $message, $code = 0, Throwable $previous = null) {
 		parent::__construct($message, $code, $previous);
+		$this->paths = $paths;
 	}
 
 	public function getPaths(): array {

@@ -32,7 +32,7 @@ class JobRepository extends AbstractRepository {
 	protected function applyWhere(SmartDto $filter, SmartDto $query, Query $builder): void {
 		parent::applyWhere($filter, $query, $builder);
 		$filter->knownWithValue('id') && $this->matchOf($builder, '$.id', $filter->getValue('id'));
-		$filter->knownWithValue('userId') && $this->matchOf($builder, '$.userId', $filter->getValue('userId'));
+		$filter->knownWithValue('userId') && $this->matchOf($builder, '$.user_id', $filter->getValue('userId'));
 		$filter->knownWithValue('params') && $this->fulltextOf($builder, '$.params', $filter->getValue('params'));
 	}
 

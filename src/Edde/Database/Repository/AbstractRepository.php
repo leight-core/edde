@@ -101,7 +101,7 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 				$this->table,
 				(array)$this->exportMapper->item($dto->getSmartDto('update'), ['raw' => $raw]),
 				[
-					$this->id => $id = $this->resolveEntityOrThrow($dto)->{$this->id},
+					$this->id => $id = $this->resolveEntityOrThrow($dto)->getValue('id'),
 				]
 			);
 		return $this->find($id);
@@ -192,7 +192,7 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 			->getConnection()
 			->delete(
 				$this->table,
-				[$this->id => $entity->id]
+				[$this->id => $entity->getValue('id')]
 			)
 			->execute();
 		return $entity;

@@ -8,7 +8,9 @@ use Edde\Query\Schema\FilterSchema;
 interface JobFilterSchema extends FilterSchema {
 	function status(): ?int;
 
+	function statusIn($array = true): ?int;
+
 	function service(): ?string;
 
-	function services($array = true): ?string;
+	function serviceIn($array = true): ?string;
 }

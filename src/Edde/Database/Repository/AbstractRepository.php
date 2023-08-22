@@ -309,8 +309,8 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 	 * @return void
 	 */
 	protected function fulltextOf(Query $query, string $field, string $value) {
-		$query->andWhere(function (QueryExpression $exp) use ($field, $value) {
-			$exp->like($this->field($field), "%$value%");
+		$query->andWhere(function (QueryExpression $expression) use ($field, $value) {
+			$expression->like($this->field($field), "%$value%");
 		});
 	}
 
@@ -328,9 +328,11 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 	}
 
 	protected function searchOf(Query $query, string $value, array $fields) {
-//		$query->andWhere($query->expr()->orX(...array_map(function (string $field) use ($query, $value, $alias) {
-//			return $query->expr()->like($this->field($field, $alias), ':' . $this->paramOf($query, "%$value%"));
-//		}, $fields)));
+		$query->andWhere(function (QueryExpression $expression) use ($value, $fields) {
+			return $expression->or(array_map(function ($field) use ($expression, $value) {
+				return $expression->like($this->field($field), "%$value%");
+			}, $fields));
+		});
 	}
 
 	/**

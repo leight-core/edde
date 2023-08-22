@@ -7,7 +7,7 @@ use Edde\Rpc\Service\IRpcHandler;
 use Edde\Schema\SchemaLoaderTrait;
 use Edde\Sdk\AbstractExport;
 
-class QueryInputExport extends AbstractExport {
+class SourceQueryInputExport extends AbstractExport {
 	use SchemaLoaderTrait;
 
 	/**

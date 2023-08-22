@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace Edde\Sdk\Generator;
 
 use Edde\Sdk\AbstractGenerator;
-use Edde\Sdk\Export\QueryInputExport;
+use Edde\Sdk\Export\SourceQueryInputExport;
 
-class QueryInputGenerator extends AbstractGenerator {
+class SourceQueryInputGenerator extends AbstractGenerator {
 	public function generate(): void {
-		$queryInputExport = $this->container->injectOn(new QueryInputExport());
+		$sourceQueryInputExport = $this->container->injectOn(new SourceQueryInputExport());
 
 		foreach ($this->rpcHandlerIndex->getHandlers() as $name) {
 			$handler = $this->rpcService->resolve($name);
@@ -16,7 +16,7 @@ class QueryInputGenerator extends AbstractGenerator {
 			if (!$meta->isQuery()) {
 				continue;
 			}
-			$export = $queryInputExport
+			$export = $sourceQueryInputExport
 				->withHandler($handler)
 				->export();
 			if (!$export) {

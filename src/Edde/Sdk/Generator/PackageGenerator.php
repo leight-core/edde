@@ -122,7 +122,7 @@ dist
 			->generate();
 
 		$this->container
-			->injectOn(new QueryInputGenerator())
+			->injectOn(new SourceQueryInputGenerator())
 			->withOutput($this->output)
 			->generate();
 	}

@@ -39,6 +39,7 @@ export const with%s = withMutation({
 		response: %s%s,
 	},%s
 });
+export type IWith%s = typeof with%s;
 		', [
 			$rpcName,
 			$this->escapeHandlerName(get_class($this->handler)),
@@ -60,6 +61,8 @@ export const with%s = withMutation({
 					$meta->getInvalidators()
 				)
 			)) : '',
+			$rpcName,
+			$rpcName,
 		]);
 
 		return $this->toExport($export);

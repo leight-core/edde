@@ -40,12 +40,15 @@ export const with%s = withQuery({
 		response: %s,
 	},
 });
+export type IWith%s = typeof with%s;
 		', [
 			$rpcName,
 			$this->escapeHandlerName(get_class($this->handler)),
 			$requestSchema,
 			$requestMeta->isOptional() ? '.nullish()' : '',
 			$responseMeta->isArray() ? sprintf('z.array(%s)', $responseType) : $responseType,
+			$rpcName,
+			$rpcName,
 		]);
 
 		return $this->toExport($export);

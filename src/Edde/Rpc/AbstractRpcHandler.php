@@ -74,10 +74,10 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 			->withOrderBySchema($this->orderBySchema)
 			->withMutator($this->isMutator || $this->withForm)
 			->withValuesSchema($this->withForm ? ($this->valuesSchema ?? $this->requestSchema) : null)
-			->withFetch($this->isFetch || strpos('Fetch', $this->getName()) !== false)
-			->withFindBy(($this->isFindBy || strpos('FindBy', $this->getName()) !== false) && ($this->filterSchema || $this->orderBySchema))
+			->withFetch($this->isFetch || $this->is('Fetch'))
+			->withFindBy(($this->isFindBy || $this->is('FindBy')) && ($this->filterSchema || $this->orderBySchema))
 			->withInvalidators($this->invalidators)
-			->withQuery(($this->isQuery || strpos('Query', $this->getName()) !== false) && ($this->filterSchema || $this->orderBySchema))
+			->withQuery(($this->isQuery || $this->is('Query')) && ($this->filterSchema || $this->orderBySchema))
 			->withForm($this->withForm);
 	}
 
@@ -107,5 +107,9 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 			return null;
 		}
 		return $this->smartService->from($response, $this->responseSchema);
+	}
+
+	protected function is(string $type): bool {
+		return strpos($type, $this->getName()) !== false;
 	}
 }

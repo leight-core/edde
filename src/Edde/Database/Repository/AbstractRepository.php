@@ -324,7 +324,10 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 	 * @return void
 	 */
 	protected function matchOf(Query $query, string $field, $value) {
-		$query->andWhere([$this->field($field) => $value]);
+		$query->andWhere(function (QueryExpression $expression) use ($field, $value) {
+			$field = $this->field($field);
+			return $value === null ? $expression->isNull($field) : $expression->eq($field, $value);
+		});
 	}
 
 	protected function matchOfIn(Query $query, string $field, array $values) {

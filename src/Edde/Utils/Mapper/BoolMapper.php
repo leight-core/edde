@@ -7,6 +7,6 @@ use Edde\Mapper\AbstractMapper;
 
 class BoolMapper extends AbstractMapper {
 	public function item($item, $params = null) {
-		return filter_var($item, FILTER_VALIDATE_BOOLEAN);
+		return (bool)$item;
 	}
 }

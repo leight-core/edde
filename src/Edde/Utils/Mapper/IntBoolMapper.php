@@ -3,5 +3,10 @@ declare(strict_types=1);
 
 namespace Edde\Utils\Mapper;
 
-class IntBoolMapper extends BoolMapper {
+use Edde\Mapper\AbstractMapper;
+
+class IntBoolMapper extends AbstractMapper {
+	public function item($item, $params = null) {
+		return filter_var($item, FILTER_VALIDATE_BOOLEAN);
+	}
 }

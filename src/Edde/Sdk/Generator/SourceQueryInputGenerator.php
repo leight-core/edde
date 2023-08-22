@@ -4,11 +4,13 @@ declare(strict_types=1);
 namespace Edde\Sdk\Generator;
 
 use Edde\Sdk\AbstractGenerator;
+use Edde\Sdk\Export\SelectionStoreExport;
 use Edde\Sdk\Export\SourceQueryInputExport;
 
 class SourceQueryInputGenerator extends AbstractGenerator {
 	public function generate(): void {
 		$sourceQueryInputExport = $this->container->injectOn(new SourceQueryInputExport());
+		$selectionStoreExport = $this->container->injectOn(new SelectionStoreExport());
 
 		foreach ($this->rpcHandlerIndex->getHandlers() as $name) {
 			$handler = $this->rpcService->resolve($name);

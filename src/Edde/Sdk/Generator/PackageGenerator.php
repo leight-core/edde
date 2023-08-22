@@ -96,34 +96,21 @@ dist
 		$this->generateEslintRc();
 		$this->generateTsConfig();
 
-		$this->container
-			->injectOn(new SchemaGenerator())
-			->withOutput($this->output)
-			->generate();
+		$generators = [
+			new SchemaGenerator(),
+			new RpcHandlerGenerator(),
+			new FetchGenerator(),
+			new SourceQueryGenerator(),
+			new FormGenerator(),
+			new SourceQueryInputGenerator(),
+			new FindByQueryGenerator(),
+		];
 
-		$this->container
-			->injectOn(new RpcHandlerGenerator())
-			->withOutput($this->output)
-			->generate();
-
-		$this->container
-			->injectOn(new FetchGenerator())
-			->withOutput($this->output)
-			->generate();
-
-		$this->container
-			->injectOn(new SourceQueryGenerator())
-			->withOutput($this->output)
-			->generate();
-
-		$this->container
-			->injectOn(new FormGenerator())
-			->withOutput($this->output)
-			->generate();
-
-		$this->container
-			->injectOn(new SourceQueryInputGenerator())
-			->withOutput($this->output)
-			->generate();
+		foreach ($generators as $generator) {
+			$this->container
+				->injectOn($generator)
+				->withOutput($this->output)
+				->generate();
+		}
 	}
 }

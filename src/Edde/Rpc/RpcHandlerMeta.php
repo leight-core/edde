@@ -101,6 +101,18 @@ class RpcHandlerMeta {
 		return in_array('query', $this->features);
 	}
 
+	public function withFindBy(bool $enable): self {
+		if (!$enable) {
+			return $this;
+		}
+		$this->features[] = 'find-by';
+		return $this;
+	}
+
+	public function isFindBy(): bool {
+		return in_array('find-by', $this->features);
+	}
+
 	public function withForm(bool $enable): self {
 		if (!$enable) {
 			return $this;

@@ -37,7 +37,7 @@ class FindByQueryExport extends AbstractRpcExport {
 
 		$responseType = sprintf('%s%s', $responseSchema, $responseMeta->isOptional() ? '.nullish()' : '');
 		$export[] = vsprintf('
-export const with%s = withFindByQuery({
+export const with%sQuery = withFindByQuery({
 	service: "%s",
 	schema:  {
 		request: withQuerySchema({
@@ -54,7 +54,7 @@ export const with%s = withFindByQuery({
 		},
 	}),
 });
-export type IWith%s = typeof with%s;
+export type IWith%sQuery = typeof with%sQuery;
 		', [
 			$rpcName,
 			$this->escapeHandlerName(get_class($this->handler)),

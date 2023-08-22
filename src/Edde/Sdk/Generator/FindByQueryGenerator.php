@@ -24,22 +24,22 @@ class FindByQueryGenerator extends AbstractGenerator {
 			}
 
 			$this->writeTo(
-				sprintf('src/rpc/with%s.ts', $handler->getName()),
+				sprintf('src/rpc/with%sQuery.ts', $handler->getName()),
 				$export
 			);
 			$this->writeTo(
-				sprintf('src/$export/with%s.ts', $handler->getName()),
-				sprintf('export {with%s} from "../rpc/with%s";', $handler->getName(), $handler->getName())
+				sprintf('src/$export/with%sQuery.ts', $handler->getName()),
+				sprintf('export {with%sQuery} from "../rpc/with%sQuery";', $handler->getName(), $handler->getName())
 			);
 			$this->writeTo(
-				sprintf('src/$export/IWith%s.ts', $handler->getName()),
-				sprintf('export {type IWith%s} from "../rpc/with%s";', $handler->getName(), $handler->getName())
+				sprintf('src/$export/IWith%sQuery.ts', $handler->getName()),
+				sprintf('export {type IWith%sQuery} from "../rpc/with%sQuery";', $handler->getName(), $handler->getName())
 			);
 			$this->writeTo(
 				'src/$export/$export.ts',
 				implode("\n", [
-					sprintf('export * from "./with%s";', $handler->getName()),
-					sprintf('export * from "./IWith%s";', $handler->getName()),
+					sprintf('export * from "./with%sQuery";', $handler->getName()),
+					sprintf('export * from "./IWith%sQuery";', $handler->getName()),
 					"",
 				]),
 				FILE_APPEND

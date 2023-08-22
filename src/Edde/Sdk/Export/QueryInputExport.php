@@ -23,7 +23,7 @@ class QueryInputExport extends AbstractExport {
 	public function export(): ?string {
 		$rpcName = sprintf('with%s', $this->handler->getName());
 		$import = [
-			'import {withQueryInput}  from "@leight/form";',
+			'import {withSourceQueryInput}  from "@leight/form";',
 			sprintf('import {%s} from "../rpc/%s";', $rpcName, $rpcName),
 		];
 
@@ -31,7 +31,7 @@ class QueryInputExport extends AbstractExport {
 			'"use client";',
 			$this->toExport($import, "\n"),
 			vsprintf(
-				"export const %sInput = withQueryInput({
+				"export const %sInput = withSourceQueryInput({
     withSourceQuery: %s,
 })",
 				[

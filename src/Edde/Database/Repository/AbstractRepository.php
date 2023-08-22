@@ -173,8 +173,7 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 		$cursor = $query->getSmartDto('cursor', true);
 		$builder = $this->select();
 		$cursor->knownWithValue('page') && $builder->page($cursor->getValue('page') + 1, $cursor->getSafeValue('size'));
-		$this->applyQuery($query, $builder);
-		return $builder;
+		return $this->applyQuery($query, $builder);
 	}
 
 	/**
@@ -242,9 +241,15 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 	 * @return void
 	 * @throws SmartDtoException
 	 */
-	protected function applyQuery(SmartDto $query, Query $build): void {
+	protected function applyQuery(SmartDto $query, Query $build): Query {
+		$query = $this->applyQueryBuilder($query);
 		$this->applyWhere($query->getSmartDto('filter', true), $query, $build);
 		$this->applyOrderBy($query->getSmartDto('orderBy', true), $query, $build);
+		return $query;
+	}
+
+	protected function applyQueryBuilder(Query $query): Query {
+		return $query;
 	}
 
 	/**

@@ -310,7 +310,7 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
 	 */
 	protected function fulltextOf(Query $query, string $field, string $value) {
 		$query->andWhere(function (QueryExpression $expression) use ($field, $value) {
-			$expression->like($this->field($field), "%$value%");
+			return $expression->like($this->field($field), "%$value%");
 		});
 	}
 

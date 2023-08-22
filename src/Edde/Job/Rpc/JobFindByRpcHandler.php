@@ -5,6 +5,7 @@ namespace Edde\Job\Rpc;
 
 use Edde\Dto\SmartDto;
 use Edde\Job\Repository\JobRepositoryTrait;
+use Edde\Job\Schema\Job\JobSchema;
 use Edde\Job\Schema\Job\Query\JobFilterSchema;
 use Edde\Job\Schema\Job\Query\JobOrderBySchema;
 use Edde\Job\Schema\Job\Query\JobQuerySchema;
@@ -14,6 +15,7 @@ class JobFindByRpcHandler extends AbstractRpcHandler {
 	use JobRepositoryTrait;
 
 	protected $requestSchema = JobQuerySchema::class;
+	protected $responseSchema = JobSchema::class;
 	protected $orderBySchema = JobOrderBySchema::class;
 	protected $filterSchema = JobFilterSchema::class;
 

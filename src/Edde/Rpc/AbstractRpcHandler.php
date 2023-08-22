@@ -110,6 +110,6 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 	}
 
 	protected function is(string $type): bool {
-		return strpos($type, $this->getName()) !== false;
+		return strpos($this->getName(), $type) !== false;
 	}
 }

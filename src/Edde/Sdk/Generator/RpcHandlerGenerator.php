@@ -26,7 +26,7 @@ class RpcHandlerGenerator extends AbstractGenerator {
 			);
 			$this->writeTo(
 				sprintf('src/$export/IWith%s.ts', $handler->getName()),
-				sprintf('export {type IWith%s} from "../rpc/IWith%s";', $handler->getName(), $handler->getName())
+				sprintf('export {type IWith%s} from "../rpc/with%s";', $handler->getName(), $handler->getName())
 			);
 			$this->writeTo(
 				'src/$export/$export.ts',

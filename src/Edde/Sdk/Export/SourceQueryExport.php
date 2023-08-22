@@ -54,6 +54,7 @@ export const with%s = withSourceQuery({
 		},
 	}),
 });
+export type IWith%s = typeof with%s;
 		', [
 			$rpcName,
 			$this->escapeHandlerName(get_class($this->handler)),
@@ -63,6 +64,8 @@ export const with%s = withSourceQuery({
 			$this->handler->getName(),
 			$filterSchema,
 			$orderBySchema,
+			$rpcName,
+			$rpcName,
 		]);
 
 		return $this->toExport($export);

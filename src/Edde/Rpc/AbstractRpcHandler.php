@@ -56,7 +56,7 @@ abstract class AbstractRpcHandler implements IRpcHandler {
     protected $isFindBy = false;
     protected $withForm = false;
     protected $_meta;
-    protected $meta;
+    protected $meta = [];
 
     public function getName(): string {
         return str_replace(

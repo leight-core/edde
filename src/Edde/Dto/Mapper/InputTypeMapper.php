@@ -11,6 +11,9 @@ class InputTypeMapper extends AbstractDtoMapper implements ITypeMapper {
 	use JsonInputMapperTrait;
 
 	protected function handle($item, Value $value, SmartDto $dto) {
+        if ($value->getAttribute()->isArray()) {
+            return $item;
+        }
 		switch ($value->getAttribute()->getType()) {
 			case self::TYPE_JSON:
 				return $this->jsonInputMapper->item($item);

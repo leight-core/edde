@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Rpc;
 
+use Edde\Database\Schema\CountSchema;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\Query\Schema\WithIdentitySchema;
@@ -72,14 +73,30 @@ abstract class AbstractRpcHandler implements IRpcHandler {
             $this->getResponseMeta(),
             $this->meta
         ))
-            ->withFilterSchema($this->filterSchema)
-            ->withOrderBySchema($this->orderBySchema)
-            ->withMutator($this->isMutator || $this->withForm)
-            ->withValuesSchema($this->withForm ? ($this->valuesSchema ?? $this->requestSchema) : null)
-            ->withFetch($this->isFetch || $this->is('Fetch'))
-            ->withFindBy(($this->isFindBy || $this->is('FindBy')) && ($this->filterSchema || $this->orderBySchema))
-            ->withInvalidators($this->invalidators)
-            ->withQuery(($this->isQuery || $this->is('Query')) && ($this->filterSchema || $this->orderBySchema))
+            ->withFilterSchema(
+                $this->filterSchema
+            )
+            ->withOrderBySchema(
+                $this->orderBySchema
+            )
+            ->withMutator(
+                $this->isMutator || $this->withForm
+            )
+            ->withValuesSchema(
+                $this->withForm ? ($this->valuesSchema ?? $this->requestSchema) : null
+            )
+            ->withFetch(
+                $this->isFetch || $this->is('Fetch')
+            )
+            ->withFindBy(
+                ($this->isFindBy || $this->is('FindBy')) && ($this->filterSchema || $this->orderBySchema)
+            )
+            ->withInvalidators(
+                $this->invalidators
+            )
+            ->withQuery(
+                ($this->isQuery || $this->is('Query')) && ($this->filterSchema || $this->orderBySchema)
+            )
             ->withForm($this->withForm);
     }
 
@@ -93,8 +110,8 @@ abstract class AbstractRpcHandler implements IRpcHandler {
 
     public function getResponseMeta(): RpcWireMeta {
         return new RpcWireMeta(
-            $this->responseSchema,
-            $this->isFetch ? false : $this->responseSchemaOptional,
+            $this->is('Count') ? CountSchema::class : $this->responseSchema,
+            !$this->isFetch && (($this->is('Count') || $this->responseSchemaOptional)),
             $this->isFetch ?
                 false : (
             $this->isQuery ?

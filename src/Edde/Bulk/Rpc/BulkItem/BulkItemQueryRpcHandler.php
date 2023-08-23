@@ -20,7 +20,6 @@ class BulkItemQueryRpcHandler extends AbstractRpcHandler {
     protected $responseSchema = BulkItemSchema::class;
     protected $responseSchemaArray = true;
     protected $isQuery = true;
-
     protected $meta = [
         'withCountQuery' => BulkItemCountRpcHandler::class,
     ];

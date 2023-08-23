@@ -7,29 +7,16 @@ use Edde\Dto\SmartDto;
 use Edde\Phinx\Mapper\UpgradeMapperTrait;
 use Edde\Phinx\UpgradeManagerTrait;
 use Edde\Rpc\AbstractRpcHandler;
-use Edde\Upgrade\Schema\UpgradeFilterSchema;
-use Edde\Upgrade\Schema\UpgradeOrderBySchema;
 use Edde\Upgrade\Schema\UpgradeQuerySchema;
-use Edde\Upgrade\Schema\UpgradeSchema;
 
-class UpgradeQueryRpcHandler extends AbstractRpcHandler {
+class UpgradeCountRpcHandler extends AbstractRpcHandler {
     use UpgradeManagerTrait;
     use UpgradeMapperTrait;
 
     protected $requestSchema = UpgradeQuerySchema::class;
-    protected $responseSchema = UpgradeSchema::class;
-    protected $responseSchemaArray = true;
-    protected $orderBySchema = UpgradeOrderBySchema::class;
-    protected $filterSchema = UpgradeFilterSchema::class;
-    protected $isQuery = true;
-
-    protected $meta = [
-        'withCountQuery' => UpgradeCountRpcHandler::class,
-    ];
 
     public function handle(SmartDto $request) {
         $filter = $request->getSmartDto('filter', true);
-        $cursor = $request->getSmartDto('cursor', true);
         $upgrades = $this->upgradeMapper->map($this->upgradeManager->migrations());
         if ($filter->knownWithValue('active')) {
             $active = $filter->getValue('active');
@@ -40,10 +27,6 @@ class UpgradeQueryRpcHandler extends AbstractRpcHandler {
         usort($upgrades, function (SmartDto $a, SmartDto $b) {
             return strcmp($a->getValue('version'), $b->getValue('version'));
         });
-        return array_slice(
-            $upgrades,
-            $cursor->getSafeValue('page', 0) * $cursor->getSafeValue('size', 10),
-            $cursor->getSafeValue('size', 10)
-        );
+        return count($upgrades);
     }
 }

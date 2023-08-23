@@ -8,9 +8,9 @@ use Edde\Query\Schema\FilterSchema;
 interface BulkFilterSchema extends FilterSchema {
 	const meta = [
 		'import' => [
-			'type IBulkFilter'       => '@leight/bulk',
-			'type IBulkFilterSchema' => '@leight/bulk',
-			'BulkFilterSchema'       => '@leight/bulk',
+            'type IBulkFilter'       => '@pico/bulk',
+            'type IBulkFilterSchema' => '@pico/bulk',
+            'BulkFilterSchema'       => '@pico/bulk',
 		],
 	];
 

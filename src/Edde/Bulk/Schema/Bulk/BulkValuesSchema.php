@@ -6,9 +6,9 @@ namespace Edde\Bulk\Schema\Bulk;
 interface BulkValuesSchema {
 	const meta = [
 		'import' => [
-			'type IBulkValuesSchema' => '@leight/bulk',
-			'type IBulkValues'       => '@leight/bulk',
-			'BulkValuesSchema'       => '@leight/bulk',
+            'type IBulkValuesSchema' => '@pico/bulk',
+            'type IBulkValues'       => '@pico/bulk',
+            'BulkValuesSchema'       => '@pico/bulk',
 		],
 	];
 

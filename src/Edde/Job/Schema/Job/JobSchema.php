@@ -16,9 +16,9 @@ use Edde\Progress\IProgress;
 interface JobSchema extends UuidSchema {
 	const meta = [
 		'import'           => [
-			'JobSchema'       => '@leight/job',
-			'type IJobSchema' => '@leight/job',
-			'type IJob'       => '@leight/job',
+            'JobSchema'       => '@pico/job',
+            'type IJobSchema' => '@pico/job',
+            'type IJob'       => '@pico/job',
 		],
 		ImportMapper::META => [
 			'user_id' => ImportMapper::CONVERT_CAMEL,

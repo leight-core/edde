@@ -10,9 +10,9 @@ use Edde\Dto\Mapper\ITypeMapper;
 interface BulkSchema extends UuidSchema {
 	const meta = [
 		'import'           => [
-			'type IBulk'       => '@leight/bulk',
-			'type IBulkSchema' => '@leight/bulk',
-			'BulkSchema'       => '@leight/bulk',
+            'type IBulk'       => '@pico/bulk',
+            'type IBulkSchema' => '@pico/bulk',
+            'BulkSchema'       => '@pico/bulk',
 		],
 		ImportMapper::META => [
 			'user_id' => ImportMapper::CONVERT_CAMEL,

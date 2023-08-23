@@ -6,9 +6,9 @@ namespace Edde\Query\Schema;
 interface CursorSchema {
 	const meta = [
 		'import' => [
-			'type ICursorSchema' => '@leight/query',
-			'type ICursor'       => '@leight/query',
-			'CursorSchema'       => '@leight/query',
+            'type ICursorSchema' => '@pico/query',
+            'type ICursor'       => '@pico/query',
+            'CursorSchema'       => '@pico/query',
 		],
 	];
 

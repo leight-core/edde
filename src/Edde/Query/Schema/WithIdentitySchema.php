@@ -6,9 +6,9 @@ namespace Edde\Query\Schema;
 interface WithIdentitySchema {
 	const meta = [
 		'import' => [
-			'type IWithIdentity'       => '@leight/query',
-			'type IWithIdentitySchema' => '@leight/query',
-			'WithIdentitySchema'       => '@leight/query',
+            'type IWithIdentity'       => '@pico/query',
+            'type IWithIdentitySchema' => '@pico/query',
+            'WithIdentitySchema'       => '@pico/query',
 		],
 	];
 

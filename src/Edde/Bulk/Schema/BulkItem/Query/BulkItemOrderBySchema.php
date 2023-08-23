@@ -6,9 +6,9 @@ namespace Edde\Bulk\Schema\BulkItem\Query;
 interface BulkItemOrderBySchema {
 	const meta = [
 		'import'  => [
-			'type IBulkItemOrderBy'       => '@leight/bulk',
-			'type IBulkItemOrderBySchema' => '@leight/bulk',
-			'BulkItemOrderBySchema'       => '@leight/bulk',
+            'type IBulkItemOrderBy'       => '@pico/bulk',
+            'type IBulkItemOrderBySchema' => '@pico/bulk',
+            'BulkItemOrderBySchema'       => '@pico/bulk',
 		],
 		'orderBy' => [
 			'status',

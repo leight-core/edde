@@ -8,9 +8,9 @@ use Edde\Dto\Mapper\ITypeMapper;
 interface BulkItemCreateSchema {
 	const meta = [
 		'import' => [
-			'type IBulkItemCreate'       => '@leight/bulk',
-			'type IBulkItemCreateSchema' => '@leight/bulk',
-			'BulkItemCreateSchema'       => '@leight/bulk',
+            'type IBulkItemCreate'       => '@pico/bulk',
+            'type IBulkItemCreateSchema' => '@pico/bulk',
+            'BulkItemCreateSchema'       => '@pico/bulk',
 		],
 	];
 

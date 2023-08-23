@@ -6,9 +6,9 @@ namespace Edde\Tag\Schema;
 interface TagSchema {
 	const meta = [
 		'import' => [
-			'type ITag'       => '@leight/utils',
-			'type ITagSchema' => '@leight/utils',
-			'TagSchema'       => '@leight/utils',
+            'type ITag'       => '@pico/utils',
+            'type ITagSchema' => '@pico/utils',
+            'TagSchema'       => '@pico/utils',
 		],
 	];
 

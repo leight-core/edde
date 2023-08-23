@@ -10,9 +10,9 @@ namespace Edde\Auth\Schema;
 interface SessionSchema {
 	const meta = [
 		'import' => [
-			'type ISession'       => '@leight/auth',
-			'type ISessionSchema' => '@leight/auth',
-			'SessionSchema'       => '@leight/auth',
+            'type ISession'       => '@pico/auth',
+            'type ISessionSchema' => '@pico/auth',
+            'SessionSchema'       => '@pico/auth',
 		],
 	];
 

@@ -8,9 +8,9 @@ use Edde\Query\Schema\CursorSchema;
 interface BulkQuerySchema {
 	const meta = [
 		'import' => [
-			'BulkQuerySchema'       => '@leight/bulk',
-			'type IBulkQuerySchema' => '@leight/bulk',
-			'type IBulkQuery'       => '@leight/bulk',
+            'BulkQuerySchema'       => '@pico/bulk',
+            'type IBulkQuerySchema' => '@pico/bulk',
+            'type IBulkQuery'       => '@pico/bulk',
 		],
 	];
 

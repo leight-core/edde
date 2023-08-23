@@ -14,9 +14,9 @@ use Edde\Dto\Mapper\ProxyDtoMapper;
 interface BulkItemSchema extends UuidSchema {
 	const meta = [
 		'import'           => [
-			'type IBulkItem'       => '@leight/bulk',
-			'type IBulkItemSchema' => '@leight/bulk',
-			'BulkItemSchema'       => '@leight/bulk',
+            'type IBulkItem'       => '@pico/bulk',
+            'type IBulkItemSchema' => '@pico/bulk',
+            'BulkItemSchema'       => '@pico/bulk',
 		],
 		ExportMapper::META => [
 			'bulkId' => ExportMapper::CONVERT_SNAKE,

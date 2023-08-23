@@ -45,7 +45,7 @@ class SourceQueryGenerator extends AbstractGenerator {
             );
 
             $this->writeTo(
-                sprintf('src/table/%sTable.ts', $handler->getName()),
+                sprintf('src/table/%sTable.tsx', $handler->getName()),
                 $sourceTable
             );
             $this->writeTo(

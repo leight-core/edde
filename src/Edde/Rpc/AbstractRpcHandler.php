@@ -103,7 +103,7 @@ abstract class AbstractRpcHandler implements IRpcHandler {
     public function getRequestMeta(): RpcWireMeta {
         return new RpcWireMeta(
             $this->isFetch ? WithIdentitySchema::class : $this->requestSchema,
-            $this->isFetch ? false : $this->requestSchemaOptional,
+            !$this->isFetch && (($this->is('Count') || $this->requestSchemaOptional)),
             false
         );
     }
@@ -111,7 +111,7 @@ abstract class AbstractRpcHandler implements IRpcHandler {
     public function getResponseMeta(): RpcWireMeta {
         return new RpcWireMeta(
             $this->is('Count') ? CountSchema::class : $this->responseSchema,
-            !$this->isFetch && (($this->is('Count') || $this->responseSchemaOptional)),
+            $this->isFetch ? false : $this->responseSchemaOptional,
             $this->isFetch ?
                 false : (
             $this->isQuery ?

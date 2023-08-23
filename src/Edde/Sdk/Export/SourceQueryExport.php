@@ -9,9 +9,10 @@ class SourceQueryExport extends AbstractRpcExport {
     use RpcServiceTrait;
 
     public function export(): ?string {
-        $countHandler = $this->rpcService->resolve(
-            $this->handler->getMeta()->getMeta('withCountQuery')
-        );
+        if (!($countHandler = $this->handler->getMeta()->getMeta('withCountQuery'))) {
+            return null;
+        }
+        $countHandler = $this->rpcService->resolve($countHandler);
         $countName = $countHandler->getName();
 
         $import = [

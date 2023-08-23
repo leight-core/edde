@@ -24,10 +24,12 @@ class PackageGenerator extends AbstractGenerator {
                 '@pico/job'   => '^1.0.0',
                 '@pico/rpc'   => '^1.0.0',
                 '@pico/utils' => '^1.0.0',
+                'react' => '^18.2.0',
             ],
             'devDependencies' => [
                 '@pico/eslint-config-eslint' => '^1.0.0',
                 '@pico/tsconfig'             => '^1.0.0',
+                '@types/react' => '^18.2.21',
                 'typescript'                 => '^5.1.6',
             ],
         ], JSON_PRETTY_PRINT)));

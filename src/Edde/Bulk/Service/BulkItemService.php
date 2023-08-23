@@ -17,71 +17,44 @@ use Edde\User\Exception\UserNotSelectedException;
 use ReflectionException;
 
 class BulkItemService {
-	use SmartServiceTrait;
-	use BulkItemRepositoryTrait;
-	use CurrentUserServiceTrait;
+    use SmartServiceTrait;
+    use BulkItemRepositoryTrait;
+    use CurrentUserServiceTrait;
 
-	/**
-	 * @param SmartDto $query
-	 *
-	 * @return SmartDto
-	 * @throws RequiredResultException
-	 * @throws SmartDtoException
-	 * @throws ItemException
-	 * @throws SkipException
-	 */
-	public function fetch(SmartDto $query): SmartDto {
-		return $this->bulkItemRepository->find($query->getValue('id'));
-	}
+    /**
+     * @param SmartDto $query
+     *
+     * @return SmartDto
+     * @throws RequiredResultException
+     * @throws SmartDtoException
+     * @throws ItemException
+     * @throws SkipException
+     */
+    public function fetch(SmartDto $query): SmartDto {
+        return $this->bulkItemRepository->find($query->getValue('id'));
+    }
 
-	/**
-	 * @param SmartDto $query
-	 *
-	 * @return SmartDto[]
-	 * @throws SmartDtoException
-	 */
-	public function query(SmartDto $query): array {
-		return $this->bulkItemRepository->query($query);
-	}
-
-	/**
-	 * @param SmartDto $query
-	 *
-	 * @return SmartDto
-	 * @throws ItemException
-	 * @throws RequiredResultException
-	 * @throws SkipException
-	 * @throws SmartDtoException
-	 */
-	public function delete(SmartDto $query): SmartDto {
-		return $this->bulkItemRepository->deleteBy($query);
-	}
-
-	/**
-	 * @param SmartDto $query
-	 *
-	 * @return SmartDto
-	 * @throws ItemException
-	 * @throws SkipException
-	 * @throws SmartDtoException
-	 * @throws UserNotSelectedException
-	 * @throws ReflectionException
-	 */
-	public function upsert(SmartDto $query, bool $raw = false): SmartDto {
-		return $this->bulkItemRepository->upsert(
-			$query
-				->convertTo(BulkItemUpsertSchema::class, $raw)
-				->merge([
-					'create' => [
-						'status'  => 0,
-						'created' => new DateTime(),
-						'userId'  => $this->currentUserService->requiredId(),
-					],
-				])
-		);
-	}
-
-	public function total(SmartDto $query): int {
-		return $this->bulkItemRepository->total($query);
-	}
+    /**
+     * @param SmartDto $query
+     *
+     * @return SmartDto
+     * @throws ItemException
+     * @throws SkipException
+     * @throws SmartDtoException
+     * @throws UserNotSelectedException
+     * @throws ReflectionException
+     */
+    public function upsert(SmartDto $query, bool $raw = false): SmartDto {
+        return $this->bulkItemRepository->upsert(
+            $query
+                ->convertTo(BulkItemUpsertSchema::class, $raw)
+                ->merge([
+                    'create' => [
+                        'status'  => 0,
+                        'created' => new DateTime(),
+                        'userId'  => $this->currentUserService->requiredId(),
+                    ],
+                ])
+        );
+    }
 }

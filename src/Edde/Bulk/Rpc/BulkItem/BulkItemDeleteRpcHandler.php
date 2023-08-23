@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Rpc\BulkItem;
 
+use Edde\Bulk\Repository\BulkItemRepositoryTrait;
 use Edde\Bulk\Schema\BulkItem\BulkItemSchema;
-use Edde\Bulk\Service\BulkItemServiceTrait;
 use Edde\Dto\SmartDto;
 use Edde\Query\Schema\WithIdentitySchema;
 use Edde\Rpc\AbstractRpcHandler;
 
 class BulkItemDeleteRpcHandler extends AbstractRpcHandler {
-    use BulkItemServiceTrait;
+    use BulkItemRepositoryTrait;
 
     protected $requestSchema = WithIdentitySchema::class;
     protected $responseSchema = BulkItemSchema::class;
@@ -22,6 +22,6 @@ class BulkItemDeleteRpcHandler extends AbstractRpcHandler {
     ];
 
     public function handle(SmartDto $request) {
-        return $this->bulkItemService->delete($request);
+        return $this->bulkItemRepository->deleteBy($request);
     }
 }

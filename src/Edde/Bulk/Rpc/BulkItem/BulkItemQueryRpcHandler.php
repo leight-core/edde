@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Rpc\BulkItem;
 
+use Edde\Bulk\Repository\BulkItemRepositoryTrait;
 use Edde\Bulk\Schema\BulkItem\BulkItemSchema;
 use Edde\Bulk\Schema\BulkItem\Query\BulkItemFilterSchema;
 use Edde\Bulk\Schema\BulkItem\Query\BulkItemOrderBySchema;
 use Edde\Bulk\Schema\BulkItem\Query\BulkItemQuerySchema;
-use Edde\Bulk\Service\BulkItemServiceTrait;
 use Edde\Dto\SmartDto;
 use Edde\Rpc\AbstractRpcHandler;
 
 class BulkItemQueryRpcHandler extends AbstractRpcHandler {
-    use BulkItemServiceTrait;
+    use BulkItemRepositoryTrait;
 
     protected $filterSchema = BulkItemFilterSchema::class;
     protected $orderBySchema = BulkItemOrderBySchema::class;
@@ -25,6 +25,6 @@ class BulkItemQueryRpcHandler extends AbstractRpcHandler {
     ];
 
     public function handle(SmartDto $request) {
-        return $this->bulkItemService->query($request);
+        return $this->bulkItemRepository->query($request);
     }
 }

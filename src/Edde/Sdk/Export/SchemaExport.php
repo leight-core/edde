@@ -78,7 +78,7 @@ E;
 
 	public function export(): ?string {
 		$imports = [
-			'import {z} from "@leight/utils";',
+            'import {z} from "@pico/utils";',
 		];
 		if ($this->schema->getMeta('import')) {
 			$imports = [];

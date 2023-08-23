@@ -6,9 +6,9 @@ namespace Edde\Sdk\Export;
 class FindByQueryExport extends AbstractRpcExport {
 	public function export(): ?string {
 		$import = [
-			'import {withFindByQuery} from "@leight/rpc";',
-			'import {z} from "@leight/utils";',
-			'import {withQuerySchema, createQueryStore} from "@leight/query";',
+            'import {withFindByQuery} from "@pico/rpc";',
+            'import {z} from "@pico/utils";',
+            'import {withQuerySchema, createQueryStore} from "@pico/query";',
 		];
 
 		$rpcName = $this->handler->getName();

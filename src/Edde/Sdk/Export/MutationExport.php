@@ -6,8 +6,8 @@ namespace Edde\Sdk\Export;
 class MutationExport extends AbstractRpcExport {
 	public function export(): ?string {
 		$import = [
-			'import {withMutation} from "@leight/rpc";',
-			'import {z}            from "@leight/utils";',
+            'import {withMutation} from "@pico/rpc";',
+            'import {z}            from "@pico/utils";',
 		];
 
 		$rpcName = $this->handler->getName();

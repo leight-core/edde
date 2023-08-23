@@ -6,8 +6,8 @@ namespace Edde\Sdk\Export;
 class QueryExport extends AbstractRpcExport {
 	public function export(): ?string {
 		$import = [
-			'import {withQuery} from "@leight/rpc";',
-			'import {z} from "@leight/utils";',
+            'import {withQuery} from "@pico/rpc";',
+            'import {z} from "@pico/utils";',
 		];
 
 		$rpcName = $this->handler->getName();

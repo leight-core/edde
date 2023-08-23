@@ -6,48 +6,48 @@ namespace Edde\Sdk\Generator;
 use Edde\Sdk\AbstractGenerator;
 
 class PackageGenerator extends AbstractGenerator {
-	protected $package;
+    protected $package;
 
-	protected function generatePackageJson() {
-		$this->writeTo("package.json", str_replace('\/', '/', json_encode([
-			'version'         => '0.5.0',
-			'name'            => $this->package,
-			'description'     => 'Generated SDK',
-			'sideEffects'     => false,
-			'type'            => 'module',
-			'main'            => 'src/index.ts',
-			'module'          => 'src/index.ts',
-			'types'           => 'src/index.ts',
-			'dependencies'    => [
-				'@leight/auth' => '^0.6.0',
-				'@leight/bulk' => '^0.6.0',
-				'@leight/job'  => '^0.6.0',
-				'@leight/rpc'   => '^0.6.0',
-				'@leight/utils' => '^0.6.0',
-			],
-			'devDependencies' => [
-				'@leight/eslint-config-eslint' => '^0.6.0',
-				'@leight/tsconfig'             => '^0.6.0',
-				'typescript'                   => '^5.1.6',
-			],
-		], JSON_PRETTY_PRINT)));
-	}
+    protected function generatePackageJson() {
+        $this->writeTo("package.json", str_replace('\/', '/', json_encode([
+            'version'         => '0.5.0',
+            'name'            => $this->package,
+            'description'     => 'Generated SDK',
+            'sideEffects'     => false,
+            'type'            => 'module',
+            'main'            => 'src/index.ts',
+            'module'          => 'src/index.ts',
+            'types'           => 'src/index.ts',
+            'dependencies'    => [
+                '@pico/auth'  => '^1.0.0',
+                '@pico/bulk'  => '^1.0.0',
+                '@pico/job'   => '^1.0.0',
+                '@pico/rpc'   => '^1.0.0',
+                '@pico/utils' => '^1.0.0',
+            ],
+            'devDependencies' => [
+                '@pico/eslint-config-eslint' => '^1.0.0',
+                '@pico/tsconfig'             => '^1.0.0',
+                'typescript'                 => '^5.1.6',
+            ],
+        ], JSON_PRETTY_PRINT)));
+    }
 
-	protected function generateIndexTs() {
-		$this->writeTo("src/index.ts", 'export * from "./$export/$export"');
-	}
+    protected function generateIndexTs() {
+        $this->writeTo("src/index.ts", 'export * from "./$export/$export"');
+    }
 
-	protected function generateEslintIgnore() {
-		$this->writeTo(".eslintignore", "node_modules
+    protected function generateEslintIgnore() {
+        $this->writeTo(".eslintignore", "node_modules
 dist
 ");
-	}
+    }
 
-	protected function generateEslintRc() {
-		$this->writeTo(".eslintrc", '{
+    protected function generateEslintRc() {
+        $this->writeTo(".eslintrc", '{
 	"root": true,
 	"extends": [
-		"@leight/eslint"
+		"@pico/eslint"
 	],
 	"overrides": [
 		{
@@ -64,11 +64,11 @@ dist
 	]
 }
 ');
-	}
+    }
 
-	protected function generateTsConfig() {
-		$this->writeTo('tsconfig.json', '{
-	"extends": "@leight/tsconfig/esbuild.json",
+    protected function generateTsConfig() {
+        $this->writeTo('tsconfig.json', '{
+	"extends": "@pico/tsconfig/esbuild.json",
 	"compilerOptions": {
 		"rootDir": "src",
 		"baseUrl": "src"
@@ -82,35 +82,35 @@ dist
 	]
 }
 ');
-	}
+    }
 
-	public function withPackage(string $package): self {
-		$this->package = $package;
-		return $this;
-	}
+    public function withPackage(string $package): self {
+        $this->package = $package;
+        return $this;
+    }
 
-	public function generate(): void {
-		$this->generatePackageJson();
-		$this->generateIndexTs();
-		$this->generateEslintIgnore();
-		$this->generateEslintRc();
-		$this->generateTsConfig();
+    public function generate(): void {
+        $this->generatePackageJson();
+        $this->generateIndexTs();
+        $this->generateEslintIgnore();
+        $this->generateEslintRc();
+        $this->generateTsConfig();
 
-		$generators = [
-			new SchemaGenerator(),
-			new RpcHandlerGenerator(),
-			new FetchGenerator(),
-			new SourceQueryGenerator(),
-			new FormGenerator(),
-			new SourceQueryInputGenerator(),
-			new FindByQueryGenerator(),
-		];
+        $generators = [
+            new SchemaGenerator(),
+            new RpcHandlerGenerator(),
+            new FetchGenerator(),
+            new SourceQueryGenerator(),
+            new FormGenerator(),
+            new SourceQueryInputGenerator(),
+            new FindByQueryGenerator(),
+        ];
 
-		foreach ($generators as $generator) {
-			$this->container
-				->injectOn($generator)
-				->withOutput($this->output)
-				->generate();
-		}
-	}
+        foreach ($generators as $generator) {
+            $this->container
+                ->injectOn($generator)
+                ->withOutput($this->output)
+                ->generate();
+        }
+    }
 }

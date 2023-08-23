@@ -23,7 +23,7 @@ class SelectionStoreExport extends AbstractExport {
 	public function export(): ?string {
 		$rpcName = sprintf('with%s', $this->handler->getName());
 		$import = [
-			'import {withSourceQueryInput}  from "@leight/form";',
+            'import {withSourceQueryInput}  from "@pico/form";',
 			sprintf('import {%s} from "../rpc/%s";', $rpcName, $rpcName),
 		];
 

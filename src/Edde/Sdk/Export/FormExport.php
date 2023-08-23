@@ -26,7 +26,7 @@ class FormExport extends AbstractExport {
 		$rpcName = sprintf('with%s', $this->handler->getName());
 		$meta = $this->handler->getMeta();
 		$import = [
-			'import {withRpcForm, type IFormSchema} from "@leight/form";',
+            'import {withRpcForm, type IFormSchema} from "@pico/form";',
 			sprintf('import {%s} from "../rpc/%s";', $rpcName, $rpcName),
 		];
 

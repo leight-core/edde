@@ -22,7 +22,7 @@ class SourceTableExport extends AbstractRpcExport {
 export interface I%sTableProps<TColumns extends string> extends Omit<ITableProps<TColumns, IWith%s["schema"]["response"]>, "useQuery" | "schema"> {
 }
         
-export const %sTable<TColumns extends string>(props: I%sTableProps<TColumns>) => {
+export const %sTable = <TColumns extends string>(props: I%sTableProps<TColumns>) => {
     return <Table
         useQuery={with%s.useQuery}
         schema={with%s.schema.response}

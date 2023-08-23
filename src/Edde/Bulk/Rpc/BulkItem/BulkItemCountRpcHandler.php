@@ -13,6 +13,7 @@ class BulkItemCountRpcHandler extends AbstractRpcHandler {
     use BulkItemRepositoryTrait;
 
     protected $requestSchema = BulkItemQuerySchema::class;
+    protected $requestSchemaOptional = true;
     protected $responseSchema = CountSchema::class;
 
     public function handle(SmartDto $request) {

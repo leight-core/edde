@@ -267,11 +267,11 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
      * @throws SmartDtoException
      */
     protected function applyWhere(SmartDto $filter, SmartDto $query, Query $builder): void {
-        foreach ($this->fulltextOf as $value => $field) {
-            if ($filter->knownWithValue($value)) {
-                $this->fulltextOf($builder, $field, $filter->getValue($value));
-            }
-        }
+//        foreach ($this->fulltextOf as $value => $field) {
+//            if ($filter->knownWithValue($value)) {
+//                $this->fulltextOf($builder, $field, $filter->getValue($value));
+//            }
+//        }
         $filter->knownWithValue('fulltext') && !empty($this->searchOf) && $this->searchOf($builder, $filter->getValue('fulltext'), $this->searchOf);
         foreach ($this->matchOf as $value => $field) {
             $filter->knownWithValue($value) && $this->matchOf($builder, $field, $filter->getValue($value));

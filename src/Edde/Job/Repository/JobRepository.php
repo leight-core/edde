@@ -16,7 +16,7 @@ class JobRepository extends AbstractRepository {
     public function __construct() {
         parent::__construct(JobSchema::class);
         $this->orderBy = [
-            '$.created' => 'desc',
+            '$.started' => 'desc',
         ];
         $this->fulltextOf = [
             'id'      => '$.id',

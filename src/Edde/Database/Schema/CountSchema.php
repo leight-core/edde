@@ -6,9 +6,9 @@ namespace Edde\Database\Schema;
 interface CountSchema {
     const meta = [
         'import' => [
-            'CountSchema'       => '@pico/source',
-            'type ICount'       => '@pico/source',
-            'type ICountSchema' => '@pico/source',
+            'CountSchema'       => '@pico/query',
+            'type ICount'       => '@pico/query',
+            'type ICountSchema' => '@pico/query',
         ],
     ];
 

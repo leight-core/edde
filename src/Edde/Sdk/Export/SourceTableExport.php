@@ -8,8 +8,8 @@ class SourceTableExport extends AbstractRpcExport {
         $rpcName = $this->handler->getName();
 
         $import = [
-            'import {type FC} from "react";',
-            sprintf('import {with%s} from "../rpc/with%s";', $rpcName, $rpcName),
+            'import {type ITableProps, Table} from "@pico/table";',
+            sprintf('import {with%s, type IWith%s} from "../rpc/with%s";', $rpcName, $rpcName, $rpcName),
         ];
 
         $export = [
@@ -17,13 +17,22 @@ class SourceTableExport extends AbstractRpcExport {
             $this->toExport($import, "\n"),
         ];
 
+        // language=text
         $export[] = vsprintf('
-export interface I%sTableProps {
+export interface I%sTableProps<TColumns extends string> extends Omit<ITableProps<TColumns, IWith%s["schema"]["response"]>, "useQuery" | "schema"> {
 }
         
-export const %sTable: FC<I%sTableProps> = props => {
+export const %sTable<TColumns extends string>(props: I%sTableProps<TColumns>) => {
+    return <Table
+        useQuery={with%s.useQuery}
+        schema={with%s.schema.response}
+        {...props}
+    />;
 };
 		', [
+            $rpcName,
+            $rpcName,
+            $rpcName,
             $rpcName,
             $rpcName,
             $rpcName,

@@ -10,17 +10,18 @@ use Edde\Query\Schema\WithIdentitySchema;
 use Edde\Rpc\AbstractRpcHandler;
 
 class BulkDeleteRpcHandler extends AbstractRpcHandler {
-	use BulkServiceTrait;
+    use BulkServiceTrait;
 
-	protected $requestSchema = WithIdentitySchema::class;
-	protected $responseSchema = BulkSchema::class;
-	protected $isMutator = true;
-	protected $invalidators = [
-		BulkQueryRpcHandler::class,
-		BulkFetchRpcHandler::class,
-	];
+    protected $requestSchema = WithIdentitySchema::class;
+    protected $responseSchema = BulkSchema::class;
+    protected $isMutator = true;
+    protected $invalidators = [
+        BulkQueryRpcHandler::class,
+        BulkFetchRpcHandler::class,
+        BulkCountRpcHandler::class,
+    ];
 
-	public function handle(SmartDto $request) {
-		return $this->bulkService->delete($request);
-	}
+    public function handle(SmartDto $request) {
+        return $this->bulkService->delete($request);
+    }
 }

@@ -11,18 +11,19 @@ use Edde\Dto\SmartDto;
 use Edde\Rpc\AbstractRpcHandler;
 
 class BulkCreateRpcHandler extends AbstractRpcHandler {
-	use BulkServiceTrait;
+    use BulkServiceTrait;
 
-	protected $requestSchema = BulkCreateSchema::class;
-	protected $responseSchema = BulkSchema::class;
-	protected $valuesSchema = BulkValuesSchema::class;
-	protected $withForm = true;
-	protected $invalidators = [
-		BulkQueryRpcHandler::class,
-		BulkFetchRpcHandler::class,
-	];
+    protected $requestSchema = BulkCreateSchema::class;
+    protected $responseSchema = BulkSchema::class;
+    protected $valuesSchema = BulkValuesSchema::class;
+    protected $withForm = true;
+    protected $invalidators = [
+        BulkQueryRpcHandler::class,
+        BulkFetchRpcHandler::class,
+        BulkCountRpcHandler::class,
+    ];
 
-	public function handle(SmartDto $request) {
-		return $this->bulkService->create($request);
-	}
+    public function handle(SmartDto $request) {
+        return $this->bulkService->create($request);
+    }
 }

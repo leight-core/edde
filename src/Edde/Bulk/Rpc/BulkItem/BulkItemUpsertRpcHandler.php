@@ -10,18 +10,19 @@ use Edde\Dto\SmartDto;
 use Edde\Rpc\AbstractRpcHandler;
 
 class BulkItemUpsertRpcHandler extends AbstractRpcHandler {
-	use BulkItemServiceTrait;
+    use BulkItemServiceTrait;
 
-	protected $requestSchema = BulkItemUpsertSchema::class;
-	protected $responseSchema = BulkItemSchema::class;
-	protected $isMutator = true;
+    protected $requestSchema = BulkItemUpsertSchema::class;
+    protected $responseSchema = BulkItemSchema::class;
+    protected $isMutator = true;
 
-	protected $invalidators = [
-		BulkItemQueryRpcHandler::class,
-		BulkItemFetchRpcHandler::class,
-	];
+    protected $invalidators = [
+        BulkItemQueryRpcHandler::class,
+        BulkItemFetchRpcHandler::class,
+        BulkItemCountRpcHandler::class,
+    ];
 
-	public function handle(SmartDto $request) {
-		return $this->bulkItemService->upsert($request);
-	}
+    public function handle(SmartDto $request) {
+        return $this->bulkItemService->upsert($request);
+    }
 }

@@ -24,7 +24,7 @@ export interface I%sTableProps<TColumns extends string> extends Omit<ITableProps
         
 export const %sTable = <TColumns extends string>(props: I%sTableProps<TColumns>) => {
     return <Table
-        useQuery={with%s}
+        withQuery={with%s}
         {...props}
     />;
 };

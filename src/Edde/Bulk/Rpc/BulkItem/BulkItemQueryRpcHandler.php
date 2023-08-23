@@ -12,16 +12,20 @@ use Edde\Dto\SmartDto;
 use Edde\Rpc\AbstractRpcHandler;
 
 class BulkItemQueryRpcHandler extends AbstractRpcHandler {
-	use BulkItemServiceTrait;
+    use BulkItemServiceTrait;
 
-	protected $filterSchema = BulkItemFilterSchema::class;
-	protected $orderBySchema = BulkItemOrderBySchema::class;
-	protected $requestSchema = BulkItemQuerySchema::class;
-	protected $responseSchema = BulkItemSchema::class;
-	protected $responseSchemaArray = true;
-	protected $isQuery = true;
+    protected $filterSchema = BulkItemFilterSchema::class;
+    protected $orderBySchema = BulkItemOrderBySchema::class;
+    protected $requestSchema = BulkItemQuerySchema::class;
+    protected $responseSchema = BulkItemSchema::class;
+    protected $responseSchemaArray = true;
+    protected $isQuery = true;
 
-	public function handle(SmartDto $request) {
-		return $this->bulkItemService->query($request);
-	}
+    protected $meta = [
+        'withCountQuery' => BulkItemCountRpcHandler::class,
+    ];
+
+    public function handle(SmartDto $request) {
+        return $this->bulkItemService->query($request);
+    }
 }

@@ -3,42 +3,54 @@ declare(strict_types=1);
 
 namespace Edde\Sdk\Export;
 
+use Edde\Rpc\Service\RpcServiceTrait;
+
 class SourceQueryExport extends AbstractRpcExport {
-	public function export(): ?string {
-		$import = [
+    use RpcServiceTrait;
+
+    public function export(): ?string {
+        $countHandler = $this->rpcService->resolve(
+            $this->handler->getMeta()->getMeta('withCountQuery')
+        );
+        $countName = $countHandler->getName();
+
+        $import = [
             'import {withSourceQuery} from "@pico/rpc";',
             'import {z} from "@pico/utils";',
             'import {withQuerySchema, createQueryStore} from "@pico/query";',
-		];
+            sprintf('import {with%s} from "./with%s";', $countName, $countName),
+        ];
 
-		$rpcName = $this->handler->getName();
-		$schemaExport = new SchemaExport();
-		$responseSchema = 'z.undefined().nullish()';
-		$filterSchema = 'z.undefined().nullish()';
-		$orderBySchema = 'z.undefined().nullish()';
 
-		$meta = $this->handler->getMeta();
-		$responseMeta = $meta->getResponseMeta();
+        $rpcName = $this->handler->getName();
+        $schemaExport = new SchemaExport();
+        $responseSchema = 'z.undefined().nullish()';
+        $filterSchema = 'z.undefined().nullish()';
+        $orderBySchema = 'z.undefined().nullish()';
 
-		if (($name = $responseMeta->getSchema()) && $schema = $this->schemaLoader->load($name)) {
-			$import[] = sprintf('import {%s} from "../schema/%s";', $responseSchema = $schemaExport->getSchemaName($schema) . 'Schema', $responseSchema);
-		}
-		if (($name = $meta->getFilterSchema()) && $schema = $this->schemaLoader->load($name)) {
-			$import[] = sprintf('import {%s} from "../schema/%s";', $filterSchema = $schemaExport->getSchemaName($schema) . 'Schema', $filterSchema);
-		}
-		if (($name = $meta->getOrderBySchema()) && $schema = $this->schemaLoader->load($name)) {
-			$import[] = sprintf('import {%s} from "../schema/%s";', $orderBySchema = $schemaExport->getSchemaName($schema) . 'Schema', $orderBySchema);
-		}
+        $meta = $this->handler->getMeta();
+        $responseMeta = $meta->getResponseMeta();
 
-		$export = [
-			'"use client";',
-			$this->toExport($import, "\n"),
-		];
+        if (($name = $responseMeta->getSchema()) && $schema = $this->schemaLoader->load($name)) {
+            $import[] = sprintf('import {%s} from "../schema/%s";', $responseSchema = $schemaExport->getSchemaName($schema) . 'Schema', $responseSchema);
+        }
+        if (($name = $meta->getFilterSchema()) && $schema = $this->schemaLoader->load($name)) {
+            $import[] = sprintf('import {%s} from "../schema/%s";', $filterSchema = $schemaExport->getSchemaName($schema) . 'Schema', $filterSchema);
+        }
+        if (($name = $meta->getOrderBySchema()) && $schema = $this->schemaLoader->load($name)) {
+            $import[] = sprintf('import {%s} from "../schema/%s";', $orderBySchema = $schemaExport->getSchemaName($schema) . 'Schema', $orderBySchema);
+        }
 
-		$responseType = sprintf('%s%s', $responseSchema, $responseMeta->isOptional() ? '.nullish()' : '');
-		$export[] = vsprintf('
+        $export = [
+            '"use client";',
+            $this->toExport($import, "\n"),
+        ];
+
+        $responseType = sprintf('%s%s', $responseSchema, $responseMeta->isOptional() ? '.nullish()' : '');
+        $export[] = vsprintf('
 export const with%s = withSourceQuery({
 	service: "%s",
+	withCountQuery: with%s,
 	schema:  {
 		request: withQuerySchema({
 			filter: %s,
@@ -56,18 +68,19 @@ export const with%s = withSourceQuery({
 });
 export type IWith%s = typeof with%s;
 		', [
-			$rpcName,
-			$this->escapeHandlerName(get_class($this->handler)),
-			$filterSchema,
-			$orderBySchema,
-			$responseType,
-			$this->handler->getName(),
-			$filterSchema,
-			$orderBySchema,
-			$rpcName,
-			$rpcName,
-		]);
+            $rpcName,
+            $this->escapeHandlerName(get_class($this->handler)),
+            $countName,
+            $filterSchema,
+            $orderBySchema,
+            $responseType,
+            $this->handler->getName(),
+            $filterSchema,
+            $orderBySchema,
+            $rpcName,
+            $rpcName,
+        ]);
 
-		return $this->toExport($export);
-	}
+        return $this->toExport($export);
+    }
 }

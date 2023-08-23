@@ -12,6 +12,7 @@ use Edde\Bulk\Rpc\Bulk\BulkDeleteRpcHandler;
 use Edde\Bulk\Rpc\Bulk\BulkFetchRpcHandler;
 use Edde\Bulk\Rpc\Bulk\BulkImportRpcHandler;
 use Edde\Bulk\Rpc\Bulk\BulkQueryRpcHandler;
+use Edde\Bulk\Rpc\BulkItem\BulkItemCountRpcHandler;
 use Edde\Bulk\Rpc\BulkItem\BulkItemDeleteRpcHandler;
 use Edde\Bulk\Rpc\BulkItem\BulkItemFetchRpcHandler;
 use Edde\Bulk\Rpc\BulkItem\BulkItemQueryRpcHandler;
@@ -26,30 +27,31 @@ use Edde\Upgrade\Rpc\UpgradeQueryRpcHandler;
 use Edde\Upgrade\Rpc\UpgradeRpcHandler;
 
 class BootstrapDefaultRpcIndex extends AbstractBootstrap {
-	use RpcHandlerIndexTrait;
+    use RpcHandlerIndexTrait;
 
-	public function bootstrap() {
-		$this->rpcHandlerIndex->indexOf([
-			LoginRpcHandler::class,
-			LogoutRpcHandler::class,
-			TicketRpcHandler::class,
-			DropCacheRpcHandler::class,
-			TranslationBundlesRpcHandler::class,
-			JobFetchRpcHandler::class,
-			JobQueryRpcHandler::class,
-			BulkCreateRpcHandler::class,
-			BulkQueryRpcHandler::class,
-			JobFindByRpcHandler::class,
-			BulkFetchRpcHandler::class,
-			BulkCommitRpcHandler::class,
-			BulkDeleteRpcHandler::class,
-			BulkImportRpcHandler::class,
-			BulkItemQueryRpcHandler::class,
-			BulkItemDeleteRpcHandler::class,
-			BulkItemUpsertRpcHandler::class,
-			BulkItemFetchRpcHandler::class,
-			UpgradeRpcHandler::class,
-			UpgradeQueryRpcHandler::class,
-		]);
-	}
+    public function bootstrap() {
+        $this->rpcHandlerIndex->indexOf([
+            BulkCreateRpcHandler::class,
+            BulkDeleteRpcHandler::class,
+            BulkImportRpcHandler::class,
+            BulkItemDeleteRpcHandler::class,
+            BulkItemFetchRpcHandler::class,
+            BulkItemQueryRpcHandler::class,
+            BulkItemUpsertRpcHandler::class,
+            DropCacheRpcHandler::class,
+            JobFetchRpcHandler::class,
+            JobQueryRpcHandler::class,
+            LoginRpcHandler::class,
+            LogoutRpcHandler::class,
+            TicketRpcHandler::class,
+            TranslationBundlesRpcHandler::class,
+            UpgradeQueryRpcHandler::class,
+            UpgradeRpcHandler::class,
+            BulkCommitRpcHandler::class,
+            BulkFetchRpcHandler::class,
+            BulkItemCountRpcHandler::class,
+            BulkQueryRpcHandler::class,
+            JobFindByRpcHandler::class,
+        ]);
+    }
 }

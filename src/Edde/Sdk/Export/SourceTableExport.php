@@ -19,7 +19,7 @@ class SourceTableExport extends AbstractRpcExport {
 
         // language=text
         $export[] = vsprintf('
-export interface I%sTableProps<TColumns extends string> extends Omit<ITableProps<TColumns, IWith%s["schema"]["schema"]>, "withQuery"> {
+export interface I%sTableProps<TColumns extends string> extends Omit<ITableProps<TColumns, IWith%s["schema"]["schema"]>, "withSourceQuery"> {
 }
         
 export const %sTable = <TColumns extends string>(props: I%sTableProps<TColumns>) => {

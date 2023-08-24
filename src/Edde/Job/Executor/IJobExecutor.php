@@ -26,7 +26,7 @@ interface IJobExecutor {
 	 * @throws UserNotSelectedException
 	 * @throws ReflectionException
 	 */
-	public function execute(IAsyncService $asyncService, $params = null): SmartDto;
+    public function execute(IAsyncService $asyncService, $params = null, string $reference = null): SmartDto;
 
 	/**
 	 * Actually run the long running job (that means - do not call this method in the common code).

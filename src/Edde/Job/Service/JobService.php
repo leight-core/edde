@@ -20,11 +20,12 @@ class JobService implements IJobService {
     use CurrentUserServiceTrait;
     use JobLogRepositoryTrait;
 
-    public function create(IAsyncService $asyncService, ?SmartDto $request): SmartDto {
+    public function create(IAsyncService $asyncService, ?SmartDto $request, string $reference = null): SmartDto {
         return $this->jobRepository->create(
             $this->smartService->from(
                 [
                     'service'       => get_class($asyncService),
+                    'reference' => $reference,
                     'status'        => 0,
                     'total'         => 0,
                     'progress'      => 0,
@@ -34,7 +35,7 @@ class JobService implements IJobService {
                     'request'       => $request ? $request->export() : null,
                     'requestSchema' => $request ? $request->getSchema()->getName() : null,
                     'started'       => new DateTime(),
-                    'commit' => false,
+                    'commit'    => false,
                     'userId'        => $this->currentUserService->requiredId(),
                 ],
                 JobCreateSchema::class

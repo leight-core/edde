@@ -10,13 +10,13 @@ use Edde\Query\Schema\WithIdentitySchema;
 use Edde\Rpc\AbstractRpcHandler;
 
 class BulkImportRpcHandler extends AbstractRpcHandler {
-	use BulkImportAsyncServiceTrait;
+    use BulkImportAsyncServiceTrait;
 
-	protected $requestSchema = WithIdentitySchema::class;
-	protected $responseSchema = JobSchema::class;
-	protected $isMutator = true;
+    protected $requestSchema = WithIdentitySchema::class;
+    protected $responseSchema = JobSchema::class;
+    protected $isMutator = true;
 
-	public function handle(SmartDto $request) {
-		return $this->bulkImportAsyncService->async($request);
-	}
+    public function handle(SmartDto $request) {
+        return $this->bulkImportAsyncService->async($request, $request->getValue('id'));
+    }
 }

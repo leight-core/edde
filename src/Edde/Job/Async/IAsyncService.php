@@ -38,5 +38,5 @@ interface IAsyncService {
 	 *
 	 * @return SmartDto
 	 */
-	public function async(SmartDto $request = null): SmartDto;
+    public function async(SmartDto $request = null, string $reference = null): SmartDto;
 }

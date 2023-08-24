@@ -16,6 +16,8 @@ interface JobFilterSchema extends FilterSchema {
 
     function status(): ?int;
 
+    function reference(): ?string;
+
     function statusIn($array = true): ?int;
 
     function service(): ?string;

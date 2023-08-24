@@ -25,72 +25,72 @@ use ReflectionException;
 use Throwable;
 
 abstract class AbstractJobExecutor implements IJobExecutor {
-	use JobRepositoryTrait;
-	use JobLogRepositoryTrait;
-	use ContainerTrait;
-	use CurrentUserServiceTrait;
-	use SmartServiceTrait;
-	use LoggerTrait;
-	use JobServiceTrait;
-	use LanguageServiceTrait;
+    use JobRepositoryTrait;
+    use JobLogRepositoryTrait;
+    use ContainerTrait;
+    use CurrentUserServiceTrait;
+    use SmartServiceTrait;
+    use LoggerTrait;
+    use JobServiceTrait;
+    use LanguageServiceTrait;
 
-	/**
-	 * @param IAsyncService $asyncService
-	 * @param SmartDto|null $request
-	 *
-	 * @return SmartDto
-	 * @throws SmartDtoException
-	 * @throws ItemException
-	 * @throws SkipException
-	 * @throws UserNotSelectedException
-	 * @throws ReflectionException
-	 */
-	protected function createJob(IAsyncService $asyncService, SmartDto $request = null): SmartDto {
-		return $this->jobService->create($asyncService, $request);
-	}
+    /**
+     * @param IAsyncService $asyncService
+     * @param SmartDto|null $request
+     *
+     * @return SmartDto
+     * @throws SmartDtoException
+     * @throws ItemException
+     * @throws SkipException
+     * @throws UserNotSelectedException
+     * @throws ReflectionException
+     */
+    protected function createJob(IAsyncService $asyncService, SmartDto $request = null, string $reference = null): SmartDto {
+        return $this->jobService->create($asyncService, $request, $reference);
+    }
 
-	/**
-	 * Actually run the long running job (that means - do not call this method in the common code).
-	 *
-	 * @param string $jobId
-	 *
-	 * @return mixed
-	 *
-	 * @throws Exception
-	 * @throws Throwable
-	 */
-	public function run(string $jobId) {
-		$this->logger->info(sprintf('Running job [%s]', $jobId), ['tags' => ['job']]);
-		$job = $this->jobService->find($jobId);
-		$this->logger->info(sprintf('Executing job service [%s], user id [%s].', $job->getValue('service'), $job->getValue('userId')), ['tags' => ['job']]);
-		/** @var $progress IProgress */
-		$progress = $job->getValue('withProgress');
-		$progress->log(IProgress::LOG_INFO, sprintf('Executing job service [%s], user id [%s], language [%s].', $job->getValue('service'), $job->getValue('userId'), $this->languageService->forCurrentUser()));
-		try {
-			if (!($service = $this->container->get($job->getValue('service'))) instanceof IAsyncService) {
-				throw new JobException(sprintf('Requested service [%s] is not instance of [%s].', get_class($service), IAsyncService::class));
-			}
-			$result = call_user_func(
-				[
-					$service,
-					'job',
-				],
-				$job
-			);
-			$progress->log(IProgress::LOG_INFO, 'Job successfully finished.');
-			$this->logger->info('Job successfully finished, setting job done.', ['tags' => ['job']]);
-			$progress->onSettled($result);
-			return $result;
-		} catch (JobInterruptedException $exception) {
-			$progress->log(IProgress::LOG_INFO, sprintf('Job [%s] has been interrupted.', $jobId));
-			$this->logger->notice(sprintf('Job [%s] has been interrupted.', $jobId), ['tags' => ['job']]);
-		} catch (Throwable $throwable) {
-			$progress->onFailure($throwable);
-			$this->logger->error($throwable, ['tags' => ['job']]);
-			throw $throwable;
-		} finally {
-			$this->logger->info('Finished.', ['tags' => ['job']]);
-		}
-		return null;
-	}
+    /**
+     * Actually run the long running job (that means - do not call this method in the common code).
+     *
+     * @param string $jobId
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     * @throws Throwable
+     */
+    public function run(string $jobId) {
+        $this->logger->info(sprintf('Running job [%s]', $jobId), ['tags' => ['job']]);
+        $job = $this->jobService->find($jobId);
+        $this->logger->info(sprintf('Executing job service [%s], user id [%s].', $job->getValue('service'), $job->getValue('userId')), ['tags' => ['job']]);
+        /** @var $progress IProgress */
+        $progress = $job->getValue('withProgress');
+        $progress->log(IProgress::LOG_INFO, sprintf('Executing job service [%s], user id [%s], language [%s].', $job->getValue('service'), $job->getValue('userId'), $this->languageService->forCurrentUser()));
+        try {
+            if (!($service = $this->container->get($job->getValue('service'))) instanceof IAsyncService) {
+                throw new JobException(sprintf('Requested service [%s] is not instance of [%s].', get_class($service), IAsyncService::class));
+            }
+            $result = call_user_func(
+                [
+                    $service,
+                    'job',
+                ],
+                $job
+            );
+            $progress->log(IProgress::LOG_INFO, 'Job successfully finished.');
+            $this->logger->info('Job successfully finished, setting job done.', ['tags' => ['job']]);
+            $progress->onSettled($result);
+            return $result;
+        } catch (JobInterruptedException $exception) {
+            $progress->log(IProgress::LOG_INFO, sprintf('Job [%s] has been interrupted.', $jobId));
+            $this->logger->notice(sprintf('Job [%s] has been interrupted.', $jobId), ['tags' => ['job']]);
+        } catch (Throwable $throwable) {
+            $progress->onFailure($throwable);
+            $this->logger->error($throwable, ['tags' => ['job']]);
+            throw $throwable;
+        } finally {
+            $this->logger->info('Finished.', ['tags' => ['job']]);
+        }
+        return null;
+    }
 }

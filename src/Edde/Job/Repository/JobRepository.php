@@ -24,10 +24,11 @@ class JobRepository extends AbstractRepository {
             'params'  => '$.params',
         ];
         $this->matchOf = [
-            'id'      => '$.id',
-            'userId'  => '$.user_id',
-            'status' => '$.status',
-            'service' => '$.service',
+            'id'        => '$.id',
+            'reference' => '$.reference',
+            'userId'    => '$.user_id',
+            'status'    => '$.status',
+            'service'   => '$.service',
         ];
     }
 

@@ -6,15 +6,15 @@ namespace Edde\Dto\Mapper;
 use Edde\Date\Mapper\IsoDateMapperTrait;
 use Edde\Dto\SmartDto;
 use Edde\Dto\Value;
+use Edde\Utils\Mapper\BoolIntMapperTrait;
 use Edde\Utils\Mapper\FloatMapperTrait;
-use Edde\Utils\Mapper\IntBoolMapperTrait;
 use Edde\Utils\Mapper\IntMapperTrait;
 use Edde\Utils\Mapper\JsonOutputMapperTrait;
 
 class OutputTypeMapper extends AbstractDtoMapper implements ITypeMapper {
     use IntMapperTrait;
     use FloatMapperTrait;
-    use IntBoolMapperTrait;
+    use BoolIntMapperTrait;
     use IsoDateMapperTrait;
     use JsonOutputMapperTrait;
 
@@ -29,7 +29,7 @@ class OutputTypeMapper extends AbstractDtoMapper implements ITypeMapper {
             case 'float':
                 return $this->floatMapper->item($item);
             case self::TYPE_BOOLINT:
-                return $this->intBoolMapper->item($item);
+                return $this->boolIntMapper->item($item);
             case self::TYPE_ISO_DATETIME:
                 return $this->isoDateMapper->item($item);
             case self::TYPE_JSON:

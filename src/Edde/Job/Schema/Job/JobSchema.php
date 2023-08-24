@@ -12,6 +12,7 @@ use Edde\Dto\SmartDto;
 use Edde\Job\Mapper\JobCountMapper;
 use Edde\Job\Progress\JobProgressFactory;
 use Edde\Progress\IProgress;
+use Edde\Utils\Mapper\IntBoolMapper;
 
 interface JobSchema extends UuidSchema {
     const meta = [
@@ -64,7 +65,7 @@ interface JobSchema extends UuidSchema {
     ): ?string;
 
     function commit(
-        $type = ITypeMapper::TYPE_BOOLINT
+        $output = IntBoolMapper::class,
     ): bool;
 
     function userId(): string;

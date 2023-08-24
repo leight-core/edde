@@ -107,7 +107,7 @@ class JobProgress extends AbstractProgress {
             $this->smartService->from(
                 [
                     'update' => [
-                        'errorCount' => ++$this->error,
+                        'errorCount' => $this->error,
                         'progress'   => $this->progress(),
                     ],
                     'filter' => [

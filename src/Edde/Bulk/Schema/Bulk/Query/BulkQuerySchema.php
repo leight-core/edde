@@ -6,17 +6,17 @@ namespace Edde\Bulk\Schema\Bulk\Query;
 use Edde\Query\Schema\CursorSchema;
 
 interface BulkQuerySchema {
-	const meta = [
-		'import' => [
+    const meta = [
+        'import' => [
             'BulkQuerySchema'       => '@pico/bulk',
             'type IBulkQuerySchema' => '@pico/bulk',
             'type IBulkQuery'       => '@pico/bulk',
-		],
-	];
+        ],
+    ];
 
-	function filter(): ?BulkFilterSchema;
+    function filter($load = true): ?BulkFilterSchema;
 
-	function orderBy(): ?BulkOrderBySchema;
+    function orderBy($load = true): ?BulkOrderBySchema;
 
-	function cursor(): ?CursorSchema;
+    function cursor($load = true): ?CursorSchema;
 }

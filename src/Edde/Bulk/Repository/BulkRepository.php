@@ -7,10 +7,14 @@ use Edde\Bulk\Schema\Bulk\BulkSchema;
 use Edde\Database\Repository\AbstractRepository;
 
 class BulkRepository extends AbstractRepository {
-	public function __construct() {
-		parent::__construct(BulkSchema::class);
-		$this->orderBy = [
-			'$.created' => 'desc',
-		];
-	}
+    public function __construct() {
+        parent::__construct(BulkSchema::class);
+        $this->orderBy = [
+            '$.created' => 'desc',
+        ];
+        $this->searchOf = [
+            '$.id',
+            '$.name',
+        ];
+    }
 }

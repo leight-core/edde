@@ -28,7 +28,11 @@ export const %sTable = <TColumns extends string>(props: I%sTableProps<TColumns>)
         {...props}
     />;
 };
+
+%sTable.QueryProvider = with%s.query.Provider;
 		', [
+            $rpcName,
+            $rpcName,
             $rpcName,
             $rpcName,
             $rpcName,

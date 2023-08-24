@@ -18,7 +18,7 @@ class SourceQueryExport extends AbstractRpcExport {
         $import = [
             'import {withSourceQuery} from "@pico/rpc";',
             'import {z} from "@pico/utils";',
-            'import {withQuerySchema, createQueryStore} from "@pico/query";',
+            'import {createQueryStore} from "@pico/query";',
             sprintf('import {with%s} from "./with%s";', $countName, $countName),
         ];
 
@@ -53,10 +53,8 @@ export const with%s = withSourceQuery({
 	service: "%s",
 	withCountQuery: with%s,
 	schema:  {
-		request: withQuerySchema({
-			filter: %s,
-			orderBy: %s,
-		}),
+		filter: %s,
+        orderBy: %s,
 		response: %s,
 	},
 	query:   createQueryStore({

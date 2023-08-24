@@ -18,6 +18,8 @@ interface JobCreateSchema extends UuidGeneratorSchema {
 
     function service(): string;
 
+    function reference(): ?string;
+
     function status(): int;
 
     function total(): int;

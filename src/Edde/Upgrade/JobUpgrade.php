@@ -16,6 +16,7 @@ class JobUpgrade extends CommonMigration {
         $this
             ->createUuidTable('z_job', ['comment' => 'Table containing jobs running or being executed.'])
             ->addStringColumn('service', 256, ['comment' => 'Service being called; must be accessible from DI container. Also it must implement IJobService interface.'])
+            ->addStringColumn('reference', 256, ['comment' => 'Soft reference to anything executed this job'])
             ->addColumn('status', 'integer', [
                 'limit'   => 1,
                 'comment' => 'Status code of the job',

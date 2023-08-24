@@ -28,6 +28,8 @@ interface JobSchema extends UuidSchema {
 
     function service(): string;
 
+    function reference(): ?string;
+
     function status(): int;
 
     function total(): int;

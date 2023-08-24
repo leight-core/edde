@@ -6,7 +6,7 @@ namespace Edde\Job\Schema\Job\Internal;
 use Edde\Database\Schema\UuidGeneratorSchema;
 use Edde\Dto\Mapper\ExportMapper;
 use Edde\Dto\Mapper\ITypeMapper;
-use Edde\Utils\Mapper\BoolIntMapperTrait;
+use Edde\Utils\Mapper\BoolIntMapper;
 use Edde\Utils\Mapper\JsonInputMapper;
 
 interface JobCreateSchema extends UuidGeneratorSchema {
@@ -41,7 +41,7 @@ interface JobCreateSchema extends UuidGeneratorSchema {
     function requestSchema(): string;
 
     function commit(
-        $output = BoolIntMapperTrait::class
+        $output = BoolIntMapper::class
     ): bool;
 
     function userId(): string;

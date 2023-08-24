@@ -14,6 +14,15 @@ class JobCountRpcHandler extends AbstractRpcHandler {
     protected $requestSchema = JobQuerySchema::class;
 
     public function handle(SmartDto $request) {
-        return $this->jobRepository->total($request);
+        return $this->jobRepository->total(
+            $request->merge(
+                [
+                    'filter' => [
+                        'userId' => $this->currentUserService->requiredId(),
+                    ],
+                ],
+                true
+            )
+        );
     }
 }

@@ -6,11 +6,13 @@ namespace Edde\Job\Schema\Job\Query;
 use Edde\Query\Schema\FilterSchema;
 
 interface JobFilterSchema extends FilterSchema {
-	function status(): ?int;
+    function status(): ?int;
 
-	function statusIn($array = true): ?int;
+    function statusIn($array = true): ?int;
 
-	function service(): ?string;
+    function service(): ?string;
 
-	function serviceIn($array = true): ?string;
+    function userId(): ?string;
+
+    function serviceIn($array = true): ?string;
 }

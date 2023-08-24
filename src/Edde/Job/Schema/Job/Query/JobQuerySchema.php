@@ -14,7 +14,7 @@ interface JobQuerySchema {
         ],
     ];
 
-    function filter($load = true): ?JobQuerySchema;
+    function filter($load = true): ?JobFilterSchema;
 
     function orderBy($load = true): ?JobOrderBySchema;
 

@@ -9,35 +9,39 @@ use Edde\Dto\Mapper\ITypeMapper;
 use Edde\Utils\Mapper\JsonInputMapper;
 
 interface JobCreateSchema extends UuidGeneratorSchema {
-	const meta = [
-		ExportMapper::META => [
-			'userId' => ExportMapper::CONVERT_SNAKE,
-		],
-	];
+    const meta = [
+        ExportMapper::META => [
+            'userId' => ExportMapper::CONVERT_SNAKE,
+        ],
+    ];
 
-	function service(): string;
+    function service(): string;
 
-	function status(): int;
+    function status(): int;
 
-	function total(): int;
+    function total(): int;
 
-	function progress(): float;
+    function progress(): float;
 
-	function successCount(): int;
+    function successCount(): int;
 
-	function errorCount(): int;
+    function errorCount(): int;
 
-	function skipCount(): int;
+    function skipCount(): int;
 
-	function started(
-		$type = ITypeMapper::TYPE_ISO_DATETIME
-	): string;
+    function started(
+        $type = ITypeMapper::TYPE_ISO_DATETIME
+    ): string;
 
-	function request(
-		$input = JsonInputMapper::class
-	): ?string;
+    function request(
+        $input = JsonInputMapper::class
+    ): ?string;
 
-	function requestSchema(): string;
+    function requestSchema(): string;
 
-	function userId(): string;
+    function commit(
+        $type = ITypeMapper::TYPE_BOOLINT
+    ): bool;
+
+    function userId(): string;
 }

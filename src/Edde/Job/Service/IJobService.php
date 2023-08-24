@@ -44,4 +44,6 @@ interface IJobService {
 	 * @throws ItemException
 	 */
 	public function find(string $jobId): SmartDto;
+
+    public function commit(SmartDto $request): SmartDto;
 }

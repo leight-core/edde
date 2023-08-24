@@ -6,9 +6,17 @@ namespace Edde\Job\Schema\Job\Query;
 use Edde\Query\Schema\CursorSchema;
 
 interface JobQuerySchema {
-	function filter($load = true): ?JobFilterSchema;
+    const meta = [
+        'import' => [
+            'JobQuerySchema'       => '@pico/job',
+            'type IJobQuerySchema' => '@pico/job',
+            'type IJobQuery'       => '@pico/job',
+        ],
+    ];
 
-	function orderBy($load = true): ?JobOrderBySchema;
+    function filter($load = true): ?JobQuerySchema;
 
-	function cursor($load = true): ?CursorSchema;
+    function orderBy($load = true): ?JobOrderBySchema;
+
+    function cursor($load = true): ?CursorSchema;
 }

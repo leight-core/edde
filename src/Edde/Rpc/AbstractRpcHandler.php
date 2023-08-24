@@ -8,9 +8,11 @@ use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
 use Edde\Query\Schema\WithIdentitySchema;
 use Edde\Rpc\Service\IRpcHandler;
+use Edde\User\CurrentUserServiceTrait;
 
 abstract class AbstractRpcHandler implements IRpcHandler {
     use SmartServiceTrait;
+    use CurrentUserServiceTrait;
 
     /**
      * Request schema used to call this handler

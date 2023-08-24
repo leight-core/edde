@@ -25,6 +25,15 @@ class JobQueryRpcHandler extends AbstractRpcHandler {
     ];
 
     public function handle(SmartDto $request) {
-        return $this->jobService->query($request);
+        return $this->jobService->query(
+            $request->merge(
+                [
+                    'filter' => [
+                        'userId' => $this->currentUserService->requiredId(),
+                    ],
+                ],
+                true
+            )
+        );
     }
 }

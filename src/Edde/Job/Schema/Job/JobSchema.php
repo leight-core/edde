@@ -65,7 +65,7 @@ interface JobSchema extends UuidSchema {
     ): ?string;
 
     function commit(
-        $output = IntBoolMapper::class,
+        $output = IntBoolMapper::class
     ): bool;
 
     function userId(): string;

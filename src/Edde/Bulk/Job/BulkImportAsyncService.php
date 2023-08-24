@@ -89,7 +89,7 @@ class BulkImportAsyncService extends AbstractAsyncService {
                         ),
                         true
                     );
-                    $progress->onProgress();
+                    isset($base['error']) ? $progress->onError() : $progress->onProgress();
                 } catch (Throwable $throwable) {
                     $progress->onError($throwable);
                     $this->bulkItemRepository->upsert(

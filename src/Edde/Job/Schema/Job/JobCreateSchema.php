@@ -6,15 +6,17 @@ namespace Edde\Job\Schema\Job;
 use Edde\Dto\Mapper\ITypeMapper;
 
 interface JobCreateSchema {
-	function service(): string;
+    function service(): string;
 
-	function started(
-		$type = ITypeMapper::TYPE_ISO_DATETIME
-	);
+    function reference(): ?string;
 
-	function request(
-		$type = ITypeMapper::TYPE_JSON
-	);
+    function started(
+        $type = ITypeMapper::TYPE_ISO_DATETIME
+    );
 
-	function requestSchema(): ?string;
+    function request(
+        $type = ITypeMapper::TYPE_JSON
+    );
+
+    function requestSchema(): ?string;
 }

@@ -34,6 +34,7 @@ class JobService implements IJobService {
                     'request'       => $request ? $request->export() : null,
                     'requestSchema' => $request ? $request->getSchema()->getName() : null,
                     'started'       => new DateTime(),
+                    'commit' => false,
                     'userId'        => $this->currentUserService->requiredId(),
                 ],
                 JobCreateSchema::class

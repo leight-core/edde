@@ -6,7 +6,7 @@ namespace Edde\Query\Schema;
 interface FilterSchema {
     function id(): ?string;
 
-    function idIn(): ?string;
+    function idIn($array = true): ?string;
 
     function fulltext(): ?string;
 }

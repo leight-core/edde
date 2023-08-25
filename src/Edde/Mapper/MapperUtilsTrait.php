@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Edde\Mapper;
 
 use DateTime;
-use DateTimeInterface;
 use DateTimeZone;
 use function is_string;
 
@@ -13,6 +12,6 @@ trait MapperUtilsTrait {
         if (is_string($dateTime)) {
             $dateTime = new DateTime($dateTime, new DateTimeZone('UTC'));
         }
-        return $dateTime ? $dateTime->format(DateTimeInterface::ATOM) : null;
+        return $dateTime ? $dateTime->format('Y-m-d\TH:i:s') : null;
     }
 }

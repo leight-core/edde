@@ -249,14 +249,14 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
      * @throws SmartDtoException
      */
     protected function applyQuery(SmartDto $query, Query $builder): Query {
-        $builder = $this->applyQueryBuilder($builder);
+        $builder = $this->applyQueryBuilder($query, $builder);
         $this->applyWhere($query->getSmartDto('filter', true), $query, $builder);
         $this->applyOrderBy($query->getSmartDto('orderBy', true), $query, $builder);
         return $builder;
     }
 
-    protected function applyQueryBuilder(Query $query): Query {
-        return $query;
+    protected function applyQueryBuilder(SmartDto $query, Query $build): Query {
+        return $build;
     }
 
     /**

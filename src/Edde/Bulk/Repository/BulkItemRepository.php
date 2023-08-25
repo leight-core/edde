@@ -3,21 +3,18 @@ declare(strict_types=1);
 
 namespace Edde\Bulk\Repository;
 
-use Cake\Database\Query;
 use Edde\Bulk\Schema\BulkItem\BulkItemSchema;
 use Edde\Database\Repository\AbstractRepository;
-use Edde\Dto\SmartDto;
 
 class BulkItemRepository extends AbstractRepository {
-	public function __construct() {
-		parent::__construct(BulkItemSchema::class);
-		$this->orderBy = [
-			'$.created' => 'desc',
-		];
-	}
-
-	protected function applyWhere(SmartDto $filter, SmartDto $query, Query $builder): void {
-		parent::applyWhere($filter, $query, $builder);
-		$filter->knownWithValue('bulkId') && $this->matchOf($builder, '$.bulk_id', $filter->getValue('bulkId'));
-	}
+    public function __construct() {
+        parent::__construct(BulkItemSchema::class);
+        $this->orderBy = [
+            '$.created' => 'desc',
+        ];
+        $this->matchOf = [
+            'bulkId' => '$.bulk_id',
+            'userId' => '$.user_id',
+        ];
+    }
 }

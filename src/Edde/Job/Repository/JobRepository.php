@@ -30,12 +30,14 @@ class JobRepository extends AbstractRepository {
             'status'    => '$.status',
             'service'   => '$.service',
         ];
+        $this->matchOfIn = [
+            'statusIn'  => '$.status',
+            'serviceIn' => '$.service',
+        ];
     }
 
     protected function applyWhere(SmartDto $filter, SmartDto $query, Query $builder): void {
         parent::applyWhere($filter, $query, $builder);
-        $filter->knownWithValue('statusIn') && $this->matchOfIn($builder, '$.status', $filter->getValue('statusIn'));
-        $filter->knownWithValue('serviceIn') && $this->matchOfIn($builder, '$.service', $filter->getValue('serviceIn'));
         $filter->knownWithValue('params') && $this->fulltextOf($builder, '$.params', $filter->getValue('params'));
     }
 

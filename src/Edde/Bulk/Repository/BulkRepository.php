@@ -16,5 +16,8 @@ class BulkRepository extends AbstractRepository {
             '$.id',
             '$.name',
         ];
+        $this->matchOf = [
+            'userId' => '$.user_id',
+        ];
     }
 }

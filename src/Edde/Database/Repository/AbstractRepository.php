@@ -143,7 +143,6 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
         $builder = $this->applyQueryBuilder($this->queryOf());
         $builder
             ->select(['count' => $builder->func()->count($field = $this->field("$.$this->id"))], true)
-            ->distinct($field)
             ->from($this->table);
         $query->knownWithValue('filter') && $this->applyWhere($query->getSmartDto('filter'), $query, $builder);
         return $this->smartService->from(
@@ -159,7 +158,7 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
     }
 
     public function select(array $fields = [], bool $override = false): Query {
-        return $this->queryOf()->select(array_merge([$this->field('$.*')], $fields), $override)->distinct($this->field("$.$this->id"))->from($this->table);
+        return $this->queryOf()->select(array_merge([$this->field('$.*')], $fields), $override)->from($this->table);
     }
 
     public function fetch(Query $query) {

@@ -161,7 +161,13 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
     }
 
     public function select(array $fields = [], bool $override = false): Query {
-        return $this->queryOf()->select(array_merge([$this->field('$.*')], $fields), $override)->from($this->table);
+        return $this
+            ->queryOf()
+            ->select(
+                array_merge([$this->field('$.*')], $fields),
+                $override
+            )
+            ->from($this->table);
     }
 
     public function fetch(Query $query) {

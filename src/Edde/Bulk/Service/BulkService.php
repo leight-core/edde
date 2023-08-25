@@ -86,9 +86,10 @@ class BulkService {
                 [
                     'filter' => [
                         'bulkId' => $request->getValue('id'),
+                        'userId' => $this->currentUserService->requiredId(),
                     ],
                 ],
-                BulkItemQuerySchema::class,
+                BulkItemQuerySchema::class
             )
         );
         $this->bulkItemRepository->deleteWith(
@@ -96,9 +97,10 @@ class BulkService {
                 [
                     'filter' => [
                         'reference' => $request->getValue('id'),
+                        'userId' => $this->currentUserService->requiredId(),
                     ],
                 ],
-                JobQuerySchema::class,
+                JobQuerySchema::class
             )
         );
         $this->bulkRepository->update(
@@ -110,7 +112,8 @@ class BulkService {
                             'commit' => true,
                         ],
                         'filter' => [
-                            'id' => $request->getValue('id'),
+                            'id'     => $request->getValue('id'),
+                            'userId' => $this->currentUserService->requiredId(),
                         ],
                     ],
                     true

@@ -255,8 +255,8 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
         return $builder;
     }
 
-    protected function applyQueryBuilder(SmartDto $query, Query $build): Query {
-        return $build;
+    protected function applyQueryBuilder(SmartDto $query, Query $builder): Query {
+        return $builder;
     }
 
     /**

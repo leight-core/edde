@@ -140,7 +140,10 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
      * @inheritDoc
      */
     public function total(SmartDto $query): SmartDto {
-        $builder = $this->applyQueryBuilder($this->queryOf());
+        $builder = $this->applyQueryBuilder(
+            $query,
+            $this->queryOf()
+        );
         $builder
             ->select(['count' => $builder->func()->count($this->field("$.$this->id"))])
             ->from($this->table);

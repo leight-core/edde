@@ -92,7 +92,7 @@ class BulkService {
                 BulkItemQuerySchema::class
             )
         );
-        $this->bulkItemRepository->deleteWith(
+        $this->jobRepository->deleteWith(
             $this->smartService->from(
                 [
                     'filter' => [

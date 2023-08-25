@@ -142,7 +142,7 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
     public function total(SmartDto $query): SmartDto {
         $builder = $this->applyQueryBuilder($this->queryOf());
         $builder
-            ->select(['count' => $builder->func()->count($field = $this->field("$.$this->id"))], true)
+            ->select(['count' => $builder->func()->count($this->field("$.$this->id"))])
             ->from($this->table);
         $query->knownWithValue('filter') && $this->applyWhere($query->getSmartDto('filter'), $query, $builder);
         return $this->smartService->from(

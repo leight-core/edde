@@ -14,5 +14,7 @@ interface BulkFilterSchema extends FilterSchema {
 		],
 	];
 
+    function userId(): ?string;
+
 	function withCommit(): ?bool;
 }

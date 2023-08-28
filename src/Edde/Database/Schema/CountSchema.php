@@ -12,5 +12,7 @@ interface CountSchema {
         ],
     ];
 
+    function total(): int;
+
     function count(): int;
 }

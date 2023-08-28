@@ -144,19 +144,31 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
             $query,
             $this->queryOf()
         );
+
+        $count = [
+            'count' => $builder->func()->count(
+                $this->field("$.$this->id")
+            ),
+        ];
+
         $builder
             ->select(
-                [
-                    'count' => $builder->func()->count(
-                        $this->field("$.$this->id")
-                    ),
-                ],
+                $count,
                 true
             )
             ->from($this->table);
         $query->knownWithValue('filter') && $this->applyWhere($query->getSmartDto('filter'), $query, $builder);
         return $this->smartService->from(
             [
+                'total' => (int)$this->fetch(
+                    $this
+                        ->applyQueryBuilder(
+                            $query,
+                            $this->queryOf()
+                        )
+                        ->select($count)
+                        ->from($this->table)
+                )->count,
                 'count' => (int)$this->fetch($builder)->count,
             ],
             CountSchema::class

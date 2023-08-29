@@ -6,9 +6,11 @@ namespace Edde\Upgrade\Schema;
 use Edde\Query\Schema\CursorSchema;
 
 interface UpgradeQuerySchema {
-	function filter($load = true): ?UpgradeFilterSchema;
+    function where($load = true): ?UpgradeFilterSchema;
 
-	function orderBy($load = true): ?UpgradeOrderBySchema;
+    function filter($load = true): ?UpgradeFilterSchema;
 
-	function cursor($load = true): ?CursorSchema;
+    function orderBy($load = true): ?UpgradeOrderBySchema;
+
+    function cursor($load = true): ?CursorSchema;
 }

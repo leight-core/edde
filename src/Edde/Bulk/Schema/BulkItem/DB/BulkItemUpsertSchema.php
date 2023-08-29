@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Edde\Bulk\Schema\BulkItem\Internal;
+namespace Edde\Bulk\Schema\BulkItem\DB;
 
 use Edde\Bulk\Schema\BulkItem\Query\BulkItemFilterSchema;
 

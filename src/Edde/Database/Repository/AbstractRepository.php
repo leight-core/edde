@@ -416,6 +416,9 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
     }
 
     protected function searchOf(Query $query, string $value, array $fields) {
+        if (empty($value)) {
+            return;
+        }
         $query->andWhere(function (QueryExpression $expression) use ($value, $fields) {
             return $expression->or(array_map(function ($field) use ($expression, $value) {
                 return $expression->or([])->like($this->field($field), "%$value%");

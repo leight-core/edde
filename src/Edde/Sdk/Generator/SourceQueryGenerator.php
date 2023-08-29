@@ -43,6 +43,10 @@ class SourceQueryGenerator extends AbstractGenerator {
                 sprintf('src/$export/IWith%s.ts', $handler->getName()),
                 sprintf('export {type IWith%s} from "../rpc/with%s";', $handler->getName(), $handler->getName())
             );
+            $this->writeTo(
+                sprintf('src/$export/%sProvider.ts', $handler->getName()),
+                sprintf('export {%sProvider} from "../rpc/with%s";', $handler->getName(), $handler->getName())
+            );
 
             $this->writeTo(
                 sprintf('src/table/%sTable.tsx', $handler->getName()),
@@ -62,6 +66,7 @@ class SourceQueryGenerator extends AbstractGenerator {
                 implode("\n", [
                     sprintf('export * from "./with%s";', $handler->getName()),
                     sprintf('export * from "./IWith%s";', $handler->getName()),
+                    sprintf('export * from "./%sProvider";', $handler->getName()),
                     sprintf('export * from "./%sTable";', $handler->getName()),
                     sprintf('export * from "./I%sTableProps";', $handler->getName()),
                     "",

@@ -14,6 +14,8 @@ interface BulkQuerySchema {
         ],
     ];
 
+    function where($load = true): ?BulkFilterSchema;
+
     function filter($load = true): ?BulkFilterSchema;
 
     function orderBy($load = true): ?BulkOrderBySchema;

@@ -121,9 +121,9 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
         return $this->item($entity);
     }
 
-    public function findSafe(string $id, string $message = null): ?SmartDto {
+    public function findSafe(?string $id, string $message = null): ?SmartDto {
         try {
-            return $this->find($id);
+            return $id ? $this->find($id) : null;
         } catch (RequiredResultException $exception) {
             return null;
         }

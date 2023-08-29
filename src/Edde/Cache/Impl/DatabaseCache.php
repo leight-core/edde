@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Edde\Cache\Impl;
 
 use Edde\Cache\Exception\CacheException;
-use Edde\Cache\Psr\AbstractCache;
+use Psr\SimpleCache\CacheInterface;
 use Throwable;
 use function is_iterable;
 use function iterator_to_array;
@@ -12,12 +12,11 @@ use function iterator_to_array;
 /**
  * @Injectable(lazy=true)
  */
-class DatabaseCache extends AbstractCache {
+class DatabaseCache implements CacheInterface {
 	public function get($key, $default = null) {
 		try {
 			return null;
 		} catch (Throwable $throwable) {
-			$this->logger->error($throwable);
 			return null;
 		}
 	}
@@ -26,7 +25,6 @@ class DatabaseCache extends AbstractCache {
 		try {
 			return true;
 		} catch (Throwable $throwable) {
-			$this->logger->error($throwable);
 			return false;
 		}
 	}
@@ -39,7 +37,6 @@ class DatabaseCache extends AbstractCache {
 		try {
 			return true;
 		} catch (Throwable $throwable) {
-			$this->logger->error($throwable);
 			return false;
 		}
 	}
@@ -48,7 +45,6 @@ class DatabaseCache extends AbstractCache {
 		try {
 			return true;
 		} catch (Throwable $throwable) {
-			$this->logger->error($throwable);
 			return false;
 		}
 	}
@@ -58,7 +54,6 @@ class DatabaseCache extends AbstractCache {
 			$keys = is_iterable($keys) ? iterator_to_array($keys) : $keys;
 			return true;
 		} catch (Throwable $throwable) {
-			$this->logger->error($throwable);
 			return false;
 		}
 	}

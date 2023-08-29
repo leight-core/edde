@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\Slim;
 
+use Cache\Adapter\Void\VoidCachePool;
 use DI\Bridge\Slim\Bridge;
 use DI\Container;
 use DI\ContainerBuilder;
@@ -11,7 +12,6 @@ use Edde\Auth\Mapper\ISessionMapper;
 use Edde\Bootstrap\IBootstrap;
 use Edde\Cache\Cache;
 use Edde\Cache\ICache;
-use Edde\Cache\Impl\DatabaseCache;
 use Edde\Dto\IDtoService;
 use Edde\Dto\ISmartService;
 use Edde\Dto\SmartService;
@@ -204,7 +204,7 @@ class SlimApp {
 				return $container->get(Cache::class);
 			},
 			CacheInterface::class      => function (ContainerInterface $container) {
-				return $container->get(DatabaseCache::class);
+				return $container->get(VoidCachePool::class);
 			},
 			SlimApp::CONFIG_CLI        => [],
 			ISmartService::class       => function (ContainerInterface $container) {

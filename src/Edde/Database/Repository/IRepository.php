@@ -63,6 +63,8 @@ interface IRepository extends IMapper {
      */
     public function find(string $id, string $message = null): SmartDto;
 
+    public function findSafe(string $id, string $message = null): ?SmartDto;
+
     /**
      * @param SmartDto $query
      *

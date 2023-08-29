@@ -6,11 +6,16 @@ namespace Edde\File;
 use Edde\Database\Exception\DuplicateEntryException;
 use Edde\Dto\DtoServiceTrait;
 use Edde\Dto\SmartDto;
+use Edde\Dto\SmartServiceTrait;
 use Edde\File\Exception\FileNotFoundException;
 use Edde\File\Exception\FileNotReadableException;
 use Edde\File\Repository\FileRepositoryTrait;
+use Edde\File\Schema\DB\FileUpdateRequestSchema;
+use Edde\File\Schema\DB\FileUpsertSchema;
+use Edde\File\Schema\Query\FileQuerySchema;
 use Edde\Log\LoggerTrait;
 use Edde\Math\RandomServiceTrait;
+use Edde\Query\Schema\WithIdentitySchema;
 use Edde\Stream\FileStream;
 use Edde\Stream\IStream;
 use Edde\User\CurrentUserServiceTrait;
@@ -38,7 +43,7 @@ class FileService implements IFileService {
 	use LoggerTrait;
 	use CurrentUserServiceTrait;
 	use MimeServiceTrait;
-	use FileMapperTrait;
+	use SmartServiceTrait;
 	use DtoServiceTrait;
 	use UuidServiceTrait;
 	use RandomServiceTrait;
@@ -150,7 +155,16 @@ class FileService implements IFileService {
 				try {
 					$this->assert($file->native);
 				} catch (FileNotFoundException|FileNotReadableException $e) {
-					$this->fileRepository->deleteByNative($file->native);
+					$this->fileRepository->deleteWith(
+						$this->smartService->from(
+							[
+								'filter' => [
+									'native' => $file->getValue('native'),
+								],
+							],
+							FileQuerySchema::class
+						)
+					);
 					$this->logger->info(sprintf('Removing dead file by missing (not readable) file [%s]', $file->native), ['tags' => ['file']]);
 					$gc['records']++;
 				}
@@ -167,7 +181,7 @@ class FileService implements IFileService {
 	 */
 	public function file(string $path, string $name, string $mime, float $ttl = null, ?string $userId = null): SmartDto {
 		$native = $this->directory->prefix('files/' . str_replace('-', '/', $uuid = $this->uuidService->uuid4()) . '/' . $uuid);
-		$file = $this->fileMapper->item($this->fileRepository->ensure($this->dtoService->fromArray(EnsureDto::class, [
+		$upsert = [
 			'path'   => $path,
 			'name'   => $name,
 			'mime'   => $mime,
@@ -175,9 +189,26 @@ class FileService implements IFileService {
 			'size'   => -1,
 			'ttl'    => $ttl,
 			'native' => $this->directory->normalize($native),
-		])));
-		$this->directory->create(dirname($this->directory->base($file->native)));
-		touch($file->native);
+		];
+		$file = $this->fileRepository->upsert(
+			$this->smartService->from(
+				[
+					'create' => $upsert,
+					'update' => $upsert,
+					'filter' => [
+						'name' => $name,
+						'path' => $path,
+					],
+				],
+				FileUpsertSchema::class
+			)
+		);
+		$this->directory->create(
+			dirname(
+				$this->directory->base($file->getValue('native'))
+			)
+		);
+		touch($file->getValue('native'));
 		return $file;
 	}
 
@@ -186,26 +217,36 @@ class FileService implements IFileService {
 	 */
 	public function store(IStream $stream, string $path, string $name, float $ttl = null, ?string $userId = null): SmartDto {
 		try {
-			$fileDto = $this->file(rtrim($path, '/'), ltrim($name, '/'), 'application/octet-stream', $ttl, $userId);
-			FileStream::openWrite($fileDto->native)->useToStream($stream);
-			return $this->refresh($fileDto->id);
+			$file = $this->file(rtrim($path, '/'), ltrim($name, '/'), 'application/octet-stream', $ttl, $userId);
+			FileStream::openWrite($file->getValue('native'))->useToStream($stream);
+			return $this->refresh($file->getValue('id'));
 		} catch (Throwable $exception) {
 			$this->logger->error($exception);
 			throw $exception;
 		}
 	}
 
-	public function refresh(string $fileId): FileDto {
-		$fileDto = $this->fileMapper->item($this->fileRepository->find($fileId));
-		return $this->fileMapper->item($this->fileRepository->change([
-			'id'   => $fileDto->id,
-			'mime' => $this->mimeService->detect($fileDto->native),
-			'size' => $this->sizeOf($fileDto->native),
-		]));
+	public function refresh(string $fileId): SmartDto {
+		$file = $this->fileRepository->find($fileId);
+		return $this->fileRepository->update(
+			$this->smartService->from(
+				[
+					'update' => [
+						'mime' => $this->mimeService->detect($file->getValue('native')),
+						'size' => $this->sizeOf($file->getValue('native')),
+					],
+					'filter' => [
+						'id' => $file->getValue('id'),
+
+					],
+				],
+				FileUpdateRequestSchema::class
+			)
+		);
 	}
 
 	public function useFile(string $fileId, callable $callback) {
-		return $callback($this->fileMapper->item($this->fileRepository->find($fileId)));
+		return $callback($this->fileRepository->find($fileId));
 	}
 
 	/**
@@ -221,12 +262,19 @@ class FileService implements IFileService {
 	 * @throws Throwable
 	 */
 	public function consumeFile(string $fileId, callable $callback) {
-		$file = $this->fileMapper->item($this->fileRepository->find($fileId));
+		$file = $this->fileRepository->find($fileId);
 		try {
 			return $callback($file);
 		} finally {
 			$this->delete($file->native);
-			$this->fileRepository->delete($fileId);
+			$this->fileRepository->deleteBy(
+				$this->smartService->from(
+					[
+						'id' => $fileId,
+					],
+					WithIdentitySchema::class
+				)
+			);
 		}
 	}
 
@@ -255,14 +303,14 @@ class FileService implements IFileService {
 	}
 
 	public function send(string $fileId, ResponseInterface $response, ?string $name = null): ResponseInterface {
-		return $this->useFile($fileId, function (FileDto $fileDto) use ($response, $name) {
+		return $this->useFile($fileId, function (SmartDto $file) use ($response, $name) {
 			return $response
-				->withHeader('Content-Type', $fileDto->mime)
+				->withHeader('Content-Type', $file->getValue('mime'))
 				->withHeader('Cache-Control', 'private, max-age=0, must-revalidate')
-				->withHeader('Content-Disposition', 'inline; filename=' . rawurlencode($name ?? $fileDto->name))
-				->withHeader('Content-Length', $fileDto->size)
+				->withHeader('Content-Disposition', 'inline; filename=' . rawurlencode($name ?? $file->getValue('name')))
+				->withHeader('Content-Length', $file->getValue('size'))
 				->withHeader('Pragma', 'public')
-				->withBody(Stream::create(FileStream::openRead($fileDto->native)->stream()));
+				->withBody(Stream::create(FileStream::openRead($file->getValue('native'))->stream()));
 		});
 	}
 

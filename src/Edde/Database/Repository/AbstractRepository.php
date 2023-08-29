@@ -114,7 +114,7 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
     /**
      * @inheritDoc
      */
-    public function find(?string $id, string $message = null): SmartDto {
+    public function find(string $id, string $message = null): SmartDto {
         if (!($entity = $this->fetch($this->select()->where([$this->id => $id])))) {
             throw new RequiredResultException($message ?? sprintf('Cannot find id [%s] in [%s]!', $id, static::class), 500);
         }

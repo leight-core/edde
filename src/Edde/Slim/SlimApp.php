@@ -62,7 +62,6 @@ use Edde\Source\ISourceService;
 use Edde\Source\SourceService;
 use Edde\User\Mapper\IUserMapper;
 use Nette\Utils\Json;
-use Nette\Utils\Strings;
 use Phinx\Config\ConfigInterface;
 use Phinx\Migration\Manager;
 use Psr\Container\ContainerInterface;
@@ -95,22 +94,8 @@ class SlimApp {
 	}
 
 	public function injectOn($instance) {
+		/** @noinspection PhpPossiblePolymorphicInvocationInspection */
 		return $this->app->getContainer()->injectOn($instance);
-	}
-
-	public function dynamicBasePath(string $lookup = 'blackfox'): SlimApp {
-		/**
-		 * Guess base path to keep things working when moved between strange environments.
-		 */
-		if ($match = (Strings::match($_SERVER['REQUEST_URI'] ?? '', '~^(?<base>.*?/' . $lookup . ').*$~')['base']) ?? null) {
-			$this->app->setBasePath($match);
-		}
-		return $this;
-	}
-
-	public function setBasePath(string $basePath): SlimApp {
-		$this->app->setBasePath($basePath);
-		return $this;
 	}
 
 	public function run(): void {
@@ -123,14 +108,17 @@ class SlimApp {
 	}
 
 	public function cli() {
-		return $this->app->getContainer()->get(Application::class)->run();
+		return $this
+			->app
+			->getContainer()
+			->get(Application::class)
+			->run();
 	}
 
 	static public function create(...$definitions): SlimApp {
 		$containerBuilder = new ContainerBuilder();
 		$containerBuilder->useAnnotations(true);
 		$containerBuilder->addDefinitions([
-			'doctrine.dev'             => false,
 			SessionInterface::class    => function (ContainerInterface $container) {
 				return $container->get(Session::class);
 			},
@@ -142,9 +130,6 @@ class SlimApp {
 			},
 			IHttpRouter::class         => function (ContainerInterface $container) {
 				return $container->get(ApiRouter::class);
-			},
-			IImageService::class       => function (ContainerInterface $container) {
-				return $container->get(ImageService::class);
 			},
 			IJobExecutor::class        => function (ContainerInterface $container) {
 				return $container->get(CliJobExecutor::class);

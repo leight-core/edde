@@ -22,12 +22,9 @@ class ProxyDtoMapper extends AbstractDtoMapper {
         } else if ($dto->isUndefined($source)) {
             return null;
         }
-        if (!($value = $dto->getValue($source))) {
-            return null;
-        }
         return call_user_func([
             $this->container->get($service),
             $method,
-        ], $value);
+        ], $dto->getValue($source));
     }
 }

@@ -61,7 +61,7 @@ interface IRepository extends IMapper {
      *
      * @throws RequiredResultException
      */
-    public function find(string $id, string $message = null): SmartDto;
+    public function find(?string $id, string $message = null): SmartDto;
 
     /**
      * @param SmartDto $query

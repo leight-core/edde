@@ -142,11 +142,7 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
             $this->queryOf()
         );
         return (int)$this->fetch(
-            $this
-                ->applyQueryBuilder(
-                    $query,
-                    $this->queryOf()
-                )
+            $builder
                 ->select(
                     [
                         'count' => $builder->func()->count(

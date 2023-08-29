@@ -3,15 +3,11 @@ declare(strict_types=1);
 
 namespace Edde\File;
 
-use Dibi\Exception;
 use Edde\Database\Exception\DuplicateEntryException;
 use Edde\Dto\DtoServiceTrait;
-use Edde\File\Dto\EnsureDto;
-use Edde\File\Dto\FileDto;
-use Edde\File\Dto\GcResultDto;
+use Edde\Dto\SmartDto;
 use Edde\File\Exception\FileNotFoundException;
 use Edde\File\Exception\FileNotReadableException;
-use Edde\File\Mapper\FileMapperTrait;
 use Edde\File\Repository\FileRepositoryTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Math\RandomServiceTrait;
@@ -67,7 +63,7 @@ class FileService implements IFileService {
 	/**
 	 * @inheritdoc
 	 */
-	public function accept(string $file, string $path, string $name, float $ttl = null): FileDto {
+	public function accept(string $file, string $path, string $name, float $ttl = null): SmartDto {
 		return FileStream::openRead($_FILES[$file]['tmp_name'])
 			->use(function (IStream $stream) use ($path, $name, $ttl) {
 				return $this->store($stream, $path, $name, $ttl, $this->currentUserService->optionalId());
@@ -77,7 +73,7 @@ class FileService implements IFileService {
 	/**
 	 * @inheritdoc
 	 */
-	public function chunk(IStream $stream, string $name, ?string $userId = null): FileDto {
+	public function chunk(IStream $stream, string $name, ?string $userId = null): SmartDto {
 		$file = $this->file('/chunk', $name, 'application/vnd.chunk', 60 * 5, $userId);
 
 		FileStream::openAppend($file->native)->useToStream($stream);
@@ -88,7 +84,7 @@ class FileService implements IFileService {
 		]));
 	}
 
-	public function commit(string $chunk, string $path, string $name = null, bool $replace = false): FileDto {
+	public function commit(string $chunk, string $path, string $name = null, bool $replace = false): SmartDto {
 		$file = $this->fileRepository->findByPath('/chunk', $chunk);
 
 		$source = [
@@ -112,7 +108,7 @@ class FileService implements IFileService {
 		return $this->directory->sizeOf($file);
 	}
 
-	public function gc(bool $force = false): GcResultDto {
+	public function gc(bool $force = false): SmartDto {
 		$start = microtime(true);
 		$gc = [
 			'records' => 0,
@@ -169,7 +165,7 @@ class FileService implements IFileService {
 	/**
 	 * @inheritdoc
 	 */
-	public function file(string $path, string $name, string $mime, float $ttl = null, ?string $userId = null): FileDto {
+	public function file(string $path, string $name, string $mime, float $ttl = null, ?string $userId = null): SmartDto {
 		$native = $this->directory->prefix('files/' . str_replace('-', '/', $uuid = $this->uuidService->uuid4()) . '/' . $uuid);
 		$file = $this->fileMapper->item($this->fileRepository->ensure($this->dtoService->fromArray(EnsureDto::class, [
 			'path'   => $path,
@@ -188,7 +184,7 @@ class FileService implements IFileService {
 	/**
 	 * @inheritdoc
 	 */
-	public function store(IStream $stream, string $path, string $name, float $ttl = null, ?string $userId = null): FileDto {
+	public function store(IStream $stream, string $path, string $name, float $ttl = null, ?string $userId = null): SmartDto {
 		try {
 			$fileDto = $this->file(rtrim($path, '/'), ltrim($name, '/'), 'application/octet-stream', $ttl, $userId);
 			FileStream::openWrite($fileDto->native)->useToStream($stream);

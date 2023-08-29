@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Edde\Api\Shared\Import\Endpoint;
 
-use Dibi\Exception;
 use Edde\Dto\SmartDto;
 use Edde\Excel\ExcelImportServiceTrait;
 use Edde\Excel\IExcelImportService;

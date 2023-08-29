@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Edde\Job\Executor;
 
-use Dibi\Exception;
 use Edde\Dto\Exception\SmartDtoException;
 use Edde\Dto\SmartDto;
 use Edde\Job\Async\IAsyncService;

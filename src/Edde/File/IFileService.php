@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace Edde\File;
 
-use Dibi\Exception;
-use Edde\File\Dto\FileDto;
-use Edde\File\Dto\GcResultDto;
+use Edde\Dto\SmartDto;
 use Edde\File\Exception\FileNotReadableException;
 use Edde\Stream\IStream;
 use League\Flysystem\FilesystemException;
@@ -27,7 +25,7 @@ interface IFileService {
 	 *
 	 * @throws FilesystemException
 	 */
-	public function chunk(IStream $stream, string $name, ?string $userId = null): FileDto;
+	public function chunk(IStream $stream, string $name, ?string $userId = null): SmartDto;
 
 	/**
 	 * Commit the given chunk; when committed, chunk became a file.
@@ -39,7 +37,7 @@ interface IFileService {
 	 *
 	 * @return FileDto
 	 */
-	public function commit(string $chunk, string $path, string $name = null, bool $replace = false): FileDto;
+	public function commit(string $chunk, string $path, string $name = null, bool $replace = false): SmartDto;
 
 	/**
 	 * Prepare writable file and it's record in database.
@@ -52,7 +50,7 @@ interface IFileService {
 	 *
 	 * @return FileDto
 	 */
-	public function file(string $path, string $name, string $mime, float $ttl = null, ?string $userId = null): FileDto;
+	public function file(string $path, string $name, string $mime, float $ttl = null, ?string $userId = null): SmartDto;
 
 	/**
 	 * Accepts an uploaded PHP file (thus this method is working with $_FILES).
@@ -68,7 +66,7 @@ interface IFileService {
 	 * @throws FileNotReadableException
 	 * @throws Throwable
 	 */
-	public function accept(string $file, string $path, string $name, float $ttl = null): FileDto;
+	public function accept(string $file, string $path, string $name, float $ttl = null): SmartDto;
 
 	/**
 	 * Takes an input file and copy it to managed space of File Service
@@ -81,7 +79,7 @@ interface IFileService {
 	 *
 	 * @return FileDto
 	 */
-	public function store(IStream $stream, string $path, string $name, float $ttl = null, ?string $userId = null): FileDto;
+	public function store(IStream $stream, string $path, string $name, float $ttl = null, ?string $userId = null): SmartDto;
 
 	/**
 	 * When a file is changed, this method will update it's changes
@@ -90,7 +88,7 @@ interface IFileService {
 	 *
 	 * @return FileDto
 	 */
-	public function refresh(string $fileId): FileDto;
+	public function refresh(string $fileId): SmartDto;
 
 	/**
 	 * Return filesize
@@ -107,7 +105,7 @@ interface IFileService {
 	 *
 	 * GC will run with probability to prevent heavy loads.
 	 */
-	public function gc(bool $force = false): GcResultDto;
+	public function gc(bool $force = false): SmartDto;
 
 	public function send(string $fileId, ResponseInterface $response, ?string $name = null): ResponseInterface;
 

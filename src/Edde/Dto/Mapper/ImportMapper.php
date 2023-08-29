@@ -10,7 +10,6 @@ use Edde\Utils\StringUtils;
 
 class ImportMapper extends AbstractMapper {
     const META = 'import-mapper';
-    const CONVERT_KEEP = 0;
     const CONVERT_CAMEL = 1;
 
     public function item($item, $params = null) {

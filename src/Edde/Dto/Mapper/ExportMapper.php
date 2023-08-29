@@ -10,7 +10,6 @@ use Edde\Utils\StringUtils;
 
 class ExportMapper extends AbstractMapper {
     const META = 'export-mapper';
-    const CONVERT_KEEP = 0;
     const CONVERT_SNAKE = 1;
 
     public function item($item, $params = null) {

@@ -5,9 +5,7 @@ namespace Edde\Cache\Impl;
 
 use Edde\Cache\Exception\CacheException;
 use Edde\Cache\Psr\AbstractCache;
-use Edde\Cache\Repository\CacheRepositoryTrait;
 use Throwable;
-use function is_array;
 use function is_iterable;
 use function iterator_to_array;
 
@@ -15,17 +13,9 @@ use function iterator_to_array;
  * @Injectable(lazy=true)
  */
 class DatabaseCache extends AbstractCache {
-	use CacheRepositoryTrait;
-
 	public function get($key, $default = null) {
 		try {
-			if (!($key = $this->cacheRepository->fetchKey($key))) {
-				return null;
-			}
-			return [
-				$key->value,
-				$key->hash,
-			];
+			return null;
 		} catch (Throwable $throwable) {
 			$this->logger->error($throwable);
 			return null;
@@ -34,7 +24,6 @@ class DatabaseCache extends AbstractCache {
 
 	public function set($key, $value, $ttl = null) {
 		try {
-			$this->cacheRepository->ensure($key, is_array($value) ? $value[0] : $value, $ttl);
 			return true;
 		} catch (Throwable $throwable) {
 			$this->logger->error($throwable);
@@ -43,14 +32,11 @@ class DatabaseCache extends AbstractCache {
 	}
 
 	public function has($key) {
-		return $this->cacheRepository->has($key);
+		return false;
 	}
 
 	public function delete($key) {
 		try {
-			$delete = $this->cacheRepository->table()->delete();
-			isset($key) && $delete->where(['key' => $key]);
-			$delete->execute();
 			return true;
 		} catch (Throwable $throwable) {
 			$this->logger->error($throwable);
@@ -60,7 +46,6 @@ class DatabaseCache extends AbstractCache {
 
 	public function clear() {
 		try {
-			$this->cacheRepository->table()->delete()->execute();
 			return true;
 		} catch (Throwable $throwable) {
 			$this->logger->error($throwable);
@@ -71,7 +56,6 @@ class DatabaseCache extends AbstractCache {
 	public function deleteMultiple($keys) {
 		try {
 			$keys = is_iterable($keys) ? iterator_to_array($keys) : $keys;
-			!empty($keys) && $this->cacheRepository->table()->delete()->where('key', 'in', $keys)->execute();
 			return true;
 		} catch (Throwable $throwable) {
 			$this->logger->error($throwable);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Edde\File;
 
 use Dibi\Exception;
+use Edde\Database\Exception\DuplicateEntryException;
 use Edde\Dto\DtoServiceTrait;
 use Edde\File\Dto\EnsureDto;
 use Edde\File\Dto\FileDto;
@@ -14,8 +15,6 @@ use Edde\File\Mapper\FileMapperTrait;
 use Edde\File\Repository\FileRepositoryTrait;
 use Edde\Log\LoggerTrait;
 use Edde\Math\RandomServiceTrait;
-use Edde\Repository\Exception\DuplicateEntryException;
-use Edde\Repository\Exception\RepositoryException;
 use Edde\Stream\FileStream;
 use Edde\Stream\IStream;
 use Edde\User\CurrentUserServiceTrait;
@@ -224,7 +223,6 @@ class FileService implements IFileService {
 	 *
 	 * @throws Exception
 	 * @throws Throwable
-	 * @throws RepositoryException
 	 */
 	public function consumeFile(string $fileId, callable $callback) {
 		$file = $this->fileMapper->item($this->fileRepository->find($fileId));

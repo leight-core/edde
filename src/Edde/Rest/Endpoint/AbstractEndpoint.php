@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Edde\Rest\Endpoint;
 
 use Edde\Cache\CacheTrait;
+use Edde\Database\Exception\DuplicateEntryException;
 use Edde\Dto\DtoServiceTrait;
 use Edde\Dto\SmartDto;
 use Edde\Dto\SmartServiceTrait;
@@ -12,7 +13,6 @@ use Edde\Log\LoggerTrait;
 use Edde\Profiler\ProfilerServiceTrait;
 use Edde\Query\Dto\Query;
 use Edde\Reflection\Dto\Method\IRequestMethod;
-use Edde\Repository\Exception\DuplicateEntryException;
 use Edde\Rest\Exception\ClientException;
 use Edde\Rest\Exception\RestException;
 use Edde\Rest\IEndpoint;

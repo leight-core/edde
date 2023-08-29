@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace Edde\Profiler;
 
 use Edde\Config\ConfigServiceTrait;
+use Edde\Dto\SmartServiceTrait;
 use Edde\Profiler\Repository\ProfilerRepositoryTrait;
+use Edde\Profiler\Schema\ProfilerSchema;
 use Throwable;
 use function filter_var;
 use function microtime;
@@ -13,6 +15,7 @@ use const FILTER_VALIDATE_BOOLEAN;
 class ProfilerService {
 	use ConfigServiceTrait;
 	use ProfilerRepositoryTrait;
+	use SmartServiceTrait;
 
 	protected $enabled;
 
@@ -34,11 +37,16 @@ class ProfilerService {
 			return $callback();
 		} finally {
 			try {
-				$this->isEnabled() && $this->profilerRepository->insert([
-					'name'    => $name,
-					'stamp'   => $stamp = microtime(true),
-					'runtime' => $stamp - $time,
-				]);
+				$this->isEnabled() && $this->profilerRepository->create(
+					$this->smartService->from(
+						[
+							'name'    => $name,
+							'stamp'   => $stamp = microtime(true),
+							'runtime' => $stamp - $time,
+						],
+						ProfilerSchema::class
+					)
+				);
 			} catch (Throwable $throwable) {
 				/**
 				 * Swallow: profiler cannot kill the app nor spam logs with failures (as it can gather information

@@ -9,22 +9,25 @@ use Edde\Dto\SmartDto;
 use Edde\Dto\Value;
 
 class ProxyDtoMapper extends AbstractDtoMapper {
-	use ContainerTrait;
+    use ContainerTrait;
 
-	protected function handle($item, Value $value, SmartDto $dto) {
-		$attribute = $value->getAttribute();
-		[
-			$service,
-			$method,
-		] = $attribute->getMetaOrThrow('proxy');
-		if (!$dto->known($source = $attribute->getMetaOrThrow('source'))) {
-			throw new SmartDtoException(sprintf('Requested unknown proxy property [%s::%s].', $dto->getName(), $source));
-		} else if ($dto->isUndefined($source)) {
-			return null;
-		}
-		return call_user_func([
-			$this->container->get($service),
-			$method,
-		], $dto->getValue($source));
-	}
+    protected function handle($item, Value $value, SmartDto $dto) {
+        $attribute = $value->getAttribute();
+        [
+            $service,
+            $method,
+        ] = $attribute->getMetaOrThrow('proxy');
+        if (!$dto->known($source = $attribute->getMetaOrThrow('source'))) {
+            throw new SmartDtoException(sprintf('Requested unknown proxy property [%s::%s].', $dto->getName(), $source));
+        } else if ($dto->isUndefined($source)) {
+            return null;
+        }
+        if (!($value = $dto->getValue($source))) {
+            return null;
+        }
+        return call_user_func([
+            $this->container->get($service),
+            $method,
+        ], $value);
+    }
 }

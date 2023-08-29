@@ -66,6 +66,8 @@ export const with%s = withSourceQuery({
 	}),
 });
 export type IWith%s = typeof with%s;
+
+export const %sProvider = with%s.query.Provider;
 		', [
             $rpcName,
             $this->escapeHandlerName(get_class($this->handler)),
@@ -76,6 +78,8 @@ export type IWith%s = typeof with%s;
             $this->handler->getName(),
             $filterSchema,
             $orderBySchema,
+            $rpcName,
+            $rpcName,
             $rpcName,
             $rpcName,
         ]);

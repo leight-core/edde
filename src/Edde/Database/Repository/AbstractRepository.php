@@ -158,6 +158,11 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
             )
             ->from($this->table);
         $query->knownWithValue('filter') && $this->applyWhere($query->getSmartDto('filter'), $query, $builder);
+        /**
+         * Where filter should override all the previously set filters or at least put in place mandatory
+         * filters.
+         */
+        $query->knownWithValue('where') && $this->applyWhere($query->getSmartDto('where'), $query, $builder);
         return $this->smartService->from(
             [
                 'total' => (int)$this->fetch(

@@ -136,48 +136,60 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
         return $this->item($entity);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function total(SmartDto $query): SmartDto {
+    public function countTotal(SmartDto $query): int {
         $builder = $this->applyQueryBuilder(
             $query,
             $this->queryOf()
         );
+        return (int)$this->fetch(
+            $this
+                ->applyQueryBuilder(
+                    $query,
+                    $this->queryOf()
+                )
+                ->select(
+                    [
+                        'count' => $builder->func()->count(
+                            $this->field("$.$this->id")
+                        ),
+                    ],
+                    true
+                )
+                ->from($this->table)
+        )->count;
+    }
 
-        $count = [
-            'count' => $builder->func()->count(
-                $this->field("$.$this->id")
-            ),
-        ];
-
-        $builder
-            ->select(
-                $count,
-                true
-            )
-            ->from($this->table);
-        $query->knownWithValue('filter') && $this->applyWhere($query->getSmartDto('filter'), $query, $builder);
+    public function countFilter(SmartDto $query): int {
+        $builder = $this->applyQueryBuilder(
+            $query,
+            $this->queryOf()
+        );
         /**
-         * Where filter should override all the previously set filters or at least put in place mandatory
-         * filters.
+         * Counting filter must have both filters as this is the real result a user gets.
          */
+        $query->knownWithValue('filter') && $this->applyWhere($query->getSmartDto('filter'), $query, $builder);
         $query->knownWithValue('where') && $this->applyWhere($query->getSmartDto('where'), $query, $builder);
+        return (int)$this->fetch($builder)->count;
+    }
+
+    public function countWhere(SmartDto $query): int {
+        $builder = $this->applyQueryBuilder(
+            $query,
+            $this->queryOf()
+        );
+        $query->knownWithValue('where') && $this->applyWhere($query->getSmartDto('where'), $query, $builder);
+        return (int)$this->fetch($builder)->count;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function total(SmartDto $query): SmartDto {
         return $this->smartService->from(
             [
-                'total' => (int)$this->fetch(
-                    $this
-                        ->applyQueryBuilder(
-                            $query,
-                            $this->queryOf()
-                        )
-                        ->select(
-                            $count,
-                            true
-                        )
-                        ->from($this->table)
-                )->count,
-                'count' => (int)$this->fetch($builder)->count,
+                'where' => $this->countWhere($query),
+                'count' => $this->countFilter($query),
+                'total' => $this->countTotal($query),
             ],
             CountSchema::class
         );
@@ -287,6 +299,11 @@ abstract class AbstractRepository extends AbstractMapper implements IRepository 
     protected function applyQuery(SmartDto $query, Query $builder): Query {
         $builder = $this->applyQueryBuilder($query, $builder);
         $this->applyWhere($query->getSmartDto('filter', true), $query, $builder);
+        /**
+         * Where filter should override all the previously set filters or at least put in place mandatory
+         * filters.
+         */
+        $query->knownWithValue('where') && $this->applyWhere($query->getSmartDto('where'), $query, $builder);
         $this->applyOrderBy($query->getSmartDto('orderBy', true), $query, $builder);
         return $builder;
     }

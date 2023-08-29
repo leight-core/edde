@@ -14,5 +14,7 @@ interface CountSchema {
 
     function total(): int;
 
+    function where(): int;
+
     function count(): int;
 }

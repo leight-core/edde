@@ -27,8 +27,6 @@ class ExportMapper extends AbstractMapper {
                 case self::CONVERT_SNAKE:
                     $key = StringUtils::recamel($key, '_');
                     break;
-                case self::CONVERT_KEEP:
-                    break;
                 default:
                     $key = $map[$k] ?? $k;
             }

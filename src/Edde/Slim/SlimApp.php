@@ -27,8 +27,6 @@ use Edde\File\IFileService;
 use Edde\Http\HttpIndex;
 use Edde\Http\IHttpIndex;
 use Edde\Http\IHttpRouter;
-use Edde\Image\IImageService;
-use Edde\Image\ImageService;
 use Edde\Job\Command\JobExecutorCommand;
 use Edde\Job\Executor\CliJobExecutor;
 use Edde\Job\Executor\IJobExecutor;
@@ -62,7 +60,6 @@ use Edde\Session\SessionMiddleware;
 use Edde\Session\SessionResolver;
 use Edde\Source\ISourceService;
 use Edde\Source\SourceService;
-use Edde\Storage\StorageConfig;
 use Edde\User\Mapper\IUserMapper;
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
@@ -187,9 +184,6 @@ class SlimApp {
 			},
 			IMapperService::class      => function (ContainerInterface $container) {
 				return $container->get(MapperService::class);
-			},
-			StorageConfig::class       => function (ContainerInterface $container) {
-				return new StorageConfig($container->get(StorageConfig::CONFIG_STORAGE));
 			},
 			Application::class         => function (ContainerInterface $container) {
 				$application = new Application($container->get(self::CONFIG_APP_NAME));

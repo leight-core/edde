@@ -22,12 +22,8 @@
 		}
 	},
 	"autoload": {
-		"files": [
-			"./src/ClanCats/Hydrahon/Query/Sql/Select.php"
-		],
 		"exclude-from-classmap": [
-			"./src/Edde/Bridge/",
-			"./vendor/clancats/hydrahon/src/Query/Sql/Select.php"
+			"./src/Edde/Bridge/"
 		],
 		"classmap": [
 			"src/"
@@ -36,8 +32,6 @@
 	"require": {
 		"cache/void-adapter": "^1.1",
 		"cakephp/database": "4.3.11",
-		"clancats/hydrahon": "^1.1",
-		"dibi/dibi": "^4.1",
 		"diff/diff": "^3.2",
 		"doctrine/annotations": "^1.12",
 		"ext-json": "*",

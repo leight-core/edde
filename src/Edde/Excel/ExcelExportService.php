@@ -5,10 +5,10 @@ namespace Edde\Excel;
 
 use Edde\Config\ConfigServiceTrait;
 use Edde\Dto\DtoServiceTrait;
+use Edde\Dto\SmartDto;
 use Edde\Excel\Dto\Export\ExcelExportDto;
 use Edde\Excel\Dto\Export\MetaDto;
 use Edde\Excel\Dto\ReadDto;
-use Edde\File\Dto\FileDto;
 use Edde\File\FileServiceTrait;
 use Edde\File\Repository\FileRepositoryTrait;
 use Edde\Log\LoggerTrait;
@@ -16,7 +16,6 @@ use Edde\Php\MemoryServiceTrait;
 use Edde\Progress\IProgress;
 use Edde\Progress\NoProgress;
 use Edde\Source\SourceServiceTrait;
-use Edde\Storage\StorageTrait;
 use Edde\Stream\FileStream;
 use Edde\User\CurrentUserServiceTrait;
 use League\Uri\Uri;
@@ -36,7 +35,6 @@ use function reset;
 use function sprintf;
 
 class ExcelExportService implements IExcelExportService {
-	use StorageTrait;
 	use ExcelServiceTrait;
 	use DtoServiceTrait;
 	use SourceServiceTrait;
@@ -183,7 +181,7 @@ class ExcelExportService implements IExcelExportService {
 		]);
 	}
 
-	public function export(ExcelExportDto $excelExportDto, IProgress $progress = null): FileDto {
+	public function export(ExcelExportDto $excelExportDto, IProgress $progress = null): SmartDto {
 		$progress = NoProgress::ensure($progress);
 		$progress->log(IProgress::LOG_INFO, 'Starting Export Service.');
 		$this->logger->debug('Starting Export Service.', ['tags' => ['export']]);

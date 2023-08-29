@@ -3,11 +3,9 @@ declare(strict_types=1);
 
 namespace Edde\Config;
 
-use Dibi\DriverException;
 use Edde\Config\Repository\ConfigRepositoryTrait;
 use Edde\Container\ContainerTrait;
 use Edde\Log\LoggerTrait;
-use Edde\Storage\StorageTrait;
 use Throwable;
 
 /**
@@ -15,35 +13,10 @@ use Throwable;
  */
 class ConfigService {
 	use ConfigRepositoryTrait;
-	use StorageTrait;
 	use ContainerTrait;
 	use LoggerTrait;
 
 	protected $configs;
-
-	/**
-	 * Create/update all the keys provided in the array.
-	 *
-	 * @param iterable $config
-	 *
-	 * @throws DriverException
-	 * @throws Throwable
-	 */
-	public function ensure(iterable $config) {
-		$this->storage->transaction(function () use ($config) {
-			foreach ($config as $k => $v) {
-				$this->configRepository->ensure($k, $v);
-			}
-		});
-	}
-
-	public function update(iterable $config) {
-		$this->storage->transaction(function () use ($config) {
-			foreach ($config as $k => $v) {
-				$this->configRepository->update($k, $v);
-			}
-		});
-	}
 
 	public function get(string $key, $default = null) {
 		try {

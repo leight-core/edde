@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Edde\Excel;
 
+use Edde\Dto\SmartDto;
 use Edde\Excel\Dto\Export\ExcelExportDto;
 use Edde\Excel\Dto\Export\MetaDto;
-use Edde\File\Dto\FileDto;
 use Edde\Progress\IProgress;
 
 interface IExcelExportService {
@@ -23,5 +23,5 @@ interface IExcelExportService {
 	 *
 	 * @return FileDto
 	 */
-	public function export(ExcelExportDto $excelExportDto, IProgress $progress = null): FileDto;
+	public function export(ExcelExportDto $excelExportDto, IProgress $progress = null): SmartDto;
 }
